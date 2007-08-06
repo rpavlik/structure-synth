@@ -1,0 +1,126 @@
+#pragma once
+
+#include <QString>
+#include <QVector>
+
+#include "Vector3.h"
+
+namespace AppCore {
+	namespace Math {	
+
+		/// A simple class for representing 4x4 Matrices
+		/// The internal representation has the rows increasing fastest: index = row + col*4;
+		template <class scalar> class Matrix4 {
+		public:
+			/// Constructor (inits to zero value).
+			Matrix4() { for (unsigned int i = 0; i < 16; i++) v[i] = 0; };
+
+			/// Identity matrix
+			static Matrix4<scalar> Identity() { 
+				Matrix4<scalar> m;
+				m.v[0] = 1; m.v[5] = 1; m.v[10] = 1; m.v[15] = 1; 
+				return m;
+			};
+
+			/// at(row, col) return a copy of the value.
+			scalar at(int row, int col) const { return v[row+col*4]; }
+			scalar at(int index) const { return v[index]; }
+			scalar operator() (int row, int col) const { return v[row+col*4]; }
+			scalar operator() (int index) const { return v[index]; }
+
+			/// getRef(row, col) returns a reference (for writing into matrix)
+			scalar& getRef(int row, int col) { return v[row+col*4];  }
+			scalar& getRef(int index) { return v[index];  }
+			scalar& operator() (int row, int col) { return v[row+col*4]; }
+			scalar& operator() (int index) { return v[index]; }
+
+			/// Internal representation (can be used in OpenGL functions)
+			scalar* getArray(void) { return v; }
+
+			/// Rotation about axis with angle
+			/// Taken from http://www.gamedev.net/reference/articles/605/math3d.h
+			static Matrix4<scalar> Rotation(Vector3<scalar> axis, scalar angle) {
+
+				Matrix4<scalar> m;
+
+				scalar c = cos(angle);
+				scalar s = sin(angle);
+				// One minus c (short name for legibility of formulai)
+				scalar omc = (1 - c);
+
+				if (axis.length() != 1) axis = axis.normalize();
+
+				scalar x = axis[0];
+				scalar y = axis[1];
+				scalar z = axis[2];	
+				scalar xs = x * s;
+				scalar ys = y * s;
+				scalar zs = z * s;
+				scalar xyomc = x * y * omc;
+				scalar xzomc = x * z * omc;
+				scalar yzomc = y * z * omc;
+
+				m.v[0] = x*x*omc + c;
+				m.v[1] = xyomc + zs;
+				m.v[2] = xzomc - ys;
+				m.v[3] = 0;
+
+				m.v[4] = xyomc - zs;
+				m.v[5] = y*y*omc + c;
+				m.v[6] = yzomc + xs;
+				m.v[7] = 0;
+
+				m.v[8] = xzomc + ys;
+				m.v[9] = yzomc - xs;
+				m.v[10] = z*z*omc + c;
+				m.v[11] = 0;
+
+				m.v[12] = 0;
+				m.v[13] = 0;
+				m.v[14] = 0;
+				m.v[15] = 1;
+
+				return m;	
+			};
+
+			Matrix4<scalar> operator* (const Matrix4<scalar>& rhs) const {
+				Matrix4<scalar> m;
+				for (int x=0; x<4; x++) {
+					for (int y=0;y <4; y++) {
+						for (int i=0; i<4; i++) m.getRef(x,y) += (this->at(x,i) * rhs.at(i,y));
+					}
+				}
+				return m;
+			};
+
+			Vector3<scalar> operator* (const Vector3<scalar>& rhs) const {
+				Vector3<scalar> v; // Is initialized to zeros.
+				for (int i=0; i<3; i++) {
+					for (int j = 0; j < 3; j++) {
+						v[i] += this->at(i,j)*rhs[j];
+					}
+					v[i] += this->at(i,3);
+				}
+
+				return v;
+			};
+
+			QString toString() {
+				QString s = QString(" Row1 = [%1 %2 %3 %4], Row2 = [%5 %6 %7 %8]").
+					arg(at(0,0)).arg(at(0,1)).arg(at(0,2)).arg(at(0,3)).
+					arg(at(1,0)).arg(at(1,1)).arg(at(1,2)).arg(at(1,3));
+				QString s2 = QString(" Row3 = [%1 %2 %3 %4], Row4 = [%5 %6 %7 %8]").
+					arg(at(2,0)).arg(at(2,1)).arg(at(2,2)).arg(at(2,3)).
+					arg(at(3,0)).arg(at(3,1)).arg(at(3,2)).arg(at(3,3));
+				return s+s2;
+			}
+
+		private:
+
+			scalar v[16];
+		};
+
+		typedef Matrix4<float> Matrix4f ;
+		typedef Matrix4<double> Matrix4d ;
+	}
+}

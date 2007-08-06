@@ -1,0 +1,46 @@
+
+Changelog for Structure Synth:
+------------------------------
+
+ 1 Aug 07 [MHC]:	Builder working (only spheres). Added 's' transformation.
+[1½h]	
+
+30 Jul 07 [MHC]:	Builder (almost) complete
+[1½h]				
+
+29 Jul 07 [MHC]:	EisenParser now creates a RuleSet (that is, it is working). 
+[1½h]				Rules are resolved
+					Name-clashing custom rules are promoted to ambiguous rules
+
+
+28 Jul 07 [MHC]:	Added model skeleton classes. (Rules (Primitive, Custom, Ambiguous), State, Transformation, Builder, ExecutionStatck, ...)
+[1h]
+
+27 Jul 07 [MHC]:	3D Engine now draws a list of Object3D's with a sphere implemented as the only primitive so far.
+[1h]				Builder skeleton
+					Rendering skeleton
+
+26 Jul 07 [MHC]:	Added Matrix4 class with some auxillary methods (such as rotating an angle around a given vector)
+[2h]
+
+24 Jul 07 [MHC]:	Changelog started.
+[2h]				3D Engine skeleton up and running. Support for translation and zooming.
+					
+23 Jul 07 [MHC]:    Added Model Classes: Rule, Ruleset, Transformation
+[2h]				Parser up and running. 
+					Tokenizer working
+	
+22 Jul 07 [MHC]:    Added Exceptions base class
+[4h]				Added Eisenparser skeleton
+					Added Tokenizer skeleton
+
+18 Jul 07 [MHC]:    Added MiniGL engine skeleton
+[8h]				Added Vector3 skeleton	
+					
+10 Jul 07 [MHC]:    Initial Check-In.
+[6h]                Added icons
+                    Added a minimalist logging framework
+                    Added main window mockup
+                    Visual Studio 2005 Solution and Project files added.
+                   
+       
