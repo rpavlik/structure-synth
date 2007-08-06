@@ -16,7 +16,7 @@ namespace AppCore {
 			virtual ~ListWidgetLogger();
 
 			/// This method all loggers must implement
-			void log(QString message, int priority);
+			void log(QString message, LogLevel priority);
 
 			QListWidget* getListWidget() { return listWidget; }
 

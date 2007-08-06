@@ -10,7 +10,7 @@ namespace AppCore {
 	namespace Logging {	
 		QVector<Logger*> Logger::loggers;
 
-		void LOG(QString message, int priority) {
+		void LOG(QString message, LogLevel priority) {
 			for (int i = 0; i < Logger::loggers.size(); i++) {
 				Logger::loggers[i]->log(message, priority);
 			}

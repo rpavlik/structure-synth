@@ -24,14 +24,14 @@ namespace AppCore {
 			}
 
 			/// This method all loggers must implement
-			virtual void log(QString message, int priority) = 0;
+			virtual void log(QString message, LogLevel priority) = 0;
 
 			/// Log messages are sent to this list of loggers.
 			static QVector<Logger*> loggers;
 		};
 
 
-		void LOG(QString message, int priority);
+		void LOG(QString message, LogLevel priority);
 
 		/// Useful aliases
 		void Debug(QString text);

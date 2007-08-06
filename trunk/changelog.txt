@@ -2,6 +2,13 @@
 Changelog for Structure Synth:
 ------------------------------
 
+
+ 6 Aug 07 [MHC]:	Initial SF.NET checkin + mini webpage. Added coloring to logger.
+[2h]	
+
+ 5 Aug 07 [MHC]:	Added 'box' primitive (which should really be solid instead of wireframe). Corrected a bug wrt sphere coordinates.
+[1h]	
+
  1 Aug 07 [MHC]:	Builder working (only spheres). Added 's' transformation.
 [1½h]	
 
