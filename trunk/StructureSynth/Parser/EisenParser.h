@@ -3,6 +3,7 @@
 #include "Tokenizer.h"
 #include "../Model/Transformation.h"
 #include "../Model/Rule.h"
+#include "../Model/CustomRule.h"
 #include "../Model/RuleSet.h"
 #include "../Model/Action.h"
 
@@ -33,6 +34,8 @@ namespace StructureSynth {
 			Model::Action setAction();
 			Model::Transformation transformationList();
 			Model::Transformation transformation();
+			void ruleModifierList(Model::CustomRule* customRule);
+		
 			
 			bool accept(Symbol::SymbolType st);
 			bool expect(Symbol::SymbolType st);

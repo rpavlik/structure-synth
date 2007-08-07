@@ -19,6 +19,9 @@ namespace StructureSynth {
 
 			void appendAction(Action a) { actions.append(a); }
 
+			double getWeight() { return weight; }
+			void setWeight(double w) { weight = w; }
+
 		private:
 			QList<Action> actions;
 			double weight;

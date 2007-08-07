@@ -33,7 +33,7 @@ namespace StructureSynth {
 				myClassFormat.setForeground(Qt::darkMagenta);
 
 				// Add stuff here..
-				QString pattern = "(rule\\s|x\\s|y\\s|z\\s|rx\\s|ry\\s|rz\\s|box|sphere|s\\s|set)";
+				static QString pattern = "(\\smd\\s|\\sw\\s|\\sweigth\\s|\\smaxdepth\\s|rule\\s|\\sx\\s|\\sy\\s|\\sz\\s|\\srx\\s|\\sry\\s|\\srz\\s|\\sbox\\s|\\ssphere\\s|\\ss\\s|set)";
 
 				QRegExp expression(pattern);
 				int index = text.indexOf(expression);

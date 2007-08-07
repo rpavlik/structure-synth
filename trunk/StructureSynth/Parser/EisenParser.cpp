@@ -17,7 +17,8 @@ namespace StructureSynth {
 			-----
 
 			program = { set | rule } ;
-			rule = 'RULE' ,  rule_name, '{', { set | action } , '}' ;
+			rule = 'RULE' ,  rule_name, { rule_modifier } , '{', { set | action } , '}' ;
+			rule_modifier = { 'MAXDEPTH' integer | WEIGHT float }
 			action = transformation rule_ref ;
 			set = 'SET'  , var_name , string ;
 
@@ -64,6 +65,31 @@ namespace StructureSynth {
 			return false;
 		}
 
+		void EisenParser::ruleModifierList(CustomRule* customRule) {
+			while (symbol.type == Symbol::Operator) { 
+				if (symbol.text == "weight") {
+					getSymbol();
+					double param = symbol.intValue;
+					if (!accept(Symbol::Number)) {
+						throw (ParseError("Rule modifier 'weight' expected numerical argument. Found: " + symbol.text));
+					}
+					customRule->setWeight(param);
+
+				} else if (symbol.text == "maxdepth") {
+					getSymbol();
+					int param = symbol.getNumerical();
+					if (!symbol.isInteger || !accept(Symbol::Number)) {
+						throw (ParseError("Rule modifier 'maxdepth' expected integer argument. Found: " + symbol.text));
+					}
+					customRule->setMaxDepth(param);
+				}
+			}
+
+			if (!symbol.type == Symbol::LeftBracket) {
+				throw (ParseError("After rule modifier list: expected a left bracket. Found: " + symbol.text));
+			}
+		}
+
 		Rule* EisenParser::rule() {
 			// rule = 'RULE' ,  rule_name, '{', { set | action }  , '}' ;
 			
@@ -72,10 +98,17 @@ namespace StructureSynth {
 			
 			QString ruleName = symbol.text;
 			if (!accept(Symbol::UserString)) throw (ParseError("After rule identifier a rule name is expected. Found: " + symbol.text));
-			if (!accept(Symbol::LeftBracket)) throw (ParseError("After rule name a left bracket is expected. Found: " + symbol.text));
-			
 			CustomRule* customRule = new CustomRule(ruleName);
 
+			if (symbol.type != Symbol::LeftBracket) {
+				// This must be a rule_modifier list.
+				ruleModifierList(customRule);
+			}
+
+
+			if (!accept(Symbol::LeftBracket)) throw (ParseError("After rule name a left bracket is expected. Found: " + symbol.text));
+			
+			
 
 			// TODO: implement rest of types:
 			// Possible actions:
@@ -134,6 +167,12 @@ namespace StructureSynth {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));
 				return Transformation::createScale(param,param,param);
+			} else if (type == "fx") {
+				return Transformation::createScale(-1,1,1);
+			} else if (type == "fy") {
+				return Transformation::createScale(1,-1,1);
+			} else if (type == "fz") {
+				return Transformation::createScale(1,1,-1);
 			} else {
 				throw (ParseError("Unknown transformation type: " + type));
 			}

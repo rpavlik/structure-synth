@@ -18,7 +18,7 @@ namespace StructureSynth {
 		Tokenizer::Tokenizer(QString input) {
 
 			QStringList operators;
-			operators << "x" << "y" << "z" << "rx" << "ry" << "rz" << "s";
+			operators << "x" << "y" << "z" << "rx" << "ry" << "rz" << "s" << "fx" << "fy" << "fz" << "maxdepth" << "weight" << "md" << "w";
 
 			currentSymbol = -1;
 
@@ -90,16 +90,11 @@ namespace StructureSynth {
 					throw ParseError("Invalid symbol found: " + s);
 				} else if (operators.contains(sl) ) {
 					QString longName = sl;
-
+					
 					// Resolve abbreviations
-					/*
-					if (longName == "y") longName = "yaw";
-					if (longName == "p") longName = "pitch";
-					if (longName == "r") longName = "roll";
-					if (longName == "l") longName = "left";
-					if (longName == "u") longName = "up";
-					if (longName == "f") longName = "forward";
-					*/
+					if (longName == "md") longName = "maxdepth";
+					if (longName == "w") longName = "weight";
+					
 					
 					Symbol ns(Symbol::Operator, longName);
 					symbols.append(ns);

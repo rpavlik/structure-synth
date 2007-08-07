@@ -2,6 +2,8 @@
 Changelog for Structure Synth:
 ------------------------------
 
+ 7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weigth' rule modifier. Added 'fx','fy','fz' commands.
+[1h]
 
  6 Aug 07 [MHC]:	Initial SF.NET checkin + mini webpage. Added coloring to logger.
 [2h]	

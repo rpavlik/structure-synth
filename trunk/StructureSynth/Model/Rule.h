@@ -14,8 +14,8 @@ namespace StructureSynth {
 		class Rule {
 		public:
 			/// Every rule must have a name.
-			Rule(QString name) : name(name) {};
-			Rule() {};
+			Rule(QString name) : name(name) { maxDepth = -1; };
+			Rule() { maxDepth = -1; };
 
 			QString getName() { return name; }
 
@@ -25,9 +25,13 @@ namespace StructureSynth {
 
 			/// Returns a list over rules that this rule references.
 			virtual QList<RuleRef*> getRuleRefs() { return QList<RuleRef*>(); }
+
+			virtual void setMaxDepth(int maxDepth) { this->maxDepth = maxDepth; }
+			virtual int getMaxDepth() { return maxDepth; }
 			
 		protected:
 			QString name;
+			int maxDepth;
 		};
 	}
 }

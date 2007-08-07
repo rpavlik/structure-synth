@@ -1,3 +1,66 @@
+
+TODO:
+
+Kolberger Heide [v 0.5]
+-----------------------
+- Add global 'set' command
+- 'set maxobjects'
+- 'set seed'
+- Preprocessor Comments
+- Version object
+- Auto load examples to menu item entry.
+- Solid Box object
+- Rotate about z axis
+- Rule retirement:
+  (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
+  (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
+  (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
+- Scale with 3 parameters.
+	- Ellipsoid object. (Sphere are always isotropic]
+- Splash screen with proper acknowledgement.
+- Skew transformations (syntax?)
+- Custom Transformation matrix operator.
+- Drag'n'Drop of EisenScript files.
+- Preprocessor '#include' statement
+
+
+Optimus Prime [v 0.8]
+---------------------
+- 'Zoom to fit'
+- Transperancy (req. sorting)
+- More complex primitives (tube, ...)
+- Better parsing (faulty tokens should be highlighted in editor)
+- Tagging (e.g. [sphereresolution 3 25])
+- Linux testing
+- Add more renders:
+  - [OpenGL dynamic] - the current
+  - [OpenGL static] - for drawing one non-rotatable frame (for time-consuming pictures)
+  - [OpenGL preview] - all objects drawn as dots.
+  - [Tag Renderer] - renders all tag as text.
+
+Final Release [v 1.0]
+---------------------
+- [PovRay] Renderer
+- Mac testing
+- Installers (for Windows at least - using InnoSetup)
+- Packaging: Icons, Eula, file associations.
+
+v 2.x
+-----
+- Built-in ray tracer.
+- Live coding / drawing
+- Meta-programming via the [Tag Renderer]
+
+
+
+Design Goals:
+- Make nice mathematical structures
+- Reproduce some standard fractals (i.e. Menger Sponge)
+- Create Mondrian like tiling (as 2D)
+- Create Rich Organic structures. i.e. Trees
+
+
+
 EisenScript
 -----------
 
@@ -32,8 +95,9 @@ Though not strictly a part of the syntax, a few rules are provided as predefined
 
 Primitives: 
 -----------
-box     
-sphere
+box      - solid box
+grid	 - wireframe box
+sphere   - 
 line     - along x axis, centered in y,z plane.
 point    - centered in coordinate system.
 cylinder - the symmetry axis will be the current x axis.
