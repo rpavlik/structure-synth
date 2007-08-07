@@ -20,7 +20,7 @@ namespace AppCore {
 		void Sphere::draw() {
 			glPushMatrix();
 			glTranslatef( center.x(), center.y(), center.z() );
-			gluSphere(myQuad, radius, 12, 12);	
+			gluSphere(myQuad, radius, 7, 7);	
 			glPopMatrix();			
 		};
 

@@ -16,7 +16,7 @@ namespace StructureSynth {
 		public:
 			AmbiguousRule(QString name) : Rule(name) {};
 
-			virtual void apply(Builder* builder) {};
+			virtual void apply(Builder* builder);
 	
 			/// Returns a list over rules that this rule references.
 			virtual QList<RuleRef*> getRuleRefs();
