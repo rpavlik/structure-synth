@@ -20,8 +20,10 @@ namespace StructureSynth {
 				name = "box";
 			} else if (type == Sphere) {
 				name = "sphere";
-			} else if (type == Point) {
-				name = "point";
+			} else if (type == Dot) {
+				name = "dot";
+			} else if (type == Grid) {
+				name = "grid";
 			} else if (type == Cylinder) {
 				name = "cylinder";
 			} else if (type == Line) {
@@ -51,6 +53,24 @@ namespace StructureSynth {
 
 				b->getRenderer()->drawBox(v1,v2-v1,v3-v1,v4-v1);
 				
+			} else if (type == Grid) {
+				Vector3f v(0,0,0);
+
+				Vector3f v1 = b->getState().matrix * v;
+				Vector3f v2 = b->getState().matrix * Vector3f(1,0,0);
+				Vector3f v3 = b->getState().matrix * Vector3f(0,1,0);
+				Vector3f v4 = b->getState().matrix * Vector3f(0,0,1);
+
+				b->getRenderer()->drawGrid(v1,v2-v1,v3-v1,v4-v1);
+			} else if (type == Dot) {
+				Vector3f v = b->getState().matrix * Vector3f(0.5,0.5,0.5);
+				
+				b->getRenderer()->drawDot(v);
+			} else if (type == Line) {
+				Vector3f v = b->getState().matrix * Vector3f(0,0.5,0.5);
+				Vector3f v2 = b->getState().matrix * Vector3f(1,0.5,0.5);
+				
+				b->getRenderer()->drawLine(v,v2);
 			}
 
 		};

@@ -133,6 +133,10 @@ namespace StructureSynth {
 			return customRule;
 		}
 
+		double degreeToRad(double degrees) {
+			return degrees*3.14159265/180.0;
+		}
+
 		Transformation EisenParser::transformation() {
 
 			QString type = symbol.text;
@@ -154,15 +158,15 @@ namespace StructureSynth {
 			} else if (type == "rx") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RX' (X-axis rotation): Expected numerical parameter. Found: " + symbol.text));
-				return Transformation::createRX(param);
+				return Transformation::createRX(degreeToRad(param));
 			} else if (type == "ry") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RY' (Y-axis rotation): Expected numerical parameter. Found: " + symbol.text));
-				return Transformation::createRY(param);
+				return Transformation::createRY(degreeToRad(param));
 			} else if (type == "rz") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RZ' (Z-axis rotation): Expected numerical parameter. Found: " + symbol.text));
-				return Transformation::createRZ(param);
+				return Transformation::createRZ(degreeToRad(param));
 			} else if (type == "s") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));

@@ -3,6 +3,7 @@ TODO:
 
 Kolberger Heide [v 0.5]
 -----------------------
++ Rotations are not around the proper unit cube axis.
 - Add global 'set' command
 - 'set maxobjects'
 - 'set seed'
@@ -10,15 +11,13 @@ Kolberger Heide [v 0.5]
 - Version object
 - Auto load examples to menu item entry.
 - Solid Box object
-- Rotate about z axis
+- GUI: Rotate about z axis
 - Rule retirement:
   (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
   (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
   (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
 - Scale with 3 parameters.
 	- Ellipsoid object. (Sphere are always isotropic]
-- Splash screen with proper acknowledgement.
-- Skew transformations (syntax?)
 - Custom Transformation matrix operator.
 - Drag'n'Drop of EisenScript files.
 - Preprocessor '#include' statement
@@ -26,11 +25,16 @@ Kolberger Heide [v 0.5]
 
 Optimus Prime [v 0.8]
 ---------------------
+- Skew transformations (syntax?)
+- Version object with check for updates on internet.
+- GUI Seed
+- Coloring
 - 'Zoom to fit'
 - Transperancy (req. sorting)
 - More complex primitives (tube, ...)
 - Better parsing (faulty tokens should be highlighted in editor)
 - Tagging (e.g. [sphereresolution 3 25])
+- OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
 - Linux testing
 - Add more renders:
   - [OpenGL dynamic] - the current
@@ -40,6 +44,10 @@ Optimus Prime [v 0.8]
 
 Final Release [v 1.0]
 ---------------------
+- Splash screen with proper acknowledgement.
+- Preferences (saving with QProperties)
+- Save screenshot
+- Tabbed interface
 - [PovRay] Renderer
 - Mac testing
 - Installers (for Windows at least - using InnoSetup)
@@ -47,9 +55,12 @@ Final Release [v 1.0]
 
 v 2.x
 -----
-- Built-in ray tracer.
-- Live coding / drawing
-- Meta-programming via the [Tag Renderer]
+- Synchronize random seed per generation.
+? Geometry Distortion plugins
+? Random parameters in rule definition
+? Built-in ray tracer.
+? Live coding / drawing
+? Meta-programming via the [Tag Renderer]
 
 
 

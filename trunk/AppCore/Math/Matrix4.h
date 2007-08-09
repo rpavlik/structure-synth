@@ -37,6 +37,18 @@ namespace AppCore {
 			/// Internal representation (can be used in OpenGL functions)
 			scalar* getArray(void) { return v; }
 
+			static Matrix4<scalar> Translation(scalar x,scalar y,scalar z) {
+				Matrix4<scalar> m;
+				m(0,3) = x;
+				m(1,3) = y;
+			    m(2,3) = z;
+				m(0,0) = 1;
+				m(1,1) = 1;
+			    m(2,2) = 1;
+				m(3,3) = 1;
+			    return  m;
+			};
+
 			/// Rotation about axis with angle
 			/// Taken from http://www.gamedev.net/reference/articles/605/math3d.h
 			static Matrix4<scalar> Rotation(Vector3<scalar> axis, scalar angle) {
