@@ -1,7 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
-
+ 9 Aug 07 [MHC]:	Fixed rotation, scale offset. Rotations now in degrees instead of rad. 
+	                Added Grid, Box, Line, Dot primitives.
+	                
  7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weigth' rule modifier. Added 'fx','fy','fz' commands.
 [1h]
 

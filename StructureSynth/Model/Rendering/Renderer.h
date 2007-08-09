@@ -22,6 +22,16 @@ namespace StructureSynth {
 								AppCore::Math::Vector3f dir1, 
 								AppCore::Math::Vector3f dir2, 
 								AppCore::Math::Vector3f dir3) = 0;
+
+				virtual void drawGrid(AppCore::Math::Vector3f base, 
+								AppCore::Math::Vector3f dir1, 
+								AppCore::Math::Vector3f dir2, 
+								AppCore::Math::Vector3f dir3) = 0;
+
+				virtual void drawLine(AppCore::Math::Vector3f from, 
+										AppCore::Math::Vector3f to) = 0;
+
+				virtual void drawDot(AppCore::Math::Vector3f pos) = 0;
 				
 				virtual void drawSphere(AppCore::Math::Vector3f center, float radius) = 0;
 		};

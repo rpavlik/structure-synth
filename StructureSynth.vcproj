@@ -236,11 +236,35 @@
 					>
 				</File>
 				<File
+					RelativePath=".\AppCore\GLEngine\Dot.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\GLEngine\Dot.h"
+					>
+				</File>
+				<File
 					RelativePath=".\AppCore\GLEngine\EngineWidget.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\AppCore\GLEngine\EngineWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\GLEngine\Grid.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\GLEngine\Grid.h"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\GLEngine\Line.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\GLEngine\Line.h"
 					>
 				</File>
 				<File
@@ -294,29 +318,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
@@ -329,7 +330,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
+				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -360,6 +361,29 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
 			</File>

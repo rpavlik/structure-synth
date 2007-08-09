@@ -56,19 +56,30 @@ namespace StructureSynth {
 		// Rotations
 		Transformation Transformation::createRX(double angle) {
 			Transformation t;
-			t.matrix = Matrix4f::Rotation(Vector3f(1,0,0), angle); // TODO: Optimize with standard (cos,sin,0)(-sin,cos,0)(0,0,1)
+			t.matrix = 
+				Matrix4f::Translation(0,0.5,0.5)*
+				Matrix4f::Rotation(Vector3f(1,0,0), angle)*
+				Matrix4f::Translation(0,-0.5,-0.5);
 			return t;
 		}
 
 		Transformation Transformation::createRY(double angle) {
 			Transformation t;
-			t.matrix = Matrix4f::Rotation(Vector3f(0,1,0), angle); // TODO: Optimize with standard (cos,sin,0)(-sin,cos,0)(0,0,1)
+			t.matrix = 
+				Matrix4f::Translation(0.5,0,0.5)*
+				Matrix4f::Rotation(Vector3f(0,1,0), angle)*
+				Matrix4f::Translation(-0.5,0,-0.5)
+				
+				; 
 			return t;
 		}
 
 		Transformation Transformation::createRZ(double angle) {
 			Transformation t;
-			t.matrix = Matrix4f::Rotation(Vector3f(0,0,1), angle); // TODO: Optimize with standard (cos,sin,0)(-sin,cos,0)(0,0,1)
+			t.matrix = 
+				Matrix4f::Translation(0.5,0.5,0)*
+				Matrix4f::Rotation(Vector3f(0,0,1), angle)*
+				Matrix4f::Translation(-0.5,-0.5,0);
 			return t;
 		}
 
@@ -77,6 +88,10 @@ namespace StructureSynth {
 			t.matrix(0,0) = x;
 			t.matrix(1,1) = y;
 			t.matrix(2,2) = z;
+			t.matrix = 
+				Matrix4f::Translation(0.5,0.5,0.5)*
+				t.matrix*
+				Matrix4f::Translation(-0.5,-0.5,-0.5);
 			return t;
 		}
 	}
