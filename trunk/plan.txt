@@ -1,23 +1,23 @@
 
 TODO:
 
-Kolberger Heide [v 0.5]
+Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 -----------------------
 + Rotations are not around the proper unit cube axis.
 - Add global 'set' command
-- 'set maxobjects'
++ 'set maxobjects'
 - 'set minvolume'
 - 'set seed'
 - Preprocessor Comments
 - Version object
 - Auto load examples to menu item entry.
 / Solid Box object
-- GUI: Rotate about z axis
++ GUI: Rotate about z axis
 - Iterated Rules
-- Rule retirement:
-  (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
-  (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
-  (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
+/ Rule retirement:
+  + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
+  - (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
+  + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
 - Scale with 3 parameters.
 	- Ellipsoid object. (Sphere are always isotropic]
 - Custom Transformation matrix operator.
