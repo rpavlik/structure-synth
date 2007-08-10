@@ -1,5 +1,5 @@
 rule start { 
-set maxgenerations 600
+set maxdepth 600
 spiral
 
 } 

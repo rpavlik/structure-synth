@@ -9,11 +9,14 @@ namespace StructureSynth {
 	namespace Model {
 
 		Builder::Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet) : renderTarget(renderTarget), ruleSet(ruleSet) {
-			maxGenerations = 5;
+			maxGenerations = 1000;
+			maxObjects = 100000;
+			objects = 0;
 		};
 			
 
 		void Builder::build() {
+			objects = 0;
 			INFO("Starting build...");
 			
 			/// Push first generation state
@@ -24,7 +27,7 @@ namespace StructureSynth {
 
 			int generationCounter = 0;
 			
-			while (generationCounter < maxGenerations) {
+			while (generationCounter < maxGenerations && objects < maxObjects) {
 				generationCounter++;
 
 				// Now iterate though all RuleState's on stack and create next generation.
@@ -38,16 +41,30 @@ namespace StructureSynth {
 				stack = nextStack;
 			}
 
+			if (objects == maxObjects) {
+				INFO(QString("Terminated because maximum number of objects reached (%1).").arg(maxObjects));
+				INFO(QString("Use 'Set MaxObjects' command to increase this number."));
+			}
+			if (generationCounter == maxGenerations) {
+				INFO(QString("Terminated because maximum number of generations reached (%1).").arg(maxGenerations));
+				INFO(QString("Use 'Set MaxGenerations' command to increase this number."));
+			}
 			INFO("Done building...");
 		}
 
 		void Builder::setCommand(QString command, QString param) {
-			if (command == "maxgenerations") {
+			if (command == "maxdepth") {
 				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
 				bool succes;
 				int i = param.toInt(&succes);
-				if (!succes) throw Exception(QString("Command 'maxgenerations' expected integer parameter. Found: %1").arg(param));
+				if (!succes) throw Exception(QString("Command 'maxdepth' expected integer parameter. Found: %1").arg(param));
 				maxGenerations = i;
+			} else if (command == "maxobjects") {
+				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
+				bool succes;
+				int i = param.toInt(&succes);
+				if (!succes) throw Exception(QString("Command 'maxobjects' expected integer parameter. Found: %1").arg(param));
+				maxObjects = i;
 			} else {
 				throw Exception(QString("Unknown command: %1").arg(command));
 			}

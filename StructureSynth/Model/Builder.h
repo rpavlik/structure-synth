@@ -22,6 +22,7 @@ namespace StructureSynth {
 			ExecutionStack& getExecutionStack();
 			State& getState() { return state; };
 			Rendering::Renderer* getRenderer() { return renderTarget; };
+			void increaseObjectCount() { objects++; };
 
 		private:
 			State state;
@@ -30,6 +31,8 @@ namespace StructureSynth {
 			Rendering::Renderer* renderTarget;
 			RuleSet* ruleSet;
 			int maxGenerations;
+			int maxObjects;
+			int objects;
 		};
 
 	}

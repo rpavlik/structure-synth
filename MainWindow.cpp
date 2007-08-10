@@ -152,18 +152,18 @@ namespace StructureSynth {
 
 			QString s = 
 			QString("rule start { \r\n")+
-			"set maxgenerations 400\r\n"+
+			"set maxdepth 400\r\n"+
 			"R1\r\n"+
 			"R2\r\n"+
 			"} \r\n"+
 			"\r\n"+
 			"rule R1 { \r\n"+
-			"{ x 1 rz 0.1 ry 0.1 s 0.99 } R1\r\n"+
+			"{ x 1 rz 6 ry 6 s 0.99 } R1\r\n"+
 			"{ s 2 } sphere\r\n"+
 			"} \r\n"+
 			"\r\n"+
 			"rule R2 { \r\n"+
-			"{ x -1  rz 0.1 ry 0.1 s 0.99 } R2\r\n"+
+			"{ x -1  rz 6 ry 6 s 0.99 } R2\r\n"+
 			"{ s 2 } sphere \r\n"+
 			"} \r\n";
 			textEdit->setText(s);

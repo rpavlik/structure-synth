@@ -6,12 +6,14 @@ Kolberger Heide [v 0.5]
 + Rotations are not around the proper unit cube axis.
 - Add global 'set' command
 - 'set maxobjects'
+- 'set minvolume'
 - 'set seed'
 - Preprocessor Comments
 - Version object
 - Auto load examples to menu item entry.
-- Solid Box object
+/ Solid Box object
 - GUI: Rotate about z axis
+- Iterated Rules
 - Rule retirement:
   (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
   (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
@@ -20,15 +22,15 @@ Kolberger Heide [v 0.5]
 	- Ellipsoid object. (Sphere are always isotropic]
 - Custom Transformation matrix operator.
 - Drag'n'Drop of EisenScript files.
-- Preprocessor '#include' statement
+- Coloring (how?)
 
 
 Optimus Prime [v 0.8]
 ---------------------
+- Preprocessor '#include' statement
 - Skew transformations (syntax?)
 - Version object with check for updates on internet.
 - GUI Seed
-- Coloring
 - 'Zoom to fit'
 - Transperancy (req. sorting)
 - More complex primitives (tube, ...)

@@ -35,6 +35,7 @@ namespace StructureSynth {
 		};
 
 		void PrimitiveRule::apply(Builder* b) {
+			b->increaseObjectCount();
 
 			if (type == Sphere) {
 				Vector3f v(0,0,0);
