@@ -14,7 +14,7 @@ namespace StructureSynth {
 		};
 
 		struct Symbol {
-			enum SymbolType { Undefined, LeftBracket, RightBracket, End, Number, Multiply, UserString, Rule, Set, Operator } ;
+			enum SymbolType { Undefined, LeftBracket, RightBracket, MoreThan, End, Number, Multiply, UserString, Rule, Set, Operator } ;
 
 			SymbolType type;
 

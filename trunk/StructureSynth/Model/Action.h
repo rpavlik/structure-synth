@@ -25,7 +25,9 @@ namespace StructureSynth {
 
 			~Action();
 
-			void  apply(Builder* b);
+			/// If 'callingRule' != 0 the new states generated will be set with 
+			/// a depth equal to 'ruleDepth'
+			void  apply(Builder* b, Rule* callingRule, int ruleDepth);
 			RuleRef* getRuleRef() { return rule; }
 
 		private:

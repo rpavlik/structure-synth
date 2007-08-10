@@ -17,6 +17,8 @@ namespace StructureSynth {
 			Rule(QString name) : name(name) { maxDepth = -1; };
 			Rule() { maxDepth = -1; };
 
+			virtual ~Rule() {};
+
 			QString getName() { return name; }
 
 			/// When applied the rule will add new pending rules to the ExecutionStack for execution.

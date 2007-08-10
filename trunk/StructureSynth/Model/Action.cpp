@@ -2,10 +2,13 @@
 #include "ExecutionStack.h"
 #include "Builder.h"
 
+#include "../../AppCore/Logging/Logging.h"
+
+using namespace AppCore::Logging;
 
 namespace StructureSynth {
 	namespace Model {	
-		void  Action::apply(Builder* b) {
+		void  Action::apply(Builder* b, Rule* callingRule, int ruleDepth) {
 
 			if (set != 0) {
 				b->setCommand(set->key, set->value);
@@ -18,11 +21,17 @@ namespace StructureSynth {
 				int rep = loops[i].repetitions;
 				for (int j = 0; j < rep; j++) {
 					s = loops[i].transformation.apply(s);
+					if (callingRule) {
+						s.maxDepths[callingRule] = ruleDepth;
+					}
 					b->getExecutionStack().currentStack.append(RuleState(rule->rule(), s));
 				}
 			}
 
 			if (loops.size() == 0) {
+				if (callingRule) {
+					s.maxDepths[callingRule] = ruleDepth;
+				}
 				b->getExecutionStack().currentStack.append(RuleState(rule->rule(), s));
 			}
 		}
@@ -39,7 +48,7 @@ namespace StructureSynth {
 			//delete(rule);
 			//delete(set);
 		}
-			
+
 
 		Action::Action(Transformation t, QString ruleName) {
 			loops.append(TransformationLoop(1, t));

@@ -27,14 +27,14 @@ namespace AppCore {
 			mouseSpeed = 1.0;
 			mouseTranslationSpeed = 64.0;
 			translation = Vector3f(0,0,-20);
-			
+
 			setMouseTracking(true);
 
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
 
 
-			
+
 			int count = 8;
 			for ( int i = 0; i < count; i++) {
 				for ( int j = 0; j < count; j++) {
@@ -56,26 +56,6 @@ namespace AppCore {
 		void EngineWidget::paintGL() {
 			if (pendingRedraws > 0) pendingRedraws--;
 
-			/*
-			
-			Matrix4f rx;
-			rx(0) = 0; rx(5) = 1; rx(10)=1; // remove x
-			Matrix4f swapxy;
-			swapxy(1) = 1; swapxy(4)= 1;swapxy(10)=1; // swap x,y
-
-			Vector3f test(1,2,3);
-
-			
-			INFO("RX:" + rx.toString());
-			INFO("SWAPXY:" + swapxy.toString());
-			INFO("RX * TEST" + (rx * test).toString());
-			INFO("SWAPXY * TEST"+ (swapxy * test).toString());
-			INFO("SWAPXY * TEST" + (swapxy * test).toString());
-			INFO("SWAPXY * (RX * TEST)" + (swapxy *  (rx * test)).toString());
-			INFO("RX * (SWAPXY * TEST)" + (rx *  (swapxy * test)).toString());
-			INFO("(RX * SWAPXY) " + (rx *  swapxy ).toString());
-			INFO("(SWAPXY * RX)" + (swapxy * rx).toString());
-*/
 			QColor c = QColor (30,30,30);
 			qglClearColor(c);
 			glMatrixMode(GL_MODELVIEW);
@@ -85,47 +65,16 @@ namespace AppCore {
 			// Calc camera position
 			glTranslatef( translation.x(), translation.y(), translation.z() );
 			glScalef( scale, scale, scale );
-			//rotation = Matrix4f::Identity();
-//			INFO(rotation.toString());
 			Vector3f v(1,2,3);
 			Vector3f v2 = rotation*v;
-//			INFO( v2.toString());
 			glMultMatrixf(rotation.getArray());
 			glTranslatef( -pivot.x(), -pivot.y(), -pivot.z() );
-				
-
-
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
 
 
 			for (int i = 0; i < objects.size(); i++) {
 				objects[i]->draw();
 			}
-			/*
-			GLUquadric* myQuad = gluNewQuadric();    
-			gluQuadricDrawStyle(myQuad, GLU_FILL);
-
-			int count = 8;
-			for ( int i = 0; i < count; i++) {
-
-				for ( int j = 0; j < count; j++) {
-					for (int k = 0; k < count; k++) {
-						glPushMatrix();
-
-						glTranslatef( (i-(count/2))/5.0, (j-(count/2))/5.0, (k-(count/2))/5.0 );
-						gluSphere(myQuad, 0.1f, 6, 8);	
-
-						glPopMatrix();
-
-					}
-				}
-			}
-
-			gluDeleteQuadric(myQuad);
-
-			*/
-
 
 		};
 
@@ -146,22 +95,16 @@ namespace AppCore {
 			glLoadIdentity();
 
 			gluPerspective(settings.perspectiveAngle, w,  (float)settings.nearClipping, (float)settings.farClipping);
-
 			//glOrtho( -w, w, -h, h, (float)0, (float) 60 );
-
-
-
 		}
 
 		void EngineWidget::timerEvent(QTimerEvent*) {
-
 			static bool firstTime = true;
 			if (firstTime) {
 				firstTime = false;
 				updatePerspective(); 
 				requireRedraw();
 			}
-			//pendingRedraws = 2;
 			if (pendingRedraws) updateGL();
 		}
 
@@ -220,7 +163,7 @@ namespace AppCore {
 			}
 			double dx = e->x() - oldPos.x();
 			double dy = e->y() - oldPos.y();
-			
+
 			// normalize wrt screen size
 			double rx = dx / width();
 			double ry = dy / height();
@@ -228,7 +171,7 @@ namespace AppCore {
 			oldPos = e->pos();
 
 			if ( (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ShiftModifier ) 
-					|| e->buttons() == (Qt::LeftButton | Qt::RightButton )) 
+				|| e->buttons() == (Qt::LeftButton | Qt::RightButton )) 
 			{
 				// 1) dragging with left mouse button + shift down, or
 				// 2) dragging with left and right mouse button down
@@ -242,8 +185,8 @@ namespace AppCore {
 				rotateWorldZ( rx );
 				requireRedraw();
 			} else if ( ( e->buttons() == Qt::RightButton ) 
-				         || (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier ) 
-						 || (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::MetaModifier ) ) 
+				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier ) 
+				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::MetaModifier ) ) 
 			{ 
 				// 1) dragging with right mouse button, 
 				// 2) dragging with left button + control button,
@@ -263,37 +206,44 @@ namespace AppCore {
 		}
 
 
-		Vector3f EngineWidget::screenTo3D(int sx, int sy) {
-				// 2D -> 3D conversion
-				GLdouble modelView[16];
-				GLdouble projection[16];
-				GLint viewPort[16];
+		Vector3f EngineWidget::screenTo3D(int sx, int sy, int sz) {
+			// 2D -> 3D conversion
+			GLdouble modelView[16];
+			GLdouble projection[16];
+			GLint viewPort[16];
 
-				glGetDoublev( GL_MODELVIEW_MATRIX, modelView );
-				glGetDoublev( GL_PROJECTION_MATRIX, projection );
-				glGetIntegerv( GL_VIEWPORT, viewPort);
-				
-				GLdouble x, y, z;
-				float h = (float)height(); 
-				gluUnProject(sx, h-sy, 1.0f, modelView, projection, viewPort, &x, &y ,&z);
-				return Vector3f(x,y,z);
+			glGetDoublev( GL_MODELVIEW_MATRIX, modelView );
+			glGetDoublev( GL_PROJECTION_MATRIX, projection );
+			glGetIntegerv( GL_VIEWPORT, viewPort);
+
+			GLdouble x, y, z;
+			float h = (float)height(); 
+			gluUnProject(sx, h-sy, sz, modelView, projection, viewPort, &x, &y ,&z);
+			return Vector3f(x,y,z);
 		}
 
 		void EngineWidget::rotateWorldXY(double x, double y) {
-				double rotateSpeed = 5.0;
+			double rotateSpeed = 5.0;
 
-				Vector3f startPoint = screenTo3D(oldPos.x(), oldPos.y());
-				Vector3f xDir =       (screenTo3D(oldPos.x()+10, oldPos.y()) - startPoint).normalize() ;
-				Vector3f yDir =       (screenTo3D(oldPos.x(), oldPos.y()+10) - startPoint).normalize() ;
-				
-				Matrix4f mx = Matrix4f::Rotation(xDir, y*rotateSpeed);
-				Matrix4f my = Matrix4f::Rotation(yDir, -x*rotateSpeed);
-				rotation = rotation*my * mx   ; 
-				requireRedraw();
+			Vector3f startPoint = screenTo3D(oldPos.x(), oldPos.y(),1);
+			Vector3f xDir =       (screenTo3D(oldPos.x()+10, oldPos.y(),1) - startPoint).normalize() ;
+			Vector3f yDir =       (screenTo3D(oldPos.x(), oldPos.y()+10,1) - startPoint).normalize() ;
+
+			Matrix4f mx = Matrix4f::Rotation(xDir, y*rotateSpeed);
+			Matrix4f my = Matrix4f::Rotation(yDir, -x*rotateSpeed);
+			rotation = rotation*my * mx   ; 
+			requireRedraw();
 		}
 
 		void EngineWidget::rotateWorldZ(double z) {
-			// TODO: Implement
+			double rotateSpeed = 5.0;
+
+			Vector3f startPoint = screenTo3D(oldPos.x(), oldPos.y(), 0);
+			Vector3f endPoint =   screenTo3D(oldPos.x(), oldPos.y(), 1);
+
+			Matrix4f mz = Matrix4f::Rotation(startPoint-endPoint, z*rotateSpeed);
+			rotation = rotation*mz  ; 
+			requireRedraw();
 		}
 
 		void EngineWidget::translateWorld(double x, double y, double z) {

@@ -82,6 +82,13 @@ namespace StructureSynth {
 						throw (ParseError("Rule modifier 'maxdepth' expected integer argument. Found: " + symbol.text));
 					}
 					customRule->setMaxDepth(param);
+
+					if (symbol.type == Symbol::MoreThan) {
+						getSymbol();
+						QString ruleName = symbol.text;
+						if (!accept(Symbol::UserString)) throw (ParseError("After maxdepth retirement operator a rule name is expected. Found: " + symbol.text));
+						customRule->setRetirementRule(ruleName);
+					}
 				}
 			}
 

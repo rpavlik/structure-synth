@@ -12,6 +12,8 @@ namespace StructureSynth {
 		class CustomRule : public Rule {
 		public:
 			CustomRule(QString name);
+			virtual ~CustomRule();
+
 			virtual void  apply(Builder* builder);
 
 			/// Returns a list over rules that this rule references.
@@ -22,9 +24,12 @@ namespace StructureSynth {
 			double getWeight() { return weight; }
 			void setWeight(double w) { weight = w; }
 
+			void setRetirementRule(QString ruleName) { retirementRule = new RuleRef(ruleName); };
+
 		private:
 			QList<Action> actions;
 			double weight;
+			RuleRef* retirementRule;
 		};
 
 	}
