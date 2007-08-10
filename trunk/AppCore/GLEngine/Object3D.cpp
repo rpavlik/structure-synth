@@ -29,18 +29,6 @@ namespace AppCore {
 			//normal(n);
 			vertex(v4); 
 
-			glEnd();
-			glDisable (GL_LIGHTING);
-			glColor3f(1,1,1);
-			glBegin(GL_LINES);
-			Vector3f c = v1+((v2-v1)+(v4-v1))*0.5;
-			vertex(c);
-			vertex(c+ n*1.0f);
-			glEnd();
-			glEnable (GL_LIGHTING);
-			
-			
-			glBegin( GL_QUADS );
 			
 			
 		}
@@ -58,18 +46,6 @@ namespace AppCore {
 			//normal(n);
 			vertex(v1); 
 
-			glEnd();
-			glDisable (GL_LIGHTING);
-			glColor3f(1,0,1);
-			glBegin(GL_LINES);
-			Vector3f c = v1+((v2-v1)+(v4-v1))*0.5;
-			vertex(c);
-			vertex(c+ n*1.0f);
-			glEnd();
-			glEnable (GL_LIGHTING);
-			
-			
-			glBegin( GL_QUADS );
 			
 		}
 
