@@ -1,5 +1,5 @@
 rule start { 
-set maxgenerations 2000
+set maxdepth 2000
 R1
 
 } 

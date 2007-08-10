@@ -34,7 +34,9 @@ namespace StructureSynth {
 					symbols.append(Symbol(Symbol::Rule, s));
 				} else if (sl == "{") {
 					symbols.append(Symbol(Symbol::LeftBracket, s));
-				} else if (sl == "}") {
+				} else if (sl == ">") {
+					symbols.append(Symbol(Symbol::MoreThan, s));
+				}else if (sl == "}") {
 					symbols.append(Symbol(Symbol::RightBracket, s));
 				} else if (sl == "*") {
 					symbols.append(Symbol(Symbol::Multiply, s));

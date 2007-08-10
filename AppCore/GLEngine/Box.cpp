@@ -56,9 +56,9 @@ namespace AppCore {
 			
 
 
-			/*
+			
 			glBegin( GL_QUADS );
-			glColor4f(1,0,0,1);
+			glColor4f(0.5,1,0.3,1);
 			vertex4n(O, v2,v2+v1,v1);
 			vertex4rn(O+v3, v2+v3, v2+v1+v3, v1+v3);
 			vertex4n(O, v3, v3+v2,v2);
@@ -66,8 +66,8 @@ namespace AppCore {
 			vertex4n(O, v1, v3+v1, v3);
 			vertex4rn(O+v2, v1+v2, v3+v2+v1, v3+v2);
 			glEnd();
-			*/
-
+			
+/*
 			Vector3f c = O + v2*0.5f + v1*0.5f + v3*0.5f;
 			glBegin( GL_QUADS );
 			glColor4f(1,0,0,1);
@@ -79,7 +79,7 @@ namespace AppCore {
 			vertex4rnc(O+v1, v3+v1, v3+v2+v1, v2+v1,c);
 			vertex4rnc(O+v2, v1+v2, v3+v2+v1, v3+v2,c);
 			glEnd();
-			
+*/			
 
 		
 

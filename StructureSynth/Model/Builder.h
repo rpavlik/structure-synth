@@ -11,6 +11,7 @@
 namespace StructureSynth {
 	namespace Model {	
 
+		
 
 		/// A Builder executes the rule set on a Renderer object
 		class Builder {

@@ -69,7 +69,7 @@ namespace AppCore {
 		private:
 			// Creates the appropriate GL_PROJECTION matrix
 			void updatePerspective();	
-			AppCore::Math::Vector3f screenTo3D(int sx, int sy);
+			AppCore::Math::Vector3f screenTo3D(int sx, int sy, int sz);
 		
 
 			int pendingRedraws; // the number of times we must redraw 
