@@ -55,30 +55,29 @@ namespace AppCore {
 			
 			
 
-			/*
-			GLfloat green[4] = {0.0f, 1.0f, 0.0f, 1.0f} ;
-			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, green );
-			glMaterialfv( GL_FRONT, GL_SPECULAR, green );
-			glMaterialfv( GL_BACK, GL_AMBIENT_AND_DIFFUSE, green );
-			glMaterialfv( GL_BACK, GL_SPECULAR, green );
-			
-	GLfloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f} ;
-			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red );
-				glMaterialfv( GL_FRONT, GL_SPECULAR, red );
-			glMaterialfv( GL_BACK, GL_AMBIENT_AND_DIFFUSE, red );
-				glMaterialfv( GL_BACK, GL_SPECULAR, red );
-			*/
 
+			/*
 			glBegin( GL_QUADS );
 			glColor4f(1,0,0,1);
 			vertex4n(O, v2,v2+v1,v1);
-			//glColor4f(1,1,0,1);
 			vertex4rn(O+v3, v2+v3, v2+v1+v3, v1+v3);
-			//glColor4f(1,1,1,1);
 			vertex4n(O, v3, v3+v2,v2);
 			vertex4rn(O+v1, v3+v1, v3+v2+v1, v2+v1);
 			vertex4n(O, v1, v3+v1, v3);
 			vertex4rn(O+v2, v1+v2, v3+v2+v1, v3+v2);
+			glEnd();
+			*/
+
+			Vector3f c = O + v2*0.5f + v1*0.5f + v3*0.5f;
+			glBegin( GL_QUADS );
+			glColor4f(1,0,0,1);
+			vertex4nc(O, v2,v2+v1,v1,c);
+			vertex4nc(O, v3, v3+v2,v2,c);
+			vertex4nc(O, v1, v3+v1, v3,c);
+			glColor4f(0,0,1,1);
+			vertex4rnc(O+v3, v2+v3, v1+v2+v3, v1+v3,c);
+			vertex4rnc(O+v1, v3+v1, v3+v2+v1, v2+v1,c);
+			vertex4rnc(O+v2, v1+v2, v3+v2+v1, v3+v2,c);
 			glEnd();
 			
 

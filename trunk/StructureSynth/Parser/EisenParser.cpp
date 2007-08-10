@@ -230,7 +230,9 @@ namespace StructureSynth {
 				accept(Symbol::Set);
 				
 				QString key = symbol.text;
-				if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text));
+				if (symbol.type == Symbol::Operator && key == "maxdepth") {
+					getSymbol();
+				} else if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text));
 				QString value = symbol.text; 
 				getSymbol(); // We will accept everything here! 
 				INFO(key + " " + value);
