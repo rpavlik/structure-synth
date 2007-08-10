@@ -1,8 +1,12 @@
 
 Changelog for Structure Synth:
 ------------------------------
+10 Aug 07 [MHC]:	Added mouse rotation about z-axis (press both mouse buttons)
+[2h]				Added rule retirement ("Rule R MaxDepth > R2"), rule substitution (see Menger sponge example).
+	                Added 'MaxObjects' setting
+
  9 Aug 07 [MHC]:	Fixed rotation, scale offset. Rotations now in degrees instead of rad. 
-	                Added Grid, Box, Line, Dot primitives.
+[1h]                Added Grid, Box, Line, Dot primitives.
 	                
  7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weigth' rule modifier. Added 'fx','fy','fz' commands.
 [1h]
