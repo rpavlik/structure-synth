@@ -174,6 +174,22 @@ namespace StructureSynth {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RZ' (Z-axis rotation): Expected numerical parameter. Found: " + symbol.text));
 				return Transformation::createRZ(degreeToRad(param));
+			} else if (type == "hue") {
+				double param = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'hue': Expected numerical parameter. Found: " + symbol.text));
+				return Transformation::createHSV(param, 1,1,1);
+			} else if (type == "sat") {
+				double param = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'sat': Expected numerical parameter. Found: " + symbol.text));
+				return Transformation::createHSV(0, param,1,1);
+			} else if (type == "brightness") {
+				double param = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'brightness': Expected numerical parameter. Found: " + symbol.text));
+				return Transformation::createHSV(0, 1,param,1);
+			} else if (type == "alpha") {
+				double param = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text));
+				return Transformation::createHSV(0, 1,1,param);
 			} else if (type == "s") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));
@@ -251,13 +267,17 @@ namespace StructureSynth {
 			RuleSet*  rs = new RuleSet();
 			getSymbol();
 	
-			while (symbol.type == Symbol::Rule || symbol.type == Symbol::Set) {    
+			while (symbol.type == Symbol::Rule || symbol.type == Symbol::Set
+				    || symbol.type == Symbol::LeftBracket || symbol.type == Symbol::UserString || symbol.type == Symbol::Number) {    
 				if (symbol.type == Symbol::Rule) {
 					Rule* r = rule(); 
 					rs->addRule(r);
-				}
-				if (symbol.type == Symbol::Set) {
-					WARNING("'Set' is not supported yet!");
+				} else if (symbol.type == Symbol::Set) {
+					Action a = setAction(); 
+					rs->getTopLevelRule()->appendAction(a);
+				} else {
+					Action a = action(); 
+					rs->getTopLevelRule()->appendAction(a);
 				}
 			}
 

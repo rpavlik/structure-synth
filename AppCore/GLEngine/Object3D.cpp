@@ -6,6 +6,13 @@ using namespace AppCore::Math;
 namespace AppCore {
 	namespace GLEngine {
 
+		void Object3D::setColor(AppCore::Math::Vector3f rgb, float alpha) { 
+			primaryColor[0] = rgb[0]; 
+			primaryColor[1] = rgb[1]; 
+			primaryColor[2] = rgb[2]; 
+			primaryColor[3] = rgb[3]; 
+		}
+
 
 		void Object3D::vertex4n(AppCore::Math::Vector3f v1,AppCore::Math::Vector3f v2,AppCore::Math::Vector3f v3,AppCore::Math::Vector3f v4) { 
 			Vector3f n = (v2-v1).cross(v4-v1);

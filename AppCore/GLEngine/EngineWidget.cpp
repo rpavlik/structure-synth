@@ -35,15 +35,7 @@ namespace AppCore {
 
 
 
-			int count = 8;
-			for ( int i = 0; i < count; i++) {
-				for ( int j = 0; j < count; j++) {
-					for (int k = 0; k < count; k++) {
-						objects.append(new Sphere(Vector3f( (i-(count/2))/5.0, (j-(count/2))/5.0, (k-(count/2))/5.0), 0.1f));
-					}
-				}
-			}
-
+			
 		}
 
 		EngineWidget::~EngineWidget() {

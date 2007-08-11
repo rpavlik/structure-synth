@@ -1,8 +1,11 @@
 #include "Builder.h"
 #include "../../AppCore/Logging/Logging.h"
 #include "../../AppCore/Exceptions/Exception.h"
+#include "../../AppCore/Misc/ColorUtils.h"
+#include "../../AppCore/Math/Vector3.h"
 
 using namespace AppCore::Logging;
+using namespace AppCore::Math;
 using namespace AppCore::Exceptions;
 
 namespace StructureSynth {
@@ -12,6 +15,8 @@ namespace StructureSynth {
 			maxGenerations = 1000;
 			maxObjects = 100000;
 			objects = 0;
+
+	
 		};
 			
 

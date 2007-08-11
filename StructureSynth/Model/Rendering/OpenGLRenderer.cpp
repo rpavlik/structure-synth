@@ -41,11 +41,14 @@ namespace StructureSynth {
 			};
 
 			void OpenGLRenderer::drawSphere(AppCore::Math::Vector3f center, float radius) {
-				engine->addObject(new Sphere( center, radius));
+				Object3D* o = new Sphere( center, radius);
+				o->setColor(rgb, 1);
+				engine->addObject(o);
 			};
 
 			void OpenGLRenderer::begin() {
 				engine->clearWorld();
+				rgb = Vector3f(1,0,0);
 			};
 
 			void OpenGLRenderer::end() {

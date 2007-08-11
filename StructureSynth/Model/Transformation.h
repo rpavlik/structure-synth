@@ -27,13 +27,21 @@ namespace StructureSynth {
 			static Transformation createRX(double angle);
 			static Transformation createRY(double angle);
 			static Transformation createRZ(double angle);
-		
+
+			
 			// Scaling 
 			static Transformation createScale(double x, double y, double z);
+		
+			// Color stuff
+			static Transformation createHSV(float h, float s, float v, float a);
 		
 		private:
 			// Matrix and Color transformations here.
 			AppCore::Math::Matrix4f matrix;
+			float deltaH;
+			float scaleS;
+			float scaleV;
+			float scaleAlpha;
 		};
 
 	}

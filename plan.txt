@@ -4,11 +4,11 @@ TODO:
 Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 -----------------------
 + Rotations are not around the proper unit cube axis.
-- Add global 'set' command
++ Add global 'set' command
 + 'set maxobjects'
 - 'set minvolume'
 - 'set seed'
-- Preprocessor Comments
++ Preprocessor Comments
 - Version object
 - Auto load examples to menu item entry.
 / Solid Box object
@@ -16,17 +16,18 @@ Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 - Iterated Rules
 / Rule retirement:
   + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
-  - (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
+  ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
   + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
 - Scale with 3 parameters.
-	- Ellipsoid object. (Sphere are always isotropic]
-- Custom Transformation matrix operator.
+	- Ellipsoid object. (as of now spheres are always isotropic]
 - Drag'n'Drop of EisenScript files.
-- Coloring (how?)
++ Coloring 
 
+- Check for infinite retirement substitution cycles.
 
 Optimus Prime [v 0.8]
 ---------------------
+- Custom Transformation matrix operator.
 - Preprocessor '#include' statement
 - Skew transformations (syntax?)
 - Version object with check for updates on internet.
@@ -57,8 +58,9 @@ Final Release [v 1.0]
 
 v 2.x
 -----
+- Parameterized rendering (movies)
 - Synchronize random seed per generation.
-? Geometry Distortion plugins
+? Geometry Distortion plugins (a la fish eye view)
 ? Random parameters in rule definition
 ? Built-in ray tracer.
 ? Live coding / drawing

@@ -18,6 +18,8 @@ namespace AppCore {
 		};
  
 		void Sphere::draw() {
+			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, primaryColor );
+
 			glPushMatrix();
 			glTranslatef( center.x(), center.y(), center.z() );
 			gluSphere(myQuad, radius, 7, 7);	

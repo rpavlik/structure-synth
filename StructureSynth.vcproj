@@ -312,23 +312,23 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Misc"
+				>
+				<File
+					RelativePath=".\AppCore\Misc\ColorUtils.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\Misc\ColorUtils.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Generated Files"
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
-			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
 				>
@@ -353,7 +353,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -384,6 +384,18 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -464,6 +476,14 @@
 				</File>
 				<File
 					RelativePath=".\StructureSynth\Parser\EisenParser.h"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Parser\Preprocessor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Parser\Preprocessor.h"
 					>
 				</File>
 				<File

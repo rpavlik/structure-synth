@@ -6,6 +6,7 @@
 #include "StructureSynth/Parser/EisenParser.h"
 #include "StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "StructureSynth/Parser/Tokenizer.h"
+#include "StructureSynth/Parser/Preprocessor.h"
 #include "StructureSynth/Model/RuleSet.h"
 #include "StructureSynth/Model/Builder.h"
 
@@ -148,14 +149,12 @@ namespace StructureSynth {
 			new EisenScriptHighlighter(textEdit);
 			textEdit->resize(100,100);
 
-			textEdit->setText("\r\n\r\n rule R1 { \r\n   { x 1 y 1 rz 23 } R2 \r\n   sphere \r\n } \r\n \r\n rule R2 { \r\n   { rx 40 y 2 } R1 \r\n   box \r\n } 		");
-
+			
 			QString s = 
-			QString("rule start { \r\n")+
+			QString("// Double spirals [MHC 2007]\r\n")+
 			"set maxdepth 400\r\n"+
 			"R1\r\n"+
 			"R2\r\n"+
-			"} \r\n"+
 			"\r\n"+
 			"rule R1 { \r\n"+
 			"{ x 1 rz 6 ry 6 s 0.99 } R1\r\n"+
@@ -168,6 +167,7 @@ namespace StructureSynth {
 			"} \r\n";
 			textEdit->setText(s);
 
+			
 			engine = new AppCore::GLEngine::EngineWidget(splitter);
 			setCentralWidget(splitter);
 
@@ -444,7 +444,7 @@ namespace StructureSynth {
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
 				
-				Tokenizer tokenizer(textEdit->toPlainText());
+				Tokenizer tokenizer(Preprocessor::Process(textEdit->toPlainText()));
 				EisenParser e(&tokenizer);
 				INFO("Parsing...");
 				RuleSet* rs = e.parseRuleset();
@@ -461,7 +461,7 @@ namespace StructureSynth {
 
 				INFO("Done...");
 
-				delete(rs);
+				//delete(rs);
 
 			} catch (Exception& er) {
 				WARNING(er.getMessage());

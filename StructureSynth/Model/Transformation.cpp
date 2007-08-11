@@ -15,6 +15,10 @@ namespace StructureSynth {
 
 		Transformation::Transformation() {
 			matrix = Matrix4f::Identity();
+			deltaH = 0;
+			scaleS = 1;
+			scaleV = 1;
+			scaleAlpha = 1;
 		}
 
 		Transformation::~Transformation() {
@@ -23,13 +27,33 @@ namespace StructureSynth {
 		State Transformation::apply(const State& s) const {
 			State s2(s);
 			s2.matrix = s.matrix*matrix; // TODO: Check order
+
+			float h = s2.hsv[0] + deltaH;
+			float sat = s2.hsv[1]*scaleS;
+			float v = s2.hsv[2]*scaleV;
+			float a = s2.alpha * scaleAlpha;
+			if (sat<0) sat=0;
+			if (v<0) v=0;
+			if (a<0) a=0;
+			if (sat>1) sat=1;
+			if (v>1) v=1;
+			if (a>1) a=1;
+			while (h>360) h-=360;
+			while (h<0) h+=360;
+
+			s2.hsv = Vector3f(h,sat,v);
+			s2.alpha = a;
 			return s2;
 		}
 
 
 			
 		void Transformation::append(const Transformation& t) {
-			this->matrix = this->matrix * t.matrix; // TODO: Check order
+			this->matrix = this->matrix * t.matrix; 
+			this->scaleAlpha = this->scaleAlpha * t.scaleAlpha;
+			this->deltaH = this->deltaH + t.deltaH;
+			this->scaleS = this->scaleS * t.scaleS;
+			this->scaleV = this->scaleV * t.scaleV;
 		}
 
 		// The predefined operators
@@ -37,7 +61,6 @@ namespace StructureSynth {
 		Transformation Transformation::createX(double offset) {
 			Transformation t;
 			t.matrix(0,3) = offset;
-			INFO("CreateX:" + t.matrix.toString() + " " + QString("%1").arg(offset));
 			return t;
 		}
 		
@@ -82,6 +105,19 @@ namespace StructureSynth {
 				Matrix4f::Translation(-0.5,-0.5,0);
 			return t;
 		}
+
+		Transformation Transformation::createHSV(float h, float s, float v, float a) {
+			Transformation t;
+			t.deltaH = h;
+			t.scaleAlpha = a;
+			t.scaleS = s;
+			t.scaleV = v;
+
+			
+
+			return t;
+		}
+
 
 		Transformation Transformation::createScale(double x, double y, double z) {
 			Transformation t;

@@ -18,7 +18,7 @@ namespace StructureSynth {
 		Tokenizer::Tokenizer(QString input) {
 
 			QStringList operators;
-			operators << "x" << "y" << "z" << "rx" << "ry" << "rz" << "s" << "fx" << "fy" << "fz" << "maxdepth" << "weight" << "md" << "w";
+			operators << "a" << "alpha" << "h" << "hue" << "sat" << "b" << "brightness" << "v" << "x" << "y" << "z" << "rx" << "ry" << "rz" << "s" << "fx" << "fy" << "fz" << "maxdepth" << "weight" << "md" << "w";
 
 			currentSymbol = -1;
 
@@ -96,6 +96,9 @@ namespace StructureSynth {
 					// Resolve abbreviations
 					if (longName == "md") longName = "maxdepth";
 					if (longName == "w") longName = "weight";
+					if (longName == "h") longName = "hue";
+					if (longName == "b") longName = "brightness";
+					if (longName == "a") longName = "alpha";
 					
 					
 					Symbol ns(Symbol::Operator, longName);

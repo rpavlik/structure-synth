@@ -12,6 +12,9 @@ namespace AppCore {
 			virtual ~Object3D() {};
 
 			virtual void draw() = 0;
+
+			void setColor(AppCore::Math::Vector3f rgb, float alpha);
+
 		protected:
 
 			void vertex(AppCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
@@ -22,7 +25,8 @@ namespace AppCore {
 			void vertex4rn(AppCore::Math::Vector3f v1,AppCore::Math::Vector3f v2,AppCore::Math::Vector3f v3,AppCore::Math::Vector3f v4);
 			void vertex4nc(AppCore::Math::Vector3f v1,AppCore::Math::Vector3f v2,AppCore::Math::Vector3f v3,AppCore::Math::Vector3f v4,AppCore::Math::Vector3f center);
 			void vertex4rnc(AppCore::Math::Vector3f v1,AppCore::Math::Vector3f v2,AppCore::Math::Vector3f v3,AppCore::Math::Vector3f v4,AppCore::Math::Vector3f center);
-		private:
+
+			GLfloat primaryColor[4];
 		};
 
 	}
