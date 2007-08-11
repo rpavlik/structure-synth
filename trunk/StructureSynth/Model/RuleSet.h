@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rule.h"
+#include "CustomRule.h"
 
 namespace StructureSynth {
 	namespace Model {	
@@ -20,19 +21,19 @@ namespace StructureSynth {
 				/// Resolve symbolic names into pointers
 				void resolveNames();
 
-				///
+				/// TODO: Implement
 				QStringList getUnreferencedNames();
 
-				/// The first rule parsed will be the start-rule.
-				/// Notice that rule loaded as part of a preprocessor '#include' statement will not be start-rules
 				Rule* getStartRule();
+
+				CustomRule* getTopLevelRule() { return topLevelRule; }
 
 				/// For debug
 				void dumpInfo();
 
 		private:
 			 QList<Rule*> rules;
-			 Rule* startRule;
+			 CustomRule* topLevelRule;
 		};
 
 	}

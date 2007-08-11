@@ -17,7 +17,9 @@ namespace StructureSynth {
 	namespace Model {	
 
 		/// Constructor. Automatically adds built-in rules.
-		RuleSet::RuleSet() : startRule(0) {
+		RuleSet::RuleSet() {
+			topLevelRule = new CustomRule("TopLevelRule");
+
 			/// Add instances of predefined built-in types.
 			rules.append(new PrimitiveRule(PrimitiveRule::Box));
 			rules.append(new PrimitiveRule(PrimitiveRule::Sphere));
@@ -25,6 +27,7 @@ namespace StructureSynth {
 			rules.append(new PrimitiveRule(PrimitiveRule::Line));
 			rules.append(new PrimitiveRule(PrimitiveRule::Dot));
 			rules.append(new PrimitiveRule(PrimitiveRule::Grid));
+			rules.append(topLevelRule);
 		};
 
 
@@ -40,11 +43,12 @@ namespace StructureSynth {
 			QString name = rule->getName();
 			INFO("Adding rule: "+name);
 
+			/*
 			if (startRule == 0) {
 				startRule = rule;
 				INFO("Added as start rule: "+name);
 
-			}
+			}*/
 
 			for (int i = 0; i < rules.size(); i++) {
 
@@ -126,7 +130,7 @@ namespace StructureSynth {
 		};
 
 		Rule* RuleSet::getStartRule() {
-			return startRule;
+			return topLevelRule;
 		};
 
 		/// For debug

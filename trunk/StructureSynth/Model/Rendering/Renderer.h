@@ -34,6 +34,10 @@ namespace StructureSynth {
 				virtual void drawDot(AppCore::Math::Vector3f pos) = 0;
 				
 				virtual void drawSphere(AppCore::Math::Vector3f center, float radius) = 0;
+
+				// Color
+				// RGB in [0;1] intervals.
+				virtual void setColor(AppCore::Math::Vector3f rgb) = 0;
 		};
 
 		}

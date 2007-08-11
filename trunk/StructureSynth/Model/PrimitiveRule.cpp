@@ -3,6 +3,7 @@
 
 #include "../../AppCore/Exceptions/Exception.h"
 #include "../../AppCore/Logging/Logging.h"
+#include "../../AppCore/Misc/ColorUtils.h"
 
 using namespace AppCore::Exceptions;
 using namespace AppCore::Logging;
@@ -36,7 +37,10 @@ namespace StructureSynth {
 
 		void PrimitiveRule::apply(Builder* b) {
 			b->increaseObjectCount();
-
+			b->getRenderer()->setColor(
+				AppCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)
+			);
+			
 			if (type == Sphere) {
 				Vector3f v(0,0,0);
 				Vector3f v1 = b->getState().matrix * v;

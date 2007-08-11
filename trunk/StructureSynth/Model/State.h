@@ -15,10 +15,9 @@ namespace StructureSynth {
 
 			AppCore::Math::Matrix4f matrix;
 
-			// TODO:
-			// - Alpha , Coloring state
-
 			QMap<Rule*, int> maxDepths;
+			AppCore::Math::Vector3f hsv;
+			float alpha;
 		};
 
 

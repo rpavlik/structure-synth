@@ -58,7 +58,7 @@ namespace AppCore {
 
 			
 			glBegin( GL_QUADS );
-			glColor4f(0.5,1,0.3,1);
+			glColor4f(0.5f,1.0f,0.3f,1.0f);
 			vertex4n(O, v2,v2+v1,v1);
 			vertex4rn(O+v3, v2+v3, v2+v1+v3, v1+v3);
 			vertex4n(O, v3, v3+v2,v2);
