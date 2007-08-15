@@ -21,7 +21,10 @@ namespace StructureSynth {
 				AppCore::Math::Vector3f dir1 , 
 				AppCore::Math::Vector3f dir2, 
 				AppCore::Math::Vector3f dir3) {
-					engine->addObject(new Box( base, dir1, dir2, dir3));
+					Object3D* o =new Box( base, dir1, dir2, dir3);
+					o->setColor(rgb, alpha);
+				
+					engine->addObject(o);
 			};
 
 			void OpenGLRenderer::drawGrid(AppCore::Math::Vector3f base, 
@@ -42,13 +45,14 @@ namespace StructureSynth {
 
 			void OpenGLRenderer::drawSphere(AppCore::Math::Vector3f center, float radius) {
 				Object3D* o = new Sphere( center, radius);
-				o->setColor(rgb, 1);
+				o->setColor(rgb, alpha);
 				engine->addObject(o);
 			};
 
 			void OpenGLRenderer::begin() {
 				engine->clearWorld();
 				rgb = Vector3f(1,0,0);
+				alpha = 1;
 			};
 
 			void OpenGLRenderer::end() {
