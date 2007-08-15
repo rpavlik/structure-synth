@@ -40,6 +40,8 @@ namespace StructureSynth {
 			b->getRenderer()->setColor(
 				AppCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)
 			);
+
+			b->getRenderer()->setAlpha( b->getState().alpha );
 			
 			if (type == Sphere) {
 				Vector3f v(0,0,0);

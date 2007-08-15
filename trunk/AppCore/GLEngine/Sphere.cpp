@@ -19,6 +19,9 @@ namespace AppCore {
  
 		void Sphere::draw() {
 			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, primaryColor );
+			if (primaryColor[3] < 1) {
+				glEnable( GL_BLEND );
+			}
 
 			glPushMatrix();
 			glTranslatef( center.x(), center.y(), center.z() );

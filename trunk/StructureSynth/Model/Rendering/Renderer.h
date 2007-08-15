@@ -38,6 +38,7 @@ namespace StructureSynth {
 				// Color
 				// RGB in [0;1] intervals.
 				virtual void setColor(AppCore::Math::Vector3f rgb) = 0;
+				virtual void setAlpha(double alpha) = 0;
 		};
 
 		}

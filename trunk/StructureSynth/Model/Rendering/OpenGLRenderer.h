@@ -39,9 +39,11 @@ namespace StructureSynth {
 				virtual void end();
 				
 				virtual void setColor(AppCore::Math::Vector3f rgb) { this->rgb = rgb; }
+				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 			private:
 				AppCore::GLEngine::EngineWidget* engine;
 				AppCore::Math::Vector3f rgb;
+				double alpha;
 			};
 
 		}

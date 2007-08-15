@@ -10,7 +10,7 @@ namespace AppCore {
 			primaryColor[0] = rgb[0]; 
 			primaryColor[1] = rgb[1]; 
 			primaryColor[2] = rgb[2]; 
-			primaryColor[3] = rgb[3]; 
+			primaryColor[3] = alpha; 
 		}
 
 
