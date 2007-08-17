@@ -330,29 +330,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
@@ -365,7 +342,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
+				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -396,6 +373,29 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
 			</File>
@@ -648,6 +648,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\bugs.txt"
+			>
+		</File>
 		<File
 			RelativePath=".\changelog.txt"
 			>
