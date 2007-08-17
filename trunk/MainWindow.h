@@ -26,6 +26,7 @@ namespace StructureSynth {
 			void closeEvent(QCloseEvent *event);
 
 		private slots:
+			void openFile();
 			void newFile();
 			void open();
 			bool save();
@@ -33,8 +34,10 @@ namespace StructureSynth {
 			void about();
 			void documentWasModified();
 			void render();
+			
 
 		private:
+			QString getExamplesDir();
 			void init();
 			void createActions();
 			void createMenus();

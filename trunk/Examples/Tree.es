@@ -1,3 +1,5 @@
+spiral
+
 rule spiral w 50 { 
  dot  
 { y 1 rx 2 s 0.995 } spiral

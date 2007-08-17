@@ -1,29 +1,30 @@
 
 TODO:
 
+Pre-alpha Build [v 0.4]?
+------------------------
+
 Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 -----------------------
 + Rotations are not around the proper unit cube axis.
 + Add global 'set' command
 + 'set maxobjects'
++ Preprocessor Comments
++ Auto load examples to menu item entry.
++ Coloring 
++ GUI: Rotate about z axis
++ Solid Box object
++ Rule retirement:
+  + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
+  + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
 - 'set minvolume'
 - 'set seed'
-+ Preprocessor Comments
 - Version object
-- Auto load examples to menu item entry.
-/ Solid Box object
-+ GUI: Rotate about z axis
 - Iterated Rules
-/ Rule retirement:
-  + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
-  ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
-  + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
 - Scale with 3 parameters.
 	- Ellipsoid object. (as of now spheres are always isotropic]
-- Drag'n'Drop of EisenScript files.
-+ Coloring 
 
-- Check for infinite retirement substitution cycles.
+
 
 Optimus Prime [v 0.8]
 ---------------------
@@ -44,6 +45,10 @@ Optimus Prime [v 0.8]
   - [OpenGL static] - for drawing one non-rotatable frame (for time-consuming pictures)
   - [OpenGL preview] - all objects drawn as dots.
   - [Tag Renderer] - renders all tag as text.
+- Check for infinite retirement substitution cycles.
+- Progress Bar
+- Drag'n'Drop of EisenScript files.
+- Rule retirement: ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
 
 Final Release [v 1.0]
 ---------------------

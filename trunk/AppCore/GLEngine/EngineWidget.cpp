@@ -22,7 +22,7 @@ namespace AppCore {
 			oldPos = QPoint(0,0);
 
 			// Engine settings
-			scale = 7.0;
+			scale = 0.4;
 			minimumScale = 0.01;
 			mouseSpeed = 1.0;
 			mouseTranslationSpeed = 64.0;

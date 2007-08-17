@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+17 Aug 07 [MHC]:    Example dir entries added to menu. Added EULA.
+[1½h]
+
 11 Aug 07 [MHC]:	Added HSV coloring model (operators Hue(H),Sat,Brightness(B))
 [2h]				Added Preprocessor (only support C++ comments, multiline /* ... */ and single line //)
 					Support for global set command (rule calls and set commands can now appear unscoped (in a top-level rule))
