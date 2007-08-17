@@ -3,7 +3,7 @@ Bug List:
 Priority 0-5, 5 is worst:
 
 - [3] No sorting while alpha-blending
-- [1] 'Save as...' and 'Load...' should defuault to '*.es* filter
+- [1] 'Save as...' and 'Load...' should default to '*.es* filter
 
 Other TO-DO's:
 
