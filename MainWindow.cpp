@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QDir>
 
 #include "mainwindow.h"
 #include "AppCore/Logging/ListWidgetLogger.h"
@@ -297,11 +298,34 @@ namespace StructureSynth {
 			editMenu->addAction(copyAction);
 			editMenu->addAction(pasteAction);
 
+
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
 			
 			menuBar()->addSeparator();
 
+			// Examples...
+			QMenu* examplesMenu = menuBar()->addMenu(tr("&Examples"));
+
+			// Scan examples dir...
+			QDir d(getExamplesDir());
+			QStringList filters;
+			filters << "*.es";
+			d.setNameFilters(filters);
+			if (!d.exists()) {
+				QAction* a = new QAction("Unable to locate: "+d.absolutePath(), this);
+				a->setEnabled(false);
+				examplesMenu->addAction(a);
+			} else {
+				QStringList sl = d.entryList();
+				for (int i = 0; i < sl.size(); i++) {
+					QAction* a = new QAction(sl[i], this);
+					a->setData(sl[i]);
+					connect(a, SIGNAL(triggered()), this, SLOT(openFile()));
+					examplesMenu->addAction(a);
+				}
+			}
+			
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
 			helpMenu->addAction(aboutQtAction);
@@ -362,9 +386,21 @@ namespace StructureSynth {
 			return true;
 		}
 
+		void MainWindow::openFile()
+		{
+			QAction *action = qobject_cast<QAction *>(sender());
+			if (action) {
+				QDir d(getExamplesDir());
+			
+				loadFile(d.absoluteFilePath(action->data().toString()));
+			} else {
+				WARNING("No data!");
+			}
+		}
+
 		void MainWindow::loadFile(const QString &fileName)
 		{
-
+			INFO("LoadFile");
 			QFile file(fileName);
 			if (!file.open(QFile::ReadOnly | QFile::Text)) {
 				QMessageBox::warning(this, tr("StructureSynth"),
@@ -466,6 +502,11 @@ namespace StructureSynth {
 			} catch (Exception& er) {
 				WARNING(er.getMessage());
 			} 
+		}
+
+		QString MainWindow::getExamplesDir() {
+			// TODO: Implement
+			return "Examples";
 		}
 	}
 }
