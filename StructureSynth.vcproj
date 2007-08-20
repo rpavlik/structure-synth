@@ -323,6 +323,14 @@
 					RelativePath=".\AppCore\Misc\ColorUtils.h"
 					>
 				</File>
+				<File
+					RelativePath=".\AppCore\Misc\Version.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AppCore\Misc\Version.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

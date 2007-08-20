@@ -3,6 +3,7 @@
 #include <QMainWindow>
 
 #include "AppCore/GLEngine/EngineWidget.h"
+#include "AppCore/Misc/Version.h"
 
 
 class QAction;
@@ -38,6 +39,7 @@ namespace StructureSynth {
 
 		private:
 			QString getExamplesDir();
+			QString getMiscDir();
 			void init();
 			void createActions();
 			void createMenus();
@@ -73,10 +75,11 @@ namespace StructureSynth {
 			QAction *copyAction;
 			QAction *pasteAction;
 			QAction *aboutAction;
-			QAction *aboutQtAction;
 
 			QAction *renderAction;
 			AppCore::GLEngine::EngineWidget* engine;
+
+			AppCore::Misc::Version version;
 		};
 
 	}

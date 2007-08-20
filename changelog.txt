@@ -1,6 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+20 Aug 07 [MHC]:    Added version object and about page.
+[1h]
+
+19 Aug 07 [MHC]:    Created a web page for the project.
+[7h]
 
 17 Aug 07 [MHC]:    Example dir entries added to menu. Added EULA.
 [1½h]
