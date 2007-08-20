@@ -126,8 +126,24 @@ namespace StructureSynth {
 
 		void MainWindow::about()
 		{
-			QMessageBox::about(this, tr("About StructureSynth"),
-				tr("<b>StructureSynth</b> by hvidtfeldts.net"));
+			
+			QFile file(getMiscDir() + QDir::separator() + "about.html");
+			if (!file.open(QFile::ReadOnly | QFile::Text)) {
+				WARNING("Could not open about.html...");
+				return;
+			}
+
+			QTextStream in(&file);
+			QString text = in.readAll();
+
+			text.replace("$VERSION$", version.toLongString());
+			
+			QMessageBox mb(this);
+			mb.setText(text);
+			mb.setWindowTitle("About Structure Synth");
+			mb.setIconPixmap(getMiscDir() + QDir::separator() + "icon.jpg");
+			mb.exec();
+
 		}
 
 		void MainWindow::documentWasModified()
@@ -137,6 +153,7 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
+			version = AppCore::Misc::Version(0, 4, 0, -1, " Alpha (Kolberger Heide)");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			isUntitled = true;
@@ -269,10 +286,7 @@ namespace StructureSynth {
 			aboutAction->setStatusTip(tr("Show the About box"));
 			connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-			aboutQtAction = new QAction(tr("About &Qt"), this);
-			aboutQtAction->setStatusTip(tr("Show the Qt library's About box"));
-			connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-
+			
 
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
@@ -328,7 +342,6 @@ namespace StructureSynth {
 			
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
-			helpMenu->addAction(aboutQtAction);
 		}
 
 		void MainWindow::createToolBars()
@@ -507,6 +520,11 @@ namespace StructureSynth {
 		QString MainWindow::getExamplesDir() {
 			// TODO: Implement
 			return "Examples";
+		}
+
+		QString MainWindow::getMiscDir() {
+			// TODO: Implement
+			return "Misc";
 		}
 	}
 }
