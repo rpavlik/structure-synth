@@ -17,9 +17,9 @@ Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 + Rule retirement:
   + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
   + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
++ Version object
 - 'set minvolume'
 - 'set seed'
-- Version object
 - Iterated Rules
 - Scale with 3 parameters.
 	- Ellipsoid object. (as of now spheres are always isotropic]

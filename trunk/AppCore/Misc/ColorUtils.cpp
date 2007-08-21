@@ -10,6 +10,7 @@ namespace AppCore {
 
 		AppCore::Math::Vector3f ColorUtils::HSVtoRGB(AppCore::Math::Vector3f hsv) {
 			/// Implentation based on: http://en.wikipedia.org/wiki/HSV_color_space
+			if (hsv[0] >= 360) hsv[0]-=360;
 			int Hi = (int)(hsv[0] / 60) % 6;
 			double f = (hsv[0] /  60) - Hi;
 			double p = hsv[2]*(1-hsv[1]);

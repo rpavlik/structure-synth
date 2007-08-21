@@ -14,6 +14,8 @@ namespace AppCore {
 
 
 		EngineWidget::EngineWidget(QWidget* parent) : QGLWidget(parent) {
+
+			
 			updatePerspective();
 
 			pendingRedraws = 0;
