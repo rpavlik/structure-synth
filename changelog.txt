@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+21 Aug 07 [MHC]:    Transformation Loops new working. Corrected a HSV conversion bug.
+[1h]
+
 20 Aug 07 [MHC]:    Added version object and about page.
 [1h]
 

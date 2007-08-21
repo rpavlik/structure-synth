@@ -16,6 +16,7 @@ namespace StructureSynth {
 			maxObjects = 100000;
 			objects = 0;
 
+
 	
 		};
 			

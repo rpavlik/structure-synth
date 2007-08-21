@@ -240,10 +240,30 @@ namespace StructureSynth {
 				accept(Symbol::UserString);
 				return Action(ruleName);
 			} else if (symbol.type == Symbol::Number) {
-				// TODO:
-				throw (ParseError("Not impl yet. Found: " + symbol.text));
-				accept(Symbol::UserString);
-				return Action();
+
+				Action action;
+
+				while (symbol.type == Symbol::Number) {
+					// number of loops...
+					if (!symbol.isInteger) throw (ParseError("Expected an integer count in the transformation loop. Found: " + symbol.text));
+					int count = symbol.intValue;
+					getSymbol(); 
+
+					// '*'
+					if (!accept(Symbol::Multiply)) throw (ParseError("Expected a '*' after the transformation count. Found: " + symbol.text));
+					
+					// transformation list
+					Transformation t = transformationList();
+					action.addTransformationLoop(TransformationLoop(count, t));
+				}
+				
+				// Rule reference
+				QString ruleName = symbol.text;
+				if (!accept(Symbol::UserString)) throw (ParseError("Expected a rule name or a new loop after the transformation list. Found: " + symbol.text));
+				action.setRule(ruleName);
+
+				return action;
+
 			} else {
 				throw (ParseError("A rule action must start with either a number, a rule name or a left bracket. Found: "+symbol.text));	
 			}

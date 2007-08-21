@@ -22,6 +22,9 @@ namespace StructureSynth {
 			Action(QString ruleName);
 			Action(QString key, QString value);
 			Action() { rule = 0; set = 0; }
+			
+			void addTransformationLoop(TransformationLoop tl);
+			void setRule(QString rule);
 
 			~Action();
 
