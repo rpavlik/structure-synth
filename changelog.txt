@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------------------------
+22 Aug 07 [MHC]:    Size transformation now has a three parameter overload.
+[½h]
 
 21 Aug 07 [MHC]:    Transformation Loops new working. Corrected a HSV conversion bug.
 [1h]
