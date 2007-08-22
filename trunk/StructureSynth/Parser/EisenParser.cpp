@@ -193,6 +193,14 @@ namespace StructureSynth {
 			} else if (type == "s") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));
+				
+				if (symbol.type == Symbol::Number) {
+					double param2 = symbol.getNumerical();
+					getSymbol();
+					double param3 = symbol.getNumerical();
+					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected third numerical parameter. Found: " + symbol.text));
+					return Transformation::createScale(param,param2,param3);
+				}
 				return Transformation::createScale(param,param,param);
 			} else if (type == "fx") {
 				return Transformation::createScale(-1,1,1);
