@@ -2,7 +2,7 @@ set maxdepth 400
 R1
 
 rule R1 w 100 { 
-{ x 1 rz 6 ry 6 s 0.99 } R1
+{ x 1 rz 6 ry 6 s 0.99 b 0.99  h 0.5  } R1
 { s 2 } sphere 
 } 
 

@@ -1,7 +1,7 @@
 { a 1000 } R1
 
 
-rule R1 maxdepth 4 > c {
+rule R1 maxdepth 3 > c {
 	{ s 1/3 x -1 y -1  } R2 
 	{ s 1/3 x -1 y -1  z -1 } R2 
 	{ s 1/3 x -1 y -1  z +1 } R2 
