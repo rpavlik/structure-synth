@@ -1,8 +1,8 @@
 ROADMAP
 -------
 
-Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
------------------------
+Version 0.5: 'Graf Zeppelin' (Release first binaries (WIN) here)
+----------------------------
 + Rotations are not around the proper unit cube axis.
 + Add global 'set' command
 + 'set maxobjects'
@@ -23,8 +23,8 @@ Kolberger Heide [v 0.5] (Release first binaries (WIN) here)
 - Progress dialog w/ cancel.
 
 
-Optimus Prime [v 0.8]
----------------------
+Version 0.8: Optimus Prime [v 0.8]
+----------------------------------
 - Custom Transformation matrix operator.
 - Preprocessor '#include' statement
 - Skew transformations (syntax?)
@@ -48,8 +48,8 @@ Optimus Prime [v 0.8]
 - Rule retirement: ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
 - Set initial viewport (create expression by right clicking mouse canvas)
 
-Final Release [v 1.0]
----------------------
+Version 1.0: Kolberger Heide.
+-----------------------------
 ! Tabbed interface
 ! [PovRay] Renderer
 - Splash screen with proper acknowledgement.
