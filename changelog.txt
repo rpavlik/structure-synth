@@ -1,6 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+26 Aug 07 [MHC]:    Added progress dialog.
+
+25 Aug 07 [MHC]:    Created Flickr group (http://www.flickr.com/groups/structuresynth)
+[1½h]               Web site modifications.
+
 22 Aug 07 [MHC]:    Size transformation now has a three parameter overload.
 [½h]
 
