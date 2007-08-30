@@ -17,10 +17,10 @@ Version 0.5: 'Graf Zeppelin' (Release first binaries (WIN) here)
 + Version object
 + Iterated Rules
 + Scale with 3 parameters.
++ Progress dialog w/ cancel.
 - 'set minvolume'
 - 'set seed'
 - Ellipsoid object. (as of now spheres are always isotropic]
-- Progress dialog w/ cancel.
 
 
 Version 0.8: Optimus Prime [v 0.8]
