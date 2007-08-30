@@ -1,7 +1,14 @@
 
 Changelog for Structure Synth:
 ------------------------------
+29 Aug 07 [MHC]:    Website modifications.
+[1½h]
+
+27 Aug 07 [MHC]:    Added Flickr group: http://flickr.com/groups/structuresynth/
+[2h]
+
 26 Aug 07 [MHC]:    Added progress dialog.
+[½h]
 
 25 Aug 07 [MHC]:    Created Flickr group (http://www.flickr.com/groups/structuresynth)
 [1½h]               Web site modifications.
