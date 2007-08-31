@@ -34,6 +34,8 @@ namespace StructureSynth {
 		
 			// Color stuff
 			static Transformation createHSV(float h, float s, float v, float a);
+			static Transformation createColor(QString color);
+		
 		
 		private:
 			// Matrix and Color transformations here.
@@ -42,6 +44,7 @@ namespace StructureSynth {
 			float scaleS;
 			float scaleV;
 			float scaleAlpha;
+			bool absoluteColor;
 		};
 
 	}

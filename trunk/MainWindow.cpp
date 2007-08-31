@@ -73,36 +73,28 @@ namespace StructureSynth {
 
 		void MainWindow::newFile()
 		{
-			MainWindow *other = new MainWindow;
-			other->move(x() + 40, y() + 40);
-			other->show();
+			if (maybeSave()) {
+				textEdit->clear();
+				setCurrentFile("");
+				// TODO: Clear 3D GUI...
+			} else {
+				WARNING("Unable to save file...");
+			}
 		}
 
 		void MainWindow::open()
 		{
-			QString fileName = QFileDialog::getOpenFileName(this);
-			if (!fileName.isEmpty()) {
-				MainWindow *existing = findMainWindow(fileName);
-				if (existing) {
-					existing->show();
-					existing->raise();
-					existing->activateWindow();
-					return;
+			if (maybeSave()) {
+				QString fileName = QFileDialog::getOpenFileName(this);
+				if (!fileName.isEmpty()) {
+					loadFile(fileName);
+					// TODO: Clear 3D GUI...
 				}
-
-				if (isUntitled && textEdit->document()->isEmpty()
-					&& !isWindowModified()) {
-						loadFile(fileName);
-				} else {
-					MainWindow *other = new MainWindow(fileName);
-					if (other->isUntitled) {
-						delete other;
-						return;
-					}
-					other->move(x() + 40, y() + 40);
-					other->show();
-				}
+				
+			} else {
+				WARNING("Unable to save file...");
 			}
+
 		}
 
 		bool MainWindow::save()
@@ -221,7 +213,7 @@ namespace StructureSynth {
 			vboxLayout1->addWidget(logger->getListWidget());
 			dockLog->setWidget(dockLogContents);
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
-			INFO("Welcome to StructureSynth. A Syntopia Project.");
+			INFO("Welcome to Structure Synth. A Syntopia Project.");
 
 			connect(textEdit->document(), SIGNAL(contentsChanged()),
 				this, SLOT(documentWasModified()));
@@ -368,7 +360,7 @@ namespace StructureSynth {
 
 		void MainWindow::readSettings()
 		{
-			QSettings settings("hvidtfeldts.net", "StructureSynth");
+			QSettings settings("hvidtfeldts.net", "Structure Synth");
 			QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
 			QSize size = settings.value("size", QSize(400, 400)).toSize();
 			move(pos);
@@ -377,7 +369,7 @@ namespace StructureSynth {
 
 		void MainWindow::writeSettings()
 		{
-			QSettings settings("hvidtfeldts.net", "StructureSynth");
+			QSettings settings("hvidtfeldts.net", "Structure Synth");
 			settings.setValue("pos", pos());
 			settings.setValue("size", size());
 		}
@@ -386,7 +378,7 @@ namespace StructureSynth {
 		{
 			if (textEdit->document()->isModified()) {
 				QMessageBox::StandardButton ret;
-				ret = QMessageBox::warning(this, tr("StructureSynth"),
+				ret = QMessageBox::warning(this, tr("Structure Synth"),
 					tr("The script has been modified.\n"
 					"Do you want to save your changes?"),
 					QMessageBox::Save | QMessageBox::Discard
@@ -403,9 +395,12 @@ namespace StructureSynth {
 		{
 			QAction *action = qobject_cast<QAction *>(sender());
 			if (action) {
-				QDir d(getExamplesDir());
-			
-				loadFile(d.absoluteFilePath(action->data().toString()));
+				if (maybeSave()) {
+					QDir d(getExamplesDir());
+					loadFile(d.absoluteFilePath(action->data().toString()));
+				} else {
+					WARNING("Unable to save...");
+				}
 			} else {
 				WARNING("No data!");
 			}
@@ -416,7 +411,7 @@ namespace StructureSynth {
 			INFO("LoadFile");
 			QFile file(fileName);
 			if (!file.open(QFile::ReadOnly | QFile::Text)) {
-				QMessageBox::warning(this, tr("StructureSynth"),
+				QMessageBox::warning(this, tr("Structure Synth"),
 					tr("Cannot read file %1:\n%2.")
 					.arg(fileName)
 					.arg(file.errorString()));
@@ -436,7 +431,7 @@ namespace StructureSynth {
 		{
 			QFile file(fileName);
 			if (!file.open(QFile::WriteOnly | QFile::Text)) {
-				QMessageBox::warning(this, tr("StructureSynth"),
+				QMessageBox::warning(this, tr("Structure Synth"),
 					tr("Cannot write file %1:\n%2.")
 					.arg(fileName)
 					.arg(file.errorString()));
@@ -468,7 +463,7 @@ namespace StructureSynth {
 			setWindowModified(false);
 
 			setWindowTitle(tr("%1[*] - %2").arg(strippedName(curFile))
-				.arg(tr("StructureSynth")));
+				.arg(tr("Structure Synth")));
 		}
 
 		QString MainWindow::strippedName(const QString &fullFileName)

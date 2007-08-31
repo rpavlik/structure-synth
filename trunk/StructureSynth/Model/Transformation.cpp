@@ -5,6 +5,8 @@
 #include "../../AppCore/Exceptions/Exception.h"
 #include "../../AppCore/Logging/Logging.h"
 
+#include <QColor>
+
 using namespace AppCore::Exceptions;
 using namespace AppCore::Logging;
 
@@ -19,6 +21,7 @@ namespace StructureSynth {
 			scaleS = 1;
 			scaleV = 1;
 			scaleAlpha = 1;
+			absoluteColor = false;
 		}
 
 		Transformation::~Transformation() {
@@ -28,21 +31,27 @@ namespace StructureSynth {
 			State s2(s);
 			s2.matrix = s.matrix*matrix; // TODO: Check order
 
-			float h = s2.hsv[0] + deltaH;
-			float sat = s2.hsv[1]*scaleS;
-			float v = s2.hsv[2]*scaleV;
-			float a = s2.alpha * scaleAlpha;
-			if (sat<0) sat=0;
-			if (v<0) v=0;
-			if (a<0) a=0;
-			if (sat>1) sat=1;
-			if (v>1) v=1;
-			if (a>1) a=1;
-			while (h>360) h-=360;
-			while (h<0) h+=360;
+			if (absoluteColor) {
+				s2.hsv = Vector3f(deltaH,scaleS,scaleV);
+				s2.alpha = scaleAlpha;
+				//DEV(QString("Abs color: %1, %2, %3"));
+			} else {
+				float h = s2.hsv[0] + deltaH;
+				float sat = s2.hsv[1]*scaleS;
+				float v = s2.hsv[2]*scaleV;
+				float a = s2.alpha * scaleAlpha;
+				if (sat<0) sat=0;
+				if (v<0) v=0;
+				if (a<0) a=0;
+				if (sat>1) sat=1;
+				if (v>1) v=1;
+				if (a>1) a=1;
+				while (h>360) h-=360;
+				while (h<0) h+=360;
+				s2.hsv = Vector3f(h,sat,v);
+				s2.alpha = a;
+			}
 
-			s2.hsv = Vector3f(h,sat,v);
-			s2.alpha = a;
 			return s2;
 		}
 
@@ -50,10 +59,18 @@ namespace StructureSynth {
 			
 		void Transformation::append(const Transformation& t) {
 			this->matrix = this->matrix * t.matrix; 
-			this->scaleAlpha = this->scaleAlpha * t.scaleAlpha;
-			this->deltaH = this->deltaH + t.deltaH;
-			this->scaleS = this->scaleS * t.scaleS;
-			this->scaleV = this->scaleV * t.scaleV;
+			if (!t.absoluteColor) {
+				this->scaleAlpha = this->scaleAlpha * t.scaleAlpha;
+				this->deltaH = this->deltaH + t.deltaH;
+				this->scaleS = this->scaleS * t.scaleS;
+				this->scaleV = this->scaleV * t.scaleV;
+			} else {
+				this->absoluteColor = true;
+				this->scaleAlpha = t.scaleAlpha;
+				this->deltaH = t.deltaH;
+				this->scaleS = t.scaleS;
+				this->scaleV = t.scaleV;
+			}
 		}
 
 		// The predefined operators
@@ -114,6 +131,22 @@ namespace StructureSynth {
 			t.scaleV = v;
 
 			
+
+			return t;
+		}
+
+		Transformation Transformation::createColor(QString color) {
+
+			Transformation t;
+			QColor c(color);
+			QColor hsv = c.toHsv();
+			t.deltaH = hsv.hue();
+			t.scaleAlpha = hsv.alpha()/255.0;
+			t.scaleS = hsv.saturation()/255.0;
+			t.scaleV = hsv.value()/255.0;
+			t.absoluteColor = true;
+
+			Debug(QString("Abs Color: %1, %2, %3, %4").arg(t.deltaH).arg(t.scaleS).arg(t.scaleV).arg(t.scaleAlpha));
 
 			return t;
 		}

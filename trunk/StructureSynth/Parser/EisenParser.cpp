@@ -3,6 +3,8 @@
 #include "../../AppCore/Logging/Logging.h"
 #include "../Model/CustomRule.h"
 
+#include <QColor>
+
 using namespace AppCore::Logging;
 using namespace StructureSynth::Model;
 
@@ -186,6 +188,11 @@ namespace StructureSynth {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'brightness': Expected numerical parameter. Found: " + symbol.text));
 				return Transformation::createHSV(0, 1,param,1);
+			} else if (type == "color") {
+				QString param = symbol.text;
+				if (!QColor(param).isValid()) throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text));
+				getSymbol();
+				return Transformation::createColor(param);
 			} else if (type == "alpha") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text));

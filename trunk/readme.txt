@@ -73,7 +73,7 @@ SynCore (Framework for rapid application development)
 
 
 
-
+Website: add news, add gallery, add 'For ontext free / CFDG users' (see below), add section links.
 
 
 
