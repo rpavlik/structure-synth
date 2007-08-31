@@ -2,7 +2,7 @@ Bug List:
 ---------
 Priority 0-5, 5 is worst:
 
-- [4] Multiple Windows give trouble. Restrict to one window, and at some point make tabbed UI.
+- [4] Parser do not allow operator names as rule names. 'rule R1 maxdepth 2 > c ' fails.
 - [3] No sorting while alpha-blending. All opaque objects should be drawn before transparent. Turn off Z-buffer while drawing.
 - [3] Face Culling does not for boxes, when coordinates are flipped.
 - [2] A self-refering cycle of rule retirements would crash structure synth.
