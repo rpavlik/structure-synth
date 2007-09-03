@@ -111,8 +111,8 @@ namespace AppCore {
 			GLfloat pos2[4] = {52.0f, 25.0f, 50.0f, 1.0f };
 			GLfloat agreen[4] = {0.0f, 0.8f, 0.2f, 1.0f };
 
-			float ambient = 0.2f;
-			float diffuse = 0.8f;
+			float ambient = 0.4f;
+			float diffuse = 0.6f;
 			float specular = 0.1f;
 			Vector3f color = Vector3f(1,1,1);
 			GLfloat ambientLight[] = { ambient * color.x(),   ambient * color.y(),  ambient * color.z(), 1.0f };
@@ -132,6 +132,10 @@ namespace AppCore {
 			glEnable( GL_NORMALIZE );
 			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, agreen );
 
+			glEnable(GL_LINE_SMOOTH);
+			glEnable(GL_POINT_SMOOTH);
+			glEnable(GL_POLYGON_SMOOTH);
+			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 		}
 
 
