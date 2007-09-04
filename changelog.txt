@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+3  Sep 07 [MHC]:    Tried to create a build that it is not dependend on a side-by-side installed DLL ('C:\WINDOWS\WinSxS\'...). I want the app to be distributable without any installation.
+[1½h]
+
 31 Aug 07 [MHC]:    Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
 [1h]
 

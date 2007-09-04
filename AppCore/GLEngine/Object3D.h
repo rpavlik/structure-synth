@@ -2,6 +2,7 @@
 
 #include "AppCore/Math/Vector3.h"
 #include <QGLWidget>
+#include <QtOpenGL>
 
 namespace AppCore {
 	namespace GLEngine {	
