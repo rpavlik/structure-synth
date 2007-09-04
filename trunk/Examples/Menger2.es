@@ -1,7 +1,7 @@
 { a 1000 } R1
 
 
-rule R1 maxdepth 3 > c {
+rule R1 maxdepth 3 > void {
 	{ s 1/3 x -1 y -1  } R2 
 	{ s 1/3 x -1 y -1  z -1 } R2 
 	{ s 1/3 x -1 y -1  z +1 } R2 
@@ -29,7 +29,7 @@ rule r2  w 8 {
     r1
 }
 
-rule c {
+rule void  {
  {  h 80  sat 0.7 a 0.9 }  box
 }
 

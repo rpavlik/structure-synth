@@ -1,7 +1,7 @@
 
 72 * {  x 1 rz 5  } 1 * { b 1.2 sat 1.0  hue 176   y 1 z 1  } R1
 
-rule R1 maxdepth 2 > c {
+rule R1 maxdepth 2 > void {
 { s 1/3 x -1 y -1  } R2 
 { s 1/3 x -1 y -1  z -1 } R2 
 { s 1/3 x -1 y -1  z +1 } R2 
@@ -24,7 +24,7 @@ rule R1 maxdepth 2 > c {
 { s 1/3 x 1    z +1 } R2 
 }
 
-rule c  {
+rule void  {
 }
 
 rule r2 {
