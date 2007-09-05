@@ -7,10 +7,14 @@ using namespace AppCore::Logging;
 namespace AppCore {
 	namespace Misc {	
 
-		Version::Version() : major(0), minor(0), revision(0), build(0), codename("") {			
+		Version::Version() : revision(0), build(0), codename("") {	
+			this->major = 0;
+			this->minor = 0;
 		}
 
-		Version::Version(int major, int minor, int revision, int build, QString codename)  : major(major), minor(minor), revision(revision), build(build), codename(codename) {
+		Version::Version(int major, int minor, int revision, int build, QString codename)  :  revision(revision), build(build), codename(codename) {
+			this->major = major;
+			this->minor = minor;
 		}
 
 		QList<Version> Version::GetNewVersions(QString url) const {
