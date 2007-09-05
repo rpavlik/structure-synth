@@ -1,7 +1,7 @@
 #include <QtGui>
 #include <QDir>
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "AppCore/Logging/ListWidgetLogger.h"
 #include "AppCore/Exceptions/Exception.h"
 #include "StructureSynth/Parser/EisenParser.h"

@@ -113,3 +113,28 @@ An action can be either:
   - a transformation list followed by a rule call.
   - a number of transformation loops followed by a rule call.
 - A SET statement.
+
+
+
+
+// Make sure you have C++ compiler and the X11 and OpenGL development libs. (And Subversion if fetching the source directly from the repository).
+sudo aptitude install build-essential
+sudo aptitude install libx11-dev
+sudo aptitude install mesa-common-dev 
+sudo aptitude install libgl1-mesa-dev
+sudo aptitude install libglu1-mesa-dev
+sudo aptitude install subversion
+
+// Build Qt 4.3 with OpenGL support.
+extract / unpack Qt:
+./configure -opengl -nomake examples -nomake demos
+./make 
+sudo ./make install
+
+// Get the latest sources.
+svn co https://structuresynth.svn.sourceforge.net/svnroot/structuresynth structuresynth
+
+// Build structure synth.
+qmake -project
+qmake trunk.pro
+make
