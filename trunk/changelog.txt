@@ -1,13 +1,19 @@
 
 Changelog for Structure Synth:
 ------------------------------
+6  Sep 07 [MHC]:    Web site updates.
+[1h]
+
+5  Sep 07 [MHC]:    Structure Synth now builds on Linux.
+[2h]
+
 3  Sep 07 [MHC]:    Tried to create a build that it is not dependend on a side-by-side installed DLL ('C:\WINDOWS\WinSxS\'...). I want the app to be distributable without any installation.
 [1½h]
 
 31 Aug 07 [MHC]:    Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
 [1h]
 
-29 Aug 07 [MHC]:    Website modifications.
+29 Aug 07 [MHC]:    Website modifications. (Added 'news', 'for Context Free users', 'Build - Linux')
 [1½h]
 
 27 Aug 07 [MHC]:    Added Flickr group: http://flickr.com/groups/structuresynth/
@@ -95,4 +101,5 @@ Changelog for Structure Synth:
                     Added main window mockup
                     Visual Studio 2005 Solution and Project files added.
                    
-       
+Earlier:            Initial design 
+[8h] 
