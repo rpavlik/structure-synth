@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+10  Sep 07 [MHC]:   Added bounding-box to 3D objects. Added quick-draw (invoke by holding ALT while rotating, translating).
+[1h]
+
 6  Sep 07 [MHC]:    Web site updates.
 [1h]
 

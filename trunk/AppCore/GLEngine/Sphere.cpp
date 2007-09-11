@@ -1,5 +1,8 @@
 #include "Sphere.h"
 
+using namespace AppCore::Math;
+
+
 namespace AppCore {
 	namespace GLEngine {
 
@@ -11,6 +14,9 @@ namespace AppCore {
 				myQuad = gluNewQuadric();    
 				gluQuadricDrawStyle(myQuad, GLU_FILL);
 			}
+			/// Bounding box
+			from = center-Vector3f(radius,radius,radius);
+			to = center+Vector3f(radius,radius,radius);
 		};
 
 		Sphere::~Sphere() {

@@ -16,6 +16,9 @@ namespace AppCore {
 
 			void setColor(AppCore::Math::Vector3f rgb, float alpha);
 
+			void getBoundingBox(AppCore::Math::Vector3f& from, AppCore::Math::Vector3f& to);
+			void expandBoundingBox(AppCore::Math::Vector3f& from, AppCore::Math::Vector3f& to);
+
 		protected:
 
 			void vertex(AppCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
@@ -28,6 +31,10 @@ namespace AppCore {
 			void vertex4rnc(AppCore::Math::Vector3f v1,AppCore::Math::Vector3f v2,AppCore::Math::Vector3f v3,AppCore::Math::Vector3f v4,AppCore::Math::Vector3f center);
 
 			GLfloat primaryColor[4];
+
+			AppCore::Math::Vector3f from;
+			AppCore::Math::Vector3f to;
+
 		};
 
 	}

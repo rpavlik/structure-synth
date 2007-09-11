@@ -12,7 +12,11 @@ namespace AppCore {
 				 AppCore::Math::Vector3f dir2, 
 				 AppCore::Math::Vector3f dir3) : base(base), v1(dir1), v2(dir2), v3(dir3) 
 		{
+			/// Bounding box
+			from = base;
+			to = base + dir1 + dir2 + dir3;
 		};
+
 
 		Grid::~Grid() { };
 

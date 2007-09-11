@@ -9,6 +9,9 @@ namespace AppCore {
 
 		Dot::Dot(AppCore::Math::Vector3f pos) : pos(pos)
 		{
+			/// Bounding box
+			from = pos;
+			to = pos;
 		};
 
 		Dot::~Dot() { };
