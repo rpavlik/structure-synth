@@ -48,6 +48,10 @@ namespace AppCore {
 		}
 
 		void EngineWidget::paintGL() {
+
+			static int count = 0;
+			count++;
+
 			if (pendingRedraws > 0) pendingRedraws--;
 
 			QColor c = QColor (30,30,30);
@@ -66,8 +70,34 @@ namespace AppCore {
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
-			for (int i = 0; i < objects.size(); i++) {
-				objects[i]->draw();
+			if (QApplication::keyboardModifiers() == Qt::AltModifier) {
+				// Fast-draw
+
+				int objs =  objects.size();
+				int step = objs/5000;
+				if (step < 1) step = 1;
+				if (count > step) count = 0;
+
+
+				glDisable (GL_LIGHTING);
+				glColor3f( 1.0f, 1.0f, 1.0f );
+				glBegin(GL_POINTS);
+				for (int i = count; i < objects.size(); i+=step) {
+					Vector3f pos1;
+					Vector3f pos2;
+					objects[i]->getBoundingBox(pos1,pos2);
+					Vector3f pos = (pos1+pos2)/2.0;
+					glVertex3f(pos.x(), pos.y(), pos.z());
+			
+				}
+				glEnd();			
+
+				glEnable (GL_LIGHTING);
+
+			} else {
+				for (int i = 0; i < objects.size(); i++) {
+					objects[i]->draw();
+				}
 			}
 
 		};

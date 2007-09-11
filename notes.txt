@@ -1,0 +1,115 @@
+Structure Synth Road Map
+------------------------
+
+
+- Restructure: 
+	+Release build should be fixed
+	-'const correctness'
+	-TODO's
+	-'AppCore'->'Syntopia Core'
+	-GUI files the proper place
+	-No local filesystem reference i VS project files.
+	-Check directory structure.
+	-Comments
+				
+- Website: 
+    - add news
+    + add (flickr) gallery
+    - add section links.
+
+
+MISC NOTES:
+-----------
+
+
+A EisenScript program consists of a number of actions and rule definitions.
+
+An action can be either:
+- A rule call:
+  - either a single call.
+  - a transformation list followed by a rule call.
+  - a number of transformation loops followed by a rule call.
+- A SET statement.
+
+
+
+
+
+Design Goals:
+- Make nice mathematical structures
+- Reproduce some standard fractals (i.e. Menger Sponge)
+- Create Mondrian like tiling (as 2D)
+- Create Rich Organic structures. i.e. Trees
+- Some of Dave Bollingers structures should be creatable (http://flickr.com/photos/davebollinger/)
+
+
+EisenScript
+-----------
+
+Structures are specified in EisenScript (named after the russian film director Sergei Eisenstein). 
+
+EisenScript is processed by the Eisenstein Engine by the following steps:
+1) Preprocessor (strips comments imports '#include' statements).
+2) Tokenizer (divides string input into symbols. The string input is split at any white space (except if it occurs inside quotes).)  
+3) Parser (standard recursive descent parser). The parser creates a 'ruleset' from the text input. 
+4) Name resolving. Rules contain symbolic references to other rules. These symbols must be resolved.
+
+The EBNF notation for EisenScript looks like this:
+
+program = { set | rule } ;
+rule = 'RULE' ,  rule_name , [ weight ] , '{' , { set | action } , '}' ;
+action = { transformationloop } [transformationlist] rule_ref ;
+transformationloop = number , '*' , transformationlist ;
+transformationlist = '{' , { transformation } , '}';
+transformation = 'X' , number |                      // translations
+                 'Y' , number |
+                 'Z' , number |
+                 'RX', number |						 // rotation about axis
+                 'RY', number |
+                 'RZ', number |
+                 'S', number |						 // resizing (all axis equal)
+                 'S', number number number, 		 // resizing for x,y,z individually
+                 
+set = 'SET' , var_name , string ;
+
+'rule_ref', 'var_name', and 'string' are text strings with a reasonable set of allowed characters.
+Though not strictly a part of the syntax, a few rules are provided as predefined primitives in Structure Synth:
+
+Primitives: 
+-----------
+box      - solid box
+grid	 - wireframe box
+sphere   - 
+line     - along x axis, centered in y,z plane.
+point    - centered in coordinate system.
+cylinder - the symmetry axis will be the current x axis.
+pbox     - continues box (will be drawn smoothly as the coordinate system transforms).
+pcylinder- polygonal cylinder (will be drawn smoothly as the coordinate system transforms).
+
+Perhaps: 
+tube     - (With number of division)
+
+Example of EisenScript:
+
+//
+//	C++ style multiline comments are allowed.
+//  A pre-processor strips comments, and imports '#include's
+//
+#include "../basicstuff.es"
+SET BackgroundColor = #F00  // All 'SET' commands outside the scope of a rule are executed at startup.
+
+RULE core {
+	r1       // simply call another rule
+}
+
+RULE r1 5 {
+    { s 0.9 x 0.1 } r1 // apply a transformation list before calling the rule
+    box
+}
+
+RULE r1 1 {
+	20 * { x -1 } r1  // applies the transformation and calls rule 'r1' twenty times.
+	{ x -20 }     r1  // this is NOT the same as above - here r1 will only be called one time.
+	20 * { y -1 } 20 * { x -1 } { z -1 } r1
+	sphere
+}

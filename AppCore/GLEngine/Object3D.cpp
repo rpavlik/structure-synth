@@ -57,6 +57,17 @@ namespace AppCore {
 		}
 
 
+		void Object3D::getBoundingBox(AppCore::Math::Vector3f& from, AppCore::Math::Vector3f& to) {
+			from = this->from;
+			to = this->to;
+		};
+
+		void Object3D::expandBoundingBox(AppCore::Math::Vector3f& from, AppCore::Math::Vector3f& to) {
+			for (unsigned int i = 0; i < 3; i++) if (this->from[i] < from[i]) from[i] = this->from[i];
+			for (unsigned int i = 0; i < 3; i++) if (this->to[i] > to[i]) to[i] = this->to[i];
+		};
+
+
 	}
 
 }

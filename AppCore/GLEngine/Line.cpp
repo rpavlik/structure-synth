@@ -12,6 +12,9 @@ namespace AppCore {
 
 		Line::Line(AppCore::Math::Vector3f from, AppCore::Math::Vector3f to) : from(from), to(to)
 		{
+			/// Bounding box
+			from = from;
+			to = to;
 		};
 
 		Line::~Line() {
