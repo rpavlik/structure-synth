@@ -154,7 +154,6 @@ namespace StructureSynth {
 			if (type == "x") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'X' (X-axis translation): Expected numerical parameter. Found: " + symbol.text));
-				INFO("TX:" + symbol.text);
 				return Transformation::createX(param);
 			} else if (type == "y") {
 				double param = symbol.getNumerical();
@@ -293,8 +292,7 @@ namespace StructureSynth {
 				} else if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text));
 				QString value = symbol.text; 
 				getSymbol(); // We will accept everything here! 
-				INFO(key + " " + value);
-
+				
 				return Action(key,value);
 		}
 

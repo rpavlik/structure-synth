@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+18  Sep 07 [MHC]:   Added Background command (e.g. 'Set Background #F00')
+[1h]				Added Seed command (e.g. 'Set seed 1')
+				    Added panic button.
+
 10  Sep 07 [MHC]:   Added bounding-box to 3D objects. Added quick-draw (invoke by holding ALT while rotating, translating).
 [1h]
 

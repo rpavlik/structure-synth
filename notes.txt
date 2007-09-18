@@ -13,7 +13,7 @@ Structure Synth Road Map
 	-Comments
 				
 - Website: 
-    - add news
+    + add news
     + add (flickr) gallery
     - add section links.
 
@@ -40,7 +40,6 @@ Design Goals:
 - Reproduce some standard fractals (i.e. Menger Sponge)
 - Create Mondrian like tiling (as 2D)
 - Create Rich Organic structures. i.e. Trees
-- Some of Dave Bollingers structures should be creatable (http://flickr.com/photos/davebollinger/)
 
 
 EisenScript

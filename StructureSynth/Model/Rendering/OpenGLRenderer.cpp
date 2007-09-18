@@ -51,15 +51,19 @@ namespace StructureSynth {
 
 			void OpenGLRenderer::begin() {
 				engine->clearWorld();
+				engine->setBackgroundColor(0,0,0);
 				rgb = Vector3f(1,0,0);
 				alpha = 1;
 			};
 
 			void OpenGLRenderer::end() {
-				INFO(QString("Ended rendering. Wrote %1 objects.").arg(engine->objectCount()));
+				INFO(QString("Rendering done. Wrote %1 objects.").arg(engine->objectCount()));
 				engine->requireRedraw();
 			};
 
+			void OpenGLRenderer::setBackgroundColor(AppCore::Math::Vector3f rgb) {
+				engine->setBackgroundColor(rgb.x(),rgb.y(),rgb.z());
+			}
 
 		}
 	}

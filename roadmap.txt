@@ -20,8 +20,9 @@ Version 0.5: 'Graf Zeppelin' (Release first binaries (WIN) here)
 + Progress dialog w/ cancel.
 + Fix multiple windows problems
 + 'Color' keyword (for absolute color)
-- 'set seed'
-- Add 'Reset button' (for OpenGL view)
++ 'Background' set command 
++ 'set seed'
++ Add 'Reset button' (for OpenGL view)
 - Create a build (resolve dependencies)
 
 Version 0.8: 'Memories of tomorrow' [v 0.8]
