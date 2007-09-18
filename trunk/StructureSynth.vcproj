@@ -340,18 +340,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
@@ -375,7 +363,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -410,6 +398,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="StructureSynth.qrc"
 				>
 				<FileConfiguration
@@ -418,8 +418,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="RCC StructureSynth.qrc"
-						CommandLine="c:\lib\qt\4.3.0\bin\rcc.exe -name StructureSynth StructureSynth.qrc -o tmp\rcc\debug_shared\qrc_StructureSynth.cpp&#x0D;&#x0A;"
-						AdditionalDependencies="c:\lib\qt\4.3.0\bin\rcc.exe;images\new.png;images\copy.png;images\cut.png;images\save.png;images\paste.png;images\open.png"
+						CommandLine="$(QT4DIR)\bin\rcc.exe -name StructureSynth StructureSynth.qrc -o tmp\rcc\debug_shared\qrc_StructureSynth.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="$(QT4DIR)\bin\rcc.exe;images\new.png;images\copy.png;images\cut.png;images\save.png;images\paste.png;images\open.png"
 						Outputs="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
 					/>
 				</FileConfiguration>
@@ -429,8 +429,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="RCC StructureSynth.qrc"
-						CommandLine="c:\lib\qt\4.3.0\bin\rcc.exe -name StructureSynth StructureSynth.qrc -o tmp\rcc\release_shared\qrc_StructureSynth.cpp&#x0D;&#x0A;"
-						AdditionalDependencies="c:\lib\qt\4.3.0\bin\rcc.exe;images\new.png;images\copy.png;images\cut.png;images\save.png;images\paste.png;images\open.png"
+						CommandLine="$(QT4DIR)\bin\rcc.exe -name StructureSynth StructureSynth.qrc -o tmp\rcc\release_shared\qrc_StructureSynth.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="$(QT4DIR)\bin\rcc.exe;images\new.png;images\copy.png;images\cut.png;images\save.png;images\paste.png;images\open.png"
 						Outputs="tmp\rcc\release_shared\qrc_StructureSynth.cpp"
 					/>
 				</FileConfiguration>
@@ -667,11 +667,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\plan.txt"
+			RelativePath=".\notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\readme.txt"
+			RelativePath=".\roadmap.txt"
 			>
 		</File>
 	</Files>
