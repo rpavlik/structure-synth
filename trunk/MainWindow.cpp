@@ -161,7 +161,7 @@ namespace StructureSynth {
 
 			
 			QString s = 
-			QString("// Double spirals [MHC 2007]\r\n")+
+			QString("// Double spirals\r\n")+
 			"set maxdepth 400\r\n"+
 			"R1\r\n"+
 			"R2\r\n"+
@@ -214,6 +214,8 @@ namespace StructureSynth {
 			dockLog->setWidget(dockLogContents);
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
 			INFO("Welcome to Structure Synth. A Syntopia Project.");
+			INFO("Hold 'CTRL' for speed draw'.");
+			INFO("Press 'Panic' if the view disappears...");
 
 			connect(textEdit->document(), SIGNAL(contentsChanged()),
 				this, SLOT(documentWasModified()));
@@ -272,6 +274,10 @@ namespace StructureSynth {
 			renderAction->setShortcut(tr("F5"));
 			renderAction->setStatusTip(tr("Render the current ruleset"));
 			connect(renderAction, SIGNAL(triggered()), this, SLOT(render()));
+
+			panicAction = new QAction("Panic!", this);
+			panicAction->setStatusTip(tr("Resets the viewport"));
+			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
 
 
 			aboutAction = new QAction(tr("&About"), this);
@@ -350,6 +356,7 @@ namespace StructureSynth {
 
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
+			renderToolBar->addAction(panicAction);
 			
 		}
 
@@ -521,5 +528,10 @@ namespace StructureSynth {
 			// TODO: Implement
 			return "Misc";
 		}
+
+		void MainWindow::resetView() {
+			engine->reset();
+		}
+			
 	}
 }

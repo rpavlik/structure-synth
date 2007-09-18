@@ -16,8 +16,6 @@ namespace StructureSynth {
 				return;
 			}
 
-			//INFO(QString("Applying action -> %1").arg(rule->rule()->getName()));
-
 			State s = b->getState();
 
 			QList<int> counters;
@@ -63,21 +61,7 @@ namespace StructureSynth {
 
 			}
 
-		
-/*
-			for (int i = 0; i < loops.size(); i++) {
-				int rep = loops[i].repetitions;
-				for (int j = 0; j < rep; j++) {
-					s = loops[i].transformation.apply(s);
-					if (callingRule) {
-						s.maxDepths[callingRule] = ruleDepth;
-					}
-					b->getExecutionStack().currentStack.append(RuleState(rule->rule(), s));
-				}
-			}
-*/
-			if (loops.size() == 0) {
-			}
+
 		}
 
 		Action::Action(QString key, QString value) {

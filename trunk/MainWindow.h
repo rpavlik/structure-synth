@@ -35,6 +35,7 @@ namespace StructureSynth {
 			void about();
 			void documentWasModified();
 			void render();
+			void resetView();
 			
 
 		private:
@@ -77,6 +78,7 @@ namespace StructureSynth {
 			QAction *aboutAction;
 
 			QAction *renderAction;
+			QAction *panicAction;
 			AppCore::GLEngine::EngineWidget* engine;
 
 			AppCore::Misc::Version version;

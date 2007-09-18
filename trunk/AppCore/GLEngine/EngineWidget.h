@@ -46,9 +46,13 @@ namespace AppCore {
 			void requireRedraw();
 
 			void clearWorld();
+			void reset();
 			void addObject(Object3D* object);
 			int objectCount() { return objects.size(); }
 
+			/// RGB in [0;1]
+			void setBackgroundColor(double r, double g, double b) { backgroundColor = QColor(r*255.0, g*255.0, b*255.0); };
+		
 		protected:
 			void initializeGL();
 			void timerEvent( QTimerEvent * );
@@ -65,7 +69,6 @@ namespace AppCore {
 			void translateWorld(double x, double y, double z);
 
 		
-
 		private:
 			// Creates the appropriate GL_PROJECTION matrix
 			void updatePerspective();	
@@ -81,6 +84,7 @@ namespace AppCore {
 			double mouseTranslationSpeed;
 			double minimumScale;
 			QPoint oldPos;
+			QColor backgroundColor;
 
 			AppCore::Math::Vector3f translation;
 			AppCore::Math::Vector3f pivot;

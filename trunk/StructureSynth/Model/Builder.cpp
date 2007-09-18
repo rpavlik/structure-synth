@@ -26,14 +26,10 @@ namespace StructureSynth {
 
 		void Builder::build() {
 			objects = 0;
-			INFO("Starting build...");
+			INFO("Starting builder...");
 			
 			/// Push first generation state
 			stack.currentStack.append(RuleState(ruleSet->getStartRule(), State()));
-
-			INFO("Rule set first rule: " + ruleSet->getStartRule()->getName());
-					
-
 			int generationCounter = 0;
 			
 			QProgressDialog progressDialog("Building objects...", "Cancel", 0, 100, 0);
@@ -123,6 +119,15 @@ namespace StructureSynth {
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'maxobjects' expected integer parameter. Found: %1").arg(param));
 				maxObjects = i;
+			} else if (command == "seed") {
+				bool succes;
+				int i = param.toInt(&succes);
+				if (!succes) throw Exception(QString("Command 'seed' expected integer parameter. Found: %1").arg(param));
+				srand(i);
+			} else if (command == "background") {
+				QColor c(param);
+				if (!c.isValid()) throw Exception(QString("Command 'background' expected a valid color identifier: Found: %1").arg(param));
+				renderTarget->setBackgroundColor(Vector3f(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0) );
 			} else {
 				throw Exception(QString("Unknown command: %1").arg(command));
 			}

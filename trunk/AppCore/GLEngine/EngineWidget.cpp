@@ -34,13 +34,18 @@ namespace AppCore {
 
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
-
-
-
-			
+			backgroundColor = QColor(30,30,30);
 		}
 
 		EngineWidget::~EngineWidget() {
+		}
+
+		void EngineWidget::reset() {
+			translation = Vector3f(0,0,-20);
+			rotation = Matrix4f::Identity();
+			pivot = Vector3f(0,0,0);
+			backgroundColor = QColor(0,0,0);
+			requireRedraw();
 		}
 
 		void EngineWidget::requireRedraw() {
@@ -54,8 +59,7 @@ namespace AppCore {
 
 			if (pendingRedraws > 0) pendingRedraws--;
 
-			QColor c = QColor (30,30,30);
-			qglClearColor(c);
+			qglClearColor(backgroundColor);
 			glMatrixMode(GL_MODELVIEW);
 
 			glLoadIdentity();
@@ -93,6 +97,8 @@ namespace AppCore {
 				glEnd();			
 
 				glEnable (GL_LIGHTING);
+
+				requireRedraw();
 
 			} else {
 				for (int i = 0; i < objects.size(); i++) {

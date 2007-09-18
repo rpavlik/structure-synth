@@ -146,7 +146,7 @@ namespace StructureSynth {
 			t.scaleV = hsv.value()/255.0;
 			t.absoluteColor = true;
 
-			Debug(QString("Abs Color: %1, %2, %3, %4").arg(t.deltaH).arg(t.scaleS).arg(t.scaleV).arg(t.scaleAlpha));
+			//Debug(QString("Abs Color: %1, %2, %3, %4").arg(t.deltaH).arg(t.scaleS).arg(t.scaleV).arg(t.scaleAlpha));
 
 			return t;
 		}
