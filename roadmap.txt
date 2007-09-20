@@ -31,6 +31,9 @@ Version 0.8: 'Memories of tomorrow' [v 0.8]
 - Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
 - Ellipsoid object. (as of now spheres are always isotropic]
+- Full Screen
+- Screenshot
+- Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.
 - Custom Transformation matrix operator.
 - Preprocessor '#include' statement
 - Skew transformations (syntax?)
@@ -41,20 +44,19 @@ Version 0.8: 'Memories of tomorrow' [v 0.8]
 - More complex primitives (tube, ...)
 - Better parsing (faulty tokens should be highlighted in editor)
 - Linux testing
-- Add more renders:
-  - [OpenGL dynamic] - the current
-  - [OpenGL static] - for drawing one non-rotatable frame (for time-consuming pictures)
-  - [OpenGL preview] - all objects drawn as dots.
-  - [Tag Renderer] - renders all tag as text.
 - Check for infinite retirement substitution cycles.
 - Better Progress Bar (include updates for transformations loop, pause button?)
 - Drag'n'Drop of EisenScript files.
 - Set initial viewport (create expression by right clicking mouse canvas)
+- Dump used seed 
 
 Version 1.0: Kolberger Heide.
 -----------------------------
 ! Tabbed interface
-! [PovRay] Renderer
+- Add more renders:
+  - [Tag Renderer] - renders all tag as text.
+  ! [PovRay] Renderer
+  - [Collada] Support? (http://www.khronos.org/collada/)
 - Rule retirement: ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
 - Splash screen with proper acknowledgement.
 - Preferences (saving with QProperties)
