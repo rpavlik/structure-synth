@@ -18,6 +18,29 @@ Structure Synth Road Map
     - add section links.
 
 
+RoadMap:
+
+Version 0.8: 'Memories of tomorrow' (November 2007?)
+-----------------------------------
+Tagging. A special syntax for sending renderer-specific commands. For the OpenGL renderer this will make
+it possible to control Fog, Light sources, perspective, sphere subdivisions and so on.
+Full Screen option, 'Zoom-to-fit' option and screenshot capabiilities.
+Some new primitives (including 'tube').
+Proper syntax highlighting in the editor.
+Controlling and displaying the random seed in the GUI.
+
+Version 1.0: 'Kolberger Heide'. (January 2008?)
+-------------------------------
+Tabbed interface
+PovRay renderer.
+Finishing: 
+  Installers (for Windows at least - using InnoSetup)
+  Splash screen.
+  Preferences (saving with QProperties)
+  Icons, Eula, file associations.
+Mac builds, Linux builds.
+
+
 MISC NOTES:
 -----------
 
