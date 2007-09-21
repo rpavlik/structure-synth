@@ -145,7 +145,7 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
-			version = AppCore::Misc::Version(0, 4, 0, -1, " Alpha (Kolberger Heide)");
+			version = AppCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			isUntitled = true;
