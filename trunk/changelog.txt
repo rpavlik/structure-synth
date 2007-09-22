@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
+[2h]
+
 18  Sep 07 [MHC]:   Added Background command (e.g. 'Set Background #F00')
 [1h]				Added Seed command (e.g. 'Set seed 1')
 				    Added panic button.
