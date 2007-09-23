@@ -3,114 +3,114 @@ Changelog for Structure Synth:
 ------------------------------
 
 ----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
-[2h]
+[2h]a
 
 18  Sep 07 [MHC]:   Added Background command (e.g. 'Set Background #F00')
-[1h]				Added Seed command (e.g. 'Set seed 1')
+[1h]c				Added Seed command (e.g. 'Set seed 1')
 				    Added panic button.
 
 10  Sep 07 [MHC]:   Added bounding-box to 3D objects. Added quick-draw (invoke by holding ALT while rotating, translating).
-[1h]
+[1h]c
 
 6  Sep 07 [MHC]:    Web site updates.
-[1h]
+[1h]a
 
 5  Sep 07 [MHC]:    Structure Synth now builds on Linux.
-[2h]
+[2h]a
 
 3  Sep 07 [MHC]:    Tried to create a build that it is not dependend on a side-by-side installed DLL ('C:\WINDOWS\WinSxS\'...). I want the app to be distributable without any installation.
-[1½h]
+[1½h]a
 
-31 Aug 07 [MHC]:    Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
-[1h]
+31 Augc 07 [MHC]:    Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
+[1h]c
 
 29 Aug 07 [MHC]:    Website modifications. (Added 'news', 'for Context Free users', 'Build - Linux')
-[1½h]
+[1½h]a
 
 27 Aug 07 [MHC]:    Added Flickr group: http://flickr.com/groups/structuresynth/
-[2h]
+[2h]a
 
 26 Aug 07 [MHC]:    Added progress dialog.
-[½h]
+[½h]c
 
 25 Aug 07 [MHC]:    Created Flickr group (http://www.flickr.com/groups/structuresynth)
-[1½h]               Web site modifications.
+[1½h]a              Web site modifications.
 
 22 Aug 07 [MHC]:    Size transformation now has a three parameter overload.
-[½h]
+[½h]c
 
 21 Aug 07 [MHC]:    Transformation Loops new working. Corrected a HSV conversion bug.
-[1h]
+[1h]c
 
 20 Aug 07 [MHC]:    Added version object and about page.
-[1h]
+[1h]c
 
 19 Aug 07 [MHC]:    Created a web page for the project.
-[7h]
+[7h]a
 
 17 Aug 07 [MHC]:    Example dir entries added to menu. Added EULA.
-[1½h]
+[1½h]a
 
 11 Aug 07 [MHC]:	Added HSV coloring model (operators Hue(H),Sat,Brightness(B))
-[2h]				Added Preprocessor (only support C++ comments, multiline /* ... */ and single line //)
+[2h]c				Added Preprocessor (only support C++ comments, multiline /* ... */ and single line //)
 					Support for global set command (rule calls and set commands can now appear unscoped (in a top-level rule))
 
 10 Aug 07 [MHC]:	Added mouse rotation about z-axis (press both mouse buttons)
-[2h]				Added rule retirement ("Rule R MaxDepth > R2"), rule substitution (see Menger sponge example).
+[2h]c				Added rule retirement ("Rule R MaxDepth > R2"), rule substitution (see Menger sponge example).
 	                Added 'MaxObjects' setting
 
  9 Aug 07 [MHC]:	Fixed rotation, scale offset. Rotations now in degrees instead of rad. 
-[1h]                Added Grid, Box, Line, Dot primitives.
+[1h]c               Added Grid, Box, Line, Dot primitives.
 	                
  7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weigth' rule modifier. Added 'fx','fy','fz' commands.
-[1h]
+[1h]c
 
  6 Aug 07 [MHC]:	Initial SF.NET checkin + mini webpage. Added coloring to logger.
-[2h]	
+[2h]a	
 
  5 Aug 07 [MHC]:	Added 'box' primitive (which should really be solid instead of wireframe). Corrected a bug wrt sphere coordinates.
-[1h]	
+[1h]c	
 
  1 Aug 07 [MHC]:	Builder working (only spheres). Added 's' transformation.
-[1½h]	
+[1½h]c	
 
 30 Jul 07 [MHC]:	Builder (almost) complete
-[1½h]				
+[1½h]c				
 
 29 Jul 07 [MHC]:	EisenParser now creates a RuleSet (that is, it is working). 
-[1½h]				Rules are resolved
+[1½h]c				Rules are resolved
 					Name-clashing custom rules are promoted to ambiguous rules
 
 
 28 Jul 07 [MHC]:	Added model skeleton classes. (Rules (Primitive, Custom, Ambiguous), State, Transformation, Builder, ExecutionStatck, ...)
-[1h]
+[1h]c
 
 27 Jul 07 [MHC]:	3D Engine now draws a list of Object3D's with a sphere implemented as the only primitive so far.
-[1h]				Builder skeleton
+[1h]c				Builder skeleton
 					Rendering skeleton
 
 26 Jul 07 [MHC]:	Added Matrix4 class with some auxillary methods (such as rotating an angle around a given vector)
-[2h]
+[2h]c
 
 24 Jul 07 [MHC]:	Changelog started.
-[2h]				3D Engine skeleton up and running. Support for translation and zooming.
+[2h]c				3D Engine skeleton up and running. Support for translation and zooming.
 					
 23 Jul 07 [MHC]:    Added Model Classes: Rule, Ruleset, Transformation
-[2h]				Parser up and running. 
+[2h]c				Parser up and running. 
 					Tokenizer working
 	
 22 Jul 07 [MHC]:    Added Exceptions base class
-[4h]				Added Eisenparser skeleton
+[4h]c				Added Eisenparser skeleton
 					Added Tokenizer skeleton
 
 18 Jul 07 [MHC]:    Added MiniGL engine skeleton
-[8h]				Added Vector3 skeleton	
+[8h]c				Added Vector3 skeleton	
 					
 10 Jul 07 [MHC]:    Initial Check-In.
-[6h]                Added icons
+[6h]c               Added icons
                     Added a minimalist logging framework
                     Added main window mockup
                     Visual Studio 2005 Solution and Project files added.
                    
 Earlier:            Initial design 
-[8h] 
+[8h]d 
