@@ -3,6 +3,8 @@ Changelog for Structure Synth:
 ------------------------------
 
 ----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
+Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hours non-coding
+
 [2h]a
 
 18  Sep 07 [MHC]:   Added Background command (e.g. 'Set Background #F00')
