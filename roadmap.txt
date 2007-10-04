@@ -1,7 +1,7 @@
 ROADMAP
 -------
 
-Version 0.5: 'Graf Zeppelin' (Release first binaries (WIN) here)
+Version 0.5: 'Graf Zeppelin' [DONE]
 ----------------------------
 + Rotations are not around the proper unit cube axis.
 + Add global 'set' command
@@ -23,7 +23,7 @@ Version 0.5: 'Graf Zeppelin' (Release first binaries (WIN) here)
 + 'Background' set command 
 + 'set seed'
 + Add 'Reset button' (for OpenGL view)
-- Create a build (resolve dependencies)
++ Create a build (resolve dependencies)
 
 Version 0.8: 'Memories of tomorrow' [v 0.8]
 ----------------------------------

@@ -25,7 +25,7 @@ namespace StructureSynth {
 
 		class EisenScriptHighlighter : public QSyntaxHighlighter {
 		public:
-	
+
 			EisenScriptHighlighter(QTextEdit* e) : QSyntaxHighlighter(e) {};
 
 			void highlightBlock(const QString &text)
@@ -48,7 +48,7 @@ namespace StructureSynth {
 
 		};
 
-		
+
 		MainWindow::MainWindow()
 		{
 			init();
@@ -90,12 +90,23 @@ namespace StructureSynth {
 					loadFile(fileName);
 					// TODO: Clear 3D GUI...
 				}
-				
+
 			} else {
 				WARNING("Unable to save file...");
 			}
 
 		}
+
+		void MainWindow::keyReleaseEvent(QKeyEvent* ev) {
+			INFO("hej");
+			if (ev->key() == Qt::Key_Escape) {
+				toggleFullScreen();
+			} else {
+				ev->ignore();
+			}
+		};
+		
+
 
 		bool MainWindow::save()
 		{
@@ -118,7 +129,7 @@ namespace StructureSynth {
 
 		void MainWindow::about()
 		{
-			
+
 			QFile file(getMiscDir() + QDir::separator() + "about.html");
 			if (!file.open(QFile::ReadOnly | QFile::Text)) {
 				WARNING("Could not open about.html...");
@@ -129,7 +140,7 @@ namespace StructureSynth {
 			QString text = in.readAll();
 
 			text.replace("$VERSION$", version.toLongString());
-			
+
 			QMessageBox mb(this);
 			mb.setText(text);
 			mb.setWindowTitle("About Structure Synth");
@@ -145,12 +156,14 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
+			setFocusPolicy(Qt::StrongFocus);
+
 			version = SyntopiaCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			isUntitled = true;
 
-			
+
 			QSplitter*	splitter = new QSplitter(this);
 			splitter->setObjectName(QString::fromUtf8("splitter"));
 			splitter->setOrientation(Qt::Horizontal);
@@ -159,31 +172,32 @@ namespace StructureSynth {
 			new EisenScriptHighlighter(textEdit);
 			textEdit->resize(100,100);
 
-			
+
 			QString s = 
-			QString("// Double spirals\r\n")+
-			"set maxdepth 400\r\n"+
-			"R1\r\n"+
-			"R2\r\n"+
-			"\r\n"+
-			"rule R1 { \r\n"+
-			"{ x 1 rz 6 ry 6 s 0.99 } R1\r\n"+
-			"{ s 2 } sphere\r\n"+
-			"} \r\n"+
-			"\r\n"+
-			"rule R2 { \r\n"+
-			"{ x -1  rz 6 ry 6 s 0.99 } R2\r\n"+
-			"{ s 2 } sphere \r\n"+
-			"} \r\n";
+				QString("// Double spirals\r\n")+
+				"set maxdepth 400\r\n"+
+				"R1\r\n"+
+				"R2\r\n"+
+				"\r\n"+
+				"rule R1 { \r\n"+
+				"{ x 1 rz 6 ry 6 s 0.99 } R1\r\n"+
+				"{ s 2 } sphere\r\n"+
+				"} \r\n"+
+				"\r\n"+
+				"rule R2 { \r\n"+
+				"{ x -1  rz 6 ry 6 s 0.99 } R2\r\n"+
+				"{ s 2 } sphere \r\n"+
+				"} \r\n";
 			textEdit->setText(s);
 
-			
+
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 			setCentralWidget(splitter);
 
 			QList<int> l; l.append(100); l.append(400);
 			splitter->setSizes(l);
 
+					
 			createActions();
 			createMenus();
 			createToolBars();
@@ -191,9 +205,8 @@ namespace StructureSynth {
 
 			readSettings();
 
-
 			// Log widget (in dockable window)
-			QDockWidget* dockLog = new QDockWidget(this);
+			dockLog = new QDockWidget(this);
 			dockLog->setWindowTitle("Log");
 			dockLog->setObjectName(QString::fromUtf8("dockWidget"));
 			dockLog->setAllowedAreas(Qt::BottomDockWidgetArea);
@@ -202,13 +215,7 @@ namespace StructureSynth {
 			QVBoxLayout* vboxLayout1 = new QVBoxLayout(dockLogContents);
 			vboxLayout1->setObjectName(QString::fromUtf8("vboxLayout1"));
 			vboxLayout1->setContentsMargins(0, 0, 0, 0);
-			
-			/*
-			QListWidget* listWidget = new QListWidget(dockLog);
-			new QListWidgetItem("", listWidget);
-			new QListWidgetItem("(hvidtfeldts.net 2007)", listWidget);
-	
-			*/
+
 			ListWidgetLogger* logger = new ListWidgetLogger(dockLog);
 			vboxLayout1->addWidget(logger->getListWidget());
 			dockLog->setWidget(dockLogContents);
@@ -219,10 +226,66 @@ namespace StructureSynth {
 
 			connect(textEdit->document(), SIGNAL(contentsChanged()),
 				this, SLOT(documentWasModified()));
+
+			fullScreenEnabled = false;
+			
+
+			createOpenGLContextMenu();
+
 		}
+
+		void MainWindow::createOpenGLContextMenu() {
+			openGLContextMenu = new QMenu();
+
+			
+			openGLContextMenu->addAction(fullScreenAction);
+
+			engine->setContextMenu(openGLContextMenu);
+		}
+
+
+		void MainWindow::toggleFullScreen() {
+			if (fullScreenEnabled) {
+				showNormal();
+				fullScreenEnabled = false;
+				fullScreenAction->setChecked(false);
+				textEdit->show();
+				dockLog->show();
+				menuBar()->show();
+				statusBar()->show();
+				fileToolBar->show();
+				editToolBar->show();
+				renderToolBar->show();
+			} else {
+				showFullScreen();
+				fullScreenAction->setChecked(true);
+				fullScreenEnabled = true;
+
+				textEdit->hide();
+				dockLog->hide();
+				menuBar()->hide();
+				statusBar()->hide();
+				fileToolBar->hide();
+				editToolBar->hide();
+				renderToolBar->hide();
+			}
+
+
+
+
+
+
+		}
+
+
 
 		void MainWindow::createActions()
 		{
+			fullScreenAction = new QAction(tr("F&ullscreen"), this);
+			fullScreenAction->setShortcut(tr("Ctrl+F"));
+			fullScreenAction->setCheckable(true);
+			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+			
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
 			newAction->setShortcut(tr("Ctrl+N"));
 			newAction->setStatusTip(tr("Create a new file"));
@@ -284,7 +347,7 @@ namespace StructureSynth {
 			aboutAction->setStatusTip(tr("Show the About box"));
 			connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-			
+
 
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
@@ -313,7 +376,8 @@ namespace StructureSynth {
 
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
-			
+			renderMenu->addAction(fullScreenAction);
+
 			menuBar()->addSeparator();
 
 			// Examples...
@@ -337,7 +401,7 @@ namespace StructureSynth {
 					examplesMenu->addAction(a);
 				}
 			}
-			
+
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
 		}
@@ -357,7 +421,7 @@ namespace StructureSynth {
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
-			
+
 		}
 
 		void MainWindow::createStatusBar()
@@ -494,7 +558,7 @@ namespace StructureSynth {
 			try {
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
-				
+
 				Tokenizer tokenizer(Preprocessor::Process(textEdit->toPlainText()));
 				EisenParser e(&tokenizer);
 				INFO("Parsing...");
@@ -532,6 +596,6 @@ namespace StructureSynth {
 		void MainWindow::resetView() {
 			engine->reset();
 		}
-			
+
 	}
 }
