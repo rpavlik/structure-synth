@@ -2,7 +2,7 @@
 
 #include <QString>
 #include <QMap>
-#include "../../AppCore/Math/Matrix4.h"
+#include "../../SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
 	namespace Model {	
@@ -13,10 +13,10 @@ namespace StructureSynth {
 		struct State {
 			State();
 
-			AppCore::Math::Matrix4f matrix;
+			SyntopiaCore::Math::Matrix4f matrix;
 
 			QMap<Rule*, int> maxDepths;
-			AppCore::Math::Vector3f hsv;
+			SyntopiaCore::Math::Vector3f hsv;
 			float alpha;
 		};
 

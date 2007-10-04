@@ -1,16 +1,16 @@
 #include "Transformation.h"
 
-#include "../../AppCore/Math/Matrix4.h"
+#include "../../SyntopiaCore/Math/Matrix4.h"
 
-#include "../../AppCore/Exceptions/Exception.h"
-#include "../../AppCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
 
 #include <QColor>
 
-using namespace AppCore::Exceptions;
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Exceptions;
+using namespace SyntopiaCore::Logging;
 
-using namespace AppCore::Math;
+using namespace SyntopiaCore::Math;
 
 namespace StructureSynth {
 	namespace Model {	

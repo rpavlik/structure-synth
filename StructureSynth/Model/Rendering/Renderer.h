@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QString>
-#include "../../../AppCore/Math/Vector3.h"
+#include "../../../SyntopiaCore/Math/Vector3.h"
 
 namespace StructureSynth {
 	namespace Model {	
@@ -18,27 +18,27 @@ namespace StructureSynth {
 				virtual void end() {};
 
 				/// The primitives
-				virtual void drawBox(AppCore::Math::Vector3f base, 
-								AppCore::Math::Vector3f dir1, 
-								AppCore::Math::Vector3f dir2, 
-								AppCore::Math::Vector3f dir3) = 0;
+				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
+								SyntopiaCore::Math::Vector3f dir1, 
+								SyntopiaCore::Math::Vector3f dir2, 
+								SyntopiaCore::Math::Vector3f dir3) = 0;
 
-				virtual void drawGrid(AppCore::Math::Vector3f base, 
-								AppCore::Math::Vector3f dir1, 
-								AppCore::Math::Vector3f dir2, 
-								AppCore::Math::Vector3f dir3) = 0;
+				virtual void drawGrid(SyntopiaCore::Math::Vector3f base, 
+								SyntopiaCore::Math::Vector3f dir1, 
+								SyntopiaCore::Math::Vector3f dir2, 
+								SyntopiaCore::Math::Vector3f dir3) = 0;
 
-				virtual void drawLine(AppCore::Math::Vector3f from, 
-										AppCore::Math::Vector3f to) = 0;
+				virtual void drawLine(SyntopiaCore::Math::Vector3f from, 
+										SyntopiaCore::Math::Vector3f to) = 0;
 
-				virtual void drawDot(AppCore::Math::Vector3f pos) = 0;
+				virtual void drawDot(SyntopiaCore::Math::Vector3f pos) = 0;
 				
-				virtual void drawSphere(AppCore::Math::Vector3f center, float radius) = 0;
+				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius) = 0;
 
 				// Color
 				// RGB in [0;1] intervals.
-				virtual void setColor(AppCore::Math::Vector3f rgb) = 0;
-				virtual void setBackgroundColor(AppCore::Math::Vector3f rgb) = 0;
+				virtual void setColor(SyntopiaCore::Math::Vector3f rgb) = 0;
+				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setAlpha(double alpha) = 0;
 		};
 

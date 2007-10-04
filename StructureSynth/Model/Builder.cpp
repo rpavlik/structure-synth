@@ -1,15 +1,15 @@
 #include "Builder.h"
-#include "../../AppCore/Logging/Logging.h"
-#include "../../AppCore/Exceptions/Exception.h"
-#include "../../AppCore/Misc/ColorUtils.h"
-#include "../../AppCore/Math/Vector3.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Misc/ColorUtils.h"
+#include "../../SyntopiaCore/Math/Vector3.h"
 
 #include <QProgressDialog>
 #include <QApplication>
 
-using namespace AppCore::Logging;
-using namespace AppCore::Math;
-using namespace AppCore::Exceptions;
+using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::Math;
+using namespace SyntopiaCore::Exceptions;
 
 namespace StructureSynth {
 	namespace Model {

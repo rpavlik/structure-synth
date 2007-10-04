@@ -2,8 +2,8 @@
 
 #include <QMainWindow>
 
-#include "AppCore/GLEngine/EngineWidget.h"
-#include "AppCore/Misc/Version.h"
+#include "SyntopiaCore/GLEngine/EngineWidget.h"
+#include "SyntopiaCore/Misc/Version.h"
 
 
 class QAction;
@@ -79,9 +79,9 @@ namespace StructureSynth {
 
 			QAction *renderAction;
 			QAction *panicAction;
-			AppCore::GLEngine::EngineWidget* engine;
+			SyntopiaCore::GLEngine::EngineWidget* engine;
 
-			AppCore::Misc::Version version;
+			SyntopiaCore::Misc::Version version;
 		};
 
 	}

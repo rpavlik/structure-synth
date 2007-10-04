@@ -6,7 +6,7 @@
 #include "State.h"
 #include "ExecutionStack.h"
 
-#include "../../../AppCore/Math/Matrix4.h"
+#include "../../../SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
 	namespace Model {	

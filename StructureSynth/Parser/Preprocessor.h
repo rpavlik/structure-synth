@@ -3,7 +3,7 @@
 #include <QString>
 #include <QList>
 
-#include "../../AppCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
 
 namespace StructureSynth {
 	namespace Parser {	

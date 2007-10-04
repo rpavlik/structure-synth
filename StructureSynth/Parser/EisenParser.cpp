@@ -1,11 +1,11 @@
 #include "EisenParser.h"
 
-#include "../../AppCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
 #include "../Model/CustomRule.h"
 
 #include <QColor>
 
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Logging;
 using namespace StructureSynth::Model;
 
 namespace StructureSynth {

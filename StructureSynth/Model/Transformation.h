@@ -2,7 +2,7 @@
 
 #include <QString>
 #include "State.h"
-#include "../../AppCore/Math/Matrix4.h"
+#include "../../SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
 	namespace Model {	
@@ -39,7 +39,7 @@ namespace StructureSynth {
 		
 		private:
 			// Matrix and Color transformations here.
-			AppCore::Math::Matrix4f matrix;
+			SyntopiaCore::Math::Matrix4f matrix;
 			float deltaH;
 			float scaleS;
 			float scaleV;
