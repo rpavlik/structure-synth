@@ -2,11 +2,11 @@
 
 #include <QStringList>
 
-#include "../../AppCore/Exceptions/Exception.h"
-#include "../../AppCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
 
-using namespace AppCore::Exceptions;
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Exceptions;
+using namespace SyntopiaCore::Logging;
 
 
 namespace StructureSynth {

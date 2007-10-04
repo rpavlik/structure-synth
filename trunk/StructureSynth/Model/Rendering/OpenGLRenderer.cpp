@@ -1,49 +1,49 @@
 #include "OpenGLRenderer.h"
-#include "../../../AppCore/GLEngine/Sphere.h"
-#include "../../../AppCore/GLEngine/Box.h"
-#include "../../../AppCore/GLEngine/Grid.h"
-#include "../../../AppCore/GLEngine/Dot.h"
-#include "../../../AppCore/GLEngine/Line.h"
-#include "../../../AppCore/Math/Vector3.h"
+#include "../../../SyntopiaCore/GLEngine/Sphere.h"
+#include "../../../SyntopiaCore/GLEngine/Box.h"
+#include "../../../SyntopiaCore/GLEngine/Grid.h"
+#include "../../../SyntopiaCore/GLEngine/Dot.h"
+#include "../../../SyntopiaCore/GLEngine/Line.h"
+#include "../../../SyntopiaCore/Math/Vector3.h"
 
-using namespace AppCore::GLEngine;
-using namespace AppCore::Math;
+using namespace SyntopiaCore::GLEngine;
+using namespace SyntopiaCore::Math;
 
-#include "../../../AppCore/Logging/Logging.h"
+#include "../../../SyntopiaCore/Logging/Logging.h"
 
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Logging;
 
 namespace StructureSynth {
 	namespace Model {	
 		namespace Rendering {
 
-			void OpenGLRenderer::drawBox(AppCore::Math::Vector3f base, 
-				AppCore::Math::Vector3f dir1 , 
-				AppCore::Math::Vector3f dir2, 
-				AppCore::Math::Vector3f dir3) {
+			void OpenGLRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
+				SyntopiaCore::Math::Vector3f dir1 , 
+				SyntopiaCore::Math::Vector3f dir2, 
+				SyntopiaCore::Math::Vector3f dir3) {
 					Object3D* o =new Box( base, dir1, dir2, dir3);
 					o->setColor(rgb, alpha);
 				
 					engine->addObject(o);
 			};
 
-			void OpenGLRenderer::drawGrid(AppCore::Math::Vector3f base, 
-				AppCore::Math::Vector3f dir1 , 
-				AppCore::Math::Vector3f dir2, 
-				AppCore::Math::Vector3f dir3) {
+			void OpenGLRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
+				SyntopiaCore::Math::Vector3f dir1 , 
+				SyntopiaCore::Math::Vector3f dir2, 
+				SyntopiaCore::Math::Vector3f dir3) {
 					engine->addObject(new Grid( base, dir1, dir2, dir3));
 			};
 
-			void OpenGLRenderer::drawLine(AppCore::Math::Vector3f from, 
-				AppCore::Math::Vector3f to) {
+			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, 
+				SyntopiaCore::Math::Vector3f to) {
 					engine->addObject(new Line( from, to));
 			};
 
-			void OpenGLRenderer::drawDot(AppCore::Math::Vector3f v) {
+			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v) {
 					engine->addObject(new Dot(v));
 			};
 
-			void OpenGLRenderer::drawSphere(AppCore::Math::Vector3f center, float radius) {
+			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
 				Object3D* o = new Sphere( center, radius);
 				o->setColor(rgb, alpha);
 				engine->addObject(o);
@@ -61,7 +61,7 @@ namespace StructureSynth {
 				engine->requireRedraw();
 			};
 
-			void OpenGLRenderer::setBackgroundColor(AppCore::Math::Vector3f rgb) {
+			void OpenGLRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) {
 				engine->setBackgroundColor(rgb.x(),rgb.y(),rgb.z());
 			}
 

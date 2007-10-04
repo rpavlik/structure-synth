@@ -204,25 +204,25 @@
 	</References>
 	<Files>
 		<Filter
-			Name="AppCore"
+			Name="SyntopiaCore"
 			>
 			<Filter
 				Name="Logging"
 				>
 				<File
-					RelativePath=".\AppCore\Logging\ListWidgetLogger.cpp"
+					RelativePath=".\SyntopiaCore\Logging\ListWidgetLogger.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Logging\ListWidgetLogger.h"
+					RelativePath=".\SyntopiaCore\Logging\ListWidgetLogger.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Logging\Logging.cpp"
+					RelativePath=".\SyntopiaCore\Logging\Logging.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Logging\Logging.h"
+					RelativePath=".\SyntopiaCore\Logging\Logging.h"
 					>
 				</File>
 			</Filter>
@@ -230,59 +230,59 @@
 				Name="GLEngine"
 				>
 				<File
-					RelativePath=".\AppCore\GLEngine\Box.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Box.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Box.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Box.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Dot.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Dot.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Dot.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Dot.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\EngineWidget.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\EngineWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\EngineWidget.h"
+					RelativePath=".\SyntopiaCore\GLEngine\EngineWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Grid.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Grid.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Grid.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Grid.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Line.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Line.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Line.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Line.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Object3D.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Object3D.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Object3D.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Object3D.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Sphere.cpp"
+					RelativePath=".\SyntopiaCore\GLEngine\Sphere.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\GLEngine\Sphere.h"
+					RelativePath=".\SyntopiaCore\GLEngine\Sphere.h"
 					>
 				</File>
 			</Filter>
@@ -290,19 +290,19 @@
 				Name="Math"
 				>
 				<File
-					RelativePath=".\AppCore\Math\Matrix4.cpp"
+					RelativePath=".\SyntopiaCore\Math\Matrix4.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Math\Matrix4.h"
+					RelativePath=".\SyntopiaCore\Math\Matrix4.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Math\Vector3.cpp"
+					RelativePath=".\SyntopiaCore\Math\Vector3.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Math\Vector3.h"
+					RelativePath=".\SyntopiaCore\Math\Vector3.h"
 					>
 				</File>
 			</Filter>
@@ -310,7 +310,7 @@
 				Name="Exceptions"
 				>
 				<File
-					RelativePath=".\AppCore\Exceptions\Exception.h"
+					RelativePath=".\SyntopiaCore\Exceptions\Exception.h"
 					>
 				</File>
 			</Filter>
@@ -318,19 +318,19 @@
 				Name="Misc"
 				>
 				<File
-					RelativePath=".\AppCore\Misc\ColorUtils.cpp"
+					RelativePath=".\SyntopiaCore\Misc\ColorUtils.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Misc\ColorUtils.h"
+					RelativePath=".\SyntopiaCore\Misc\ColorUtils.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Misc\Version.cpp"
+					RelativePath=".\SyntopiaCore\Misc\Version.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Misc\Version.h"
+					RelativePath=".\SyntopiaCore\Misc\Version.h"
 					>
 				</File>
 			</Filter>

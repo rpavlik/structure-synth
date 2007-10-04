@@ -1,16 +1,16 @@
 #include "PrimitiveRule.h"
 #include "Builder.h"
 
-#include "../../AppCore/Exceptions/Exception.h"
-#include "../../AppCore/Logging/Logging.h"
-#include "../../AppCore/Misc/ColorUtils.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Misc/ColorUtils.h"
 
-using namespace AppCore::Exceptions;
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Exceptions;
+using namespace SyntopiaCore::Logging;
 
-#include "../../AppCore/Math/Vector3.h"
+#include "../../SyntopiaCore/Math/Vector3.h"
 
-using namespace AppCore::Math;
+using namespace SyntopiaCore::Math;
 
 namespace StructureSynth {
 	namespace Model {	
@@ -38,7 +38,7 @@ namespace StructureSynth {
 		void PrimitiveRule::apply(Builder* b) {
 			b->increaseObjectCount();
 			b->getRenderer()->setColor(
-				AppCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)
+				SyntopiaCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)
 			);
 
 			b->getRenderer()->setAlpha( b->getState().alpha );

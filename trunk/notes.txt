@@ -6,7 +6,7 @@ Structure Synth Road Map
 	+Release build should be fixed
 	-'const correctness'
 	-TODO's
-	-'AppCore'->'Syntopia Core'
+	-'SyntopiaCore'->'Syntopia Core'
 	-GUI files the proper place
 	-No local filesystem reference i VS project files.
 	-Check directory structure.

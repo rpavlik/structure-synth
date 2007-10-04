@@ -2,9 +2,9 @@
 #include "ExecutionStack.h"
 #include "Builder.h"
 
-#include "../../AppCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
 
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Logging;
 
 namespace StructureSynth {
 	namespace Model {	

@@ -3,12 +3,12 @@
 #include <QString>
 #include <QList>
 
-#include "../../AppCore/Exceptions/Exception.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
 
 namespace StructureSynth {
 	namespace Parser {	
 
-		class ParseError : public AppCore::Exceptions::Exception {
+		class ParseError : public SyntopiaCore::Exceptions::Exception {
 		public:
 			ParseError(QString message) : Exception(message) {};
 		};

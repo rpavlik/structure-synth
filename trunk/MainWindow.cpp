@@ -2,8 +2,8 @@
 #include <QDir>
 
 #include "MainWindow.h"
-#include "AppCore/Logging/ListWidgetLogger.h"
-#include "AppCore/Exceptions/Exception.h"
+#include "SyntopiaCore/Logging/ListWidgetLogger.h"
+#include "SyntopiaCore/Exceptions/Exception.h"
 #include "StructureSynth/Parser/EisenParser.h"
 #include "StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "StructureSynth/Parser/Tokenizer.h"
@@ -12,9 +12,9 @@
 #include "StructureSynth/Model/Builder.h"
 
 
-using namespace AppCore::Logging;
+using namespace SyntopiaCore::Logging;
 using namespace StructureSynth::Model::Rendering;
-using namespace AppCore::Exceptions;
+using namespace SyntopiaCore::Exceptions;
 using namespace StructureSynth::Parser;
 using namespace StructureSynth::Model;
 
@@ -145,7 +145,7 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
-			version = AppCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
+			version = SyntopiaCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			isUntitled = true;
@@ -178,7 +178,7 @@ namespace StructureSynth {
 			textEdit->setText(s);
 
 			
-			engine = new AppCore::GLEngine::EngineWidget(splitter);
+			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 			setCentralWidget(splitter);
 
 			QList<int> l; l.append(100); l.append(400);
