@@ -53,7 +53,10 @@ namespace SyntopiaCore {
 			/// RGB in [0;1]
 			void setBackgroundColor(double r, double g, double b) { backgroundColor = QColor(r*255.0, g*255.0, b*255.0); };
 		
+			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
+
 		protected:
+			void contextMenuEvent (QContextMenuEvent* ev );
 			void initializeGL();
 			void timerEvent( QTimerEvent * );
 
@@ -91,6 +94,8 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Matrix4f rotation;
 
 			QList<Object3D*> objects;
+
+			QMenu* contextMenu;
 		};
 	};
 

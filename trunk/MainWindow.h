@@ -24,7 +24,8 @@ namespace StructureSynth {
 			MainWindow(const QString &fileName);
 
 		protected:
-			void closeEvent(QCloseEvent *event);
+			void closeEvent(QCloseEvent* ev);
+			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
 			void openFile();
@@ -36,6 +37,7 @@ namespace StructureSynth {
 			void documentWasModified();
 			void render();
 			void resetView();
+			void toggleFullScreen();
 			
 
 		private:
@@ -54,11 +56,14 @@ namespace StructureSynth {
 			void setCurrentFile(const QString &fileName);
 			QString strippedName(const QString &fullFileName);
 			MainWindow *findMainWindow(const QString &fileName);
+			void createOpenGLContextMenu();
 
 			QTextEdit *textEdit;
 			QString curFile;
 			bool isUntitled;
+			QDockWidget* dockLog;
 
+			QAction *fullScreenAction;
 			QMenu *fileMenu;
 			QMenu *editMenu;
 			QMenu *renderMenu;
@@ -82,6 +87,9 @@ namespace StructureSynth {
 			SyntopiaCore::GLEngine::EngineWidget* engine;
 
 			SyntopiaCore::Misc::Version version;
+
+			QMenu* openGLContextMenu;
+			bool fullScreenEnabled;
 		};
 
 	}

@@ -35,9 +35,15 @@ namespace SyntopiaCore {
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
 			backgroundColor = QColor(30,30,30);
+			contextMenu = 0;
+			
 		}
 
 		EngineWidget::~EngineWidget() {
+		}
+
+		void EngineWidget::contextMenuEvent(QContextMenuEvent* ev ) {
+			if (contextMenu) contextMenu->exec(ev->globalPos());	
 		}
 
 		void EngineWidget::reset() {
