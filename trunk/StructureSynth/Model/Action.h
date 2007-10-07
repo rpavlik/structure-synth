@@ -30,8 +30,8 @@ namespace StructureSynth {
 
 			/// If 'callingRule' != 0 the new states generated will be set with 
 			/// a depth equal to 'ruleDepth'
-			void  apply(Builder* b, Rule* callingRule, int ruleDepth);
-			RuleRef* getRuleRef() { return rule; }
+			void apply(Builder* b, const Rule* callingRule, int ruleDepth) const;
+			RuleRef* getRuleRef() const { return rule; }
 
 		private:
 			QList<TransformationLoop> loops;

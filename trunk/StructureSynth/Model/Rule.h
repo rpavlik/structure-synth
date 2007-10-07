@@ -19,17 +19,17 @@ namespace StructureSynth {
 
 			virtual ~Rule() {};
 
-			QString getName() { return name; }
+			QString getName() const { return name; }
 
 			/// When applied the rule will add new pending rules to the ExecutionStack for execution.
 			/// Only PrimitiveRules will make use of the renderer.
-			virtual void apply(Builder* builder) = 0;
+			virtual void apply(Builder* builder) const = 0;
 
 			/// Returns a list over rules that this rule references.
-			virtual QList<RuleRef*> getRuleRefs() { return QList<RuleRef*>(); }
+			virtual QList<RuleRef*> getRuleRefs() const { return QList<RuleRef*>(); }
 
 			virtual void setMaxDepth(int maxDepth) { this->maxDepth = maxDepth; }
-			virtual int getMaxDepth() { return maxDepth; }
+			virtual int getMaxDepth() const { return maxDepth; }
 			
 		protected:
 			QString name;

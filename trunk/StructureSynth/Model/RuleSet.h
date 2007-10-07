@@ -24,12 +24,12 @@ namespace StructureSynth {
 				/// TODO: Implement
 				QStringList getUnreferencedNames();
 
-				Rule* getStartRule();
+				Rule* getStartRule() const ;
 
-				CustomRule* getTopLevelRule() { return topLevelRule; }
+				CustomRule* getTopLevelRule() const { return topLevelRule; }
 
 				/// For debug
-				void dumpInfo();
+				void dumpInfo() const;
 
 		private:
 			 QList<Rule*> rules;

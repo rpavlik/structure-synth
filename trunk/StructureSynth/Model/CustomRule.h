@@ -14,14 +14,14 @@ namespace StructureSynth {
 			CustomRule(QString name);
 			virtual ~CustomRule();
 
-			virtual void  apply(Builder* builder);
+			virtual void apply(Builder* builder) const;
 
 			/// Returns a list over rules that this rule references.
-			virtual QList<RuleRef*> getRuleRefs();
+			virtual QList<RuleRef*> getRuleRefs() const;
 
 			void appendAction(Action a) { actions.append(a); }
 
-			double getWeight() { return weight; }
+			double getWeight() const { return weight; }
 			void setWeight(double w) { weight = w; }
 
 			void setRetirementRule(QString ruleName) { retirementRule = new RuleRef(ruleName); };

@@ -25,15 +25,21 @@ Version 0.5: 'Graf Zeppelin' [DONE]
 + Add 'Reset button' (for OpenGL view)
 + Create a build (resolve dependencies)
 
+Version 0.6?:
+-------------
++ Full Screen
+- Parser should take {,} as delimiters
+- Screenshot
+- Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.
+! Tabbed interface
+- Change random generator -> mersenne twister for cross-platform reproducibility and random seed setting/getting.
+
 Version 0.8: 'Memories of tomorrow' [v 0.8]
 ----------------------------------
 - 'set minvolume'
 - Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
 - Ellipsoid object. (as of now spheres are always isotropic]
-- Full Screen
-- Screenshot
-- Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.
 - Custom Transformation matrix operator.
 - Preprocessor '#include' statement
 - Skew transformations (syntax?)
@@ -52,7 +58,6 @@ Version 0.8: 'Memories of tomorrow' [v 0.8]
 
 Version 1.0: Kolberger Heide.
 -----------------------------
-! Tabbed interface
 - Add more renders:
   - [Tag Renderer] - renders all tag as text.
   ! [PovRay] Renderer

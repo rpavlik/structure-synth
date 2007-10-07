@@ -8,9 +8,8 @@ using namespace SyntopiaCore::Logging;
 
 namespace StructureSynth {
 	namespace Model {	
-		void  Action::apply(Builder* b, Rule* callingRule, int ruleDepth) {
+		void Action::apply(Builder* b, const Rule* callingRule, int ruleDepth) const {
 
-			
 			if (set != 0) {
 				b->setCommand(set->key, set->value);
 				return;
@@ -57,11 +56,7 @@ namespace StructureSynth {
 					}
 				}
 
-				//if (done) break;
-
 			}
-
-
 		}
 
 		Action::Action(QString key, QString value) {

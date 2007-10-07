@@ -35,7 +35,7 @@ namespace StructureSynth {
 
 		};
 
-		void PrimitiveRule::apply(Builder* b) {
+		void PrimitiveRule::apply(Builder* b) const {
 			b->increaseObjectCount();
 			b->getRenderer()->setColor(
 				SyntopiaCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)

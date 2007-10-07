@@ -10,7 +10,7 @@ using namespace SyntopiaCore::Logging;
 namespace StructureSynth {
 	namespace Model {	
 
-		QList<RuleRef*> AmbiguousRule::getRuleRefs() {
+		QList<RuleRef*> AmbiguousRule::getRuleRefs() const {
 			QList<RuleRef*>  list;
 			for (int i = 0; i < rules.size(); i++) {
 				for (int j = 0; j < rules[i]->getRuleRefs().size(); j++) {
@@ -20,7 +20,7 @@ namespace StructureSynth {
 			return list;
 		}
 
-		void AmbiguousRule::apply(Builder* builder) {
+		void AmbiguousRule::apply(Builder* builder) const {
 			// Calc sum of weigths
 			double totalWeigth = 0;
 			for (int i = 0; i < rules.size(); i++) {

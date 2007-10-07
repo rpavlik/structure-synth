@@ -1,22 +1,14 @@
-Structure Synth Road Map
-------------------------
-
 
 - Restructure: 
-	+Release build should be fixed
 	-'const correctness'
 	-TODO's
-	-'SyntopiaCore'->'Syntopia Core'
 	-GUI files the proper place
-	-No local filesystem reference i VS project files.
 	-Check directory structure.
 	-Comments
 				
 - Website: 
-    + add news
-    + add (flickr) gallery
     - add section links.
-
+    - tutorials: 'EisenScript Kata'
 
 RoadMap:
 

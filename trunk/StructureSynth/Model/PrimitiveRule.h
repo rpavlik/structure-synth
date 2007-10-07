@@ -12,11 +12,11 @@ namespace StructureSynth {
 				enum PrimitiveType { Box, Sphere, Dot, Grid, Cylinder, Line } ;
 				
 				PrimitiveRule(PrimitiveType type);
-				virtual void apply(Builder* builder);
+				virtual void apply(Builder* builder) const;
 	
 				/// Returns a list over rules that this rule references.
 				/// (Empty for all PrimitiveRules!)
-				virtual QList<RuleRef*> getRuleRefs() { return QList<RuleRef*>(); }
+				virtual QList<RuleRef*> getRuleRefs() const { return QList<RuleRef*>(); }
 
 			private:
 				PrimitiveType type;
