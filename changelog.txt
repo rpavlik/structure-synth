@@ -1,9 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+07 Oct 07 [MHC]: Added initial support for tabs. Not fully implemented.
+[3h]             Did some 'const correctness' clean up
 
-04   Oct 07 [MHC]: Refactored AppCore -> SyntopiaCore
-[1½h]              Added support for full screen (+context menu).
+04 Oct 07 [MHC]: Refactored AppCore -> SyntopiaCore
+[1½h]            Added support for full screen (+context menu).
 
 ----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
 Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hours non-coding

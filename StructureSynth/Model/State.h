@@ -15,7 +15,7 @@ namespace StructureSynth {
 
 			SyntopiaCore::Math::Matrix4f matrix;
 
-			QMap<Rule*, int> maxDepths;
+			QMap<const Rule*, int> maxDepths;
 			SyntopiaCore::Math::Vector3f hsv;
 			float alpha;
 		};

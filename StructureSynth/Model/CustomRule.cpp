@@ -17,7 +17,7 @@ namespace StructureSynth {
 			delete (retirementRule);
 		}
 
-		void CustomRule::apply(Builder* b) {
+		void CustomRule::apply(Builder* b) const {
 
 			int newDepth = -1;
 			/// If there is a maxdepth set for this object check it.
@@ -51,7 +51,7 @@ namespace StructureSynth {
 			}
 		}
 
-		QList<RuleRef*> CustomRule::getRuleRefs() {
+		QList<RuleRef*> CustomRule::getRuleRefs() const {
 			QList<RuleRef*>  list;
 			for (int i = 0; i < actions.size(); i++) {
 				RuleRef* a = actions[i].getRuleRef();

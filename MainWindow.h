@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QTabBar>
+
 
 #include "SyntopiaCore/GLEngine/EngineWidget.h"
 #include "SyntopiaCore/Misc/Version.h"
@@ -12,6 +14,16 @@ class QTextEdit;
 
 namespace StructureSynth {
 	namespace GUI {
+
+		struct TabInfo {
+			TabInfo() {}; 
+
+			TabInfo(QString filename, QTextEdit* textEdit) : filename(filename), modified(false), textEdit(textEdit) {};
+			QString filename;
+			bool modified;
+			QTextEdit* textEdit;
+        };
+
 
 		/// The main window of the application.
 		/// As of now a SDI interface, but at some point tabs will be added.
@@ -28,6 +40,8 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void tabChanged(int index);
+			
 			void openFile();
 			void newFile();
 			void open();
@@ -41,6 +55,9 @@ namespace StructureSynth {
 			
 
 		private:
+			void insertTabPage(QString filename);
+			QTextEdit* getTextEdit();
+		
 			QString getExamplesDir();
 			QString getMiscDir();
 			void init();
@@ -58,7 +75,6 @@ namespace StructureSynth {
 			MainWindow *findMainWindow(const QString &fileName);
 			void createOpenGLContextMenu();
 
-			QTextEdit *textEdit;
 			QString curFile;
 			bool isUntitled;
 			QDockWidget* dockLog;
@@ -85,11 +101,15 @@ namespace StructureSynth {
 			QAction *renderAction;
 			QAction *panicAction;
 			SyntopiaCore::GLEngine::EngineWidget* engine;
+			QTabBar* tabBar;
 
 			SyntopiaCore::Misc::Version version;
 
 			QMenu* openGLContextMenu;
 			bool fullScreenEnabled;
+			QStackedWidget *stackedTextEdits;
+
+			QVector<TabInfo> tabInfo;
 		};
 
 	}
