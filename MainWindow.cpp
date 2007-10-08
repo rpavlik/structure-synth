@@ -311,12 +311,12 @@ namespace StructureSynth {
 			saveAsAction->setStatusTip(tr("Save the script under a new name"));
 			connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 
-			closeAction = new QAction(tr("&Close"), this);
+			closeAction = new QAction(tr("&Close Tab"), this);
 			closeAction->setShortcut(tr("Ctrl+W"));
-			closeAction->setStatusTip(tr("Close this window"));
-			connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+			closeAction->setStatusTip(tr("Close this tab"));
+			connect(closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
 
-			exitAction = new QAction(tr("E&xit"), this);
+			exitAction = new QAction(tr("E&xit Application"), this);
 			exitAction->setShortcut(tr("Ctrl+Q"));
 			exitAction->setStatusTip(tr("Exit the application"));
 			connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
@@ -641,6 +641,16 @@ namespace StructureSynth {
 			TabInfo t = tabInfo[index];
 			setWindowTitle(tr("%1[*] - %2").arg(strippedName(t.filename)).arg(tr("Structure Synth")));
 			stackedTextEdits->setCurrentWidget(t.textEdit);
+		}
+
+		void MainWindow::closeTab() {
+			int index = tabBar->currentIndex();
+			TabInfo t = tabInfo[index];
+			stackedTextEdits->removeWidget(t.textEdit);
+			delete(t.textEdit); // ?
+			tabBar->removeTab(index);
+			tabInfo.remove(index);
+			
 		}
 	}
 }
