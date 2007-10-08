@@ -96,6 +96,7 @@ namespace SyntopiaCore {
 			QList<Object3D*> objects;
 
 			QMenu* contextMenu;
+			bool rmbDragging;
 		};
 	};
 

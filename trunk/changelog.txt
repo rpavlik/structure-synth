@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+08 Oct 07 [MHC]: Bugfixes: 'panic' doesn't change background color, context menus doesn't appear while dragging in 3D view
+[½h]
+
 07 Oct 07 [MHC]: Added initial support for tabs. Not fully implemented.
 [3h]             Did some 'const correctness' clean up
 

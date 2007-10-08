@@ -36,6 +36,8 @@ namespace SyntopiaCore {
 			pivot = Vector3f(0,0,0);
 			backgroundColor = QColor(30,30,30);
 			contextMenu = 0;
+
+			rmbDragging = false;
 			
 		}
 
@@ -43,6 +45,7 @@ namespace SyntopiaCore {
 		}
 
 		void EngineWidget::contextMenuEvent(QContextMenuEvent* ev ) {
+			if (rmbDragging) { return; }
 			if (contextMenu) contextMenu->exec(ev->globalPos());	
 		}
 
@@ -50,7 +53,7 @@ namespace SyntopiaCore {
 			translation = Vector3f(0,0,-20);
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
-			backgroundColor = QColor(0,0,0);
+			//backgroundColor = QColor(0,0,0);
 			requireRedraw();
 		}
 
@@ -224,6 +227,10 @@ namespace SyntopiaCore {
 
 				rotateWorldZ( rx );
 				requireRedraw();
+
+				if (e->buttons() == (Qt::LeftButton | Qt::RightButton ))  {
+					rmbDragging = true;
+				}
 			} else if ( ( e->buttons() == Qt::RightButton ) 
 				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier ) 
 				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::MetaModifier ) ) 
@@ -234,14 +241,21 @@ namespace SyntopiaCore {
 				//
 				// results in translation
 
-				translateWorld( mouseSpeed*mouseTranslationSpeed* rx, - mouseSpeed*mouseTranslationSpeed*ry, 0 );
-				requireRedraw();
+				if (rx != 0 || ry != 0) {
+					translateWorld( mouseSpeed*mouseTranslationSpeed* rx, - mouseSpeed*mouseTranslationSpeed*ry, 0 );
+					requireRedraw();
+					rmbDragging = true;
+				} 
 			} else if ( e->buttons() == Qt::LeftButton ) {
 				// Dragging with left mouse button.
 				// Results in rotation.
 
 				rotateWorldXY( rx, ry );
 				requireRedraw();
+
+				rmbDragging = false;
+			} else {
+				rmbDragging = false;
 			}
 		}
 

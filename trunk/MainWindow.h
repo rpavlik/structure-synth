@@ -41,6 +41,7 @@ namespace StructureSynth {
 
 		private slots:
 			void tabChanged(int index);
+			void closeTab();
 			
 			void openFile();
 			void newFile();
