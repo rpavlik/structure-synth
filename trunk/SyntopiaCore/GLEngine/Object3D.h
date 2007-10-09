@@ -15,6 +15,7 @@ namespace SyntopiaCore {
 			virtual void draw() = 0;
 
 			void setColor(SyntopiaCore::Math::Vector3f rgb, float alpha);
+			const GLfloat (&getColor() const)[4] { return primaryColor; }
 
 			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to);
 			void expandBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to);

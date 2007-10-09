@@ -18,7 +18,7 @@ namespace SyntopiaCore {
 
 		void Dot::draw() {
 			glDisable (GL_LIGHTING);
-			glColor3f( 1.0f, 1.0f, 1.0f );
+			glColor4fv(primaryColor);
 			glBegin(GL_POINTS);
 			glVertex3f(pos.x(), pos.y(), pos.z());
 			glEnd();			

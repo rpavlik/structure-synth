@@ -7,7 +7,7 @@
 namespace SyntopiaCore {
 	namespace Logging {
 
-		ListWidgetLogger::ListWidgetLogger(QWidget* parent) { 	
+		ListWidgetLogger::ListWidgetLogger(QWidget* parent) : parent(parent) { 	
 			listWidget = new QListWidget(parent);
 		}
 
@@ -22,8 +22,10 @@ namespace SyntopiaCore {
 			if ( priority == InfoLevel ) {
 				i->setBackgroundColor(QColor(255,255,255));
 			} else if ( priority == WarningLevel ) {
+				parent->show();
 				i->setBackgroundColor(QColor(255,243,73));
 			} else if ( priority == CriticalLevel ) {
+				parent->show();
 				i->setBackgroundColor(QColor(255,2,0));
 			} else {
 				i->setBackgroundColor(QColor(220,220,220));

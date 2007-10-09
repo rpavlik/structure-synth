@@ -61,6 +61,8 @@ namespace SyntopiaCore {
 			pendingRedraws = requiredRedraws;
 		}
 
+		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
+			
 		void EngineWidget::paintGL() {
 
 			static int count = 0;
@@ -89,21 +91,53 @@ namespace SyntopiaCore {
 				int objs =  objects.size();
 				int step = objs/5000;
 				if (step < 1) step = 1;
-				if (count > step) count = 0;
+				if (count >= step) count = 0;
 
 
 				glDisable (GL_LIGHTING);
+				glLineWidth( 1.0 );
 				glColor3f( 1.0f, 1.0f, 1.0f );
-				glBegin(GL_POINTS);
 				for (int i = count; i < objects.size(); i+=step) {
+					glColor3f(
+						objects[i]->getColor()[0],
+						objects[i]->getColor()[1],
+						objects[i]->getColor()[2]
+					);
 					Vector3f pos1;
 					Vector3f pos2;
 					objects[i]->getBoundingBox(pos1,pos2);
-					Vector3f pos = (pos1+pos2)/2.0;
-					glVertex3f(pos.x(), pos.y(), pos.z());
-			
+
+					glPushMatrix();
+					glTranslatef( pos1.x(), pos1.y(), pos1.z() );
+					Vector3f v1(0,(pos2-pos1).y(),0);
+					Vector3f v2((pos2-pos1).x(),0,0);
+					Vector3f v3(0,0,(pos2-pos1).z());
+
+					glBegin( GL_LINE_LOOP  );
+					Vector3f O(0,0,0);
+					vertexm(O);
+					vertexm(v2);
+					vertexm(v2+v1);
+					vertexm(v1);
+					glEnd();
+
+					glBegin( GL_LINE_LOOP  );
+					vertexm(v3);
+					vertexm(v2+v3);
+					vertexm(v2+v1+v3);
+					vertexm(v1+v3);
+					glEnd();
+
+					glBegin( GL_LINES  );
+					vertexm( v3 );   vertexm( O );
+					vertexm( v2 );   vertexm( v2+v3 );
+					vertexm( v1+v2 );   vertexm( v1+v2+v3 );
+					vertexm( v1 );   vertexm( v1+v3 );
+					glEnd();
+
+					glPopMatrix();			
+
 				}
-				glEnd();			
 
 				glEnable (GL_LIGHTING);
 

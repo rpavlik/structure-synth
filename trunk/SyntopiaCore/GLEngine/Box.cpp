@@ -57,12 +57,8 @@ namespace SyntopiaCore {
 			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 			glEnable(GL_COLOR_MATERIAL);
 			
-			
-
-
-			
+					
 			glBegin( GL_QUADS );
-			//glColor4f(0.5f,1.0f,0.3f,1.0f);
 			glColor4fv(primaryColor);
 			vertex4n(O, v2,v2+v1,v1);
 			vertex4rn(O+v3, v2+v3, v2+v1+v3, v1+v3);

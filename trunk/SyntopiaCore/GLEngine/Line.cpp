@@ -28,7 +28,7 @@ namespace SyntopiaCore {
 			
 			glLineWidth( 1.0 );
 			glDisable (GL_LIGHTING);
-			glColor3f( 1.0f, 1.0f, 1.0f );
+			glColor4fv(primaryColor);
 			
 			glBegin(GL_LINES);
 			vertex(from);

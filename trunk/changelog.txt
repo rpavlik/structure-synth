@@ -1,6 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+09 Oct 07 [MHC]: Corrected: [4] Lines and dots do not respect color settings.
+[2h]             Better fast-draw.
+                 Corrected: [3] When parser encounters an error, it should clear 3D view, and force shown log.
+
+
 08 Oct 07 [MHC]: Bugfixes: 'panic' doesn't change background color, context menus doesn't appear while dragging in 3D view
 [½h]
 
