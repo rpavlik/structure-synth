@@ -22,6 +22,7 @@ namespace SyntopiaCore {
 
 		private:
 			QListWidget* listWidget;
+			QWidget* parent;
 		};
 		
 	}

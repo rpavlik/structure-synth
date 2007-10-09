@@ -31,16 +31,21 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3) {
-					engine->addObject(new Grid( base, dir1, dir2, dir3));
+					Object3D* o = new Grid( base, dir1, dir2, dir3);
+					o->setColor(rgb, alpha);
+					engine->addObject(o);
 			};
 
-			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, 
-				SyntopiaCore::Math::Vector3f to) {
-					engine->addObject(new Line( from, to));
+			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to) {
+					Object3D* o = new Line( from, to);
+					o->setColor(rgb, alpha);
+					engine->addObject(o);
 			};
 
 			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v) {
-					engine->addObject(new Dot(v));
+					Object3D* o = new Dot(v);
+					o->setColor(rgb, alpha);
+					engine->addObject(o);	
 			};
 
 			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {

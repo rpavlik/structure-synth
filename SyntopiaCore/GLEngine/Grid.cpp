@@ -26,8 +26,7 @@ namespace SyntopiaCore {
 			glLineWidth( 1.0 );
 
 			glDisable (GL_LIGHTING);
-			glColor3f( 1.0f, 1.0f, 1.0f );
-			
+			glColor4fv( primaryColor );
 
 			glBegin( GL_LINE_LOOP  );
 			Vector3f O(0,0,0);
@@ -51,10 +50,7 @@ namespace SyntopiaCore {
 			vertex( v1 );   vertex( v1+v3 );
 			glEnd();
 
-
-
-			glEnable (GL_LIGHTING);
-			
+			glEnable (GL_LIGHTING);			
 
 			glPopMatrix();			
 		};

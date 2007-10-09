@@ -101,7 +101,6 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::keyReleaseEvent(QKeyEvent* ev) {
-			INFO("hej");
 			if (ev->key() == Qt::Key_Escape) {
 				toggleFullScreen();
 			} else {
@@ -180,7 +179,7 @@ namespace StructureSynth {
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
 			tabBar = new QTabBar(this);
-			insertTabPage("Test.es");
+			//insertTabPage("");
 			
 			QFrame* f = new QFrame(this);
 			QVBoxLayout* vboxLayout = new QVBoxLayout();
@@ -198,7 +197,14 @@ namespace StructureSynth {
 			createActions();
 			createMenus();
 			createToolBars();
+
+
+			
 			createStatusBar();
+
+			QDir d(getExamplesDir());
+			loadFile(d.absoluteFilePath("Default.es"));
+
 
 			readSettings();
 
@@ -232,8 +238,9 @@ namespace StructureSynth {
 
 			createOpenGLContextMenu();
 
-			insertTabPage("");
-
+			
+			
+			
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 		}
@@ -507,6 +514,7 @@ namespace StructureSynth {
 
 		void MainWindow::setCurrentFile(const QString &fileName)
 		{
+			/*
 			static int sequenceNumber = 1;
 
 			isUntitled = fileName.isEmpty();
@@ -521,6 +529,7 @@ namespace StructureSynth {
 
 			setWindowTitle(tr("%1[*] - %2").arg(strippedName(curFile))
 				.arg(tr("Structure Synth")));
+				*/
 		}
 
 		QString MainWindow::strippedName(const QString &fullFileName)
@@ -566,6 +575,8 @@ namespace StructureSynth {
 
 			} catch (Exception& er) {
 				WARNING(er.getMessage());
+				engine->clearWorld();
+				engine->requireRedraw();
 			} 
 		}
 
@@ -590,6 +601,7 @@ namespace StructureSynth {
 		void MainWindow::insertTabPage(QString filename) {
 					
 			QTextEdit* textEdit = new QTextEdit();
+			textEdit->setTabStopWidth(20);
 			new EisenScriptHighlighter(textEdit);
 			
 
@@ -626,7 +638,7 @@ namespace StructureSynth {
 
 			
 			QString displayName = filename;
-			if (displayName.isEmpty()) displayName = "Unnamed.es";
+			if (displayName.isEmpty()) displayName = "Unnamed";
 			
 			stackedTextEdits->addWidget(textEdit);
 			//stackedTextEdits->setCurrentWidget(textEdit);
