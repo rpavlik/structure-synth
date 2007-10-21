@@ -101,7 +101,7 @@ namespace StructureSynth {
 			
 			if (generationCounter == maxGenerations) {
 				INFO(QString("Terminated because maximum number of generations reached (%1).").arg(maxGenerations));
-				INFO(QString("Use 'Set MaxGenerations' command to increase this number."));
+				INFO(QString("Use 'Set Maxdepth' command to increase this number."));
 			}
 			INFO("Done building...");
 		}
