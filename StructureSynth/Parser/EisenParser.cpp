@@ -71,10 +71,11 @@ namespace StructureSynth {
 			while (symbol.type == Symbol::Operator) { 
 				if (symbol.text == "weight") {
 					getSymbol();
-					double param = symbol.intValue;
+					double param = symbol.getNumerical();
 					if (!accept(Symbol::Number)) {
 						throw (ParseError("Rule modifier 'weight' expected numerical argument. Found: " + symbol.text));
 					}
+					INFO(QString("Param: %1").arg(param));
 					customRule->setWeight(param);
 
 				} else if (symbol.text == "maxdepth") {
