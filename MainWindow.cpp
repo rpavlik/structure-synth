@@ -1,11 +1,13 @@
 #include <QtGui>
 #include <QDir>
+#include <QClipboard>
 
 #include "MainWindow.h"
 #include "SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "SyntopiaCore/Exceptions/Exception.h"
 #include "StructureSynth/Parser/EisenParser.h"
 #include "StructureSynth/Model/Rendering/OpenGLRenderer.h"
+#include "StructureSynth/Model/Rendering/POVRenderer.h"
 #include "StructureSynth/Parser/Tokenizer.h"
 #include "StructureSynth/Parser/Preprocessor.h"
 #include "StructureSynth/Model/RuleSet.h"
@@ -351,6 +353,11 @@ namespace StructureSynth {
 			renderAction->setStatusTip(tr("Render the current ruleset"));
 			connect(renderAction, SIGNAL(triggered()), this, SLOT(render()));
 
+			povRenderAction = new QAction(QIcon(":/images/render.png"), tr("&Export as POV-Ray script"), this);
+			povRenderAction->setShortcut(tr("F6"));
+			povRenderAction->setStatusTip(tr("Export as POV-Ray script"));
+			connect(povRenderAction, SIGNAL(triggered()), this, SLOT(povRender()));
+
 			panicAction = new QAction("Panic!", this);
 			panicAction->setStatusTip(tr("Resets the viewport"));
 			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
@@ -387,6 +394,7 @@ namespace StructureSynth {
 
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
+			renderMenu->addAction(povRenderAction);
 			renderMenu->addAction(fullScreenAction);
 
 			menuBar()->addSeparator();
@@ -431,6 +439,7 @@ namespace StructureSynth {
 
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
+			renderToolBar->addAction(povRenderAction);
 			renderToolBar->addAction(panicAction);
 
 		}
@@ -579,6 +588,39 @@ namespace StructureSynth {
 				engine->requireRedraw();
 			} 
 		}
+
+		void MainWindow::povRender() {
+			try {
+				QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
+				Rendering::POVRenderer rendering(text);
+				rendering.begin(); // we clear before parsing...
+
+				Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
+				EisenParser e(&tokenizer);
+				INFO("Parsing...");
+				RuleSet* rs = e.parseRuleset();
+
+				INFO("Resolving named references...");
+				rs->resolveNames();
+
+				rs->dumpInfo();
+
+				INFO("Building....");
+				Builder b(&rendering, rs);
+				b.build();
+				rendering.end();
+
+				INFO("Done...");
+				INFO("POV-Ray script is now copied to the clipboard");
+
+				QClipboard *clipboard = QApplication::clipboard();
+				clipboard->setText(text); 
+
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+			} 
+		}
+
 
 		QString MainWindow::getExamplesDir() {
 			// TODO: Implement
