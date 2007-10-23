@@ -1,6 +1,13 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+23 Oct 97 [MHC]: Started working on POVRay export.
+[2h]
+
+1x Oct 97 [MHC]: Started working on tutorial.
+[1h]
+
 14 Oct 97 [MHC]: Fixed 'weight' bug. Now accepts floating points as weights.
 
 09 Oct 07 [MHC]: Corrected: [4] Lines and dots do not respect color settings.
