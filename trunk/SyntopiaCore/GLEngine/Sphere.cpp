@@ -15,8 +15,9 @@ namespace SyntopiaCore {
 				gluQuadricDrawStyle(myQuad, GLU_FILL);
 			}
 			/// Bounding box
-			from = center-Vector3f(radius,radius,radius);
-			to = center+Vector3f(radius,radius,radius);
+			Vector3f v = Vector3f(radius,radius,radius);
+			from = center-v;
+			to = center+v;
 		};
 
 		Sphere::~Sphere() {
