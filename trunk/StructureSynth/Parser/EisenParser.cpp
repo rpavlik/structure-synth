@@ -197,6 +197,14 @@ namespace StructureSynth {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text));
 				return Transformation::createHSV(0, 1,1,param);
+			} else if (type == "matrix") {
+				QVector<double> ds;
+				for (unsigned int i = 0; i < 9; i++) {
+					double param = symbol.getNumerical();
+					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'matrix': Expected nine (9) parameters. Found: " + symbol.text));
+					ds.append(param);
+				}
+				return Transformation::createMatrix(ds);
 			} else if (type == "s") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));

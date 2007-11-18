@@ -1,14 +1,19 @@
 
 Changelog for Structure Synth:
 ------------------------------
-
-23 Oct 97 [MHC]: Started working on POVRay export.
-[2h]
-
-1x Oct 97 [MHC]: Started working on tutorial.
+18 Nov 07 [MHC]: Added 'matrix x1 x2 x3 y1 y2 y3 z1 z2 z3' transformation.
 [1h]
 
-14 Oct 97 [MHC]: Fixed 'weight' bug. Now accepts floating points as weights.
+09 Nov 07 [MHC]: Fixed a syntax error affection compilation under GCC (Linux). Works again on Linux now.
+[½h]
+
+23 Oct 07 [MHC]: Started working on POVRay export.
+[2h]
+
+1x Oct 07 [MHC]: Started working on tutorial.
+[1h]
+
+14 Oct 07 [MHC]: Fixed 'weight' bug. Now accepts floating points as weights.
 
 09 Oct 07 [MHC]: Corrected: [4] Lines and dots do not respect color settings.
 [2h]             Better fast-draw.

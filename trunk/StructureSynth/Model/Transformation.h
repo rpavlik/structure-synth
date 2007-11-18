@@ -32,6 +32,9 @@ namespace StructureSynth {
 			// Scaling 
 			static Transformation createScale(double x, double y, double z);
 		
+			// Free transformation 
+			static Transformation createMatrix(QVector<double> vals);
+		
 			// Color stuff
 			static Transformation createHSV(float h, float s, float v, float a);
 			static Transformation createColor(QString color);
