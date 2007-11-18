@@ -163,5 +163,25 @@ namespace StructureSynth {
 				Matrix4f::Translation(-0.5,-0.5,-0.5);
 			return t;
 		}
+
+		Transformation Transformation::createMatrix(QVector<double> vals) {
+			Transformation t;
+			t.matrix(0,0) = vals[0];
+			t.matrix(0,1) = vals[1];
+			t.matrix(0,2) = vals[2];
+			t.matrix(1,0) = vals[3];
+			t.matrix(1,1) = vals[4];
+			t.matrix(1,2) = vals[5];
+			t.matrix(2,0) = vals[6];
+			t.matrix(2,1) = vals[7];
+			t.matrix(2,2) = vals[8];
+			t.matrix = 
+				Matrix4f::Translation(0.5,0.5,0.5)*
+				t.matrix*
+				Matrix4f::Translation(-0.5,-0.5,-0.5);
+			return t;
+			
+		}
+		
 	}
 }

@@ -28,11 +28,13 @@ Version 0.5: 'Graf Zeppelin' [DONE]
 Version 0.6?:
 -------------
 + Full Screen
+! Tabbed interface
++ Custom Transformation matrix operator.
 - Parser should take {,} as delimiters
 - Screenshot
 - Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.
-! Tabbed interface
 - Change random generator -> mersenne twister for cross-platform reproducibility and random seed setting/getting.
+- Linux testing
 
 Version 0.8: 'Memories of tomorrow' [v 0.8]
 ----------------------------------
@@ -40,21 +42,17 @@ Version 0.8: 'Memories of tomorrow' [v 0.8]
 - Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
 - Ellipsoid object. (as of now spheres are always isotropic]
-- Custom Transformation matrix operator.
 - Preprocessor '#include' statement
-- Skew transformations (syntax?)
 - Version object with check for updates on internet.
 - GUI Seed
 - 'Zoom to fit'
 - Real transperancy (req. sorting)
 - More complex primitives (tube, ...)
 - Better parsing (faulty tokens should be highlighted in editor)
-- Linux testing
 - Check for infinite retirement substitution cycles.
 - Better Progress Bar (include updates for transformations loop, pause button?)
 - Drag'n'Drop of EisenScript files.
 - Set initial viewport (create expression by right clicking mouse canvas)
-- Dump used seed 
 
 Version 1.0: Kolberger Heide.
 -----------------------------
