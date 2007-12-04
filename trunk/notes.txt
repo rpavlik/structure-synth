@@ -1,3 +1,11 @@
+This file is my personal notes for Structure Synth.
+They are not secret, but they were not meant to be read by any other than myself. /MHC.
+
+- The PovRay support.
+  - Should be done using text-based (and user-customizable) template...
+
+- Tabs: 
+  - Does not check for modified files when closing project...
 
 - Restructure: 
 	-'const correctness'
@@ -10,51 +18,15 @@
     - add section links.
     - tutorials: 'EisenScript Kata'
 
-RoadMap:
-
-Version 0.8: 'Memories of tomorrow' (November 2007?)
------------------------------------
-Tagging. A special syntax for sending renderer-specific commands. For the OpenGL renderer this will make
-it possible to control Fog, Light sources, perspective, sphere subdivisions and so on.
-Full Screen option, 'Zoom-to-fit' option and screenshot capabiilities.
-Some new primitives (including 'tube').
-Proper syntax highlighting in the editor.
-Controlling and displaying the random seed in the GUI.
-
-Version 1.0: 'Kolberger Heide'. (January 2008?)
--------------------------------
-Tabbed interface
-PovRay renderer.
-Finishing: 
-  Installers (for Windows at least - using InnoSetup)
-  Splash screen.
-  Preferences (saving with QProperties)
-  Icons, Eula, file associations.
-Mac builds, Linux builds.
-
-
-MISC NOTES:
------------
-
-
-A EisenScript program consists of a number of actions and rule definitions.
-
-An action can be either:
-- A rule call:
-  - either a single call.
-  - a transformation list followed by a rule call.
-  - a number of transformation loops followed by a rule call.
-- A SET statement.
 
 
 
 
 
-Design Goals:
-- Make nice mathematical structures
-- Reproduce some standard fractals (i.e. Menger Sponge)
-- Create Mondrian like tiling (as 2D)
-- Create Rich Organic structures. i.e. Trees
+
+
+
+
 
 
 EisenScript
@@ -99,31 +71,5 @@ point    - centered in coordinate system.
 cylinder - the symmetry axis will be the current x axis.
 pbox     - continues box (will be drawn smoothly as the coordinate system transforms).
 pcylinder- polygonal cylinder (will be drawn smoothly as the coordinate system transforms).
-
-Perhaps: 
 tube     - (With number of division)
 
-Example of EisenScript:
-
-//
-//	C++ style multiline comments are allowed.
-//  A pre-processor strips comments, and imports '#include's
-//
-#include "../basicstuff.es"
-SET BackgroundColor = #F00  // All 'SET' commands outside the scope of a rule are executed at startup.
-
-RULE core {
-	r1       // simply call another rule
-}
-
-RULE r1 5 {
-    { s 0.9 x 0.1 } r1 // apply a transformation list before calling the rule
-    box
-}
-
-RULE r1 1 {
-	20 * { x -1 } r1  // applies the transformation and calls rule 'r1' twenty times.
-	{ x -20 }     r1  // this is NOT the same as above - here r1 will only be called one time.
-	20 * { y -1 } 20 * { x -1 } { z -1 } r1
-	sphere
-}

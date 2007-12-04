@@ -17,11 +17,12 @@ namespace StructureSynth {
 
 		struct TabInfo {
 			TabInfo() {}; 
-
-			TabInfo(QString filename, QTextEdit* textEdit) : filename(filename), modified(false), textEdit(textEdit) {};
+			TabInfo(QString filename, QTextEdit* textEdit) : filename(filename), unsaved(false), textEdit(textEdit), hasBeenSavedOnce(false) {};
+			TabInfo(QString filename, QTextEdit* textEdit, bool unsaved, bool hasBeenSavedOnce=false) : filename(filename), unsaved(unsaved), textEdit(textEdit), hasBeenSavedOnce(hasBeenSavedOnce) {};
 			QString filename;
-			bool modified;
+			bool unsaved;
 			QTextEdit* textEdit;
+			bool hasBeenSavedOnce;			
         };
 
 
@@ -72,15 +73,10 @@ namespace StructureSynth {
 			bool maybeSave();
 			void loadFile(const QString &fileName);
 			bool saveFile(const QString &fileName);
-			void setCurrentFile(const QString &fileName);
 			QString strippedName(const QString &fullFileName);
-			MainWindow *findMainWindow(const QString &fileName);
 			void createOpenGLContextMenu();
 
-			QString curFile;
-			bool isUntitled;
 			QDockWidget* dockLog;
-
 			QAction *fullScreenAction;
 			QMenu *fileMenu;
 			QMenu *editMenu;

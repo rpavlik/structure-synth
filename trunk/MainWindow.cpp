@@ -54,7 +54,6 @@ namespace StructureSynth {
 		MainWindow::MainWindow()
 		{
 			init();
-			setCurrentFile("");
 		}
 
 		MainWindow::MainWindow(const QString &fileName)
@@ -76,15 +75,6 @@ namespace StructureSynth {
 		void MainWindow::newFile()
 		{
 			insertTabPage("");
-			/*
-			if (maybeSave()) {
-				getTextEdit()->clear();
-				setCurrentFile("");
-				// TODO: Clear 3D GUI...
-			} else {
-				WARNING("Unable to save file...");
-			}
-			*/
 		}
 
 		void MainWindow::open()
@@ -114,17 +104,22 @@ namespace StructureSynth {
 
 		bool MainWindow::save()
 		{
-			if (isUntitled) {
-				return saveAs();
+			int index = tabBar->currentIndex();
+			TabInfo t = tabInfo[index];
+			
+			if (t.hasBeenSavedOnce) {
+				return saveFile(t.filename);
 			} else {
-				return saveFile(curFile);
+				return saveAs();
 			}
 		}
 
 		bool MainWindow::saveAs()
 		{
-			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"),
-				curFile);
+			int index = tabBar->currentIndex();
+			TabInfo t = tabInfo[index];
+			
+			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename);
 			if (fileName.isEmpty())
 				return false;
 
@@ -155,7 +150,8 @@ namespace StructureSynth {
 
 		void MainWindow::documentWasModified()
 		{
-			setWindowModified(true);
+			tabInfo[tabBar->currentIndex()].unsaved = true;
+			tabChanged(tabBar->currentIndex());
 		}
 
 		void MainWindow::init()
@@ -165,9 +161,7 @@ namespace StructureSynth {
 			version = SyntopiaCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
-			isUntitled = true;
-
-
+			
 			QSplitter*	splitter = new QSplitter(this);
 			splitter->setObjectName(QString::fromUtf8("splitter"));
 			splitter->setOrientation(Qt::Horizontal);
@@ -181,7 +175,6 @@ namespace StructureSynth {
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
 			tabBar = new QTabBar(this);
-			//insertTabPage("");
 			
 			QFrame* f = new QFrame(this);
 			QVBoxLayout* vboxLayout = new QVBoxLayout();
@@ -229,30 +222,15 @@ namespace StructureSynth {
 			INFO("Hold 'CTRL' for speed draw'.");
 			INFO("Press 'Panic' if the view disappears...");
 
-			/*
-			connect(textEdit->document(), SIGNAL(contentsChanged()),			
-			this, SLOT(documentWasModified()));
-			*/
-
-			
 			fullScreenEnabled = false;
-			
-
 			createOpenGLContextMenu();
 
-			
-			
-			
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
-
 		}
 
 		void MainWindow::createOpenGLContextMenu() {
-			openGLContextMenu = new QMenu();
-
-			
+			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(fullScreenAction);
-
 			engine->setContextMenu(openGLContextMenu);
 		}
 
@@ -284,12 +262,6 @@ namespace StructureSynth {
 				editToolBar->hide();
 				renderToolBar->hide();
 			}
-
-
-
-
-
-
 		}
 
 
@@ -367,8 +339,6 @@ namespace StructureSynth {
 			aboutAction->setStatusTip(tr("Show the About box"));
 			connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-
-
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
 			//connect(textEdit, SIGNAL(copyAvailable(bool)),	cutAction, SLOT(setEnabled(bool)));
@@ -439,7 +409,6 @@ namespace StructureSynth {
 
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
-			renderToolBar->addAction(povRenderAction);
 			renderToolBar->addAction(panicAction);
 
 		}
@@ -451,7 +420,7 @@ namespace StructureSynth {
 
 		void MainWindow::readSettings()
 		{
-			QSettings settings("hvidtfeldts.net", "Structure Synth");
+			QSettings settings("Syntopia Software", "Structure Synth");
 			QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
 			QSize size = settings.value("size", QSize(400, 400)).toSize();
 			move(pos);
@@ -460,7 +429,7 @@ namespace StructureSynth {
 
 		void MainWindow::writeSettings()
 		{
-			QSettings settings("hvidtfeldts.net", "Structure Synth");
+			QSettings settings("Syntopia Software", "Structure Synth");
 			settings.setValue("pos", pos());
 			settings.setValue("size", size());
 		}
@@ -516,47 +485,22 @@ namespace StructureSynth {
 			out << getTextEdit()->toPlainText();
 			QApplication::restoreOverrideCursor();
 
-			setCurrentFile(fileName);
+			tabInfo[tabBar->currentIndex()].hasBeenSavedOnce = true;
+			tabInfo[tabBar->currentIndex()].unsaved = false;
+			tabInfo[tabBar->currentIndex()].filename = fileName;
+			tabChanged(tabBar->currentIndex()); // to update displayed name;
+			
 			statusBar()->showMessage(tr("File saved"), 2000);
 			return true;
 		}
 
-		void MainWindow::setCurrentFile(const QString &fileName)
-		{
-			/*
-			static int sequenceNumber = 1;
-
-			isUntitled = fileName.isEmpty();
-			if (isUntitled) {
-				curFile = tr("structure%1.es").arg(sequenceNumber++);
-			} else {
-				curFile = QFileInfo(fileName).canonicalFilePath();
-			}
-
-			getTextEdit()->document()->setModified(false);
-			setWindowModified(false);
-
-			setWindowTitle(tr("%1[*] - %2").arg(strippedName(curFile))
-				.arg(tr("Structure Synth")));
-				*/
-		}
+		
 
 		QString MainWindow::strippedName(const QString &fullFileName)
 		{
 			return QFileInfo(fullFileName).fileName();
 		}
 
-		MainWindow* MainWindow::findMainWindow(const QString &fileName)
-		{
-			QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
-
-			foreach (QWidget *widget, qApp->topLevelWidgets()) {
-				MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
-				if (mainWin && mainWin->curFile == canonicalFilePath)
-					return mainWin;
-			}
-			return 0;
-		}
 
 		void MainWindow::render() {
 			try {
@@ -623,12 +567,10 @@ namespace StructureSynth {
 
 
 		QString MainWindow::getExamplesDir() {
-			// TODO: Implement
 			return "Examples";
 		}
 
 		QString MainWindow::getMiscDir() {
-			// TODO: Implement
 			return "Misc";
 		}
 
@@ -645,61 +587,79 @@ namespace StructureSynth {
 			QTextEdit* textEdit = new QTextEdit();
 			textEdit->setTabStopWidth(20);
 			new EisenScriptHighlighter(textEdit);
-			
-
-
-			QString s = 
-				QString("// Double spirals\r\n")+
-				"set maxdepth 400\r\n"+
-				"R1\r\n"+
-				"R2\r\n"+
-				"\r\n"+
-				"rule R1 { \r\n"+
-				"{ x 1 rz 6 ry 6 s 0.99 } R1\r\n"+
-				"{ s 2 } sphere\r\n"+
-				"} \r\n"+
-				"\r\n"+
-				"rule R2 { \r\n"+
-				"{ x -1  rz 6 ry 6 s 0.99 } R2\r\n"+
-				"{ s 2 } sphere \r\n"+
-				"} \r\n";
+		
+			QString s = QString("// Write EisenScript code here...\r\n");
 			textEdit->setText(s);
 
-			INFO("LoadFile");
-			QFile file(filename);
-			if (!file.open(QFile::ReadOnly | QFile::Text)) {
-				textEdit->setPlainText(QString("Cannot read file %1:\n%2.").arg(filename).arg(file.errorString()));
-			} else {
-				QTextStream in(&file);
-				QApplication::setOverrideCursor(Qt::WaitCursor);
-				textEdit->setPlainText(in.readAll());
-				QApplication::restoreOverrideCursor();
-				setCurrentFile(filename);
-				statusBar()->showMessage(tr("File loaded"), 2000);
+			bool loadingSucceded = false;
+			if (!filename.isEmpty()) {
+				INFO(QString("Loading file: %1").arg(filename));
+				QFile file(filename);
+				if (!file.open(QFile::ReadOnly | QFile::Text)) {
+					textEdit->setPlainText(QString("Cannot read file %1:\n%2.").arg(filename).arg(file.errorString()));
+				} else {
+					QTextStream in(&file);
+					QApplication::setOverrideCursor(Qt::WaitCursor);
+					textEdit->setPlainText(in.readAll());
+					QApplication::restoreOverrideCursor();
+					statusBar()->showMessage(QString("Loaded file: %1").arg(filename), 2000);
+					loadingSucceded = true;
+				}
 			}
 
 			
 			QString displayName = filename;
-			if (displayName.isEmpty()) displayName = "Unnamed";
+			if (displayName.isEmpty()) {
+				// Find a new name
+				displayName = "Unnamed";
+				QString suggestedName = displayName;
+
+				bool unique = false;
+				int counter = 1;
+				while (!unique) {
+					unique = true;
+					for (int i = 0; i < tabInfo.size(); i++) {
+						if (tabInfo[i].filename == suggestedName) {
+							INFO("equal");
+							unique = false;
+							break;
+						}	
+					}
+					if (!unique) suggestedName = displayName + " " + QString::number(counter++);
+				}
+				displayName = suggestedName;
+			}
 			
 			stackedTextEdits->addWidget(textEdit);
-			//stackedTextEdits->setCurrentWidget(textEdit);
+			
+			if (loadingSucceded) {
+				tabInfo.append(TabInfo(displayName, textEdit, false, true));
+			} else {
+				tabInfo.append(TabInfo(displayName, textEdit, true));
+			}
 
-			tabInfo.append(TabInfo(filename, textEdit));
+			QString tabTitle = QString("%1%3").arg(strippedName(displayName)).arg(!loadingSucceded? "*" : "");
+			tabBar->setCurrentIndex(tabBar->addTab(strippedName(tabTitle)));
 
-			tabBar->setCurrentIndex(tabBar->addTab(displayName));
+			connect(textEdit->document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
 			
 		}
 
 		void MainWindow::tabChanged(int index) {			
 			TabInfo t = tabInfo[index];
-			setWindowTitle(tr("%1[*] - %2").arg(strippedName(t.filename)).arg(tr("Structure Synth")));
+			QString tabTitle = QString("%1%3").arg(strippedName(t.filename)).arg(t.unsaved ? "*" : "");
+			setWindowTitle(QString("%1 - %2").arg(tabTitle).arg("Structure Synth"));
 			stackedTextEdits->setCurrentWidget(t.textEdit);
+			tabBar->setTabText(tabBar->currentIndex(), tabTitle);
 		}
 
 		void MainWindow::closeTab() {
 			int index = tabBar->currentIndex();
-			TabInfo t = tabInfo[index];
+			TabInfo t = tabInfo[tabBar->currentIndex()];
+			if (t.unsaved) {
+				int answer = QMessageBox::warning(this, QString("Unsaved changes"), "Close this tab without saving changes?", "OK", "Cancel");
+				if (answer == 1) return;
+			}
 			stackedTextEdits->removeWidget(t.textEdit);
 			delete(t.textEdit); // ?
 			tabBar->removeTab(index);

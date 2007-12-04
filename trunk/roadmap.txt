@@ -28,16 +28,16 @@ Version 0.5: 'Graf Zeppelin' [DONE]
 Version 0.6?:
 -------------
 + Full Screen
-! Tabbed interface
++ Tabbed interface
 + Custom Transformation matrix operator.
 - Parser should take {,} as delimiters
 - Screenshot
 - Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.
-- Change random generator -> mersenne twister for cross-platform reproducibility and random seed setting/getting.
 - Linux testing
 
 Version 0.8: 'Memories of tomorrow' [v 0.8]
 ----------------------------------
+- Change random generator -> mersenne twister for cross-platform reproducibility and random seed setting/getting.
 - 'set minvolume'
 - Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
