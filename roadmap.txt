@@ -30,6 +30,7 @@ Version 0.6?:
 + Full Screen
 + Tabbed interface
 + Custom Transformation matrix operator.
++ Syntax Highlighter
 - Parser should take {,} as delimiters
 - Screenshot
 - Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', Full screen.

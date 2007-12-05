@@ -28,25 +28,51 @@ namespace StructureSynth {
 		class EisenScriptHighlighter : public QSyntaxHighlighter {
 		public:
 
-			EisenScriptHighlighter(QTextEdit* e) : QSyntaxHighlighter(e) {};
+			EisenScriptHighlighter(QTextEdit* e) : QSyntaxHighlighter(e) {
+				keywordFormat.setFontWeight(QFont::Bold);
+				keywordFormat.setForeground(Qt::darkMagenta);
+				bracketFormat.setFontWeight(QFont::Bold);
+				bracketFormat.setForeground(Qt::blue);
+				primitiveFormat.setFontWeight(QFont::Bold);
+				primitiveFormat.setForeground(Qt::darkYellow);
+				//commentFormat.setFontWeight(QFont::Bold);
+				commentFormat.setForeground(Qt::darkGreen);
+				//commentFormat.setFontItalic(true);
+			};
 
 			void highlightBlock(const QString &text)
 			{
-				QTextCharFormat myClassFormat;
-				myClassFormat.setFontWeight(QFont::Bold);
-				myClassFormat.setForeground(Qt::darkMagenta);
+				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
+				static QRegExp primitives("(sphere|box|dot|line|grid)");
+				
+				QString current;
+				int startMatch = 0;
+				for (int i = 0; i < text.length(); i++) {
+					if ((i > 0) && (i < text.length()-2) && text.at(i) == '/' && text.at(i-1) == '/') {
+						// Comment
+						setFormat(i-1, text.length()-i+1, commentFormat);
+						break;
+					}
 
-				// Add stuff here..
-				static QString pattern = "(\\smd\\s|\\sw\\s|\\sweigth\\s|\\smaxdepth\\s|rule\\s|\\sx\\s|\\sy\\s|\\sz\\s|\\srx\\s|\\sry\\s|\\srz\\s|\\sbox\\s|\\ssphere\\s|\\ss\\s|set)";
-
-				QRegExp expression(pattern);
-				int index = text.indexOf(expression);
-				while (index >= 0) {
-					int length = expression.matchedLength();
-					setFormat(index, length, myClassFormat);
-					index = text.indexOf(expression, index + length);
+					if (text.at(i) == '{' || text.at(i) == '}' || text.at(i) == ' ' || (i==text.length()-1) || (text.at(i) == '\r') || (text.at(i) == '\n')) {
+						if (i==text.length()-1) current += text.at(i);
+						if (expression.exactMatch(current)) setFormat(startMatch, i-startMatch, keywordFormat);
+						if (primitives.exactMatch(current)) setFormat(startMatch, i-startMatch, primitiveFormat);
+						if (text.at(i) == '{' || text.at(i) == '}') setFormat(i, 1, bracketFormat);
+						startMatch = i;
+						current = "";
+					} else {
+						current += text.at(i);
+					}
 				}
+				
 			}; 
+		private:
+			QTextCharFormat keywordFormat;
+			QTextCharFormat bracketFormat;
+			QTextCharFormat primitiveFormat;
+			QTextCharFormat commentFormat;
+				
 
 		};
 
@@ -341,8 +367,6 @@ namespace StructureSynth {
 
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
-			//connect(textEdit, SIGNAL(copyAvailable(bool)),	cutAction, SLOT(setEnabled(bool)));
-			//connect(textEdit, SIGNAL(copyAvailable(bool)),	copyAction, SLOT(setEnabled(bool)));
 		}
 
 		void MainWindow::createMenus()
