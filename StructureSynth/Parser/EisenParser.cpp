@@ -92,6 +92,8 @@ namespace StructureSynth {
 						if (!accept(Symbol::UserString)) throw (ParseError("After maxdepth retirement operator a rule name is expected. Found: " + symbol.text));
 						customRule->setRetirementRule(ruleName);
 					}
+				} else {
+					throw (ParseError("In rule modifier list: expected maxdepth or weight. Found: " + symbol.text));
 				}
 			}
 
@@ -102,8 +104,7 @@ namespace StructureSynth {
 
 		Rule* EisenParser::rule() {
 			// rule = 'RULE' ,  rule_name, '{', { set | action }  , '}' ;
-			
-			
+		
 			if (!accept(Symbol::Rule)) throw (ParseError("Unexpected: trying to parse Rule not starting with rule identifier. Found: " + symbol.text));
 			
 			QString ruleName = symbol.text;
@@ -117,9 +118,7 @@ namespace StructureSynth {
 
 
 			if (!accept(Symbol::LeftBracket)) throw (ParseError("After rule name a left bracket is expected. Found: " + symbol.text));
-			
-			
-
+				
 			// TODO: implement rest of types:
 			// Possible actions:
 			//   SET something = something
@@ -244,14 +243,13 @@ namespace StructureSynth {
 			if (!accept(Symbol::RightBracket)) throw (ParseError("Transformation List: Expected a right bracket or an operator. Found: " + symbol.text));
 
 			return t;
-
 		}
 
 		Action EisenParser::action() {
 			// There are 3 types of action statements:
-			//  { yaw 20 pitch 30 roll 20 } rulename
+			//  { rx 20 ry 30 rz 20 } rulename
 			//  rulename
-			//  20 * { forward 10 } 10 * { left 10 } rulename
+			//  20 * { x 10 } 10 * { y 10 } rulename
 			
 			if (symbol.type == Symbol::LeftBracket) {
 				Transformation t = transformationList();

@@ -18,13 +18,15 @@ namespace StructureSynth {
 			bool inComment = false;
 			for (int i = 0; i < in.size(); i++) {
 				QString l = in[i];
-				l.remove(QRegExp("//.*$"));
-				if (l.contains("/*")) inComment = true;
-				if (l.contains("*/")) inComment = false;
-				l.remove(QRegExp("/\\*.*$"));
-				l.remove(QRegExp("^.*\\*/"));
-				if (!inComment) {
-					out.append(l);	
+				l.remove(QRegExp("//.*$")); // remove single-line comments 
+				if (l.contains("/*")) inComment = true;   // remove multi-line comments
+				
+				if (l.contains("*/")) {
+					inComment = false;
+				} else {
+					if (!inComment) {
+						out.append(l);	
+					}
 				}
 			}
 			return out.join("\r\n");

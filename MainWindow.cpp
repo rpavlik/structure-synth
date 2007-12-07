@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QDir>
 #include <QClipboard>
+#include <QDesktopServices>
 
 #include "MainWindow.h"
 #include "SyntopiaCore/Logging/ListWidgetLogger.h"
@@ -44,7 +45,7 @@ namespace StructureSynth {
 			{
 				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
 				static QRegExp primitives("(sphere|box|dot|line|grid)");
-				
+
 				QString current;
 				int startMatch = 0;
 				for (int i = 0; i < text.length(); i++) {
@@ -65,14 +66,14 @@ namespace StructureSynth {
 						current += text.at(i);
 					}
 				}
-				
+
 			}; 
 		private:
 			QTextCharFormat keywordFormat;
 			QTextCharFormat bracketFormat;
 			QTextCharFormat primitiveFormat;
 			QTextCharFormat commentFormat;
-				
+
 
 		};
 
@@ -125,14 +126,14 @@ namespace StructureSynth {
 				ev->ignore();
 			}
 		};
-		
+
 
 
 		bool MainWindow::save()
 		{
 			int index = tabBar->currentIndex();
 			TabInfo t = tabInfo[index];
-			
+
 			if (t.hasBeenSavedOnce) {
 				return saveFile(t.filename);
 			} else {
@@ -144,7 +145,7 @@ namespace StructureSynth {
 		{
 			int index = tabBar->currentIndex();
 			TabInfo t = tabInfo[index];
-			
+
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename);
 			if (fileName.isEmpty())
 				return false;
@@ -187,7 +188,7 @@ namespace StructureSynth {
 			version = SyntopiaCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
-			
+
 			QSplitter*	splitter = new QSplitter(this);
 			splitter->setObjectName(QString::fromUtf8("splitter"));
 			splitter->setOrientation(Qt::Horizontal);
@@ -195,13 +196,13 @@ namespace StructureSynth {
 
 			stackedTextEdits = new QStackedWidget(splitter);
 
-	
+
 
 
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
 			tabBar = new QTabBar(this);
-			
+
 			QFrame* f = new QFrame(this);
 			QVBoxLayout* vboxLayout = new QVBoxLayout();
 			vboxLayout->setSpacing(0);
@@ -214,13 +215,13 @@ namespace StructureSynth {
 			QList<int> l; l.append(100); l.append(400);
 			splitter->setSizes(l);
 
-					
+
 			createActions();
 			createMenus();
 			createToolBars();
 
 
-			
+
 			createStatusBar();
 
 			QDir d(getExamplesDir());
@@ -298,7 +299,7 @@ namespace StructureSynth {
 			fullScreenAction->setShortcut(tr("Ctrl+F"));
 			fullScreenAction->setCheckable(true);
 			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
-			
+
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
 			newAction->setShortcut(tr("Ctrl+N"));
 			newAction->setStatusTip(tr("Create a new file"));
@@ -365,6 +366,14 @@ namespace StructureSynth {
 			aboutAction->setStatusTip(tr("Show the About box"));
 			connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
+			sfHomeAction = new QAction(tr("&Project Homepage (web link)"), this);
+			sfHomeAction->setStatusTip(tr("Open the SourceForge project page in a browser."));
+			connect(sfHomeAction, SIGNAL(triggered()), this, SLOT(launchSfHome()));
+
+			referenceAction = new QAction(tr("&Structure Synth Reference (web link)"), this);
+			referenceAction->setStatusTip(tr("Open a Structure Synth reference web page in a browser."));
+			connect(referenceAction, SIGNAL(triggered()), this, SLOT(launchReferenceHome()));
+
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
 		}
@@ -417,6 +426,8 @@ namespace StructureSynth {
 
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
+			helpMenu->addAction(sfHomeAction);
+			helpMenu->addAction(referenceAction);
 		}
 
 		void MainWindow::createToolBars()
@@ -482,7 +493,7 @@ namespace StructureSynth {
 			if (action) {
 				QDir d(getExamplesDir());
 				loadFile(d.absoluteFilePath(action->data().toString()));
-				
+
 			} else {
 				WARNING("No data!");
 			}
@@ -513,12 +524,12 @@ namespace StructureSynth {
 			tabInfo[tabBar->currentIndex()].unsaved = false;
 			tabInfo[tabBar->currentIndex()].filename = fileName;
 			tabChanged(tabBar->currentIndex()); // to update displayed name;
-			
+
 			statusBar()->showMessage(tr("File saved"), 2000);
 			return true;
 		}
 
-		
+
 
 		QString MainWindow::strippedName(const QString &fullFileName)
 		{
@@ -605,13 +616,13 @@ namespace StructureSynth {
 		QTextEdit* MainWindow::getTextEdit() {
 			return (stackedTextEdits->currentWidget() ? (QTextEdit*)stackedTextEdits->currentWidget() : 0);
 		}
-		
+
 		void MainWindow::insertTabPage(QString filename) {
-					
+
 			QTextEdit* textEdit = new QTextEdit();
 			textEdit->setTabStopWidth(20);
 			new EisenScriptHighlighter(textEdit);
-		
+
 			QString s = QString("// Write EisenScript code here...\r\n");
 			textEdit->setText(s);
 
@@ -631,7 +642,7 @@ namespace StructureSynth {
 				}
 			}
 
-			
+
 			QString displayName = filename;
 			if (displayName.isEmpty()) {
 				// Find a new name
@@ -653,9 +664,9 @@ namespace StructureSynth {
 				}
 				displayName = suggestedName;
 			}
-			
+
 			stackedTextEdits->addWidget(textEdit);
-			
+
 			if (loadingSucceded) {
 				tabInfo.append(TabInfo(displayName, textEdit, false, true));
 			} else {
@@ -666,7 +677,7 @@ namespace StructureSynth {
 			tabBar->setCurrentIndex(tabBar->addTab(strippedName(tabTitle)));
 
 			connect(textEdit->document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
-			
+
 		}
 
 		void MainWindow::tabChanged(int index) {			
@@ -688,7 +699,20 @@ namespace StructureSynth {
 			delete(t.textEdit); // ?
 			tabBar->removeTab(index);
 			tabInfo.remove(index);
-			
+
 		}
+
+		void MainWindow::launchSfHome() {
+			INFO("Launching web browser...");
+			bool s = QDesktopServices::openUrl(QUrl("http://structuresynth.sourceforge.net/"));
+			if (!s) WARNING("Failed to open browser...");
+		}
+
+		void MainWindow::launchReferenceHome() {
+			INFO("Launching web browser...");
+			bool s = QDesktopServices::openUrl(QUrl("http://structuresynth.sourceforge.net/reference.php"));
+			if (!s) WARNING("Failed to open browser...");
+		}
+
 	}
 }

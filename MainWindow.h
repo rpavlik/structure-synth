@@ -43,6 +43,8 @@ namespace StructureSynth {
 		private slots:
 			void tabChanged(int index);
 			void closeTab();
+			void launchSfHome();
+			void launchReferenceHome();
 			
 			void openFile();
 			void newFile();
@@ -60,7 +62,6 @@ namespace StructureSynth {
 		private:
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
-		
 			QString getExamplesDir();
 			QString getMiscDir();
 			void init();
@@ -78,6 +79,8 @@ namespace StructureSynth {
 
 			QDockWidget* dockLog;
 			QAction *fullScreenAction;
+			QAction* sfHomeAction;
+			QAction* referenceAction;
 			QMenu *fileMenu;
 			QMenu *editMenu;
 			QMenu *renderMenu;
