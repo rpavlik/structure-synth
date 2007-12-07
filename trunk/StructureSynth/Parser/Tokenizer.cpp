@@ -24,8 +24,22 @@ namespace StructureSynth {
 
 			// We will split on whitespace and line breaks
 			// TODO: Respect quotations ( file = "C:\Program Files\Test" )
-			QStringList l = input.split(QRegExp("\\s|\\r|\\n"), QString::SkipEmptyParts);
+			QStringList l;
 
+			// We will use our own split routine
+			QString current;
+			input += " "; // to ensure last symbol gets parsed.
+			for (int i = 0; i < input.length(); i++) {
+				if (input.at(i) == '{' || input.at(i) == '}' || input.at(i) == ' ' || (input.at(i) == '\r') || (input.at(i) == '\n')) {
+					QString trimmed = current.remove(QRegExp("\\s|\\r|\\n"));
+					if (!current.trimmed().isEmpty()) { l.append(trimmed); 	}
+					if (input.at(i) == '{' || input.at(i) == '}') { l.append(QString(input.at(i)));	}
+					current = "";
+				} else {
+					current += input.at(i);
+				}
+			}
+		
 			for (int i = 0; i < l.size(); i++) {
 				QString s = l[i];
 				QString sl = l[i].toLower();

@@ -1,7 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
-04 Dec 07 [MHC]: Wrote a proper syntax highlighter
+06 Dec 07 [MHC]: Rewrote the tokenizer. It is better now. 
+          [MHC]: Fixed an infinite loop while parsing incorrect rule modifiers.
+[2h]
+
+05 Dec 07 [MHC]: Wrote a proper syntax highlighter
 [2h]
 
 04 Dec 07 [MHC]: Fixed the tab window logic. Should be working now.
