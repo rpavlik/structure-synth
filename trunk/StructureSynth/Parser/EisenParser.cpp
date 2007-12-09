@@ -80,7 +80,7 @@ namespace StructureSynth {
 
 				} else if (symbol.text == "maxdepth") {
 					getSymbol();
-					int param = symbol.getNumerical();
+					int param = (int)symbol.getNumerical();
 					if (!symbol.isInteger || !accept(Symbol::Number)) {
 						throw (ParseError("Rule modifier 'maxdepth' expected integer argument. Found: " + symbol.text, symbol.pos));
 					}

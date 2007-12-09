@@ -10,7 +10,7 @@ namespace StructureSynth {
 
 		class ParseError : public SyntopiaCore::Exceptions::Exception {
 		public:
-			ParseError(QString message, int position) : position(position), Exception(message) {};
+			ParseError(QString message, int position) :  Exception(message), position(position) {};
 			int getPosition() { return position; }
 		private:
 			int position;
@@ -19,11 +19,10 @@ namespace StructureSynth {
 		struct Symbol {
 			enum SymbolType { Undefined, LeftBracket, RightBracket, MoreThan, End, Number, Multiply, UserString, Rule, Set, Operator } ;
 
-			SymbolType type;
+			
 
-
-			Symbol() : pos(-1), floatValue(0), intValue(0), isInteger(false), type(Undefined) { 	};
-			Symbol(int pos, SymbolType s, QString original) : pos(pos), floatValue(0), intValue(0), isInteger(false), type(s), text(original) { 	};
+			Symbol() :  floatValue(0), pos(-1), intValue(0), isInteger(false), type(Undefined) { 	};
+			Symbol(int pos, SymbolType s, QString original) : text(original),floatValue(0), intValue(0),isInteger(false), pos(pos),    type(s) { 	};
 
 			
 			/// yes, yes, it is a bloated representation. (I don't like unions...)
@@ -32,6 +31,8 @@ namespace StructureSynth {
 			int    intValue;
 			bool   isInteger;
 			int pos;              // the position (char-index) of the original text parsed.
+			SymbolType type;
+
 
 			double getNumerical() {
 				if (isInteger) return intValue;
@@ -61,3 +62,4 @@ namespace StructureSynth {
 
 	}
 }
+

@@ -48,7 +48,7 @@ namespace StructureSynth {
 						// Now we must remove the existing rule, and create a new ambiguous rule hosting them both.
 			
 						Rule* r = rules[i];
-						int count = rules.removeAll(r);
+						rules.removeAll(r);
 						CustomRule* cr1 = dynamic_cast<CustomRule*>(r);
 					
 						AmbiguousRule* ar = new AmbiguousRule(name);

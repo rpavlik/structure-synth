@@ -59,7 +59,7 @@ namespace StructureSynth {
 				}
 
 				if (lastValue != (int)(progress*100.0)) {
-					progressDialog.setValue(progress*100.0);
+					progressDialog.setValue((int)(progress*100.0));
 					progressDialog.setLabelText(
 						QString("Building objects...\r\n\r\nGeneration: %1\r\nObjects: %2\r\nPending rules: %3")
 						.arg(generationCounter).arg(objects).arg(stack.currentStack.size()));

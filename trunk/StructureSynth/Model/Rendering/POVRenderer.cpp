@@ -38,18 +38,18 @@ namespace StructureSynth {
 
 			};
 
-			void POVRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
-				SyntopiaCore::Math::Vector3f dir1 , 
-				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3) {
+			void POVRenderer::drawGrid(SyntopiaCore::Math::Vector3f /*base*/, 
+				SyntopiaCore::Math::Vector3f /*dir1*/ , 
+				SyntopiaCore::Math::Vector3f /*dir2*/, 
+				SyntopiaCore::Math::Vector3f /*dir3*/) {
 					// TODO
 			};
 
-			void POVRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to) {
+			void POVRenderer::drawLine(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /* to*/) {
 				// TODO
 			};
 
-			void POVRenderer::drawDot(SyntopiaCore::Math::Vector3f v) {
+			void POVRenderer::drawDot(SyntopiaCore::Math::Vector3f /*v*/) {
 				// TODO	
 			};
 
@@ -104,7 +104,7 @@ namespace StructureSynth {
 				// TODO
 			};
 
-			void POVRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) {
+			void POVRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f /*rgb*/) {
 				// TODO
 			}
 
