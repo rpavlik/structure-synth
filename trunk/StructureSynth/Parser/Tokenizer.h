@@ -10,7 +10,10 @@ namespace StructureSynth {
 
 		class ParseError : public SyntopiaCore::Exceptions::Exception {
 		public:
-			ParseError(QString message) : Exception(message) {};
+			ParseError(QString message, int position) : position(position), Exception(message) {};
+			int getPosition() { return position; }
+		private:
+			int position;
 		};
 
 		struct Symbol {
@@ -19,15 +22,16 @@ namespace StructureSynth {
 			SymbolType type;
 
 
-			Symbol() : floatValue(0), intValue(0), isInteger(false), type(Undefined) { 	};
-			Symbol(SymbolType s, QString original) : floatValue(0), intValue(0), isInteger(false), type(s), text(original) { 	};
+			Symbol() : pos(-1), floatValue(0), intValue(0), isInteger(false), type(Undefined) { 	};
+			Symbol(int pos, SymbolType s, QString original) : pos(pos), floatValue(0), intValue(0), isInteger(false), type(s), text(original) { 	};
 
 			
 			/// yes, yes, it is a bloated representation. (I don't like unions...)
-			QString text;  // The original text-string we parsed. Notice userstrings are converted to lower-case
+			QString text;         // The original text-string we parsed. Notice userstrings are converted to lower-case
 			double floatValue;
 			int    intValue;
 			bool   isInteger;
+			int pos;              // the position (char-index) of the original text parsed.
 
 			double getNumerical() {
 				if (isInteger) return intValue;

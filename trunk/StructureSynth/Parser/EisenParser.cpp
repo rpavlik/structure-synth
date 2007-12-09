@@ -73,7 +73,7 @@ namespace StructureSynth {
 					getSymbol();
 					double param = symbol.getNumerical();
 					if (!accept(Symbol::Number)) {
-						throw (ParseError("Rule modifier 'weight' expected numerical argument. Found: " + symbol.text));
+						throw (ParseError("Rule modifier 'weight' expected numerical argument. Found: " + symbol.text, symbol.pos));
 					}
 					INFO(QString("Param: %1").arg(param));
 					customRule->setWeight(param);
@@ -82,33 +82,33 @@ namespace StructureSynth {
 					getSymbol();
 					int param = symbol.getNumerical();
 					if (!symbol.isInteger || !accept(Symbol::Number)) {
-						throw (ParseError("Rule modifier 'maxdepth' expected integer argument. Found: " + symbol.text));
+						throw (ParseError("Rule modifier 'maxdepth' expected integer argument. Found: " + symbol.text, symbol.pos));
 					}
 					customRule->setMaxDepth(param);
 
 					if (symbol.type == Symbol::MoreThan) {
 						getSymbol();
 						QString ruleName = symbol.text;
-						if (!accept(Symbol::UserString)) throw (ParseError("After maxdepth retirement operator a rule name is expected. Found: " + symbol.text));
+						if (!accept(Symbol::UserString)) throw (ParseError("After maxdepth retirement operator a rule name is expected. Found: " + symbol.text, symbol.pos));
 						customRule->setRetirementRule(ruleName);
 					}
 				} else {
-					throw (ParseError("In rule modifier list: expected maxdepth or weight. Found: " + symbol.text));
+					throw (ParseError("In rule modifier list: expected maxdepth or weight. Found: " + symbol.text, symbol.pos));
 				}
 			}
 
 			if (!symbol.type == Symbol::LeftBracket) {
-				throw (ParseError("After rule modifier list: expected a left bracket. Found: " + symbol.text));
+				throw (ParseError("After rule modifier list: expected a left bracket. Found: " + symbol.text, symbol.pos));
 			}
 		}
 
 		Rule* EisenParser::rule() {
 			// rule = 'RULE' ,  rule_name, '{', { set | action }  , '}' ;
 		
-			if (!accept(Symbol::Rule)) throw (ParseError("Unexpected: trying to parse Rule not starting with rule identifier. Found: " + symbol.text));
+			if (!accept(Symbol::Rule)) throw (ParseError("Unexpected: trying to parse Rule not starting with rule identifier. Found: " + symbol.text, symbol.pos));
 			
 			QString ruleName = symbol.text;
-			if (!accept(Symbol::UserString)) throw (ParseError("After rule identifier a rule name is expected. Found: " + symbol.text));
+			if (!accept(Symbol::UserString)) throw (ParseError("After rule identifier a rule name is expected. Found: " + symbol.text, symbol.pos));
 			CustomRule* customRule = new CustomRule(ruleName);
 
 			if (symbol.type != Symbol::LeftBracket) {
@@ -117,7 +117,7 @@ namespace StructureSynth {
 			}
 
 
-			if (!accept(Symbol::LeftBracket)) throw (ParseError("After rule name a left bracket is expected. Found: " + symbol.text));
+			if (!accept(Symbol::LeftBracket)) throw (ParseError("After rule name a left bracket is expected. Found: " + symbol.text, symbol.pos));
 				
 			// TODO: implement rest of types:
 			// Possible actions:
@@ -137,7 +137,7 @@ namespace StructureSynth {
 				}
 			}
 
-			if (!accept(Symbol::RightBracket)) throw (ParseError("A rule definition must end with a right bracket. Found: "+symbol.text));
+			if (!accept(Symbol::RightBracket)) throw (ParseError("A rule definition must end with a right bracket. Found: "+symbol.text, symbol.pos));
 
 			return customRule;
 		}
@@ -149,70 +149,70 @@ namespace StructureSynth {
 		Transformation EisenParser::transformation() {
 
 			QString type = symbol.text;
-			if (!accept(Symbol::Operator)) throw (ParseError("Transformation: Expected transformation identifier (e.g. 'x' or 'rx'). Found: " + symbol.text));
+			if (!accept(Symbol::Operator)) throw (ParseError("Transformation: Expected transformation identifier (e.g. 'x' or 'rx'). Found: " + symbol.text, symbol.pos));
 
 			if (type == "x") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'X' (X-axis translation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'X' (X-axis translation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createX(param);
 			} else if (type == "y") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'Y' (Y-axis translation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'Y' (Y-axis translation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createY(param);
 			} else if (type == "z") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'Z' (Z-axis translation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'Z' (Z-axis translation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createZ(param);
 			} else if (type == "rx") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RX' (X-axis rotation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RX' (X-axis rotation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createRX(degreeToRad(param));
 			} else if (type == "ry") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RY' (Y-axis rotation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RY' (Y-axis rotation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createRY(degreeToRad(param));
 			} else if (type == "rz") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RZ' (Z-axis rotation): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'RZ' (Z-axis rotation): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createRZ(degreeToRad(param));
 			} else if (type == "hue") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'hue': Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'hue': Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createHSV(param, 1,1,1);
 			} else if (type == "sat") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'sat': Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'sat': Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createHSV(0, param,1,1);
 			} else if (type == "brightness") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'brightness': Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'brightness': Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createHSV(0, 1,param,1);
 			} else if (type == "color") {
 				QString param = symbol.text;
-				if (!QColor(param).isValid()) throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text));
+				if (!QColor(param).isValid()) throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text, symbol.pos));
 				getSymbol();
 				return Transformation::createColor(param);
 			} else if (type == "alpha") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				return Transformation::createHSV(0, 1,1,param);
 			} else if (type == "matrix") {
 				QVector<double> ds;
 				for (unsigned int i = 0; i < 9; i++) {
 					double param = symbol.getNumerical();
-					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'matrix': Expected nine (9) parameters. Found: " + symbol.text));
+					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'matrix': Expected nine (9) parameters. Found: " + symbol.text, symbol.pos));
 					ds.append(param);
 				}
 				return Transformation::createMatrix(ds);
 			} else if (type == "s") {
 				double param = symbol.getNumerical();
-				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text));
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected numerical parameter. Found: " + symbol.text, symbol.pos));
 				
 				if (symbol.type == Symbol::Number) {
 					double param2 = symbol.getNumerical();
 					getSymbol();
 					double param3 = symbol.getNumerical();
-					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected third numerical parameter. Found: " + symbol.text));
+					if (!accept(Symbol::Number)) throw (ParseError("Transformation 'S' (size): Expected third numerical parameter. Found: " + symbol.text, symbol.pos));
 					return Transformation::createScale(param,param2,param3);
 				}
 				return Transformation::createScale(param,param,param);
@@ -223,7 +223,7 @@ namespace StructureSynth {
 			} else if (type == "fz") {
 				return Transformation::createScale(1,1,-1);
 			} else {
-				throw (ParseError("Unknown transformation type: " + type));
+				throw (ParseError("Unknown transformation type: " + type, symbol.pos));
 			}
 			return Transformation();
 		}
@@ -234,13 +234,13 @@ namespace StructureSynth {
 
 			Transformation t;
 
-			if (!accept(Symbol::LeftBracket)) throw (ParseError("Transformation List: Expected a left bracket. Found: " + symbol.text));
+			if (!accept(Symbol::LeftBracket)) throw (ParseError("Transformation List: Expected a left bracket. Found: " + symbol.text, symbol.pos));
 
 			while (symbol.type == Symbol::Operator) {    
 				t.append(transformation());
 			}
 
-			if (!accept(Symbol::RightBracket)) throw (ParseError("Transformation List: Expected a right bracket or an operator. Found: " + symbol.text));
+			if (!accept(Symbol::RightBracket)) throw (ParseError("Transformation List: Expected a right bracket or an operator. Found: " + symbol.text, symbol.pos));
 
 			return t;
 		}
@@ -254,7 +254,7 @@ namespace StructureSynth {
 			if (symbol.type == Symbol::LeftBracket) {
 				Transformation t = transformationList();
 				QString ruleName = symbol.text;
-				if (!accept(Symbol::UserString)) throw (ParseError("Expected a rule name after the transformation list. Found: " + symbol.text));
+				if (!accept(Symbol::UserString)) throw (ParseError("Expected a rule name after the transformation list. Found: " + symbol.text, symbol.pos));
 				return Action(t, ruleName);
 			} else if (symbol.type == Symbol::UserString) {
 				QString ruleName = symbol.text;
@@ -266,12 +266,12 @@ namespace StructureSynth {
 
 				while (symbol.type == Symbol::Number) {
 					// number of loops...
-					if (!symbol.isInteger) throw (ParseError("Expected an integer count in the transformation loop. Found: " + symbol.text));
+					if (!symbol.isInteger) throw (ParseError("Expected an integer count in the transformation loop. Found: " + symbol.text, symbol.pos));
 					int count = symbol.intValue;
 					getSymbol(); 
 
 					// '*'
-					if (!accept(Symbol::Multiply)) throw (ParseError("Expected a '*' after the transformation count. Found: " + symbol.text));
+					if (!accept(Symbol::Multiply)) throw (ParseError("Expected a '*' after the transformation count. Found: " + symbol.text, symbol.pos));
 					
 					// transformation list
 					Transformation t = transformationList();
@@ -280,13 +280,13 @@ namespace StructureSynth {
 				
 				// Rule reference
 				QString ruleName = symbol.text;
-				if (!accept(Symbol::UserString)) throw (ParseError("Expected a rule name or a new loop after the transformation list. Found: " + symbol.text));
+				if (!accept(Symbol::UserString)) throw (ParseError("Expected a rule name or a new loop after the transformation list. Found: " + symbol.text, symbol.pos));
 				action.setRule(ruleName);
 
 				return action;
 
 			} else {
-				throw (ParseError("A rule action must start with either a number, a rule name or a left bracket. Found: "+symbol.text));	
+				throw (ParseError("A rule action must start with either a number, a rule name or a left bracket. Found: "+symbol.text, symbol.pos));	
 			}
 		}
 
@@ -296,7 +296,7 @@ namespace StructureSynth {
 				QString key = symbol.text;
 				if (symbol.type == Symbol::Operator && key == "maxdepth") {
 					getSymbol();
-				} else if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text));
+				} else if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text, symbol.pos));
 				QString value = symbol.text; 
 				getSymbol(); // We will accept everything here! 
 				
@@ -321,7 +321,7 @@ namespace StructureSynth {
 				}
 			}
 
-			if (!accept(Symbol::End)) throw (ParseError("Unexpected symbol found. At this scope only RULE and SET statements are allowed. Found: " + symbol.text));
+			if (!accept(Symbol::End)) throw (ParseError("Unexpected symbol found. At this scope only RULE and SET statements are allowed. Found: " + symbol.text, symbol.pos));
 			return rs;
 		}
 
