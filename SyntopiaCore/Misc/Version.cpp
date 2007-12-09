@@ -17,7 +17,7 @@ namespace SyntopiaCore {
 			this->minor = minor;
 		}
 
-		QList<Version> Version::GetNewVersions(QString url) const {
+		QList<Version> Version::GetNewVersions(QString /*url*/) const {
 			return QList<Version>();
 		}
 

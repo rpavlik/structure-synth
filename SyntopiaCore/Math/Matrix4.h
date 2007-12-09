@@ -136,3 +136,4 @@ namespace SyntopiaCore {
 		typedef Matrix4<double> Matrix4d ;
 	}
 }
+

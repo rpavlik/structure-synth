@@ -161,7 +161,7 @@ namespace SyntopiaCore {
 			if (height() == 0) return;
 
 			GLfloat w = (float) width() / (float) height();
-			GLfloat h = 1.0;
+			//GLfloat h = 1.0;
 
 			glViewport( 0, 0, width(), height() );
 			glMatrixMode(GL_PROJECTION);
@@ -187,7 +187,7 @@ namespace SyntopiaCore {
 			requireRedraw();
 
 			GLfloat pos[4] = {-55.0f, -25.0f, 20.0f, 1.0f };
-			GLfloat pos2[4] = {52.0f, 25.0f, 50.0f, 1.0f };
+			//GLfloat pos2[4] = {52.0f, 25.0f, 50.0f, 1.0f };
 			GLfloat agreen[4] = {0.0f, 0.8f, 0.2f, 1.0f };
 
 			float ambient = 0.4f;

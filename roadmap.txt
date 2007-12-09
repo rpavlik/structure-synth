@@ -34,7 +34,7 @@ Version 0.7:
 + Parser should take {,} as delimiters
 + Screenshot
 + Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', 'Full screen'.
-- Linux testing (should compile with minimum of error on Linux)
++ Linux testing (should compile with minimum of error on Linux)
 
 Version 0.8: 'Memories of tomorrow' [v 0.8]
 ----------------------------------

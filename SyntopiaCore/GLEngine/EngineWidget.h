@@ -51,7 +51,9 @@ namespace SyntopiaCore {
 			int objectCount() { return objects.size(); }
 
 			/// RGB in [0;1]
-			void setBackgroundColor(double r, double g, double b) { backgroundColor = QColor(r*255.0, g*255.0, b*255.0); };
+			void setBackgroundColor(double r, double g, double b) { 
+				backgroundColor = QColor((int)(r*255.0), (int)(g*255.0), (int)(b*255.0)); 
+			};
 		
 			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
 
