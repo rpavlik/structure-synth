@@ -1,8 +1,13 @@
 
 Changelog for Structure Synth:
 ------------------------------
+07 Dec 07 [MHC]: Syntax highlighter now supports multi-line comments and highlight parse error positions. 
+          [MHC]: Added screenshot save capability.
+[2h]
+
 06 Dec 07 [MHC]: Rewrote the tokenizer. It is better now. 
           [MHC]: Fixed an infinite loop while parsing incorrect rule modifiers.
+          [MHC]: Added web links to the Help Menu.
 [2h]
 
 05 Dec 07 [MHC]: Wrote a proper syntax highlighter

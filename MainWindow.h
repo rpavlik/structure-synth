@@ -42,8 +42,10 @@ namespace StructureSynth {
 
 		private slots:
 			void tabChanged(int index);
+			void makeScreenshot();
 			void closeTab();
 			void launchSfHome();
+			void launchGallery();
 			void launchReferenceHome();
 			
 			void openFile();
@@ -79,8 +81,10 @@ namespace StructureSynth {
 
 			QDockWidget* dockLog;
 			QAction *fullScreenAction;
+			QAction *screenshotAction;
 			QAction* sfHomeAction;
 			QAction* referenceAction;
+			QAction* galleryAction;
 			QMenu *fileMenu;
 			QMenu *editMenu;
 			QMenu *renderMenu;

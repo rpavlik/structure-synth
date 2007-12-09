@@ -2,6 +2,8 @@
 #include <QDir>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QImageWriter>
+#include <QTextBlockUserData>
 
 #include "MainWindow.h"
 #include "SyntopiaCore/Logging/ListWidgetLogger.h"
@@ -24,8 +26,6 @@ using namespace StructureSynth::Model;
 namespace StructureSynth {
 	namespace GUI {
 
-
-
 		class EisenScriptHighlighter : public QSyntaxHighlighter {
 		public:
 
@@ -36,21 +36,60 @@ namespace StructureSynth {
 				bracketFormat.setForeground(Qt::blue);
 				primitiveFormat.setFontWeight(QFont::Bold);
 				primitiveFormat.setForeground(Qt::darkYellow);
-				//commentFormat.setFontWeight(QFont::Bold);
 				commentFormat.setForeground(Qt::darkGreen);
-				//commentFormat.setFontItalic(true);
+				warningFormat.setBackground(QBrush(Qt::yellow));
+				
 			};
 
 			void highlightBlock(const QString &text)
 			{
+				static int uniqueID = 0;
 				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
 				static QRegExp primitives("(sphere|box|dot|line|grid)");
 
+				if (currentBlockState() == 2) {
+					setFormat(0, text.length(), warningFormat);
+					setCurrentBlockState(-1);
+					return;
+				}
+
+
+				if (previousBlockState() != 1 && currentBlockState() == 1) {
+					// This line was previously a multi-line start 
+					if (!text.contains("*/")) setCurrentBlockState(0);
+				}
+				
+				if (previousBlockState() == 1) {
+					// Part of multi-line comment. Skip the rest...
+					if (!text.contains("*/")) {
+						setFormat(0, text.length(), commentFormat);
+						setCurrentBlockState(1);
+						return;
+					}
+				}
+			
+				// Line parsing
 				QString current;
 				int startMatch = 0;
 				for (int i = 0; i < text.length(); i++) {
+					if ((i > 0) && text.at(i) == '*' && text.at(i-1) == '/') {
+						// Multi-line comment begins
+						setFormat(i-1, text.length()-i+1, commentFormat);
+						setCurrentBlockState(1);
+						return;
+					}
+
+					if ((i > 0) && text.at(i) == '/' && text.at(i-1) == '*') {
+						// Multi-line comment ends
+						setFormat(0, i, commentFormat);
+						if (currentBlockState() != 0) {
+							setCurrentBlockState(0);
+						}
+						continue;
+					}
+
 					if ((i > 0) && (i < text.length()-2) && text.at(i) == '/' && text.at(i-1) == '/') {
-						// Comment
+						// Single-line comments
 						setFormat(i-1, text.length()-i+1, commentFormat);
 						break;
 					}
@@ -73,7 +112,8 @@ namespace StructureSynth {
 			QTextCharFormat bracketFormat;
 			QTextCharFormat primitiveFormat;
 			QTextCharFormat commentFormat;
-
+            QTextCharFormat warningFormat;
+				
 
 		};
 
@@ -185,7 +225,7 @@ namespace StructureSynth {
 		{
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 5, 0, -1, " Alpha (\"Graf Zeppelin\")");
+			version = SyntopiaCore::Misc::Version(0, 7, 0, -1, " Alpha (\"Graf Zeppelin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
@@ -247,17 +287,25 @@ namespace StructureSynth {
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
 			INFO("Welcome to Structure Synth. A Syntopia Project.");
 			INFO("Hold 'CTRL' for speed draw'.");
-			INFO("Press 'Panic' if the view disappears...");
+			INFO("Press 'Reset View' if the view disappears...");
+			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel.");
+			INFO("Translate using right mouse button.");
+
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
 
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+
+
+			
 		}
 
 		void MainWindow::createOpenGLContextMenu() {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(fullScreenAction);
+			openGLContextMenu->addAction(screenshotAction);
+			openGLContextMenu->addAction(panicAction);
 			engine->setContextMenu(openGLContextMenu);
 		}
 
@@ -299,6 +347,10 @@ namespace StructureSynth {
 			fullScreenAction->setShortcut(tr("Ctrl+F"));
 			fullScreenAction->setCheckable(true);
 			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
+			screenshotAction = new QAction(tr("&Save as bitmap..."), this);
+			screenshotAction->setShortcut(tr("Ctrl+S"));
+			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
 
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
 			newAction->setShortcut(tr("Ctrl+N"));
@@ -357,7 +409,7 @@ namespace StructureSynth {
 			povRenderAction->setStatusTip(tr("Export as POV-Ray script"));
 			connect(povRenderAction, SIGNAL(triggered()), this, SLOT(povRender()));
 
-			panicAction = new QAction("Panic!", this);
+			panicAction = new QAction("Reset View", this);
 			panicAction->setStatusTip(tr("Resets the viewport"));
 			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
 
@@ -373,6 +425,10 @@ namespace StructureSynth {
 			referenceAction = new QAction(tr("&Structure Synth Reference (web link)"), this);
 			referenceAction->setStatusTip(tr("Open a Structure Synth reference web page in a browser."));
 			connect(referenceAction, SIGNAL(triggered()), this, SLOT(launchReferenceHome()));
+
+			galleryAction = new QAction(tr("&Flickr Structure Synth Group (web link)"), this);
+			galleryAction->setStatusTip(tr("Opens the main Flickr group for Structure Synth creations."));
+			connect(galleryAction, SIGNAL(triggered()), this, SLOT(launchGallery()));
 
 			cutAction->setEnabled(false);
 			copyAction->setEnabled(false);
@@ -399,6 +455,8 @@ namespace StructureSynth {
 			renderMenu->addAction(renderAction);
 			renderMenu->addAction(povRenderAction);
 			renderMenu->addAction(fullScreenAction);
+			renderMenu->addAction(screenshotAction);
+
 
 			menuBar()->addSeparator();
 
@@ -426,8 +484,10 @@ namespace StructureSynth {
 
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
+			helpMenu->addSeparator();
 			helpMenu->addAction(sfHomeAction);
 			helpMenu->addAction(referenceAction);
+			helpMenu->addAction(galleryAction);
 		}
 
 		void MainWindow::createToolBars()
@@ -560,12 +620,24 @@ namespace StructureSynth {
 				INFO("Done...");
 
 				//delete(rs);
+				getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
 
+
+			} catch (ParseError& pe) {
+
+				WARNING(pe.getMessage());
+				int pos = pe.getPosition();
+				INFO(QString("Found at character %1.").arg(pos));	
+				getTextEdit()->document()->findBlock(pos).setUserState(2);
+				getTextEdit()->document()->markContentsDirty(pos,1);
+				engine->clearWorld();
+				engine->requireRedraw();
 			} catch (Exception& er) {
 				WARNING(er.getMessage());
 				engine->clearWorld();
 				engine->requireRedraw();
 			} 
+			
 		}
 
 		void MainWindow::povRender() {
@@ -620,6 +692,7 @@ namespace StructureSynth {
 		void MainWindow::insertTabPage(QString filename) {
 
 			QTextEdit* textEdit = new QTextEdit();
+			textEdit->setLineWrapMode(QTextEdit::NoWrap);
 			textEdit->setTabStopWidth(20);
 			new EisenScriptHighlighter(textEdit);
 
@@ -712,6 +785,50 @@ namespace StructureSynth {
 			INFO("Launching web browser...");
 			bool s = QDesktopServices::openUrl(QUrl("http://structuresynth.sourceforge.net/reference.php"));
 			if (!s) WARNING("Failed to open browser...");
+		}
+
+		void MainWindow::launchGallery() {
+			INFO("Launching web browser...");
+			bool s = QDesktopServices::openUrl(QUrl("http://flickr.com/groups/structuresynth/"));
+			if (!s) WARNING("Failed to open browser...");
+		}
+
+		void MainWindow::makeScreenshot() {
+			INFO("Screenshotaction");
+
+			QList<QByteArray> a = QImageWriter::supportedImageFormats();
+			QStringList allowedTypesFilter;
+			QStringList allowedTypes;
+			for (int i = 0; i < a.count(); i++) {
+				allowedTypesFilter.append("*."+a[i]);
+				allowedTypes.append(a[i]);
+			}
+			QString filter = "Image Files (" + allowedTypesFilter.join(" ")+")";
+			
+			QImage image = engine->grabFrameBuffer();
+
+			QString filename = QFileDialog::getSaveFileName(this, "Save Screenshot As...", QString(), filter);
+			if (filename.isEmpty()) {
+				INFO("User cancelled save...");
+				return;
+			}
+
+			
+			QString ext = filename.section(".", -1).toLower();
+			if (!allowedTypes.contains(ext)) {
+				WARNING("Invalid image extension.");
+				WARNING("File must be one of the following types: " + allowedTypes.join(","));
+				return;
+			}
+
+			bool succes = image.save(filename);
+			if (succes) {
+				INFO("Saved screenshot as: " + filename);
+			} else {
+				WARNING("Save failed! Filename: " + filename);
+			}
+
+				
 		}
 
 	}
