@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QTabBar>
+#include <QStackedWidget>
 
 
 #include "SyntopiaCore/GLEngine/EngineWidget.h"
