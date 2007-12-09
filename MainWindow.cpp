@@ -225,7 +225,7 @@ namespace StructureSynth {
 		{
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 7, 0, -1, " Alpha (\"Graf Zeppelin\")");
+			version = SyntopiaCore::Misc::Version(0, 7, 0, -1, " Alpha (\"Nostromo\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
