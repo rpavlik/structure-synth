@@ -23,7 +23,7 @@ namespace SyntopiaCore {
 
 		
 
-		void Box::draw() {
+		void Box::draw() const {
 			glPushMatrix();
 			glTranslatef( base.x(), base.y(), base.z() );
 			

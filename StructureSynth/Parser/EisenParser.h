@@ -29,20 +29,18 @@ namespace StructureSynth {
 		private:
 			void getSymbol();
 			Model::Rule* rule();
-			Model::RuleSet*  ruleset();
+			Model::RuleSet* ruleset();
 			Model::Action action();
 			Model::Action setAction();
 			Model::Transformation transformationList();
 			Model::Transformation transformation();
 			void ruleModifierList(Model::CustomRule* customRule);
 		
-			
 			bool accept(Symbol::SymbolType st);
 			bool expect(Symbol::SymbolType st);
 			Symbol symbol;
 
 			Tokenizer* tokenizer;
-
 		};
 
 	}

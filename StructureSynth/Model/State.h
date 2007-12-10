@@ -13,11 +13,12 @@ namespace StructureSynth {
 		struct State {
 			State();
 
-			SyntopiaCore::Math::Matrix4f matrix;
+			SyntopiaCore::Math::Matrix4f matrix; // Transformation matrix (4x4 homogenous representation)
 
-			QMap<const Rule*, int> maxDepths;
-			SyntopiaCore::Math::Vector3f hsv;
-			float alpha;
+			QMap<const Rule*, int> maxDepths;    // Rules may have a max. recursion depth before they are retired. 
+												 // We need to keep track of this in the state.
+			SyntopiaCore::Math::Vector3f hsv;    // Hue, Saturation, Value colorspace state
+			float alpha;                         // Transparency 
 		};
 
 

@@ -24,7 +24,7 @@ namespace SyntopiaCore {
 			gluDeleteQuadric(myQuad);
 		};
  
-		void Sphere::draw() {
+		void Sphere::draw() const {
 			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, primaryColor );
 			if (primaryColor[3] < 1) {
 				glEnable( GL_BLEND );

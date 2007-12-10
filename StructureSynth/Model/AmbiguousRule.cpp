@@ -31,10 +31,6 @@ namespace StructureSynth {
 			int r = rand();
 			double random = totalWeigth*(r/(double)RAND_MAX);
 
-			/*
-			if (random >= totalWeigth) {
-				INFO(QString("Sum: %1, Random: %2, r: %3, RMAX: %4").arg(totalWeigth).arg(random).arg(r).arg(RAND_MAX));
-			}*/
 
 			// Choose a random rule according to weigths
 			double accWeigth = 0;
@@ -47,11 +43,10 @@ namespace StructureSynth {
 			}
 			rules[rules.size()-1]->apply(builder);
 
-			WARNING("!!!");
-
-			
+			WARNING("Assertion failed: in AmbiguousRule::apply");
 
 		};
 	
 	}
 }
+

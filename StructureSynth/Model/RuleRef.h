@@ -15,7 +15,7 @@ namespace StructureSynth {
 
 			Rule* rule() { return rulePtr; }
 
-			QString getReference() { return reference; }
+			QString getReference() const { return reference; }
 
 			void setRef(Rule* rule) { rulePtr = rule; }
 

@@ -12,7 +12,7 @@ namespace SyntopiaCore {
 
 			virtual ~Line();
 
-			virtual void draw();
+			virtual void draw() const;
 
 		private:
 			SyntopiaCore::Math::Vector3f from;

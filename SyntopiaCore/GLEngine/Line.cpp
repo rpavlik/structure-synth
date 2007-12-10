@@ -24,7 +24,7 @@ namespace SyntopiaCore {
 			glVertex3f(v.x(), v.y(), v.z());
 		}
 
-		void Line::draw() {
+		void Line::draw() const {
 			
 			glLineWidth( 1.0 );
 			glDisable (GL_LIGHTING);

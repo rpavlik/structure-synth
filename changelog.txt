@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+08 Dec 07 [MHC]: Corrected more Linux compiler warnings, and some const correctness.
+[1h]
+
 07 Dec 07 [MHC]: Syntax highlighter now supports multi-line comments and highlight parse error positions. 
           [MHC]: Added screenshot save capability.
           [MHC]: Corrected lots of Linux warnings and a single bug.
