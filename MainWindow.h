@@ -117,6 +117,8 @@ namespace StructureSynth {
 			QStackedWidget *stackedTextEdits;
 
 			QVector<TabInfo> tabInfo;
+
+			int oldDirtyPosition;
 		};
 
 	}

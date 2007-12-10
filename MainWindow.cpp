@@ -43,7 +43,6 @@ namespace StructureSynth {
 
 			void highlightBlock(const QString &text)
 			{
-				static int uniqueID = 0;
 				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
 				static QRegExp primitives("(sphere|box|dot|line|grid)");
 
@@ -138,7 +137,7 @@ namespace StructureSynth {
 			}
 			if (modification) {
 				int i = QMessageBox::warning(this, "Unsaved changed", "There are tabs with unsaved changes.\r\nContinue and loose changes?", QMessageBox::Ok, QMessageBox::Cancel);
-				if (i == 0) {
+				if (i == QMessageBox::Ok) {
 					// OK
 					ev->accept();
 					return;
@@ -235,6 +234,7 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
+			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
 			version = SyntopiaCore::Misc::Version(0, 7, 0, -1, " Alpha (\"Nostromo\")");
@@ -628,8 +628,12 @@ namespace StructureSynth {
 
 				INFO("Done...");
 
-				//delete(rs);
-				getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
+				if (oldDirtyPosition > 0) {
+					getTextEdit()->document()->markContentsDirty(oldDirtyPosition,1);
+					oldDirtyPosition = -1;
+				}
+				
+				//if (getTextEdit()->isWindowModified()) getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
 
 
 			} catch (ParseError& pe) {
@@ -639,6 +643,7 @@ namespace StructureSynth {
 				INFO(QString("Found at character %1.").arg(pos));	
 				getTextEdit()->document()->findBlock(pos).setUserState(2);
 				getTextEdit()->document()->markContentsDirty(pos,1);
+				oldDirtyPosition = pos;
 				engine->clearWorld();
 				engine->requireRedraw();
 			} catch (Exception& er) {
