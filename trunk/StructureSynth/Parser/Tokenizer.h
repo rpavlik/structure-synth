@@ -21,7 +21,7 @@ namespace StructureSynth {
 
 			
 
-			Symbol() :  floatValue(0), pos(-1), intValue(0), isInteger(false), type(Undefined) { 	};
+			Symbol() :  floatValue(0), intValue(0),  isInteger(false),pos(-1), type(Undefined) { 	};
 			Symbol(int pos, SymbolType s, QString original) : text(original),floatValue(0), intValue(0),isInteger(false), pos(pos),    type(s) { 	};
 
 			

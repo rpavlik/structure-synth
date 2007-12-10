@@ -129,14 +129,26 @@ namespace StructureSynth {
 			loadFile(fileName);
 		}
 
-		void MainWindow::closeEvent(QCloseEvent *event)
+		void MainWindow::closeEvent(QCloseEvent *ev)
 		{
-			if (maybeSave()) {
-				writeSettings();
-				event->accept();
-			} else {
-				event->ignore();
+
+			bool modification = false;
+			for (int i = 0; i < tabInfo.size(); i++) {
+				if (tabInfo[i].unsaved) modification = true;
 			}
+			if (modification) {
+				int i = QMessageBox::warning(this, "Unsaved changed", "There are tabs with unsaved changes.\r\nContinue and loose changes?", QMessageBox::Ok, QMessageBox::Cancel);
+				if (i == 0) {
+					// OK
+					ev->accept();
+					return;
+				} else {
+					// Cancel
+					ev->ignore();
+					return;
+				}
+			}
+			ev->accept();
 		}
 
 		void MainWindow::newFile()
@@ -259,14 +271,11 @@ namespace StructureSynth {
 			createActions();
 			createMenus();
 			createToolBars();
-
-
-
 			createStatusBar();
 
 			QDir d(getExamplesDir());
 			loadFile(d.absoluteFilePath("Default.es"));
-
+			tabChanged(0); // to update title.
 
 			readSettings();
 
@@ -379,7 +388,7 @@ namespace StructureSynth {
 			exitAction = new QAction(tr("E&xit Application"), this);
 			exitAction->setShortcut(tr("Ctrl+Q"));
 			exitAction->setStatusTip(tr("Exit the application"));
-			connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
+			connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 			cutAction = new QAction(QIcon(":/images/cut.png"), tr("Cu&t"), this);
 			cutAction->setShortcut(tr("Ctrl+X"));
@@ -833,3 +842,4 @@ namespace StructureSynth {
 
 	}
 }
+

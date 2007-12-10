@@ -11,7 +11,7 @@ namespace SyntopiaCore {
 			Sphere(SyntopiaCore::Math::Vector3f center, float radius);
 			virtual ~Sphere();
 
-			virtual void draw();
+			virtual void draw() const;
 
 		private:
 			SyntopiaCore::Math::Vector3f center;

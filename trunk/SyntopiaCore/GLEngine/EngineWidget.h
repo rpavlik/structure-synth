@@ -48,7 +48,7 @@ namespace SyntopiaCore {
 			void clearWorld();
 			void reset();
 			void addObject(Object3D* object);
-			int objectCount() { return objects.size(); }
+			int objectCount() const { return objects.size(); }
 
 			/// RGB in [0;1]
 			void setBackgroundColor(double r, double g, double b) { 

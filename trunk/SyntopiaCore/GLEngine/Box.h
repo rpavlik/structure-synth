@@ -15,7 +15,7 @@ namespace SyntopiaCore {
 
 			virtual ~Box();
 
-			virtual void draw();
+			virtual void draw() const;
 
 		private:
 			SyntopiaCore::Math::Vector3f base;

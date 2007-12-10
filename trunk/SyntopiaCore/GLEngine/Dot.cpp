@@ -16,7 +16,7 @@ namespace SyntopiaCore {
 
 		Dot::~Dot() { };
 
-		void Dot::draw() {
+		void Dot::draw() const {
 			glDisable (GL_LIGHTING);
 			glColor4fv(primaryColor);
 			glBegin(GL_POINTS);

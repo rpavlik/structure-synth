@@ -20,7 +20,7 @@ namespace SyntopiaCore {
 
 		Grid::~Grid() { };
 
-		void Grid::draw() {
+		void Grid::draw() const {
 			glPushMatrix();
 			glTranslatef( base.x(), base.y(), base.z() );
 			glLineWidth( 1.0 );

@@ -28,8 +28,8 @@ namespace SyntopiaCore {
 			scalar length() const { return sqrt(s[0]*s[0]+s[1]*s[1]+s[2]*s[2]); }
 
 			Vector3<scalar> normalize() const { scalar l = length(); return Vector3<scalar>(s[0]/l,s[1]/l,s[2]/l); }
-			Vector3<scalar> operator- (Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]-rhs.s[0], s[1]-rhs.s[1], s[2]-rhs.s[2]); }
-			Vector3<scalar> operator+ (Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]+rhs.s[0], s[1]+rhs.s[1], s[2]+rhs.s[2]); }
+			Vector3<scalar> operator- (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]-rhs.s[0], s[1]-rhs.s[1], s[2]-rhs.s[2]); }
+			Vector3<scalar> operator+ (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]+rhs.s[0], s[1]+rhs.s[1], s[2]+rhs.s[2]); }
 			Vector3<scalar> operator- () const { return Vector3<scalar>(-s[0], -s[1], -s[2]); }
 
 			Vector3<scalar> operator* (scalar rhs) const { return Vector3<scalar>(s[0]*rhs, s[1]*rhs, s[2]*rhs); }
@@ -39,7 +39,7 @@ namespace SyntopiaCore {
 				return QString("[%1 %2 %3]").arg(s[0]).arg(s[1]).arg(s[2]);
 			}
 
-			Vector3<scalar> cross(Vector3<scalar> b) const { 
+			Vector3<scalar> cross(const Vector3<scalar> b) const { 
 				return Vector3<scalar>(
 					s[1]*b.s[2] - s[2]*b.s[1] ,
 					s[2]*b.s[0] - s[0]*b.s[2] ,
