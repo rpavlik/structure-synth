@@ -59,6 +59,7 @@ namespace SyntopiaCore {
 
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
+			void mouseReleaseEvent ( QMouseEvent * event );
 			void initializeGL();
 			void timerEvent( QTimerEvent * );
 
