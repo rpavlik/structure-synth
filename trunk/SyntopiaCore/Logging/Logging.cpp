@@ -23,3 +23,4 @@ namespace SyntopiaCore {
 		void CRITICAL(QString text) { LOG(text, CriticalLevel); }
 	}
 }
+

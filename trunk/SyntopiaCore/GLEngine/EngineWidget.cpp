@@ -44,10 +44,20 @@ namespace SyntopiaCore {
 		EngineWidget::~EngineWidget() {
 		}
 
-		void EngineWidget::contextMenuEvent(QContextMenuEvent* ev ) {
+		void EngineWidget::mouseReleaseEvent(QMouseEvent* ev)  {
+			if (ev->button() != Qt::RightButton) return;
 			if (rmbDragging) { return; }
-			if (contextMenu) contextMenu->exec(ev->globalPos());	
+			if (contextMenu) contextMenu->exec(ev->globalPos());
 		}
+
+
+		
+		void EngineWidget::contextMenuEvent(QContextMenuEvent* ev ) {
+			// Implementing this here gives trouble on Linux...
+			// if (rmbDragging) { return; }
+			// if (contextMenu) contextMenu->exec(ev->globalPos());	
+		}
+		
 
 		void EngineWidget::reset() {
 			translation = Vector3f(0,0,-20);
@@ -348,6 +358,7 @@ namespace SyntopiaCore {
 			objects.append(object);
 		}
 
+		
 	}
 }
 
