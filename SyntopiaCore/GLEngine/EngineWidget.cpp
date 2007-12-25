@@ -52,7 +52,7 @@ namespace SyntopiaCore {
 
 
 		
-		void EngineWidget::contextMenuEvent(QContextMenuEvent* ev ) {
+		void EngineWidget::contextMenuEvent(QContextMenuEvent* /*ev*/ ) {
 			// Implementing this here gives trouble on Linux...
 			// if (rmbDragging) { return; }
 			// if (contextMenu) contextMenu->exec(ev->globalPos());	
@@ -92,7 +92,10 @@ namespace SyntopiaCore {
 			Vector3f v2 = rotation*v;
 			glMultMatrixf(rotation.getArray());
 			glTranslatef( -pivot.x(), -pivot.y(), -pivot.z() );
-			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			
+			//if (QApplication::keyboardModifiers() != Qt::ShiftModifier) {
+				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			//}
 
 
 			if (QApplication::keyboardModifiers() == Qt::AltModifier) {
