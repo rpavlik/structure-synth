@@ -1,52 +1,60 @@
 
 Changelog for Structure Synth:
 ------------------------------
+----- Release of v0.7.0 [25 Dec 2007 ] ----------------------------------------------------------
+This release: 22 hours of work: 19½ hours coding, 2½ hours non-coding. (15 log entries)
+Stats total: 95 hours total shared over 49 log entries. 62½ hours coding, 32½ hours non-coding
+
+25 Dec 07 [MHC]: Created build and updated website for v0.7
+[1½h]a
+
 08 Dec 07 [MHC]: Corrected more Linux compiler warnings, and some const correctness.
-[1h]
+[1h]c
 
 07 Dec 07 [MHC]: Syntax highlighter now supports multi-line comments and highlight parse error positions. 
           [MHC]: Added screenshot save capability.
           [MHC]: Corrected lots of Linux warnings and a single bug.
-[2h]
+[2h]c
 
 06 Dec 07 [MHC]: Rewrote the tokenizer. It is better now. 
           [MHC]: Fixed an infinite loop while parsing incorrect rule modifiers.
           [MHC]: Added web links to the Help Menu.
-[2h]
+[2h]c
 
 05 Dec 07 [MHC]: Wrote a proper syntax highlighter
-[2h]
+[2h]c
 
 04 Dec 07 [MHC]: Fixed the tab window logic. Should be working now.
-[1h]
+[1h]c
 
 18 Nov 07 [MHC]: Added 'matrix x1 x2 x3 y1 y2 y3 z1 z2 z3' transformation.
-[1h]
+[1h]c
 
 09 Nov 07 [MHC]: Fixed a syntax error affecting compilation under GCC (Linux). Works on Linux again now.
-[½h]
+[½h]c
 
 23 Oct 07 [MHC]: Started working on POVRay export.
-[2h]
+[2h]c
 
 1x Oct 07 [MHC]: Started working on tutorial.
-[1h]
+[1h]a
 
 14 Oct 07 [MHC]: Fixed 'weight' bug. Now accepts floating points as weights.
+[1h]c
 
 09 Oct 07 [MHC]: Corrected: [4] Lines and dots do not respect color settings.
-[2h]             Better fast-draw.
+[2h]c            Better fast-draw.
                  Corrected: [3] When parser encounters an error, it should clear 3D view, and force shown log.
 
 
 08 Oct 07 [MHC]: Bugfixes: 'panic' doesn't change background color, context menus doesn't appear while dragging in 3D view
-[½h]
+[½h]c
 
 07 Oct 07 [MHC]: Added initial support for tabs. Not fully implemented.
-[3h]             Did some 'const correctness' clean up
+[3h]c            Did some 'const correctness' clean up
 
 04 Oct 07 [MHC]: Refactored AppCore -> SyntopiaCore
-[1½h]            Added support for full screen (+context menu).
+[1½h]c           Added support for full screen (+context menu).
 
 ----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
 Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hours non-coding
