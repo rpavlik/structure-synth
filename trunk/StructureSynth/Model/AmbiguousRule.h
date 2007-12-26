@@ -10,8 +10,8 @@ namespace StructureSynth {
 		/// If several definitions for the same rule exists,
 		/// an Ambiguous Rule is created which contains the multiple definitions.
 		///
-		/// When the rule is executed, a random rule is chosen from the multiple definitins,
-	    /// taking their weigths into account.
+		/// When the rule is executed, a random rule is chosen from the multiple definitions,
+	    /// taking their weights into account.
 		class AmbiguousRule : public Rule {
 		public:
 			AmbiguousRule(QString name) : Rule(name) {};
