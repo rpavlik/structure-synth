@@ -25,6 +25,10 @@ namespace StructureSynth {
 			Rendering::Renderer* getRenderer() { return renderTarget; };
 			void increaseObjectCount() { objects++; };
 
+			// True, if the random seed was changed by the builder (by 'set seed <int>')
+			bool seedChanged() { return hasSeedChanged; }
+			int getNewSeed() { return newSeed; }
+
 		private:
 			State state;
 			ExecutionStack stack;
@@ -34,6 +38,8 @@ namespace StructureSynth {
 			int maxGenerations;
 			int maxObjects;
 			int objects;
+			int newSeed;
+			bool hasSeedChanged;
 		};
 
 	}

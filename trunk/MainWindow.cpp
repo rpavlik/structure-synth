@@ -157,17 +157,11 @@ namespace StructureSynth {
 
 		void MainWindow::open()
 		{
-			if (maybeSave()) {
-				QString fileName = QFileDialog::getOpenFileName(this);
-				if (!fileName.isEmpty()) {
-					loadFile(fileName);
-					// TODO: Clear 3D GUI...
-				}
-
-			} else {
-				WARNING("Unable to save file...");
+			QString fileName = QFileDialog::getOpenFileName(this);
+			if (!fileName.isEmpty()) {
+				loadFile(fileName);
+				// TODO: Clear 3D GUI...
 			}
-
 		}
 
 		void MainWindow::keyReleaseEvent(QKeyEvent* ev) {
@@ -501,6 +495,7 @@ namespace StructureSynth {
 
 		void MainWindow::createToolBars()
 		{
+			
 			fileToolBar = addToolBar(tr("File"));
 			fileToolBar->addAction(newAction);
 			fileToolBar->addAction(openAction);
@@ -512,8 +507,18 @@ namespace StructureSynth {
 			editToolBar->addAction(pasteAction);
 
 			renderToolBar = addToolBar(tr("Render"));
+			
+			QLabel* randomSeed = new QLabel("Seed:"); 
+			renderToolBar->addWidget(randomSeed);
+			seedSpinBox = new QSpinBox();
+			seedSpinBox->setRange(1,32768);
+			seedSpinBox->setValue(1);
+			renderToolBar->addWidget(seedSpinBox);
+			
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
+
+			
 
 		}
 
@@ -538,24 +543,7 @@ namespace StructureSynth {
 			settings.setValue("size", size());
 		}
 
-		bool MainWindow::maybeSave()
-		{
-			if (!getTextEdit()) return false;
-			if (getTextEdit()->document()->isModified()) {
-				QMessageBox::StandardButton ret;
-				ret = QMessageBox::warning(this, tr("Structure Synth"),
-					tr("The script has been modified.\n"
-					"Do you want to save your changes?"),
-					QMessageBox::Save | QMessageBox::Discard
-					| QMessageBox::Cancel);
-				if (ret == QMessageBox::Save)
-					return save();
-				else if (ret == QMessageBox::Cancel)
-					return false;
-			}
-			return true;
-		}
-
+		
 		void MainWindow::openFile()
 		{
 			QAction *action = qobject_cast<QAction *>(sender());
@@ -606,7 +594,24 @@ namespace StructureSynth {
 		}
 
 
+		void MainWindow::updateRandom() {
+			setSeed((getSeed()+1) % 32768);
+			INFO(QString("Auto-incremented random seed: %1").arg(getSeed()));
+			
+			// Should we try something like below?
+			if (tabInfo[tabBar->currentIndex()].unsaved) {
+				// Current tab is unsaved, we will not change the random seed.
+			} else {
+				// We will auto-increment random seed.
+			}
+
+			srand(getSeed());
+		}
+
 		void MainWindow::render() {
+			srand(getSeed());
+			INFO(QString("Random seed: %1").arg(getSeed()));
+			
 			try {
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
@@ -627,6 +632,13 @@ namespace StructureSynth {
 				renderTarget.end();
 
 				INFO("Done...");
+
+				if (b.seedChanged()) {
+					setSeed(b.getNewSeed());
+					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
+				} else {
+					updateRandom();
+				}
 
 				if (oldDirtyPosition > 0) {
 					getTextEdit()->document()->markContentsDirty(oldDirtyPosition,1);
@@ -654,7 +666,11 @@ namespace StructureSynth {
 			
 		}
 
+		// TODO: To much code reuse here...
 		void MainWindow::povRender() {
+			srand(getSeed());
+			INFO(QString("Random seed: %1").arg(getSeed()));
+			
 			try {
 				QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
 				Rendering::POVRenderer rendering(text);
@@ -677,6 +693,13 @@ namespace StructureSynth {
 
 				INFO("Done...");
 				INFO("POV-Ray script is now copied to the clipboard");
+
+				if (b.seedChanged()) {
+					setSeed(b.getNewSeed());
+					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
+				} else {
+					updateRandom();
+				}
 
 				QClipboard *clipboard = QApplication::clipboard();
 				clipboard->setText(text); 
@@ -844,6 +867,15 @@ namespace StructureSynth {
 
 				
 		}
+
+		void MainWindow::setSeed(int randomSeed) {
+			seedSpinBox->setValue(randomSeed);
+		}
+
+		int MainWindow::getSeed() {
+			return seedSpinBox->value();
+		};
+
 
 	}
 }
