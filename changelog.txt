@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------------------------
+4  Jan 08 [MHC] BugFix: when loading new script, a 'unsaved data' would occour (even though loaded scripts appears in new tabs)
+
 ----- Release of v0.7.0 [25 Dec 2007 ] ----------------------------------------------------------
 This release: 22 hours of work: 19½ hours coding, 2½ hours non-coding. (15 log entries)
 Stats total: 95 hours total shared over 49 log entries. 62½ hours coding, 32½ hours non-coding

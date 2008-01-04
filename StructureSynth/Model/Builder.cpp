@@ -18,9 +18,8 @@ namespace StructureSynth {
 			maxGenerations = 1000;
 			maxObjects = 100000;
 			objects = 0;
-
-
-	
+			newSeed = 0;
+			hasSeedChanged = false;
 		};
 			
 
@@ -124,6 +123,8 @@ namespace StructureSynth {
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'seed' expected integer parameter. Found: %1").arg(param));
 				srand(i);
+				hasSeedChanged = true;
+				newSeed = i;
 			} else if (command == "background") {
 				QColor c(param);
 				if (!c.isValid()) throw Exception(QString("Command 'background' expected a valid color identifier: Found: %1").arg(param));

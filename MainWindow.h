@@ -36,6 +36,8 @@ namespace StructureSynth {
 		public:
 			MainWindow();
 			MainWindow(const QString &fileName);
+			void setSeed(int randomSeed);
+			int getSeed();
 
 		protected:
 			void closeEvent(QCloseEvent* ev);
@@ -74,12 +76,13 @@ namespace StructureSynth {
 			void createStatusBar();
 			void readSettings();
 			void writeSettings();
-			bool maybeSave();
+			void updateRandom();
 			void loadFile(const QString &fileName);
 			bool saveFile(const QString &fileName);
 			QString strippedName(const QString &fullFileName);
 			void createOpenGLContextMenu();
 
+			QSpinBox* seedSpinBox;
 			QDockWidget* dockLog;
 			QAction *fullScreenAction;
 			QAction *screenshotAction;
