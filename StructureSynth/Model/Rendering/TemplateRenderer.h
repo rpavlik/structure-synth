@@ -49,6 +49,9 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
 				Template* boxTemplate;
+				Template* sphereTemplate;
+				Template* beginTemplate;
+				Template* endTemplate;
 			};
 
 		}
