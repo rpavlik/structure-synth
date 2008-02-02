@@ -50,6 +50,7 @@ namespace StructureSynth {
 			void launchSfHome();
 			void launchGallery();
 			void launchReferenceHome();
+			void templateRender();
 			
 			void openFile();
 			void newFile();
@@ -69,6 +70,7 @@ namespace StructureSynth {
 			QTextEdit* getTextEdit();
 			QString getExamplesDir();
 			QString getMiscDir();
+			QString getTemplateDir();
 			void init();
 			void createActions();
 			void createMenus();

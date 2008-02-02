@@ -16,6 +16,8 @@ namespace StructureSynth {
 			class TemplateRenderer : public Renderer {
 			public:
 				TemplateRenderer();
+				TemplateRenderer(QString xmlDefinitionFile);
+				
 				virtual ~TemplateRenderer();
 
 				/// The primitives

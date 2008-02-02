@@ -11,6 +11,7 @@
 #include "StructureSynth/Parser/EisenParser.h"
 #include "StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "StructureSynth/Model/Rendering/POVRenderer.h"
+#include "StructureSynth/Model/Rendering/TemplateRenderer.h"
 #include "StructureSynth/Parser/Tokenizer.h"
 #include "StructureSynth/Parser/Preprocessor.h"
 #include "StructureSynth/Model/RuleSet.h"
@@ -457,9 +458,30 @@ namespace StructureSynth {
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
 			renderMenu->addAction(povRenderAction);
+			
+			// Scan render templates...
+			QDir miscDir(getTemplateDir());
+			QStringList filters;
+			filters << "*.rendertemplate";
+			miscDir.setNameFilters(filters);
+			if (!miscDir.exists()) {
+				QAction* a = new QAction("Unable to locate: "+miscDir.absolutePath(), this);
+				a->setEnabled(false);
+				renderMenu->addAction(a);
+			} else {
+				QStringList sl = miscDir.entryList();
+				QMenu* templateMenu = renderMenu->addMenu("Template Rendering");
+				for (int i = 0; i < sl.size(); i++) {
+					QAction* a = new QAction(sl[i], this);
+					a->setData(sl[i]);
+					connect(a, SIGNAL(triggered()), this, SLOT(templateRender()));
+					templateMenu->addAction(a);
+				}
+			}
+
+			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
 			renderMenu->addAction(screenshotAction);
-
 
 			menuBar()->addSeparator();
 
@@ -468,7 +490,7 @@ namespace StructureSynth {
 
 			// Scan examples dir...
 			QDir d(getExamplesDir());
-			QStringList filters;
+			filters.clear();
 			filters << "*.es";
 			d.setNameFilters(filters);
 			if (!d.exists()) {
@@ -718,6 +740,10 @@ namespace StructureSynth {
 			return "Misc";
 		}
 
+		QString MainWindow::getTemplateDir() {
+			return "Misc";
+		}
+
 		void MainWindow::resetView() {
 			engine->reset();
 		}
@@ -875,6 +901,19 @@ namespace StructureSynth {
 		int MainWindow::getSeed() {
 			return seedSpinBox->value();
 		};
+
+		void MainWindow::templateRender()
+		{
+			QAction *action = qobject_cast<QAction *>(sender());
+			if (action) {
+				QDir d(getTemplateDir());
+				QString fileName = d.absoluteFilePath(action->data().toString());
+				WARNING("TemplateRenderer: " + fileName);
+				TemplateRenderer r(fileName);
+			} else {
+				WARNING("No data!");
+			}
+		}
 
 
 	}
