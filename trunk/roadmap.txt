@@ -41,40 +41,39 @@ Version 0.8: 'Memories of tomorrow'
 Main Focus: reproducibility -> control of random seed, save view as eisenscript code.
 - GUI Seed
 - Set initial viewport (create expression by right clicking mouse canvas)
-- Change random generator -> mersenne twister for cross-platform reproducibility and random seed setting/getting.
 ? 'Zoom to fit'
+- Add Template Renderer (user customizable text templats)
+ ! [PovRay] Renderer
+ - SunFlow?
+ - [Collada] Support? (http://www.khronos.org/collada/)
 
 
 Version 1.0: 'Kolberger Heide.'
 -------------------------------
 - Splash screen.
 - Preferences (saving with QProperties) [For what?]
-- Add more renders:
-  - [Tag Renderer] - renders all tag as text.
-  ! [PovRay] Renderer
-  - [Collada] Support? (http://www.khronos.org/collada/)
 - Mac testing
 - Installers (for Windows at least - using InnoSetup)
 - Packaging: Icons, Eula, file associations.
-
-Possible extensions:
-_-------------------
 ? Version object with check for updates on internet.
 ? Drag'n'Drop of EisenScript files.
+
+Possible Version 1.x extensions:
+_-------------------------------
 ? 'set minvolume'
 ? Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
 ? Ellipsoid object. (as of now spheres are always isotropic]
-? Preprocessor '#include' statement
-? Real transperancy (req. sorting)
+? Real transperancy (req. sorting) [Easier now we have defined bounding boxes]
 ? More complex primitives (tube, ...)
+? Preprocessor '#include' statement
 ? Check for infinite retirement substitution cycles.
 ? Better Progress Bar (include updates for transformations loop, pause button?)
 ? Rule retirement: ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
 
 
-v 2.x
------
+Possible version 2.x extensions:
+--------------------------------
 - Textures w. alpha
 - 2D Mode
 - Parameterized rendering (movies)
