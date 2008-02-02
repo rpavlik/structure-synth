@@ -23,7 +23,7 @@ namespace StructureSynth {
 			};
 
 			TemplateRenderer::TemplateRenderer() {
-				Template boxTemplate("Box %1 %2 %3");
+				boxTemplate = new Template("Box %1 %2 %3");
 			}
 
 			TemplateRenderer::~TemplateRenderer() {
@@ -34,8 +34,8 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3) 
 			{
-				Template t(boxTemplate); 
-				t.substitue("%1", )
+				Template t(*boxTemplate); 
+				t.substitute("%1", "");
 
 			};
 

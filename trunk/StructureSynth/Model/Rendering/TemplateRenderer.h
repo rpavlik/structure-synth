@@ -9,6 +9,8 @@
 namespace StructureSynth {
 	namespace Model {	
 		namespace Rendering {
+			
+			class Template; // Forward...
 
 			/// A renderer implementation based on the SyntopiaCore POV widget.
 			class TemplateRenderer : public Renderer {
@@ -44,6 +46,7 @@ namespace StructureSynth {
 
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
+				Template* boxTemplate;
 			};
 
 		}
