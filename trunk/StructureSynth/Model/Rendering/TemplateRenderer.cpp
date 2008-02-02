@@ -2,6 +2,10 @@
 #include "../../../SyntopiaCore/Math/Vector3.h"
 #include "../../../SyntopiaCore/Logging/Logging.h"
 
+#include <QDomDocument>
+#include <QIODevice>
+#include <QFile>
+
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Logging;
 
@@ -21,6 +25,44 @@ namespace StructureSynth {
 			private:
 				QString def;
 			};
+
+			TemplateRenderer::TemplateRenderer(QString xmlDefinitionFile) {
+				QDomDocument doc;
+				QFile file(xmlDefinitionFile);
+				if (!file.open(QIODevice::ReadOnly)) {
+					WARNING("Unable to open file: " + xmlDefinitionFile);
+					return;
+				}
+				if (!doc.setContent(&file)) {
+					WARNING("Unable to parsefile: " + xmlDefinitionFile);
+					file.close();
+					return;
+				}
+				file.close();
+
+				QDomElement docElem = doc.documentElement();
+
+				QDomNode n = docElem.firstChild();
+				while(!n.isNull()) {
+					QDomElement e = n.toElement(); // try to convert the node to an element.
+					if(!e.isNull()) {
+						if (e.tagName() != "substitution") {
+							WARNING("Expected 'substitution' element, found: " + e.tagName());
+							continue;
+						}
+						if (!e.hasAttribute("name")) {
+							WARNING("Substitution without name attribute found!");
+							continue;
+						}
+
+						QString name = e.attribute("name");
+						QString s = e.text();
+						INFO(QString("%1 = %2").arg(name).arg(e.text()));
+					}
+					n = n.nextSibling();
+				}
+			}
+
 
 			TemplateRenderer::TemplateRenderer() {
 				boxTemplate = new Template("Box %1 %2 %3");
@@ -55,7 +97,7 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
-				
+			
 			};
 
 			void TemplateRenderer::begin() {
