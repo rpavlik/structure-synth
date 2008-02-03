@@ -4,68 +4,68 @@
 <template name="Pov Ray Template" inherits="" >
 	<substitution name="begin">
 	    <![CDATA[
-		// Structure Synth Pov Ray Export. 
+// Structure Synth Pov Ray Export. 
 
-		// Global settings
-		global_settings {
-		  max_trace_level 5
-		  ambient_light rgb <1,1,1>
-		}
+// Global settings
+global_settings {
+  max_trace_level 5
+  ambient_light rgb <1,1,1>
+}
 
-		// Finish and normal
-		#declare DEFFIN = finish { ambient 0.1 diffuse 0.5 specular 0.5 };
-		#declare DEFNOR = normal { dents 0 scale 0.01 };
+// Finish and normal
+#declare DEFFIN = finish { ambient 0.1 diffuse 0.5 specular 0.5 };
+#declare DEFNOR = normal { dents 0 scale 0.01 };
 
-		// Background
-		plane {
-		  z, 100.0
-		  texture {
-		    pigment { color rgb <0.0,0.0,0.0> }
-		    finish { ambient 1 }
-		  }
-		  hollow
-		}
+// Background
+plane {
+  z, 100.0
+  texture {
+	pigment { color rgb <0.0,0.0,0.0> }
+	finish { ambient 1 }
+  }
+  hollow
+}
 
-		// Camera
-		camera {
-		  location <-0.0,0.0,-15.0>
-		  look_at <-0.0,-0.0,-0.0>
-		  right -x
-		  up y
-		  angle 60
-		}
+// Camera
+camera {
+  location <-0.0,0.0,-15.0>
+  look_at <-0.0,-0.0,-0.0>
+  right -x
+  up y
+  angle 60
+}
 
-		// Lights
-		light_source { <500,500,-1000> rgb <1,1,1> shadowless } 
-		light_source { <-500,-500,-1000> rgb <1,1,1> shadowless } 
-		light_source { <-500,500,1000> rgb <1,1,1> shadowless } 
+// Lights
+light_source { <500,500,-1000> rgb <1,1,1> shadowless } 
+light_source { <-500,-500,-1000> rgb <1,1,1> shadowless } 
+light_source { <-500,500,1000> rgb <1,1,1> shadowless } 
 		]]>
 	</substitution>
 	
 	<substitution name="end">
 	    <![CDATA[
-		
-		// Done...
-		
+
+// Done...
+
 		]]>
 	</substitution>
 
 	<substitution name="box">
 		<![CDATA[
-		object {   
-		  box { <0,  0.0, 0>, <1,  1,  1> }
-		matrix < 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.5, -0.5, -0.5 > 
-		  texture { pigment { color rgbt <{r},{g},{b},{alpha}> } finish { DEFFIN } normal { DEFNOR } }
-		}
+object {   
+  box { <0,  0.0, 0>, <1,  1,  1> }
+  matrix < 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.5, -0.5, -0.5 > 
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } finish { DEFFIN } normal { DEFNOR } }
+}
 		]]>
 	</substitution>
 	
 	<substitution name="sphere">
 		<![CDATA[
-		object {   
-		  sphere { <{cx}, {cy}, {cz}>, {rad} }
-		  texture { pigment { color rgbt <{r},{g},{b},{alpha}> } finish { DEFFIN } normal { DEFNOR } }
-		}
+object {   
+  sphere { <{cx}, {cy}, {cz}>, {rad} }
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } finish { DEFFIN } normal { DEFNOR } }
+}
 		]]>
 	</substitution>
 </template>

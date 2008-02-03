@@ -20,6 +20,8 @@ namespace StructureSynth {
 				Template(QString def) : def(def) {};
 				Template(const Template& t) { this->def = t.def; };
 
+				QString getText() { return def; }
+
 				void substitute(QString before, QString after) {
 					def.replace(before, after);
 				};
@@ -110,7 +112,7 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir3) 
 			{
 				Template t(*boxTemplate); 
-				t.substitute("%1", "");
+				t.substitute("", "");
 
 			};
 
@@ -130,16 +132,32 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
-				Template t(*boxTemplate); 
-				t.substitute("%1", "");
+				Template t(*sphereTemplate); 
+				t.substitute("{cx}", QString::number(center.x()));
+				t.substitute("{cy}", QString::number(center.y()));
+				t.substitute("{cz}", QString::number(center.z()));
+				
+				t.substitute("{rad}", QString::number(radius));
+
+				t.substitute("{r}", QString::number(rgb.x()));
+				t.substitute("{g}", QString::number(rgb.y()));
+				t.substitute("{b}", QString::number(rgb.z()));
+
+				t.substitute("{alpha}", QString::number(alpha));
+				t.substitute("{oneminusalpha}", QString::number(1-alpha));
+				
+
+				output.append(t.getText());
 			};
 
 			void TemplateRenderer::begin() {
-
+				Template t(*beginTemplate); 
+				output.append(t.getText());
 			};
 
 			void TemplateRenderer::end() {
-				// TODO
+				Template t(*endTemplate); 
+				output.append(t.getText());
 			};
 
 			void TemplateRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f /*rgb*/) {

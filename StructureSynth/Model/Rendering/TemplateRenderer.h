@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 #include "Renderer.h"
 
 #include "../../../SyntopiaCore/Math/Vector3.h"
@@ -44,6 +45,8 @@ namespace StructureSynth {
 				virtual void setColor(SyntopiaCore::Math::Vector3f rgb) { this->rgb = rgb; }
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
+
+				QString getOutput() { return output.join(""); }
 			private:
 
 				SyntopiaCore::Math::Vector3f rgb;
@@ -52,6 +55,8 @@ namespace StructureSynth {
 				Template* sphereTemplate;
 				Template* beginTemplate;
 				Template* endTemplate;
+
+				QStringList output;
 			};
 
 		}
