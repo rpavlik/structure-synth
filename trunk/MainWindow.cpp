@@ -39,7 +39,7 @@ namespace StructureSynth {
 				primitiveFormat.setForeground(Qt::darkYellow);
 				commentFormat.setForeground(Qt::darkGreen);
 				warningFormat.setBackground(QBrush(Qt::yellow));
-				
+
 			};
 
 			void highlightBlock(const QString &text)
@@ -58,7 +58,7 @@ namespace StructureSynth {
 					// This line was previously a multi-line start 
 					if (!text.contains("*/")) setCurrentBlockState(0);
 				}
-				
+
 				if (previousBlockState() == 1) {
 					// Part of multi-line comment. Skip the rest...
 					if (!text.contains("*/")) {
@@ -67,7 +67,7 @@ namespace StructureSynth {
 						return;
 					}
 				}
-			
+
 				// Line parsing
 				QString current;
 				int startMatch = 0;
@@ -112,8 +112,8 @@ namespace StructureSynth {
 			QTextCharFormat bracketFormat;
 			QTextCharFormat primitiveFormat;
 			QTextCharFormat commentFormat;
-            QTextCharFormat warningFormat;
-				
+			QTextCharFormat warningFormat;
+
 
 		};
 
@@ -302,7 +302,7 @@ namespace StructureSynth {
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 
-			
+
 		}
 
 		void MainWindow::createOpenGLContextMenu() {
@@ -458,7 +458,7 @@ namespace StructureSynth {
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
 			renderMenu->addAction(povRenderAction);
-			
+
 			// Scan render templates...
 			QDir miscDir(getTemplateDir());
 			QStringList filters;
@@ -517,7 +517,7 @@ namespace StructureSynth {
 
 		void MainWindow::createToolBars()
 		{
-			
+
 			fileToolBar = addToolBar(tr("File"));
 			fileToolBar->addAction(newAction);
 			fileToolBar->addAction(openAction);
@@ -529,18 +529,18 @@ namespace StructureSynth {
 			editToolBar->addAction(pasteAction);
 
 			renderToolBar = addToolBar(tr("Render"));
-			
+
 			QLabel* randomSeed = new QLabel("Seed:"); 
 			renderToolBar->addWidget(randomSeed);
 			seedSpinBox = new QSpinBox();
 			seedSpinBox->setRange(1,32768);
 			seedSpinBox->setValue(1);
 			renderToolBar->addWidget(seedSpinBox);
-			
+
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
 
-			
+
 
 		}
 
@@ -565,7 +565,7 @@ namespace StructureSynth {
 			settings.setValue("size", size());
 		}
 
-		
+
 		void MainWindow::openFile()
 		{
 			QAction *action = qobject_cast<QAction *>(sender());
@@ -619,7 +619,7 @@ namespace StructureSynth {
 		void MainWindow::updateRandom() {
 			setSeed((getSeed()+1) % 32768);
 			INFO(QString("Auto-incremented random seed: %1").arg(getSeed()));
-			
+
 			// Should we try something like below?
 			if (tabInfo[tabBar->currentIndex()].unsaved) {
 				// Current tab is unsaved, we will not change the random seed.
@@ -633,7 +633,7 @@ namespace StructureSynth {
 		void MainWindow::render() {
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
-			
+
 			try {
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
@@ -666,7 +666,7 @@ namespace StructureSynth {
 					getTextEdit()->document()->markContentsDirty(oldDirtyPosition,1);
 					oldDirtyPosition = -1;
 				}
-				
+
 				//if (getTextEdit()->isWindowModified()) getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
 
 
@@ -685,14 +685,14 @@ namespace StructureSynth {
 				engine->clearWorld();
 				engine->requireRedraw();
 			} 
-			
+
 		}
 
 		// TODO: To much code reuse here...
 		void MainWindow::povRender() {
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
-			
+
 			try {
 				QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
 				Rendering::POVRenderer rendering(text);
@@ -867,7 +867,7 @@ namespace StructureSynth {
 				allowedTypes.append(a[i]);
 			}
 			QString filter = "Image Files (" + allowedTypesFilter.join(" ")+")";
-			
+
 			QImage image = engine->grabFrameBuffer();
 
 			QString filename = QFileDialog::getSaveFileName(this, "Save Screenshot As...", QString(), filter);
@@ -876,7 +876,7 @@ namespace StructureSynth {
 				return;
 			}
 
-			
+
 			QString ext = filename.section(".", -1).toLower();
 			if (!allowedTypes.contains(ext)) {
 				WARNING("Invalid image extension.");
@@ -891,7 +891,7 @@ namespace StructureSynth {
 				WARNING("Save failed! Filename: " + filename);
 			}
 
-				
+
 		}
 
 		void MainWindow::setSeed(int randomSeed) {
@@ -908,8 +908,48 @@ namespace StructureSynth {
 			if (action) {
 				QDir d(getTemplateDir());
 				QString fileName = d.absoluteFilePath(action->data().toString());
-				WARNING("TemplateRenderer: " + fileName);
-				TemplateRenderer r(fileName);
+				INFO("Starting templateRenderer: " + fileName);
+				
+				srand(getSeed());
+				INFO(QString("Random seed: %1").arg(getSeed()));
+				try {
+					QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
+					TemplateRenderer rendering(fileName);
+					rendering.begin(); // we clear before parsing...
+
+					Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
+					EisenParser e(&tokenizer);
+					INFO("Parsing...");
+					RuleSet* rs = e.parseRuleset();
+
+					INFO("Resolving named references...");
+					rs->resolveNames();
+
+					rs->dumpInfo();
+
+					INFO("Building....");
+					Builder b(&rendering, rs);
+					b.build();
+					rendering.end();
+
+					if (b.seedChanged()) {
+						setSeed(b.getNewSeed());
+						INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
+					} else {
+						updateRandom();
+					}
+
+					QClipboard *clipboard = QApplication::clipboard();
+					clipboard->setText(rendering.getOutput()); 
+
+					INFO("Done...");
+					INFO("Script is now copied to the clipboard");
+
+
+				} catch (Exception& er) {
+					WARNING(er.getMessage());
+				}
+
 			} else {
 				WARNING("No data!");
 			}
