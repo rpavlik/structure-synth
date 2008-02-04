@@ -9,97 +9,27 @@
 %}
 
 shader {
-  name "ground"
-  type diffuse
-  diff 0.800000011921 0.800000011921 0.800000011921
-}
-
-shader {
-  name "shader01"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 2
-  absorbtion.color 0.8 0.2 0.2
-}
-
-shader {
-   name "shader02"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 1
-  absorbtion.color 0.8 0.2 0.2
-}
-
-shader {
-   name "shader03"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 0.5
-  absorbtion.color 0.8 0.2 0.2
-}
-
-shader {
-   name "shader04"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 2
-  absorbtion.color 0.1 0.7 0.1
-}
-
-shader {
-   name "shader05"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 1
-  absorbtion.color 0.1 0.7 0.1
-}
-
-shader {
-   name "shader06"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 0.5
-  absorbtion.color 0.1 0.7 0.1
-}
-
-shader {
-   name "shader07"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 2
-  absorbtion.color 0.3 0.3 0.6
-}
-
-shader {
-   name "shader08"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 1
-  absorbtion.color 0.3 0.3 0.6
-}
-
-shader {
-   name "shader09"
-  type glass
-  eta 1.55
-  color 1 1 1
-  absorbtion.distance 0.5
-  absorbtion.color 0.3 0.3 0.6
+  name "shader05"
+  type amb-occ
+  bright   1 1 1
+  dark     0 0 0
+  samples  16
+  dist     6
 }
 
 %% common settings
 
 image {
-   resolution 600 600
-   aa 0 2
+   resolution 500 500
+   aa 1 2
+}
+
+gi {
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
 }
 
 accel bih
@@ -117,6 +47,7 @@ camera {
    fov    40
    aspect 1
 }
+
 
 
 %% light sources
@@ -137,25 +68,40 @@ light {
       0 2 3
 }
 
-light {
-   type meshlight
-   name "meshlight.001"
-   emit 1 1 1
-   radiance 15
-   samples 32
-   points 4
-      -4.25819396973 -4.8784570694 5.70054674149
-      -5.13696432114 -5.61583280563 4.06224298477
-      -6.422539711 -4.08374404907 4.06224298477
-      -5.54376888275 -3.34636831284 5.70054721832
-   triangles 2
-      0 1 2
-      0 2 3
-}
-
 
 %% geometry
 
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs none
+}
 
 object {
    shader ground
@@ -199,11 +145,11 @@ object {
 
 	<substitution name="box">
 		<![CDATA[
-object {
-  shader "shader05"
-  type sphere
-  c {cx} {cy} {cz}
-  r {rad}
+instance {
+   name "{uid}"
+   geometry "Box"
+   transform col {matrix}
+   shader "shader05"
 }
 		]]>
 	</substitution>

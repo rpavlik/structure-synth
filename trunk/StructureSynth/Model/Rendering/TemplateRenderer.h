@@ -48,7 +48,7 @@ namespace StructureSynth {
 
 				QString getOutput() { return output.join(""); }
 			private:
-
+				
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
 				Template* boxTemplate;

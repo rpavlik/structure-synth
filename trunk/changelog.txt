@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+4  Feb 08 [MHC] Worked on the TemplateRenderer.
+[2h]c
+
 2  Feb 08 [MHC] Continued working on the TemplateRenderer.
 [2h]c
 
