@@ -129,6 +129,10 @@ namespace StructureSynth {
 				QColor c(param);
 				if (!c.isValid()) throw Exception(QString("Command 'background' expected a valid color identifier: Found: %1").arg(param));
 				renderTarget->setBackgroundColor(Vector3f(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0) );
+			} else if (command == "opengl") {
+				INFO("Render commands for 'opengl' not impl'ed yet!");
+			} else if (command == "template") {
+				renderTarget->callCommand(command,param);
 			} else {
 				throw Exception(QString("Unknown command: %1").arg(command));
 			}

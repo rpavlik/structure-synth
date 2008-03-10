@@ -47,6 +47,10 @@ namespace StructureSynth {
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 
 				QString getOutput() { return output.join(""); }
+				
+				// Issues a command for a specific renderclass such as 'template' or 'opengl'
+				virtual void callCommand(const QString& renderClass, const QString& command);
+
 			private:
 				
 				SyntopiaCore::Math::Vector3f rgb;

@@ -41,6 +41,9 @@ namespace StructureSynth {
 				virtual void setColor(SyntopiaCore::Math::Vector3f rgb) { this->rgb = rgb; }
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
+
+				// Issues a command for a specific renderclass such as 'template' or 'opengl'
+				virtual void callCommand(const QString& renderClass, const QString& command);
 			private:
 				SyntopiaCore::GLEngine::EngineWidget* engine;
 				SyntopiaCore::Math::Vector3f rgb;
