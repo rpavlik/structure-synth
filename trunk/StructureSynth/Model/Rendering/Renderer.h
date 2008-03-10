@@ -40,6 +40,9 @@ namespace StructureSynth {
 				virtual void setColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setAlpha(double alpha) = 0;
+
+				// Issues a command for a specific renderclass such as 'template' or 'opengl'
+				virtual void callCommand(const QString& renderClass, const QString& command) {};
 		};
 
 		}
