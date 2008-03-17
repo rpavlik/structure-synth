@@ -1,6 +1,12 @@
 
 Changelog for Structure Synth:
 ------------------------------
+Remember to include QtXml4.dll in deploy!
+
+17 Mar 08 [MHC] Long development break (lots of work and a Japan visit)  
+[4h]            I've got a new laptop, so I updated to Windows Vista and Visual Studio Express 2008. This means the VS solution files will no longer work for VS 2005!
+                I managed to get Structure Synth compiled on Mac OS X (10.4.7 with XCode 2.5) and Qt 4.3.4 Open Source. Build instruction will be added to the SourceForge web site shortly.
+
 4  Feb 08 [MHC] Worked on the TemplateRenderer.
 [2h]c
 

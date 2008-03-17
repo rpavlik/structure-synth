@@ -42,7 +42,7 @@ namespace StructureSynth {
 				virtual void setAlpha(double alpha) = 0;
 
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
-				virtual void callCommand(const QString& renderClass, const QString& command) {};
+				virtual void callCommand(const QString& /*renderClass*/, const QString& /*command*/) {};
 		};
 
 		}

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="StructureSynth"
 	ProjectGUID="{D41D8CD9-8F00-3204-A980-0998ECF8427E}"
 	RootNamespace="StructureSynth"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -81,8 +80,6 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=""
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -102,6 +99,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -172,8 +172,6 @@
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -193,6 +191,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -339,18 +340,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
@@ -374,7 +363,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -405,6 +394,18 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
