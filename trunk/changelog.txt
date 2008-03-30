@@ -2,6 +2,8 @@
 Changelog for Structure Synth:
 ------------------------------
 Remember to include QtXml4.dll in deploy!
+30 Mar 08 [MHC] Web site updates (build instruction for Vista and Mac Os X)
+[2h]           
 
 17 Mar 08 [MHC] Long development break (lots of work and a Japan visit)  
 [4h]            I've got a new laptop, so I updated to Windows Vista and Visual Studio Express 2008. This means the VS solution files will no longer work for VS 2005!
