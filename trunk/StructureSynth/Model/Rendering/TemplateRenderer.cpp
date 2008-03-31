@@ -192,7 +192,7 @@ namespace StructureSynth {
 				// TODO
 			}
 
-			void TemplateRenderer::callCommand(const QString& renderClass, const QString& command) {
+			void TemplateRenderer::callCommand(const QString& /*renderClass*/, const QString& /*command*/) {
 				INFO("callCommand");
 			}
 
