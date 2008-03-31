@@ -224,7 +224,6 @@ namespace StructureSynth {
 			} else {
 				throw (ParseError("Unknown transformation type: " + type, symbol.pos));
 			}
-			return Transformation();
 		}
 
 		Transformation EisenParser::transformationList() {

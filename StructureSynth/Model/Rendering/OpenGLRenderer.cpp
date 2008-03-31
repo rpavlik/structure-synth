@@ -70,7 +70,7 @@ namespace StructureSynth {
 				engine->setBackgroundColor(rgb.x(),rgb.y(),rgb.z());
 			}
 
-			void OpenGLRenderer::callCommand(const QString& renderClass, const QString& command) {
+			void OpenGLRenderer::callCommand(const QString& /*renderClass*/, const QString& /*command*/) {
 			}
 
 		}

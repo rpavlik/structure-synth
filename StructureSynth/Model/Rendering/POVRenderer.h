@@ -41,7 +41,7 @@ namespace StructureSynth {
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 			private:
-
+				void operator=(const POVRenderer&) {}; 
 				void writeline(QString text) const;
 				void write(QString text) const;
 
