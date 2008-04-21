@@ -178,6 +178,7 @@ namespace StructureSynth {
 		bool MainWindow::save()
 		{
 			int index = tabBar->currentIndex();
+			if (index == -1) { WARNING("No open tab"); return false; } 
 			TabInfo t = tabInfo[index];
 
 			if (t.hasBeenSavedOnce) {
@@ -190,6 +191,8 @@ namespace StructureSynth {
 		bool MainWindow::saveAs()
 		{
 			int index = tabBar->currentIndex();
+			if (index == -1) { WARNING("No open tab"); return false; } 
+			
 			TabInfo t = tabInfo[index];
 
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename);
@@ -585,6 +588,9 @@ namespace StructureSynth {
 
 		bool MainWindow::saveFile(const QString &fileName)
 		{
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return false; } 
+			
+
 			QFile file(fileName);
 			if (!file.open(QFile::WriteOnly | QFile::Text)) {
 				QMessageBox::warning(this, tr("Structure Synth"),
@@ -617,6 +623,9 @@ namespace StructureSynth {
 
 
 		void MainWindow::updateRandom() {
+
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			setSeed((getSeed()+1) % 32768);
 			INFO(QString("Auto-incremented random seed: %1").arg(getSeed()));
 
@@ -826,6 +835,8 @@ namespace StructureSynth {
 
 		void MainWindow::closeTab() {
 			int index = tabBar->currentIndex();
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			TabInfo t = tabInfo[tabBar->currentIndex()];
 			if (t.unsaved) {
 				int answer = QMessageBox::warning(this, QString("Unsaved changes"), "Close this tab without saving changes?", "OK", "Cancel");
