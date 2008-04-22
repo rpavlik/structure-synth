@@ -1,6 +1,7 @@
 #include "TemplateRenderer.h"
 #include "../../../SyntopiaCore/Math/Vector3.h"
 #include "../../../SyntopiaCore/Logging/Logging.h"
+#include "../../../SyntopiaCore/Exceptions/Exception.h"
 
 #include <QDomDocument>
 #include <QIODevice>
@@ -50,7 +51,6 @@ namespace StructureSynth {
 
 				QDomElement docElem = doc.documentElement();
 
-				QMap<QString , Template> templates;
 				QDomNode n = docElem.firstChild();
 				while(!n.isNull()) {
 					QDomElement e = n.toElement(); // try to convert the node to an element.
@@ -64,41 +64,21 @@ namespace StructureSynth {
 							continue;
 						}
 
-						QString name = e.attribute("name");
+
+						QString type = "";
+						if (e.hasAttribute("type")) {
+							type = "::" + e.attribute("type");
+						}
+
+
+						QString name = e.attribute("name") + type;
 						INFO(QString("%1 = %2").arg(name).arg(e.text()));
 						templates[name] = Template(e.text());
 					}
 					n = n.nextSibling();
 				}
 
-				boxTemplate = 0;
-				sphereTemplate = 0;
-				beginTemplate = 0;
-				endTemplate = 0;
-
-				if (!templates.contains("box")) {
-					WARNING("'box' template not found.");
-				} else {
-					boxTemplate = new Template(templates["box"]);
-				}
-
-				if (!templates.contains("sphere")) {
-					WARNING("'sphere' template not found.");
-				} else {
-					sphereTemplate = new Template(templates["sphere"]);
-				}
-
-				if (!templates.contains("begin")) {
-					WARNING("'begin' template not found.");
-				} else {
-					beginTemplate = new Template(templates["begin"]);
-				}
-
-				if (!templates.contains("end")) {
-					WARNING("'end' template not found.");
-				} else {
-					endTemplate = new Template(templates["end"]);
-				}
+				
 			}
 
 
@@ -110,13 +90,23 @@ namespace StructureSynth {
 			TemplateRenderer::~TemplateRenderer() {
 			}
 
+			void TemplateRenderer::assertTemplateExists(QString templateName) {
+				if (!templates.contains(templateName)) {
+						throw SyntopiaCore::Exceptions::Exception(
+							QString("Template error: the primitive '%1' is not defined.").arg(templateName));
+					
+				}
+					
+			} 
+
 			void TemplateRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3) 
 			{
+				assertTemplateExists("box"+alternateID);
 				static int counter = 0;
-				Template t(*boxTemplate); 
+				Template t(templates["box"+alternateID]); 
 				if (t.contains("{matrix}")) {
 					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
 					.arg(dir1.x()).arg(dir1.y()).arg(dir1.z())
@@ -160,7 +150,8 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
-				Template t(*sphereTemplate); 
+				assertTemplateExists("sphere"+alternateID);
+				Template t(templates["sphere"+alternateID]); 
 				t.substitute("{cx}", QString::number(center.x()));
 				t.substitute("{cy}", QString::number(center.y()));
 				t.substitute("{cz}", QString::number(center.z()));
@@ -179,12 +170,14 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::begin() {
-				Template t(*beginTemplate); 
+				assertTemplateExists("begin");
+				Template t(templates["begin"]); 
 				output.append(t.getText());
 			};
 
 			void TemplateRenderer::end() {
-				Template t(*endTemplate); 
+				assertTemplateExists("end");
+				Template t(templates["end"]); 
 				output.append(t.getText());
 			};
 
@@ -192,8 +185,11 @@ namespace StructureSynth {
 				// TODO
 			}
 
-			void TemplateRenderer::callCommand(const QString& /*renderClass*/, const QString& /*command*/) {
-				INFO("callCommand");
+			void TemplateRenderer::callCommand(const QString& renderClass, const QString& command) {
+				if (renderClass != this->renderClass()) return;
+				alternateID = "::" + command;
+				if (command == "default") alternateID = "";
+				
 			}
 
 
