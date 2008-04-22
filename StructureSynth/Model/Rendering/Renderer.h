@@ -17,6 +17,9 @@ namespace StructureSynth {
 				virtual void begin() {};
 				virtual void end() {};
 
+				/// This defines the identifier for our renderer.
+				virtual QString renderClass() { return ""; }
+
 				/// The primitives
 				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 

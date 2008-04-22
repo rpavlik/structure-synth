@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QMap>
 #include <QStringList>
 #include "Renderer.h"
 
@@ -20,6 +21,8 @@ namespace StructureSynth {
 				TemplateRenderer(QString xmlDefinitionFile);
 				
 				virtual ~TemplateRenderer();
+
+				virtual QString renderClass() { return "template"; }
 
 				/// The primitives
 				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
@@ -51,16 +54,16 @@ namespace StructureSynth {
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& renderClass, const QString& command);
 
+				void assertTemplateExists(QString templateName);
+			
+
 			private:
 				
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
-				Template* boxTemplate;
-				Template* sphereTemplate;
-				Template* beginTemplate;
-				Template* endTemplate;
-
+				QMap<QString, Template> templates;
 				QStringList output;
+				QString alternateID;
 			};
 
 		}

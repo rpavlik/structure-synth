@@ -1,19 +1,10 @@
 This file is my personal notes for Structure Synth.
 They are not secret, but they were not meant to be read by any other than myself. /MHC.
 
-Panic button -> reset view...
 On startup -> show 3D view nav info...
 Help -> add weblinks...
 
-- The PovRay support.
-  - Should be done using text-based (and user-customizable) template...
-
-- Tabs: 
-  - Does not check for modified files when closing project...
-
 - Restructure: 
-	-'const correctness'
-	-TODO's
 	-GUI files the proper place
 	-Check directory structure.
 	-Comments

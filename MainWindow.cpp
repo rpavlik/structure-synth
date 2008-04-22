@@ -356,7 +356,6 @@ namespace StructureSynth {
 			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 			screenshotAction = new QAction(tr("&Save as bitmap..."), this);
-			screenshotAction->setShortcut(tr("Ctrl+S"));
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
 
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
@@ -411,10 +410,12 @@ namespace StructureSynth {
 			renderAction->setStatusTip(tr("Render the current ruleset"));
 			connect(renderAction, SIGNAL(triggered()), this, SLOT(render()));
 
+			/*
 			povRenderAction = new QAction(QIcon(":/images/render.png"), tr("&Export as POV-Ray script"), this);
 			povRenderAction->setShortcut(tr("F6"));
 			povRenderAction->setStatusTip(tr("Export as POV-Ray script"));
 			connect(povRenderAction, SIGNAL(triggered()), this, SLOT(povRender()));
+			*/
 
 			panicAction = new QAction("Reset View", this);
 			panicAction->setStatusTip(tr("Resets the viewport"));
@@ -460,7 +461,7 @@ namespace StructureSynth {
 
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
-			renderMenu->addAction(povRenderAction);
+			//renderMenu->addAction(povRenderAction);
 
 			// Scan render templates...
 			QDir miscDir(getTemplateDir());
@@ -473,7 +474,7 @@ namespace StructureSynth {
 				renderMenu->addAction(a);
 			} else {
 				QStringList sl = miscDir.entryList();
-				QMenu* templateMenu = renderMenu->addMenu("Template Rendering");
+				QMenu* templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to Clipboard");
 				for (int i = 0; i < sl.size(); i++) {
 					QAction* a = new QAction(sl[i], this);
 					a->setData(sl[i]);
@@ -868,8 +869,7 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::makeScreenshot() {
-			INFO("Screenshotaction");
-
+			
 			QList<QByteArray> a = QImageWriter::supportedImageFormats();
 			QStringList allowedTypesFilter;
 			QStringList allowedTypes;
@@ -919,12 +919,12 @@ namespace StructureSynth {
 			if (action) {
 				QDir d(getTemplateDir());
 				QString fileName = d.absoluteFilePath(action->data().toString());
-				INFO("Starting templateRenderer: " + fileName);
+				INFO("Starting Template Renderer: " + fileName);
 				
 				srand(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
-					QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
+					QString text = "// Structure Synth Export. \r\n\r\n";
 					TemplateRenderer rendering(fileName);
 					rendering.begin(); // we clear before parsing...
 
