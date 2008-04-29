@@ -2,6 +2,7 @@ Bug List:
 ---------
 Priority 0-5, 5 is worst:
 
+- [3] Parser does not show syntax errors at the correct location.
 - [3] Parser do not allow operator names as rule names. 'rule R1 maxdepth 2 > c ' fails.
 - [3] No sorting while alpha-blending. All opaque objects should be drawn before transparent. Turn off Z-buffer while drawing.
 - [3] Face Culling does not work for boxes, when coordinates are flipped.
