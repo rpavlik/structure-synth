@@ -3,8 +3,10 @@ Changelog for Structure Synth:
 ------------------------------
 Remember to include QtXml4.dll in deploy!
 
-22 Apr 08 [MHC] Bug Fix: CTRL+S works again
-[0.5h]			Templates: Added support for different types of substitutions, usings the 'type' attribute.
+22 Apr 08 [MHC] Bug Fix: CTRL+S works again.
+[1.5h]			Templates: Added support for different types of substitutions, usings the 'type' attribute.
+                Removed the 'Export to PovRay' menu item (now all export must take place using templates).
+                Renamed template rendering menu item.
 
 21 Apr 08 [MHC] Bug Fix: no longer crashes on certain operations when no textedit areas are present
 [0.5h]

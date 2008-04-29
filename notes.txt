@@ -1,5 +1,7 @@
-This file is my personal notes for Structure Synth.
-They are not secret, but they were not meant to be read by any other than myself. /MHC.
+This file is my personal TODO list and scratch pad for Structure Synth. /Mikael
+
+Check copy paste menu
+Examples should be allowed to have sub-dirs as well...
 
 On startup -> show 3D view nav info...
 Help -> add weblinks...

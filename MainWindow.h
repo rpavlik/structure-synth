@@ -60,7 +60,7 @@ namespace StructureSynth {
 			void about();
 			void documentWasModified();
 			void render();
-			void povRender();
+			//void povRender();
 			void resetView();
 			void toggleFullScreen();
 			
@@ -110,7 +110,7 @@ namespace StructureSynth {
 			QAction *aboutAction;
 
 			QAction *renderAction;
-			QAction *povRenderAction;
+			//QAction *povRenderAction;
 			QAction *panicAction;
 			SyntopiaCore::GLEngine::EngineWidget* engine;
 			QTabBar* tabBar;

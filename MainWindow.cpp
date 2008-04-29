@@ -699,6 +699,7 @@ namespace StructureSynth {
 		}
 
 		// TODO: To much code reuse here...
+		/*
 		void MainWindow::povRender() {
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
@@ -740,7 +741,7 @@ namespace StructureSynth {
 				WARNING(er.getMessage());
 			} 
 		}
-
+*/
 
 		QString MainWindow::getExamplesDir() {
 			return "Examples";
