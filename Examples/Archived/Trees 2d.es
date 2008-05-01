@@ -1,3 +1,6 @@
+// This one is a direct translation of one of Chris Coynes CFDG examples:
+// http://www.chriscoyne.com/cfdg/page2.php
+
 set maxdepth 150
 
 FOREST
