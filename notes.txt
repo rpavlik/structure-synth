@@ -1,6 +1,8 @@
 This file is my personal TODO list and scratch pad for Structure Synth. /Mikael
 
 Check copy paste menu
+'Template Render to File...'
+
 Examples should be allowed to have sub-dirs as well...
 
 On startup -> show 3D view nav info...
@@ -15,6 +17,7 @@ Help -> add weblinks...
     - add section links.
     - tutorials: 'EisenScript Kata'
 
+- [Collada] Support? (http://www.khronos.org/collada/)
 
 
 

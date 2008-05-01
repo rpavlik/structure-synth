@@ -38,14 +38,15 @@ Version 0.7: 'Nostromo'
 
 Version 0.8: 'Memories of tomorrow'
 -----------------------------------
+Main Focus: Template rendering
++ GUI Seed
+- Add Template Renderer (user customizable text templats)
+ 
+Version 0.9: ''
+---------------
 Main Focus: reproducibility -> control of random seed, save view as eisenscript code.
-- GUI Seed
 - Set initial viewport (create expression by right clicking mouse canvas)
 ? 'Zoom to fit'
-- Add Template Renderer (user customizable text templats)
- ! [PovRay] Renderer
- - SunFlow?
- - [Collada] Support? (http://www.khronos.org/collada/)
 
 
 Version 1.0: 'Kolberger Heide.'
