@@ -239,7 +239,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 7, 0, -1, " Alpha (\"Nostromo\")");
+			version = SyntopiaCore::Misc::Version(0, 8, 0, -1, " Alpha (\"Memories of Tomorrow\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
@@ -479,6 +479,14 @@ namespace StructureSynth {
 			} else {
 				QStringList sl = miscDir.entryList();
 				QMenu* templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to Clipboard");
+				for (int i = 0; i < sl.size(); i++) {
+					QAction* a = new QAction(sl[i], this);
+					a->setData(sl[i]);
+					connect(a, SIGNAL(triggered()), this, SLOT(templateRender()));
+					templateMenu->addAction(a);
+				}
+
+				templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to File...");
 				for (int i = 0; i < sl.size(); i++) {
 					QAction* a = new QAction(sl[i], this);
 					a->setData(sl[i]);
