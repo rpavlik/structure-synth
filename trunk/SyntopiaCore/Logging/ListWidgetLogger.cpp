@@ -1,8 +1,6 @@
 #include "ListWidgetLogger.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
+
 
 namespace SyntopiaCore {
 	namespace Logging {
@@ -32,9 +30,6 @@ namespace SyntopiaCore {
 			}
 			listWidget->scrollToItem(i); 
 
-#ifdef WIN32
-			OutputDebugString((LPCWSTR) (message+"\r\n").utf16());
-#endif
 		}
 
 	}
