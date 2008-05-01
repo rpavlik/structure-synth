@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QImageWriter>
 #include <QTextBlockUserData>
+#include <QStack>
 
 #include "MainWindow.h"
 #include "SyntopiaCore/Logging/ListWidgetLogger.h"
@@ -158,10 +159,10 @@ namespace StructureSynth {
 
 		void MainWindow::open()
 		{
-			QString fileName = QFileDialog::getOpenFileName(this);
+			QString filter = "EisenScript (*.es);;All Files (*.*)";
+			QString fileName = QFileDialog::getOpenFileName(this, QString(), QString(), filter);
 			if (!fileName.isEmpty()) {
 				loadFile(fileName);
-				// TODO: Clear 3D GUI...
 			}
 		}
 
@@ -195,7 +196,9 @@ namespace StructureSynth {
 			
 			TabInfo t = tabInfo[index];
 
-			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename);
+			QString filter = "EisenScript (*.es); All Files (*.*)";
+			
+			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename, filter);
 			if (fileName.isEmpty())
 				return false;
 
@@ -218,6 +221,7 @@ namespace StructureSynth {
 
 			QMessageBox mb(this);
 			mb.setText(text);
+			mb.setMinimumWidth(800);
 			mb.setWindowTitle("About Structure Synth");
 			mb.setIconPixmap(getMiscDir() + QDir::separator() + "icon.jpg");
 			mb.exec();
@@ -373,16 +377,16 @@ namespace StructureSynth {
 			saveAction->setStatusTip(tr("Save the script to disk"));
 			connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-			saveAsAction = new QAction(tr("Save &As..."), this);
+			saveAsAction = new QAction(QIcon(":/images/filesaveas.png"), tr("Save &As..."), this);
 			saveAsAction->setStatusTip(tr("Save the script under a new name"));
 			connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 
-			closeAction = new QAction(tr("&Close Tab"), this);
+			closeAction = new QAction(QIcon(":/images/fileclose.png"), tr("&Close Tab"), this);
 			closeAction->setShortcut(tr("Ctrl+W"));
 			closeAction->setStatusTip(tr("Close this tab"));
 			connect(closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
 
-			exitAction = new QAction(tr("E&xit Application"), this);
+			exitAction = new QAction(QIcon(":/images/exit.png"), tr("E&xit Application"), this);
 			exitAction->setShortcut(tr("Ctrl+Q"));
 			exitAction->setStatusTip(tr("Exit the application"));
 			connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -422,19 +426,19 @@ namespace StructureSynth {
 			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
 
 
-			aboutAction = new QAction(tr("&About"), this);
+			aboutAction = new QAction(QIcon(":/images/documentinfo.png"), tr("&About"), this);
 			aboutAction->setStatusTip(tr("Show the About box"));
 			connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-			sfHomeAction = new QAction(tr("&Project Homepage (web link)"), this);
+			sfHomeAction = new QAction(QIcon(":/images/agt_internet.png"), tr("&Project Homepage (web link)"), this);
 			sfHomeAction->setStatusTip(tr("Open the SourceForge project page in a browser."));
 			connect(sfHomeAction, SIGNAL(triggered()), this, SLOT(launchSfHome()));
 
-			referenceAction = new QAction(tr("&Structure Synth Reference (web link)"), this);
+			referenceAction = new QAction(QIcon(":/images/agt_internet.png"), tr("&Structure Synth Reference (web link)"), this);
 			referenceAction->setStatusTip(tr("Open a Structure Synth reference web page in a browser."));
 			connect(referenceAction, SIGNAL(triggered()), this, SLOT(launchReferenceHome()));
 
-			galleryAction = new QAction(tr("&Flickr Structure Synth Group (web link)"), this);
+			galleryAction = new QAction(QIcon(":/images/agt_internet.png"), tr("&Flickr Structure Synth Group (web link)"), this);
 			galleryAction->setStatusTip(tr("Opens the main Flickr group for Structure Synth creations."));
 			connect(galleryAction, SIGNAL(triggered()), this, SLOT(launchGallery()));
 
@@ -502,13 +506,46 @@ namespace StructureSynth {
 				a->setEnabled(false);
 				examplesMenu->addAction(a);
 			} else {
-				QStringList sl = d.entryList();
-				for (int i = 0; i < sl.size(); i++) {
-					QAction* a = new QAction(sl[i], this);
-					a->setData(sl[i]);
-					connect(a, SIGNAL(triggered()), this, SLOT(openFile()));
-					examplesMenu->addAction(a);
+				// we will recurse the dirs...
+				QStack<QString> pathStack;
+				pathStack.append(QDir(getExamplesDir()).absolutePath());
+
+				QMap< QString , QMenu* > menuMap;
+				while (!pathStack.isEmpty()) {
+					
+					QMenu* currentMenu = examplesMenu;
+					QString path = pathStack.pop();
+					if (menuMap.contains(path)) currentMenu = menuMap[path];
+					QDir dir(path);
+
+					QStringList sl = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+					for (int i = 0; i < sl.size(); i++) {
+						QMenu* menu = new QMenu(sl[i]);
+						QString absPath = QDir(path + QDir::separator() +  sl[i]).absolutePath();
+						menuMap[absPath] = menu;
+						currentMenu->addMenu(menu);
+						menu->setIcon(QIcon(":/images/folder.png"));
+						pathStack.push(absPath);
+					}
+
+					dir.setNameFilters(filters);
+
+					sl = dir.entryList();
+					for (int i = 0; i < sl.size(); i++) {
+						INFO(QString("Found item:")+ sl[i]);
+						QAction* a = new QAction(sl[i], this);
+						a->setIcon(QIcon(":/images/mail_new.png"));
+						
+
+						QString absPath = QDir(path ).absoluteFilePath(sl[i]);
+						
+						a->setData(absPath);
+						connect(a, SIGNAL(triggered()), this, SLOT(openFile()));
+						currentMenu->addAction(a);
+					}
 				}
+
+				
 			}
 
 			helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -574,9 +611,7 @@ namespace StructureSynth {
 		{
 			QAction *action = qobject_cast<QAction *>(sender());
 			if (action) {
-				QDir d(getExamplesDir());
-				loadFile(d.absoluteFilePath(action->data().toString()));
-
+				loadFile(action->data().toString());
 			} else {
 				WARNING("No data!");
 			}

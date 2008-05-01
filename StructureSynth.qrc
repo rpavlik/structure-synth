@@ -6,6 +6,13 @@
     <file>images/open.png</file>
     <file>images/paste.png</file>
     <file>images/save.png</file>
+  <file>images/filesaveas.png</file>
+  <file>images/folder.png</file>
+  <file>images/mail_new.png</file>
 	<file>images/render.png</file>
+  <file>images/agt_internet.png</file>
+  <file>images/exit.png</file>
+  <file>images/fileclose.png</file>
+  <file>images/documentinfo.png</file>
 </qresource>
 </RCC>
