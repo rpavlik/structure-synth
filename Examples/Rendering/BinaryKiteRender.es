@@ -8,8 +8,7 @@ Try rendering it using the sunflowcolored render template.
 set maxobjects 8000
 10 * { y 1 } 10 * { z 1 }  1 * { a 0.8  sat 0.9 ry -3 rx -3  rz -3 } r1 
 set background #aaa
-set template white
-{ z -5 s 1000 1000 0.1 } box 
+{ z -5 s 1000 1000 0.1 } box::white
 
 rule r1   {
   { x 1  ry 4 } r1
@@ -39,11 +38,9 @@ xbox
 }
 
 rule xbox {
-  set template white
-  { b 0.7  color #000   a 0.9  }  box
+  { b 0.7  color #000   a 0.9  }  box::white
 }
 
 rule xbox {
-  set template black
- { b 0.7  color #ddd  a 0.9    } box
+ { b 0.7  color #ddd  a 0.9    } box::black
 }

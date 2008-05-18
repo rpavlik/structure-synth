@@ -24,19 +24,24 @@ namespace StructureSynth {
 				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 
 								SyntopiaCore::Math::Vector3f dir2, 
-								SyntopiaCore::Math::Vector3f dir3) = 0;
+								SyntopiaCore::Math::Vector3f dir3,
+								const QString& classID) = 0;
 
 				virtual void drawGrid(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 
 								SyntopiaCore::Math::Vector3f dir2, 
-								SyntopiaCore::Math::Vector3f dir3) = 0;
+								SyntopiaCore::Math::Vector3f dir3,
+								const QString& classID) = 0;
 
 				virtual void drawLine(SyntopiaCore::Math::Vector3f from, 
-										SyntopiaCore::Math::Vector3f to) = 0;
+										SyntopiaCore::Math::Vector3f to,
+								const QString& classID) = 0;
 
-				virtual void drawDot(SyntopiaCore::Math::Vector3f pos) = 0;
+				virtual void drawDot(SyntopiaCore::Math::Vector3f pos,
+								const QString& classID) = 0;
 				
-				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius) = 0;
+				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius,
+								const QString& classID) = 0;
 
 				// Color
 				// RGB in [0;1] intervals.

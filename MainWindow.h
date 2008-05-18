@@ -44,6 +44,7 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void seedChanged();
 			void tabChanged(int index);
 			void makeScreenshot();
 			void closeTab();
@@ -51,6 +52,8 @@ namespace StructureSynth {
 			void launchGallery();
 			void launchReferenceHome();
 			void templateRender();
+			void templateRenderToFile();
+			void templateRender(const QString& fileName);
 			
 			void openFile();
 			void newFile();
@@ -85,6 +88,8 @@ namespace StructureSynth {
 			void createOpenGLContextMenu();
 
 			QSpinBox* seedSpinBox;
+			QCheckBox* autoIncrementCheckbox;
+
 			QDockWidget* dockLog;
 			QAction *fullScreenAction;
 			QAction *screenshotAction;
@@ -98,6 +103,7 @@ namespace StructureSynth {
 			QToolBar *fileToolBar;
 			QToolBar *renderToolBar;
 			QToolBar *editToolBar;
+			QToolBar *randomToolBar;
 			QAction *newAction;
 			QAction *openAction;
 			QAction *saveAction;

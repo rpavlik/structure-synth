@@ -4,6 +4,19 @@ Changelog for Structure Synth:
 * Remember to include QtXml4.dll in deploy!
 * 'Template Render to File'
 
+15 May 08 [MHC] Completed the Template Rendering code.
+[2½h]           Corrected a small bug in the syntax-highlightning
+                Implemented Template Render to File:
+                -> Notice: a small bug: it saves files with \d\d\a carriage returns (instead of \d\a). Don't know why yet
+                Added 'Auto Increment' check box, for whether the seed should auto increment (makes this a bit more logic to use)
+				Added support for different Template classes:
+                -> Now it possible to specify a class signifier for a primitive object:
+                -> For instance 'box::metal'.
+                -> The OpenGL will just ignore this, but the Template Renderers
+                -> will try to find a substitution of the type:
+                -> <substitution name="box" type="metal">
+
+
 05 May 08 [MHC] Created initial DoxyGen setup.
 [1½h]
 

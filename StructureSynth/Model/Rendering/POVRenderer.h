@@ -20,19 +20,24 @@ namespace StructureSynth {
 				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
 					          SyntopiaCore::Math::Vector3f dir1 , 
 							  SyntopiaCore::Math::Vector3f dir2, 
-							  SyntopiaCore::Math::Vector3f dir3);
+							  SyntopiaCore::Math::Vector3f dir3,
+								const QString& classID);
 
-				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius);
+				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius,
+								const QString& classID);
 
 				virtual void drawGrid(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 
 								SyntopiaCore::Math::Vector3f dir2, 
-								SyntopiaCore::Math::Vector3f dir3);
+								SyntopiaCore::Math::Vector3f dir3,
+								const QString& classID);
 
 				virtual void drawLine(SyntopiaCore::Math::Vector3f from, 
-										SyntopiaCore::Math::Vector3f to);
+										SyntopiaCore::Math::Vector3f to,
+								const QString& classID);
 
-				virtual void drawDot(SyntopiaCore::Math::Vector3f pos);
+				virtual void drawDot(SyntopiaCore::Math::Vector3f pos,
+								const QString& classID);
 
 				virtual void begin();
 				virtual void end();

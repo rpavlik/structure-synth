@@ -99,7 +99,33 @@ namespace StructureSynth {
 				for (int j = 0; j < refs.size(); j++) {
 					QString name = refs[j]->getReference();
 					if (!map.contains(name)) {
-						throw Exception(QString("Unable to resolve rule: %1").arg(name));
+						// We could not resolve the name.
+						// Check if it has a class specifier.
+						QStringList sl = name.split("::");
+						if (sl.size() == 2) {
+							QString baseName = sl[0];
+							QString classID = sl[1];
+
+							if (!map.contains(baseName)) {
+								throw Exception(QString("Unable to resolve base rule name: %1 for rule %2").arg(baseName).arg(name));
+							}
+					
+							// Now we have to create a new instance of this rule.
+							Rule* r = map[baseName];
+
+							if (typeid(*r) != typeid(PrimitiveRule)) {
+								throw Exception(QString("Only primitive rules (box, sphere, ...) may have a class specifier: %1 is invalid").arg(name));
+							}
+
+							PrimitiveRule* pr = (PrimitiveRule*)r;
+							PrimitiveRule* newRule = new PrimitiveRule(*pr);
+							newRule->setClass(classID);
+							map[name] = newRule;
+							
+							INFO("Created new class for rule: " + name);
+						} else {
+							throw Exception(QString("Unable to resolve rule: %1").arg(name));
+						}
 					}
 					refs[j]->setRef(map[name]);
 				}

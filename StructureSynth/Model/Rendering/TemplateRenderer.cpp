@@ -102,8 +102,10 @@ namespace StructureSynth {
 			void TemplateRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3) 
+				SyntopiaCore::Math::Vector3f dir3,
+				const QString& classID) 
 			{
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
 				assertTemplateExists("box"+alternateID);
 				static int counter = 0;
 				Template t(templates["box"+alternateID]); 
@@ -137,19 +139,51 @@ namespace StructureSynth {
 			void TemplateRenderer::drawGrid(SyntopiaCore::Math::Vector3f /*base*/, 
 				SyntopiaCore::Math::Vector3f /*dir1*/ , 
 				SyntopiaCore::Math::Vector3f /*dir2*/, 
-				SyntopiaCore::Math::Vector3f /*dir3*/) {
+				SyntopiaCore::Math::Vector3f /*dir3*/,
+								const QString& classID) {
 					// TODO
 			};
 
-			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /* to*/) {
-				// TODO
+			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,const QString& classID) {
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				assertTemplateExists("line"+alternateID);
+				Template t(templates["line"+alternateID]); 
+				t.substitute("{x1}", QString::number(from.x()));
+				t.substitute("{y1}", QString::number(from.y()));
+				t.substitute("{z1}", QString::number(from.z()));
+				
+				t.substitute("{x2}", QString::number(to.x()));
+				t.substitute("{y2}", QString::number(to.y()));
+				t.substitute("{z2}", QString::number(to.z()));
+
+				t.substitute("{alpha}", QString::number(alpha));
+				t.substitute("{oneminusalpha}", QString::number(1-alpha));
+				
+
+				output.append(t.getText());
 			};
 
-			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f /*v*/) {
-				// TODO	
+			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f v,const QString& classID) {
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				assertTemplateExists("dot"+alternateID);
+				Template t(templates["dot"+alternateID]); 
+				t.substitute("{x}", QString::number(v.x()));
+				t.substitute("{y}", QString::number(v.y()));
+				t.substitute("{z}", QString::number(v.z()));
+				
+				t.substitute("{r}", QString::number(rgb.x()));
+				t.substitute("{g}", QString::number(rgb.y()));
+				t.substitute("{b}", QString::number(rgb.z()));
+
+				t.substitute("{alpha}", QString::number(alpha));
+				t.substitute("{oneminusalpha}", QString::number(1-alpha));
+				
+
+				output.append(t.getText());
 			};
 
-			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
+			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,const QString& classID) {
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
 				assertTemplateExists("sphere"+alternateID);
 				Template t(templates["sphere"+alternateID]); 
 				t.substitute("{cx}", QString::number(center.x()));
@@ -187,8 +221,6 @@ namespace StructureSynth {
 
 			void TemplateRenderer::callCommand(const QString& renderClass, const QString& command) {
 				if (renderClass != this->renderClass()) return;
-				alternateID = "::" + command;
-				if (command == "default") alternateID = "";
 				
 			}
 
