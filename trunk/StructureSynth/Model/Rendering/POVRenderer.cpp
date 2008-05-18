@@ -22,7 +22,7 @@ namespace StructureSynth {
 			void POVRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3) 
+				SyntopiaCore::Math::Vector3f dir3,  const QString &) 
 			{
 				writeline("object {   ");                               
 				writeline("  box { <0,  0.0, 0>, <1,  1,  1> }");
@@ -41,19 +41,19 @@ namespace StructureSynth {
 			void POVRenderer::drawGrid(SyntopiaCore::Math::Vector3f /*base*/, 
 				SyntopiaCore::Math::Vector3f /*dir1*/ , 
 				SyntopiaCore::Math::Vector3f /*dir2*/, 
-				SyntopiaCore::Math::Vector3f /*dir3*/) {
+				SyntopiaCore::Math::Vector3f /*dir3*/,  const QString &) {
 					// TODO
 			};
 
-			void POVRenderer::drawLine(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /* to*/) {
+			void POVRenderer::drawLine(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /* to*/,  const QString &) {
 				// TODO
 			};
 
-			void POVRenderer::drawDot(SyntopiaCore::Math::Vector3f /*v*/) {
+			void POVRenderer::drawDot(SyntopiaCore::Math::Vector3f /*v*/,  const QString &) {
 				// TODO	
 			};
 
-			void POVRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
+			void POVRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,  const QString &) {
 				writeline("object {   ");                               
 				writeline(QString("  sphere { <%1, %2, %3>, %4 }")
 					.arg(center.x()).arg(center.y()).arg(center.z()).arg(radius));

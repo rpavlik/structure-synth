@@ -18,8 +18,16 @@ namespace StructureSynth {
 				/// (Empty for all PrimitiveRules!)
 				virtual QList<RuleRef*> getRuleRefs() const { return QList<RuleRef*>(); }
 
+				/// 'class' is an identifier used for distinguishing between
+				/// different forms of the the same PrimiteType.
+				/// This is used together with Template Renderers.
+				///
+				/// For instance 'box::metal' will be parsed in to a 'box' primitive with a 'metal' class identifier.
+				void setClass(QString classID) { this->classID = classID; }
+				QString getClass() { return classID; }
 			private:
 				PrimitiveType type;
+				QString classID;
 		};
 
 	}

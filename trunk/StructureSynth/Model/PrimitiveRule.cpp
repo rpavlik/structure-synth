@@ -50,7 +50,7 @@ namespace StructureSynth {
 				Vector3f c2 = (b->getState().matrix * Vector3f(0.5,0.5,0.0));
 				double r =  (c-  c2).length();
 
-				b->getRenderer()->drawSphere(c,r);
+				b->getRenderer()->drawSphere(c,r,classID);
 			} else if (type == Box) {
 				Vector3f v(0,0,0);
 
@@ -59,7 +59,7 @@ namespace StructureSynth {
 				Vector3f v3 = b->getState().matrix * Vector3f(0,1,0);
 				Vector3f v4 = b->getState().matrix * Vector3f(0,0,1);
 
-				b->getRenderer()->drawBox(v1,v2-v1,v3-v1,v4-v1);
+				b->getRenderer()->drawBox(v1,v2-v1,v3-v1,v4-v1,classID);
 				
 			} else if (type == Grid) {
 				Vector3f v(0,0,0);
@@ -69,16 +69,16 @@ namespace StructureSynth {
 				Vector3f v3 = b->getState().matrix * Vector3f(0,1,0);
 				Vector3f v4 = b->getState().matrix * Vector3f(0,0,1);
 
-				b->getRenderer()->drawGrid(v1,v2-v1,v3-v1,v4-v1);
+				b->getRenderer()->drawGrid(v1,v2-v1,v3-v1,v4-v1,classID);
 			} else if (type == Dot) {
 				Vector3f v = b->getState().matrix * Vector3f(0.5,0.5,0.5);
 				
-				b->getRenderer()->drawDot(v);
+				b->getRenderer()->drawDot(v,classID);
 			} else if (type == Line) {
 				Vector3f v = b->getState().matrix * Vector3f(0,0.5,0.5);
 				Vector3f v2 = b->getState().matrix * Vector3f(1,0.5,0.5);
 				
-				b->getRenderer()->drawLine(v,v2);
+				b->getRenderer()->drawLine(v,v2,classID);
 			}
 
 		};

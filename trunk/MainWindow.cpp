@@ -46,7 +46,7 @@ namespace StructureSynth {
 			void highlightBlock(const QString &text)
 			{
 				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
-				static QRegExp primitives("(sphere|box|dot|line|grid)");
+				static QRegExp primitives("(sphere(::\\w+)?|box(::\\w+)?|dot(::\\w+)?|line(::\\w+)?|grid(::\\w+)?)");
 
 				if (currentBlockState() == 2) {
 					setFormat(0, text.length(), warningFormat);
@@ -95,10 +95,13 @@ namespace StructureSynth {
 						break;
 					}
 
-					if (text.at(i) == '{' || text.at(i) == '}' || text.at(i) == ' ' || (i==text.length()-1) || (text.at(i) == '\r') || (text.at(i) == '\n')) {
-						if (i==text.length()-1) current += text.at(i);
-						if (expression.exactMatch(current)) setFormat(startMatch, i-startMatch, keywordFormat);
-						if (primitives.exactMatch(current)) setFormat(startMatch, i-startMatch, primitiveFormat);
+					bool delimiter = (text.at(i) == '{' || text.at(i) == '}' || text.at(i) == ' '  || (text.at(i) == '\r') || (text.at(i) == '\n'));
+					bool lastChar = (i==text.length()-1);
+					if (delimiter || lastChar) {
+						if (lastChar && !delimiter) current += text.at(i);
+						int adder = (i==text.length()-1 ? 1 : 0);
+						if (expression.exactMatch(current)) setFormat(startMatch, i-startMatch+adder, keywordFormat);
+						if (primitives.exactMatch(current)) setFormat(startMatch, i-startMatch+adder, primitiveFormat);
 						if (text.at(i) == '{' || text.at(i) == '}') setFormat(i, 1, bracketFormat);
 						startMatch = i;
 						current = "";
@@ -490,7 +493,7 @@ namespace StructureSynth {
 				for (int i = 0; i < sl.size(); i++) {
 					QAction* a = new QAction(sl[i], this);
 					a->setData(sl[i]);
-					connect(a, SIGNAL(triggered()), this, SLOT(templateRender()));
+					connect(a, SIGNAL(triggered()), this, SLOT(templateRenderToFile()));
 					templateMenu->addAction(a);
 				}
 			}
@@ -577,20 +580,32 @@ namespace StructureSynth {
 			editToolBar->addAction(copyAction);
 			editToolBar->addAction(pasteAction);
 
-			renderToolBar = addToolBar(tr("Render"));
+			randomToolBar = addToolBar(tr("Random"));
 
 			QLabel* randomSeed = new QLabel("Seed:"); 
-			renderToolBar->addWidget(randomSeed);
+			randomToolBar->addWidget(randomSeed);
 			seedSpinBox = new QSpinBox();
 			seedSpinBox->setRange(1,32768);
 			seedSpinBox->setValue(1);
-			renderToolBar->addWidget(seedSpinBox);
+			randomToolBar->addWidget(seedSpinBox);
+			autoIncrementCheckbox = new QCheckBox("Auto Increment", randomToolBar);
+			randomToolBar->addWidget(autoIncrementCheckbox);
+			autoIncrementCheckbox->setChecked(true);
 
+			
+
+			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
 
 
 
+			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
+		}
+
+
+		void MainWindow::seedChanged() {
+			autoIncrementCheckbox->setChecked(false);
 		}
 
 		void MainWindow::createStatusBar()
@@ -670,7 +685,9 @@ namespace StructureSynth {
 
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 			
+			seedSpinBox->blockSignals(true);
 			setSeed((getSeed()+1) % 32768);
+			seedSpinBox->blockSignals(false);
 			INFO(QString("Auto-incremented random seed: %1").arg(getSeed()));
 
 			// Should we try something like below?
@@ -684,10 +701,12 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::render() {
+			if (autoIncrementCheckbox->isChecked()) updateRandom();
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
 
 			try {
+				
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
 
@@ -711,9 +730,7 @@ namespace StructureSynth {
 				if (b.seedChanged()) {
 					setSeed(b.getNewSeed());
 					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
-				} else {
-					updateRandom();
-				}
+				} 
 
 				if (oldDirtyPosition > 0) {
 					getTextEdit()->document()->markContentsDirty(oldDirtyPosition,1);
@@ -740,51 +757,6 @@ namespace StructureSynth {
 			} 
 
 		}
-
-		// TODO: To much code reuse here...
-		/*
-		void MainWindow::povRender() {
-			srand(getSeed());
-			INFO(QString("Random seed: %1").arg(getSeed()));
-
-			try {
-				QString text = "// Structure Synth Pov Ray Export. \r\n\r\n";
-				Rendering::POVRenderer rendering(text);
-				rendering.begin(); // we clear before parsing...
-
-				Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
-				EisenParser e(&tokenizer);
-				INFO("Parsing...");
-				RuleSet* rs = e.parseRuleset();
-
-				INFO("Resolving named references...");
-				rs->resolveNames();
-
-				rs->dumpInfo();
-
-				INFO("Building....");
-				Builder b(&rendering, rs);
-				b.build();
-				rendering.end();
-
-				INFO("Done...");
-				INFO("POV-Ray script is now copied to the clipboard");
-
-				if (b.seedChanged()) {
-					setSeed(b.getNewSeed());
-					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
-				} else {
-					updateRandom();
-				}
-
-				QClipboard *clipboard = QApplication::clipboard();
-				clipboard->setText(text); 
-
-			} catch (Exception& er) {
-				WARNING(er.getMessage());
-			} 
-		}
-*/
 
 		QString MainWindow::getExamplesDir() {
 			return "Examples";
@@ -957,19 +929,51 @@ namespace StructureSynth {
 			return seedSpinBox->value();
 		};
 
+		void MainWindow::templateRenderToFile()
+		{
+			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), "output.txt");
+			if (fileName.isEmpty()) {
+				INFO("User cancelled.");
+				return;
+			}
+
+			if (QFile::exists(fileName)) {
+				int choice = QMessageBox::warning(this, tr("File Exists"),
+								tr("File already exists.\r\nOverwrite:%1.")
+								.arg(QFileInfo(fileName).absoluteFilePath())
+								, "OK", "Cancel");
+
+				if (choice == 0) {
+					INFO("Overwriting: " + QFileInfo(fileName).absoluteFilePath());
+					templateRender(fileName);
+				} else {
+					INFO("User cancelled.");
+					return;
+				}		
+			} else {
+				templateRender(fileName);
+			}
+			
+		}
+
 		void MainWindow::templateRender()
+		{
+			templateRender(""); // Renders to clip board when file name is empty.
+		}
+
+		void MainWindow::templateRender(const QString& fileName)
 		{
 			QAction *action = qobject_cast<QAction *>(sender());
 			if (action) {
 				QDir d(getTemplateDir());
-				QString fileName = d.absoluteFilePath(action->data().toString());
+				QString templateFileName = d.absoluteFilePath(action->data().toString());
 				INFO("Starting Template Renderer: " + fileName);
 				
 				srand(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";
-					TemplateRenderer rendering(fileName);
+					TemplateRenderer rendering(templateFileName);
 					rendering.begin(); // we clear before parsing...
 
 					Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
@@ -990,12 +994,28 @@ namespace StructureSynth {
 					if (b.seedChanged()) {
 						setSeed(b.getNewSeed());
 						INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
-					} else {
-						updateRandom();
-					}
+					} 
 
-					QClipboard *clipboard = QApplication::clipboard();
-					clipboard->setText(rendering.getOutput()); 
+					if (fileName.isEmpty()){
+						QClipboard *clipboard = QApplication::clipboard();
+						clipboard->setText(rendering.getOutput()); 
+					} else {
+						QFile file(fileName);
+						INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
+						if (!file.open(QFile::WriteOnly | QFile::Text)) {
+							QMessageBox::warning(this, tr("Structure Synth"),
+								tr("Cannot write file %1:\n%2.")
+								.arg(fileName)
+								.arg(file.errorString()));
+							return;
+						}
+
+						QTextStream out(&file);
+						QApplication::setOverrideCursor(Qt::WaitCursor);
+						out << rendering.getOutput();
+						QApplication::restoreOverrideCursor();
+						INFO("File saved.");
+					}
 
 					INFO("Done...");
 					INFO("Script is now copied to the clipboard");

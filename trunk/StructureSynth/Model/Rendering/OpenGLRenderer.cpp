@@ -20,7 +20,7 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3) {
+				SyntopiaCore::Math::Vector3f dir3, const QString &) {
 					Object3D* o =new Box( base, dir1, dir2, dir3);
 					o->setColor(rgb, alpha);
 				
@@ -30,25 +30,25 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3) {
+				SyntopiaCore::Math::Vector3f dir3, const QString &) {
 					Object3D* o = new Grid( base, dir1, dir2, dir3);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);
 			};
 
-			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to) {
+			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to, const QString &) {
 					Object3D* o = new Line( from, to);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);
 			};
 
-			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v) {
+			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v, const QString &) {
 					Object3D* o = new Dot(v);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);	
 			};
 
-			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius) {
+			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius, const QString &) {
 				Object3D* o = new Sphere( center, radius);
 				o->setColor(rgb, alpha);
 				engine->addObject(o);
