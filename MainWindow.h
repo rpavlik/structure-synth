@@ -39,6 +39,10 @@ namespace StructureSynth {
 			void setSeed(int randomSeed);
 			int getSeed();
 
+			static QString getExamplesDir();
+			static QString getMiscDir();
+			static QString getTemplateDir();
+			
 		protected:
 			void closeEvent(QCloseEvent* ev);
 			void keyReleaseEvent(QKeyEvent* ev);
@@ -71,9 +75,6 @@ namespace StructureSynth {
 		private:
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
-			QString getExamplesDir();
-			QString getMiscDir();
-			QString getTemplateDir();
 			void init();
 			void createActions();
 			void createMenus();

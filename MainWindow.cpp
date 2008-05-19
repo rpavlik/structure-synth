@@ -239,6 +239,7 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
+			
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
@@ -937,22 +938,9 @@ namespace StructureSynth {
 				return;
 			}
 
-			if (QFile::exists(fileName)) {
-				int choice = QMessageBox::warning(this, tr("File Exists"),
-								tr("File already exists.\r\nOverwrite:%1.")
-								.arg(QFileInfo(fileName).absoluteFilePath())
-								, "OK", "Cancel");
-
-				if (choice == 0) {
-					INFO("Overwriting: " + QFileInfo(fileName).absoluteFilePath());
-					templateRender(fileName);
-				} else {
-					INFO("User cancelled.");
-					return;
-				}		
-			} else {
-				templateRender(fileName);
-			}
+			
+			templateRender(fileName);
+			
 			
 		}
 
