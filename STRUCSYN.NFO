@@ -1,0 +1,73 @@
+			  _________             __                .__        
+			 /   _____/__.__. _____/  |_  ____ ______ |__|____   
+			 \_____  <   |  |/    \   __\/  _ \\____ \|  \__  \  
+			 /        \___  |   |  \  | (  <_> )  |_> >  |/ __ \_
+			/_______  / ____|___|  /__|  \____/|   __/|__(____  /
+			        \/\/         \/            |__|           \/ 
+
+
+ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ[ ş SYNTOPIA PRESENTS  ş ]ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+ ³                                                                           ³
+ ³              Structure Synth (c) Mikael Hvidtfeldt Christensen            ³
+ ³                                                                           ³
+ ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+ ³ Supplier: SourceForge               ³ Release Dat : 5/5/08                ³
+ ³ Packager: Mikael                    ³ Game Type   : Generative Art Toy    ³
+ ³ Stripper: Full Release              ³ License     : GPL                   ³
+ ³ Cracker : N/A (It is Open Source )  ³ Disks       : 19                    ³
+ ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+ ³ System Requirements: IBM Compatible PC or Mac, 512 MB RAM, 30 MB HD       ³
+ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Release Notes:  
+  ~~~~~~~~~~~~~~
+  Structure Synth is an application for creating 3D structures from a set
+  of user specified rules. It is an attempt to make a 3D version of Context 
+  Free.
+
+  It is built in C++, OpenGL, and Qt 4.3. Builds are currently provided for 
+  Windows only. It is possible to compile Structure Synth on Linux and Mac 
+  as well.
+
+  As of now this project is usable, but it is still alpha quality (although 
+  it is quite stable, some features are not implemented yet). The progress 
+  and design considerations can be tracked at the Syntopia blog.
+
+  Installation Notes:
+  ~~~~~~~~~~~~~~~~~~~
+  Windows: Unpack the files, and run StructureSynth.exe. Enjoy.
+  
+  Linux and Mac: See the build instructions here:
+  http://structuresynth.sourceforge.net/download.php
+
+  
+ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ  ÄÄ  ú ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ú  ÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+ ³              -/-   SYNTOPIA'S WORLD WIDE BULLETIN BOARDS   -\-             ³
+ ÀÄÄÄÄÄÄÄÄ  ÄÄ  ú    ú ÄÄ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄ ú    ú  ÄÄ  ÄÄÄÄÄÄÄÄÙ
+  
+  structuresynth.sf.net  10 Node(s)   World HQ - Structure Synth Home
+   blog.hvidtfeldts.net	   1 Node(s)   European HQ - Syntopia Blog		 
+  
+   TEMPORARY DOWN          5 Node(s)   United States HQ       
+   
+   YOU COULD BE HERE      +2 Node(s)   Dist Site          YOU                   
+
+   SxxxxxSxxx Sxxxxx       FTP Site    World HQ           Sxxxxx               
+   Sxxxxxxx                FTP Site    USA HQ             Sxxxxxxxxxx           
+
+ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ  ÄÄ  ú ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ú  ÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+ ³                           -/-  INFORMATION  -\-                            ³
+ ÀÄÄÄÄÄÄÄÄ  ÄÄ  ú    ú ÄÄ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄ ú    ú  ÄÄ  ÄÄÄÄÄÄÄÄÙ
+  
+  Syntopia is dedicated in bringing you the best in Generative Art Software!
+  If you have something to offer us contact us immediately! 
+
+  IF YOU WANT TO GET IN TOUCH WITH US HERE IS HOW TO DO IT:
+
+  Search the BBS and Gopher sites for Syntopia / Structure Synth.
+  You will know when you find us!	 
+    
+                     Uncopyright (u) by Syntopia 2008
+
+   
+    ** IF YOU LIKE THIS APP, DONT BUY IT! STRUCTURE SYNTH IS OPEN SOURCE! **
