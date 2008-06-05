@@ -136,12 +136,40 @@ namespace StructureSynth {
 
 			};
 
-			void TemplateRenderer::drawGrid(SyntopiaCore::Math::Vector3f /*base*/, 
-				SyntopiaCore::Math::Vector3f /*dir1*/ , 
-				SyntopiaCore::Math::Vector3f /*dir2*/, 
-				SyntopiaCore::Math::Vector3f /*dir3*/,
+			void TemplateRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
+				SyntopiaCore::Math::Vector3f dir1, 
+				SyntopiaCore::Math::Vector3f dir2, 
+				SyntopiaCore::Math::Vector3f dir3,
 								const QString& classID) {
-					// TODO
+
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				assertTemplateExists("grid"+alternateID);
+				static int counter = 0;
+				Template t(templates["grid"+alternateID]); 
+				if (t.contains("{matrix}")) {
+					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
+					.arg(dir1.x()).arg(dir1.y()).arg(dir1.z())
+					.arg(dir2.x()).arg(dir2.y()).arg(dir2.z())
+					.arg(dir3.x()).arg(dir3.y()).arg(dir3.z())
+					.arg(base.x()).arg(base.y()).arg(base.z());
+				
+					t.substitute("{matrix}", mat);
+				}
+				
+
+				if (t.contains("{uid}")) {
+					t.substitute("{uid}", QString("Grid%1").arg(counter++));
+				}
+
+				t.substitute("{r}", QString::number(rgb.x()));
+				t.substitute("{g}", QString::number(rgb.y()));
+				t.substitute("{b}", QString::number(rgb.z()));
+
+				t.substitute("{alpha}", QString::number(alpha));
+				t.substitute("{oneminusalpha}", QString::number(1-alpha));
+				
+
+				output.append(t.getText());
 			};
 
 			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,const QString& classID) {
@@ -219,7 +247,7 @@ namespace StructureSynth {
 				// TODO
 			}
 
-			void TemplateRenderer::callCommand(const QString& renderClass, const QString& command) {
+			void TemplateRenderer::callCommand(const QString& renderClass, const QString& /*command*/) {
 				if (renderClass != this->renderClass()) return;
 				
 			}

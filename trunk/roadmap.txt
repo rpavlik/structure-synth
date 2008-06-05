@@ -36,24 +36,24 @@ Version 0.7: 'Nostromo'
 + Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', 'Full screen'.
 + Linux testing (should compile with minimum of error on Linux)
 
-Version 0.8: 'Memories of tomorrow'
+Version 0.8: 'Exonautica'
 -----------------------------------
 Main Focus: Template rendering
++ reproducibility -> control of random seed, 
 + GUI Seed
-- Add Template Renderer (user customizable text templats)
++ Add Template Renderer (user customizable text templats)
++ Splash screen.
  
-Version 0.9: ''
+Version 0.9: 'Kolberger Heide'
 ---------------
-Main Focus: reproducibility -> control of random seed, save view as eisenscript code.
+- save view as eisenscript code.
 - Set initial viewport (create expression by right clicking mouse canvas)
 ? 'Zoom to fit'
 
 
-Version 1.0: 'Kolberger Heide.'
+Version 1.0: 'Potemkin'
 -------------------------------
-- Splash screen.
 - Preferences (saving with QProperties) [For what?]
-- Mac testing
 - Installers (for Windows at least - using InnoSetup)
 - Packaging: Icons, Eula, file associations.
 ? Version object with check for updates on internet.
