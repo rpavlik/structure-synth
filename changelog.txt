@@ -2,7 +2,8 @@
 Changelog for Structure Synth:
 ------------------------------
 * Remember to include QtXml4.dll in deploy!
-* 'Template Render to File'
+
+5  Jun 08 [MHC] Creating builds for Structure Synth 0.8 'Exonautica'.
 
 15 May 08 [MHC] Completed the Template Rendering code.
 [2½h]           Corrected a small bug in the syntax-highlightning
