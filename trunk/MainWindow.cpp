@@ -243,7 +243,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 8, 0, -1, " Alpha (\"Memories of Tomorrow\")");
+			version = SyntopiaCore::Misc::Version(0, 8, 0, -1, " (\"Exonautica\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
