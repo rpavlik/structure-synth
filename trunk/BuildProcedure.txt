@@ -1,0 +1,8 @@
+Build Procedure:
+
+Windows:
+- Change to 'Release'. Build in VS 2008.
+- Check dependencies in Process Explorer - update Build\Packaging\copyWin32Files.bat to reflect this.
+- Run copyWin32Files.bat
+- Zip the content of 'contents' and name the files after the following template: "StructureSynth-Windows_Binary_v0.8.0.zip"
+
