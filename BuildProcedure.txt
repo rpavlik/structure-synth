@@ -8,3 +8,25 @@ Windows:
 - Make an 'export' of the Trunk SVN directory (e.g. right-mouse-button-drag the directory to a new location, and use the context menu) into a directory named 'Structure Synth Source Code' and zip the contents into an archive named "StructureSynth-Source-v0.8.0.zip".
 - Log onto SourceForge choose 'Admin | File Releases'. Choose 'Structure Synth | Add Release'. Choose a suitable name: "Version 0.8.0 (Exonautica)"
 
+- Update the SourceForge web pages.
+- Send out SourceForge news.
+- Mention on Syntopia Blog.
+
+
+
+
+Template for SourceForge news updates:
+
+Structure Synth 0.8.0 (Exonautica) Released
+-------------------------------------------
+
+Binaries for Windows XP and Vista. Source for Linux and Mac.  
+ 
+Changes: 
+- The new template rendering system allows for easily defining custom exporters (with examples for PovRay and Sunflow)
+- Control of the random seed from GUI.
+- Minor bug fixes.
+- Splash Screen.
+
+Download instructions at:
+http://structuresynth.sourceforge.net/download.php

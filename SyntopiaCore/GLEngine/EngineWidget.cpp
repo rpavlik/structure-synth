@@ -63,6 +63,7 @@ namespace SyntopiaCore {
 			translation = Vector3f(0,0,-20);
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
+			scale = 0.4f;
 			//backgroundColor = QColor(0,0,0);
 			requireRedraw();
 		}
