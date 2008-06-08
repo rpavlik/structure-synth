@@ -1,12 +1,18 @@
 
 Changelog for Structure Synth:
 ------------------------------
-* Remember to include QtXml4.dll in deploy!
+7  Jun 08 [MHC] Bugfix: Reset View did not reset scale.
+[½h]
+
+----- Release of v0.8.0 (Exonautica) [5 Jun 2008 ] ----------------------------------------------------------
+This release: 24 hours of work: 17½ hours coding, 6½ hours non-coding. (12 log entries)
+Stats total: 119 hours total shared over 61 log entries. 80 hours coding, 39 hours non-coding
 
 5  Jun 08 [MHC] Creating builds for Structure Synth 0.8 'Exonautica'.
+[3h] a
 
 15 May 08 [MHC] Completed the Template Rendering code.
-[2½h]           Corrected a small bug in the syntax-highlightning
+[2½h]c          Corrected a small bug in the syntax-highlightning
                 Implemented Template Render to File:
                 -> Notice: a small bug: it saves files with \d\d\a carriage returns (instead of \d\a). Don't know why yet
                 Added 'Auto Increment' check box, for whether the seed should auto increment (makes this a bit more logic to use)
@@ -19,26 +25,26 @@ Changelog for Structure Synth:
 
 
 05 May 08 [MHC] Created initial DoxyGen setup.
-[1½h]
+[1½h]a
 
 01 May 08 [MHC] Examples menu now recurses the Examples directory (so that we can introduce 'tutorials' and clean up the mess of examples)
-[2h]			Bug Fix: [1] 'Save as...' and 'Load...' should default to '*.es* filter.
+[2h]c			Bug Fix: [1] 'Save as...' and 'Load...' should default to '*.es* filter.
 				Updated Icon for About dialog.
 				Added several new icons.
 
 22 Apr 08 [MHC] Bug Fix: CTRL+S works again.
-[1.5h]			Templates: Added support for different types of substitutions, usings the 'type' attribute.
+[1.5h]c			Templates: Added support for different types of substitutions, usings the 'type' attribute.
                 Removed the 'Export to PovRay' menu item (now all export must take place using templates).
                 Renamed template rendering menu item.
 
 21 Apr 08 [MHC] Bug Fix: no longer crashes on certain operations when no textedit areas are present
-[0.5h]
+[0.5h]c
 
 30 Mar 08 [MHC] Web site updates (build instruction for Vista and Mac Os X)
-[2h]           
+[2h]a           
 
 17 Mar 08 [MHC] Long development break (lots of work and a Japan visit)  
-[4h]            I've got a new laptop, so I updated to Windows Vista and Visual Studio Express 2008. This means the VS solution files will no longer work for VS 2005!
+[4h]c           I've got a new laptop, so I updated to Windows Vista and Visual Studio Express 2008. This means the VS solution files will no longer work for VS 2005!
                 I managed to get Structure Synth compiled on Mac OS X (10.4.7 with XCode 2.5) and Qt 4.3.4 Open Source. Build instruction will be added to the SourceForge web site shortly.
 
 4  Feb 08 [MHC] Worked on the TemplateRenderer.
