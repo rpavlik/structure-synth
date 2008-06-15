@@ -27,6 +27,14 @@ namespace StructureSynth {
 								SyntopiaCore::Math::Vector3f dir3,
 								const QString& classID) = 0;
 
+				virtual void drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
+										SyntopiaCore::Math::Vector3f startDir1, 
+										SyntopiaCore::Math::Vector3f startDir2, 
+										SyntopiaCore::Math::Vector3f endBase, 
+										SyntopiaCore::Math::Vector3f endDir1, 
+										SyntopiaCore::Math::Vector3f endDir2, 
+										const QString& classID) = 0;
+
 				virtual void drawGrid(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 
 								SyntopiaCore::Math::Vector3f dir2, 

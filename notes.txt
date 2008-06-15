@@ -3,6 +3,23 @@ This file is my personal TODO list and scratch pad for Structure Synth. /Mikael
 
 Check copy paste menu
 
+Template Render Dialog
+----------------------
+Save file as:
+Default file path: [...............] [Dir...]
+File name: [Output0001.es] [File...]
+
+Post processing:
+[ ] Run the following command after saving picture.
+    [C:\program files\Sunflow\Sunflow.bat {FILENAME}]
+   
+ Edit script before saving:
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+
+
 
 
 On startup -> show 3D view nav info...

@@ -36,6 +36,7 @@ namespace StructureSynth {
 			};
 
 			TemplateRenderer::TemplateRenderer(QString xmlDefinitionFile) {
+				counter = 0;
 				QDomDocument doc;
 				QFile file(xmlDefinitionFile);
 				if (!file.open(QIODevice::ReadOnly)) {
@@ -84,7 +85,7 @@ namespace StructureSynth {
 
 			TemplateRenderer::TemplateRenderer()  
 			{
-
+				counter = 0;
 			}
 
 			TemplateRenderer::~TemplateRenderer() {
@@ -107,7 +108,6 @@ namespace StructureSynth {
 			{
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
 				assertTemplateExists("box"+alternateID);
-				static int counter = 0;
 				Template t(templates["box"+alternateID]); 
 				if (t.contains("{matrix}")) {
 					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
@@ -144,7 +144,6 @@ namespace StructureSynth {
 
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
 				assertTemplateExists("grid"+alternateID);
-				static int counter = 0;
 				Template t(templates["grid"+alternateID]); 
 				if (t.contains("{matrix}")) {
 					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
@@ -187,6 +186,9 @@ namespace StructureSynth {
 				t.substitute("{alpha}", QString::number(alpha));
 				t.substitute("{oneminusalpha}", QString::number(1-alpha));
 				
+				if (t.contains("{uid}")) {
+					t.substitute("{uid}", QString("Line%1").arg(counter++));
+				}
 
 				output.append(t.getText());
 			};
@@ -206,6 +208,9 @@ namespace StructureSynth {
 				t.substitute("{alpha}", QString::number(alpha));
 				t.substitute("{oneminusalpha}", QString::number(1-alpha));
 				
+				if (t.contains("{uid}")) {
+					t.substitute("{uid}", QString("Dot%1").arg(counter++));
+				}
 
 				output.append(t.getText());
 			};
@@ -227,6 +232,9 @@ namespace StructureSynth {
 				t.substitute("{alpha}", QString::number(alpha));
 				t.substitute("{oneminusalpha}", QString::number(1-alpha));
 				
+				if (t.contains("{uid}")) {
+					t.substitute("{uid}", QString("Sphere%1").arg(counter++));
+				}
 
 				output.append(t.getText());
 			};
@@ -246,6 +254,15 @@ namespace StructureSynth {
 			void TemplateRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f /*rgb*/) {
 				// TODO
 			}
+
+			void TemplateRenderer::drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
+										SyntopiaCore::Math::Vector3f startDir1, 
+										SyntopiaCore::Math::Vector3f startDir2, 
+										SyntopiaCore::Math::Vector3f endBase, 
+										SyntopiaCore::Math::Vector3f endDir1, 
+										SyntopiaCore::Math::Vector3f endDir2, 
+										const QString& classID) {
+			};
 
 			void TemplateRenderer::callCommand(const QString& renderClass, const QString& /*command*/) {
 				if (renderClass != this->renderClass()) return;

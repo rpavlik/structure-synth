@@ -1,6 +1,7 @@
 
 Changelog for Structure Synth:
 ------------------------------
+12 Jun 08 [MHC] Started playing around with a 'mesh' object (requires some internal changes).
 7  Jun 08 [MHC] Bugfix: Reset View did not reset scale.
 [½h]
 

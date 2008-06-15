@@ -48,6 +48,7 @@ Version 0.9: 'Kolberger Heide'
 ---------------
 - save view as eisenscript code.
 - Set initial viewport (create expression by right clicking mouse canvas)
+- Export view settings to Template Renderers
 ? 'Zoom to fit'
 
 

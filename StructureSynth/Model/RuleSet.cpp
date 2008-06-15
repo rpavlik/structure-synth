@@ -24,6 +24,7 @@ namespace StructureSynth {
 			rules.append(new PrimitiveRule(PrimitiveRule::Box));
 			rules.append(new PrimitiveRule(PrimitiveRule::Sphere));
 			rules.append(new PrimitiveRule(PrimitiveRule::Cylinder));
+			rules.append(new PrimitiveRule(PrimitiveRule::Mesh));
 			rules.append(new PrimitiveRule(PrimitiveRule::Line));
 			rules.append(new PrimitiveRule(PrimitiveRule::Dot));
 			rules.append(new PrimitiveRule(PrimitiveRule::Grid));
