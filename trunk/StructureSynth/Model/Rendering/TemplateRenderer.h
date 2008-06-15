@@ -34,6 +34,15 @@ namespace StructureSynth {
 				virtual void drawSphere(SyntopiaCore::Math::Vector3f center, float radius,
 								const QString& classID);
 
+				
+				virtual void drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
+										SyntopiaCore::Math::Vector3f startDir1, 
+										SyntopiaCore::Math::Vector3f startDir2, 
+										SyntopiaCore::Math::Vector3f endBase, 
+										SyntopiaCore::Math::Vector3f endDir1, 
+										SyntopiaCore::Math::Vector3f endDir2, 
+										const QString& classID);
+
 				virtual void drawGrid(SyntopiaCore::Math::Vector3f base, 
 								SyntopiaCore::Math::Vector3f dir1, 
 								SyntopiaCore::Math::Vector3f dir2, 
@@ -68,6 +77,7 @@ namespace StructureSynth {
 				double alpha;
 				QMap<QString, Template> templates;
 				QStringList output;
+				int counter;
 			};
 
 		}

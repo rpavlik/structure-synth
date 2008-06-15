@@ -270,6 +270,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\GLEngine\Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\GLEngine\Mesh.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\GLEngine\Object3D.cpp"
 					>
 				</File>

@@ -9,7 +9,7 @@ namespace StructureSynth {
 		/// for drawing boxes, spheres and other simple geometric shapes.
 		class PrimitiveRule : public Rule {
 			public:
-				enum PrimitiveType { Box, Sphere, Dot, Grid, Cylinder, Line } ;
+				enum PrimitiveType { Box, Sphere, Dot, Grid, Cylinder, Line, Mesh } ;
 				
 				PrimitiveRule(PrimitiveType type);
 				virtual void apply(Builder* builder) const;

@@ -4,6 +4,7 @@
 #include "../../../SyntopiaCore/GLEngine/Grid.h"
 #include "../../../SyntopiaCore/GLEngine/Dot.h"
 #include "../../../SyntopiaCore/GLEngine/Line.h"
+#include "../../../SyntopiaCore/GLEngine/Mesh.h"
 #include "../../../SyntopiaCore/Math/Vector3.h"
 
 using namespace SyntopiaCore::GLEngine;
@@ -22,6 +23,20 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3, const QString &) {
 					Object3D* o =new Box( base, dir1, dir2, dir3);
+					o->setColor(rgb, alpha);
+				
+					engine->addObject(o);
+			};
+
+			
+			void OpenGLRenderer::drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
+										SyntopiaCore::Math::Vector3f startDir1, 
+										SyntopiaCore::Math::Vector3f startDir2, 
+										SyntopiaCore::Math::Vector3f endBase, 
+										SyntopiaCore::Math::Vector3f endDir1, 
+										SyntopiaCore::Math::Vector3f endDir2, 
+										const QString& classID) {
+					Object3D* o =new Mesh( startBase, startDir1, startDir2, endBase, endDir1, endDir2);
 					o->setColor(rgb, alpha);
 				
 					engine->addObject(o);

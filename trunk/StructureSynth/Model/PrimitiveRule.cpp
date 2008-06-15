@@ -29,6 +29,8 @@ namespace StructureSynth {
 				name = "cylinder";
 			} else if (type == Line) {
 				name = "line";
+			} else if (type == Mesh) {
+				name = "mesh";
 			} else {
 				WARNING("PrimitiveRule constructor: unknown PrimitiveType");
 			}
@@ -51,6 +53,22 @@ namespace StructureSynth {
 				double r =  (c-  c2).length();
 
 				b->getRenderer()->drawSphere(c,r,classID);
+			} else if (type == Mesh) {
+				if (b->getState().prevMatrix) {
+					
+					Vector3f v1 = *(b->getState().prevMatrix) * Vector3f(0,0,0);
+					Vector3f v2 = *(b->getState().prevMatrix) * Vector3f(1,0,0);
+					Vector3f v3 = *(b->getState().prevMatrix) * Vector3f(0,1,0);
+
+
+					Vector3f u1 = b->getState().matrix * Vector3f(0,0,0);
+					Vector3f u2 = b->getState().matrix * Vector3f(1,0,0);
+					Vector3f u3 = b->getState().matrix * Vector3f(0,1,0);
+
+					b->getRenderer()->drawMesh(v1,v2-v1,v3-v1,u1,u2-u1,u3-u1,classID);
+				} else {
+					INFO("No prev");
+				}
 			} else if (type == Box) {
 				Vector3f v(0,0,0);
 
