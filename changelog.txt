@@ -1,7 +1,12 @@
 
 Changelog for Structure Synth:
 ------------------------------
+15 Jun 08 [MHC] BugFix: TemplateExporter: All objects may now use the {UID} tag.
+[1h]
+
 12 Jun 08 [MHC] Started playing around with a 'mesh' object (requires some internal changes).
+[3h]
+
 7  Jun 08 [MHC] Bugfix: Reset View did not reset scale.
 [½h]
 
