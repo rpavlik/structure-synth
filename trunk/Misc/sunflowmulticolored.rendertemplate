@@ -1,0 +1,164 @@
+<!--
+   This is an example of a render template, using one shader for each object.  
+   
+   Based on a template by Tom Beddard ('subblue')
+-->
+<template name="Sun Flow Template" inherits="" >
+	<substitution name="begin">
+	    <![CDATA[
+%photons {
+%  caustics 10000000 kd 64 0.5
+%}
+
+%% common settings
+image {
+	resolution 500 500
+	aa 0 2
+}
+
+gi {
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
+}
+
+accel bih
+filter mitchell
+bucket 32 spiral
+
+%% camera
+camera {
+   type pinhole
+   eye    0 10 40
+   target 0 0 0
+   up     0 1 0
+   fov    40
+   aspect 1
+}
+
+
+%% light sources
+light {
+   type meshlight
+   name "meshlight"
+   emit 1 1 1
+   radiance 16
+   samples 32
+   points 4
+      -1.79750967026 -6.22097349167 5.70054674149
+      -2.28231739998 -7.26064729691 4.06224298477
+      -4.09493303299 -6.41541051865 4.06224298477
+      -3.61012482643 -5.37573671341 5.70054721832
+   triangles 2
+      0 1 2
+      0 2 3
+}
+
+%% common shaders
+shader {
+	name "floor"
+	type amb-occ
+	bright   1 1 1
+	dark     0 0 0
+	samples  4
+	dist     6
+}
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" 1 1 1 }
+}
+
+%object {
+%   shader "floor"
+%   type plane
+%   p 0 -1 0
+%   n 0 1 0
+%}
+
+
+%% geometry
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs none
+}
+		]]>
+	</substitution>
+	
+	<substitution name="end">
+	    <![CDATA[
+
+		]]>
+	</substitution>
+
+	<substitution name="box">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   {r} {g} {b}
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</substitution>
+	
+	<substitution name="sphere">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	%type amb-occ
+	%bright   {r} {g} {b}
+	%dark     0 0 0
+	%samples  16
+	%dist     6
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</substitution>
+</template>
