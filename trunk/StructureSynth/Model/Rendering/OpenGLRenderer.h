@@ -56,6 +56,11 @@ namespace StructureSynth {
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 
+				virtual void setTranslation(SyntopiaCore::Math::Vector3f /*translation*/);
+				virtual void setScale(double /*scale*/);
+				virtual void setRotation(SyntopiaCore::Math::Matrix4f /*rotation*/);
+				virtual void setPivot(SyntopiaCore::Math::Vector3f /*pivot*/);
+
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& renderClass, const QString& command);
 			private:

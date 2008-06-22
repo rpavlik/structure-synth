@@ -4,6 +4,8 @@
 namespace SyntopiaCore {
 	namespace Math {	
 		
+		
+		
 	}
 }
 

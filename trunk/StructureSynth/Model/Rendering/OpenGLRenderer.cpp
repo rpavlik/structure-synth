@@ -88,6 +88,25 @@ namespace StructureSynth {
 			void OpenGLRenderer::callCommand(const QString& /*renderClass*/, const QString& /*command*/) {
 			}
 
+			void OpenGLRenderer::setTranslation(SyntopiaCore::Math::Vector3f translation) {
+				engine->setTranslation(translation);
+			};
+
+			void OpenGLRenderer::setScale(double scale) {
+				engine->setScale(scale);
+			};
+
+			void OpenGLRenderer::setRotation(SyntopiaCore::Math::Matrix4f rotation) {
+				engine->setRotation(rotation);
+			};
+
+			
+			void OpenGLRenderer::setPivot(SyntopiaCore::Math::Vector3f pivot) {
+				engine->setPivot(pivot);
+			};
+
+				
+
 		}
 	}
 }

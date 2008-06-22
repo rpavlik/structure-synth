@@ -50,6 +50,16 @@ namespace SyntopiaCore {
 			void addObject(Object3D* object);
 			int objectCount() const { return objects.size(); }
 
+			SyntopiaCore::Math::Vector3f getPivot() { return pivot; }
+			SyntopiaCore::Math::Matrix4f getRotation() { return rotation; }
+			SyntopiaCore::Math::Vector3f getTranslation() { return translation; }
+			double getScale() { return scale; }
+
+			void setPivot(SyntopiaCore::Math::Vector3f pivot) { this->pivot = pivot; }
+			void setRotation(SyntopiaCore::Math::Matrix4f rotation) { this->rotation = rotation; }
+			void setTranslation(SyntopiaCore::Math::Vector3f translation) { this->translation = translation; }
+		    void setScale(double scale) { this->scale = scale; }
+
 			/// RGB in [0;1]
 			void setBackgroundColor(double r, double g, double b) { 
 				backgroundColor = QColor((int)(r*255.0), (int)(g*255.0), (int)(b*255.0)); 

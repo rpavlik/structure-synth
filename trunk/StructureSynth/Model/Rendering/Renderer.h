@@ -2,6 +2,7 @@
 
 #include <QString>
 #include "../../../SyntopiaCore/Math/Vector3.h"
+#include "../../../SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
 	namespace Model {	
@@ -56,6 +57,12 @@ namespace StructureSynth {
 				virtual void setColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setAlpha(double alpha) = 0;
+
+				// Camera settings
+				virtual void setTranslation(SyntopiaCore::Math::Vector3f /*translation*/) {};
+				virtual void setScale(double /*scale*/) {};
+				virtual void setRotation(SyntopiaCore::Math::Matrix4f /*rotation*/) {};
+				virtual void setPivot(SyntopiaCore::Math::Vector3f /*pivot*/) {};
 
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& /*renderClass*/, const QString& /*command*/) {};

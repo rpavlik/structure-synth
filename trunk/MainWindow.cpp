@@ -18,7 +18,10 @@
 #include "StructureSynth/Model/RuleSet.h"
 #include "StructureSynth/Model/Builder.h"
 
+#include "SyntopiaCore/Math/Vector3.h"
+#include "SyntopiaCore/Math/Matrix4.h"
 
+using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Logging;
 using namespace StructureSynth::Model::Rendering;
 using namespace SyntopiaCore::Exceptions;
@@ -318,6 +321,7 @@ namespace StructureSynth {
 
 		void MainWindow::createOpenGLContextMenu() {
 			openGLContextMenu = new QMenu();			
+			openGLContextMenu->addAction(insertCameraSettingsAction);
 			openGLContextMenu->addAction(fullScreenAction);
 			openGLContextMenu->addAction(screenshotAction);
 			openGLContextMenu->addAction(panicAction);
@@ -362,6 +366,10 @@ namespace StructureSynth {
 			fullScreenAction->setShortcut(tr("Ctrl+F"));
 			fullScreenAction->setCheckable(true);
 			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
+			insertCameraSettingsAction  = new QAction(tr("&Copy Camera settings to EisenScript Window"), this);
+			connect(insertCameraSettingsAction, SIGNAL(triggered()), this, SLOT(insertCameraSettings()));
+
 
 			screenshotAction = new QAction(tr("&Save as bitmap..."), this);
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
@@ -929,6 +937,26 @@ namespace StructureSynth {
 		int MainWindow::getSeed() {
 			return seedSpinBox->value();
 		};
+
+		void MainWindow::insertCameraSettings() {
+			///xxx
+			Vector3f translation = engine->getTranslation();
+			Matrix4f rotation = engine->getRotation();
+			Vector3f pivot = engine->getPivot();
+			double scale = engine->getScale();
+
+			QStringList sl;
+			sl << "// Camera settings. Place these before first rule call." 
+			   << QString("set translation %1").arg(translation.toString())
+			   << QString("set rotation %1").arg(rotation.toStringAs3x3())
+			   << QString("set pivot %1").arg(pivot.toString())
+			   << QString("set scale %1").arg(scale);
+
+
+			getTextEdit()->insertPlainText(sl.join("\r\n"));
+			INFO("Camera settings are now pasted into the script window.");
+			INFO("Remember to clear previous 'set' commands if neccesary.");
+		}
 
 		void MainWindow::templateRenderToFile()
 		{
