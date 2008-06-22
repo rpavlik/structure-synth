@@ -32,6 +32,22 @@ namespace StructureSynth {
 			int startPos = 0;
 			input += " "; // to ensure last symbol gets parsed.
 			for (int i = 0; i < input.length(); i++) {
+				if (input.at(i) == '[') {
+					while (input.at(i) != ']' && i < input.length()) {
+						current += input.at(i);
+						i++;
+					}
+					current += ']';
+
+					if (input.at(i) != ']') {
+						throw ParseError("No matching ']' found for '['", startPos);
+					}
+
+					l.append(current);
+					positions.append(startPos);
+					startPos = i;
+					current = "";
+				} else 
 				if (input.at(i) == '{' || input.at(i) == '}' || input.at(i) == ' ' || (input.at(i) == '\r') || (input.at(i) == '\n')) {
 					QString trimmed = current.remove(QRegExp("\\s|\\r|\\n"));
 					if (!current.trimmed().isEmpty()) { l.append(trimmed); positions.append(startPos);	}
@@ -132,6 +148,9 @@ namespace StructureSynth {
 
 
 
+			for (int i = 0; i < symbols.size(); i++) {
+				INFO(QString("%1. Symbol: %2, Position: %3").arg(i).arg(symbols[i].text).arg(positions[i]));
+			}
 
 
 

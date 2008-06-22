@@ -3,7 +3,6 @@
 
 namespace SyntopiaCore {
 	namespace Math {	
-		
 	}
 }
 

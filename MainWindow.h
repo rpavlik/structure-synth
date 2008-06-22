@@ -48,6 +48,7 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void insertCameraSettings();
 			void seedChanged();
 			void tabChanged(int index);
 			void makeScreenshot();
@@ -92,8 +93,9 @@ namespace StructureSynth {
 			QCheckBox* autoIncrementCheckbox;
 
 			QDockWidget* dockLog;
-			QAction *fullScreenAction;
-			QAction *screenshotAction;
+			QAction* fullScreenAction;
+			QAction* insertCameraSettingsAction;
+			QAction* screenshotAction;
 			QAction* sfHomeAction;
 			QAction* referenceAction;
 			QAction* galleryAction;

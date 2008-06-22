@@ -15,6 +15,33 @@ namespace SyntopiaCore {
 			/// Constructor (inits to zero value).
 			Matrix4() { for (unsigned int i = 0; i < 16; i++) v[i] = 0; };
 
+			/// Construct from a string (with 3x3 entries) - such as "[1 0 0 0 1 0 0 0 1]"
+			Matrix4(QString input, bool& succes2) {
+				for (unsigned int i = 0; i < 16; i++) v[i] = 0;
+				v[0] = 1; v[5] = 1; v[10] = 1; v[15] = 1; 
+
+				input.remove('[');
+				input.remove(']');
+
+				QStringList sl = input.split(" ");
+				if (sl.size() != 9) { succes2 = false; return; }
+
+				bool succes = false;
+				float f = 0;
+				f = sl[0].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[0] = f;
+				f = sl[1].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[4] = f;
+				f = sl[2].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[8] = f;
+				f = sl[3].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[1] = f;
+				f = sl[4].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[5] = f;
+				f = sl[5].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[9] = f;
+				f = sl[6].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[2] = f;
+				f = sl[7].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[6] = f;
+				f = sl[8].toFloat(&succes); if (!succes) { succes2 = false; return; }; v[10] = f;
+
+				succes2 = true;
+			}
+
+
 			/// Identity matrix
 			static Matrix4<scalar> Identity() { 
 				Matrix4<scalar> m;
@@ -41,12 +68,12 @@ namespace SyntopiaCore {
 				Matrix4<scalar> m;
 				m(0,3) = x;
 				m(1,3) = y;
-			    m(2,3) = z;
+				m(2,3) = z;
 				m(0,0) = 1;
 				m(1,1) = 1;
-			    m(2,2) = 1;
+				m(2,2) = 1;
 				m(3,3) = 1;
-			    return  m;
+				return  m;
 			};
 
 			/// Rotation about axis with angle
@@ -125,6 +152,16 @@ namespace SyntopiaCore {
 					arg(at(2,0)).arg(at(2,1)).arg(at(2,2)).arg(at(2,3)).
 					arg(at(3,0)).arg(at(3,1)).arg(at(3,2)).arg(at(3,3));
 				return s+s2;
+			}
+
+			// Only return the 3x3 part of the matrix.
+			QString toStringAs3x3() {
+				QString s = QString("[%1 %2 %3 %4 %5 %6 %7 %8 %9]").
+					arg(at(0,0)).arg(at(0,1)).arg(at(0,2)).
+					arg(at(1,0)).arg(at(1,1)).arg(at(1,2)).
+					arg(at(2,0)).arg(at(2,1)).arg(at(2,2))
+					;
+				return s;
 			}
 
 		private:

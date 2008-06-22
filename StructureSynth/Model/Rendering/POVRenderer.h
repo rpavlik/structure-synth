@@ -4,7 +4,8 @@
 #include "Renderer.h"
 
 #include "../../../SyntopiaCore/Math/Vector3.h"
-
+#include "SyntopiaCore/Math/Vector3.h"
+#include "SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
 	namespace Model {	

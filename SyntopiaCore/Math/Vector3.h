@@ -7,13 +7,31 @@
 
 namespace SyntopiaCore {
 	namespace Math {	
-	
+
 		/// A simple class for representing three-dimensional vectors.
 		template <class scalar> class Vector3 {
 		public:
 			Vector3() { s[0] = 0; s[1] = 0; s[2] = 0;}
 			Vector3(scalar x, scalar y, scalar z) { s[0] = x; s[1] = y; s[2] = z; }
-			
+
+			// Constructor. Parses input such as "[1 2 3]";
+			Vector3(QString input, bool& succes2) {
+				input.remove('[');
+				input.remove(']');
+
+				QStringList sl = input.split(" ");
+				if (sl.size() != 3) { succes2 = false; return; }
+
+				bool succes = false;
+				float f;
+				f = sl[0].toFloat(&succes); if (!succes)  { succes2 = false; return; }; s[0] = f;
+				f = sl[1].toFloat(&succes); if (!succes)  { succes2 = false; return; }; s[1] = f;
+				f = sl[2].toFloat(&succes); if (!succes)  { succes2 = false; return; }; s[2] = f;
+
+				succes2 = true;
+			}
+
+		
 			// data access
 			scalar x() const { return s[0]; }
 			scalar y() const { return s[1]; };
@@ -34,7 +52,7 @@ namespace SyntopiaCore {
 
 			Vector3<scalar> operator* (scalar rhs) const { return Vector3<scalar>(s[0]*rhs, s[1]*rhs, s[2]*rhs); }
 			Vector3<scalar> operator/ (scalar rhs) const { return Vector3<scalar>(s[0]/rhs, s[1]/rhs, s[2]/rhs); }
-			
+
 			QString toString() const {
 				return QString("[%1 %2 %3]").arg(s[0]).arg(s[1]).arg(s[2]);
 			}
@@ -45,7 +63,7 @@ namespace SyntopiaCore {
 					s[2]*b.s[0] - s[0]*b.s[2] ,
 					s[0]*b.s[1] - s[1]*b.s[0]);
 			}
-			
+
 		private:
 			scalar s[3];
 		};

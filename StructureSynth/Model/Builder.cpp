@@ -129,6 +129,26 @@ namespace StructureSynth {
 				QColor c(param);
 				if (!c.isValid()) throw Exception(QString("Command 'background' expected a valid color identifier: Found: %1").arg(param));
 				renderTarget->setBackgroundColor(Vector3f(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0) );
+			} else if (command == "scale") {
+				bool succes;
+				double s = param.toDouble(&succes);
+				if (!succes) throw Exception(QString("Command 'scale' expected floating point parameter. Found: %1").arg(param));
+				renderTarget->setScale(s);
+			} else if (command == "translation") {
+				bool succes;
+				Vector3f v3(param, succes);
+				if (!succes) throw Exception(QString("Command 'translation' expected vector (such as [1 3 -10.1]). Found: %1").arg(param));
+				renderTarget->setTranslation(v3);
+			} else if (command == "pivot") {
+				bool succes;
+				Vector3f v3(param, succes);
+				if (!succes) throw Exception(QString("Command 'pivot' expected vector (such as [1 3 -10.1]). Found: %1").arg(param));
+				renderTarget->setPivot(v3);
+			} else if (command == "rotation") {
+				bool succes;
+				Matrix4f m4(param, succes);
+				if (!succes) throw Exception(QString("Command 'rotation' expected matrix (such as [1 0 0 0 1 0 0 0 1]). Found: %1").arg(param));
+				renderTarget->setRotation(m4);
 			} else if (command == "opengl") {
 				INFO("Render commands for 'opengl' not impl'ed yet!");
 			} else if (command == "template") {

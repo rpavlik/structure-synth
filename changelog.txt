@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+22 Jun 08 [MHC] Started working on Export of Camera settings.
+[2h]
+
 15 Jun 08 [MHC] BugFix: TemplateExporter: All objects may now use the {UID} tag.
 [1h]
 
