@@ -15,7 +15,7 @@ namespace StructureSynth {
 			this->matrix = rhs.matrix;
 			this->hsv = rhs.hsv;
 			this->alpha = rhs.alpha;
-			this->maxDepths = maxDepths;
+			this->maxDepths = rhs.maxDepths;
 			if (rhs.prevMatrix) {
 				this->prevMatrix = new SyntopiaCore::Math::Matrix4f();
 				*(this->prevMatrix) = *rhs.prevMatrix;
