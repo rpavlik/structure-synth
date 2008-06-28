@@ -149,7 +149,8 @@ namespace StructureSynth {
 
 
 			for (int i = 0; i < symbols.size(); i++) {
-				INFO(QString("%1. Symbol: %2, Position: %3").arg(i).arg(symbols[i].text).arg(positions[i]));
+
+//				INFO(QString("%1. Symbol: %2, Position: %3").arg(i).arg(symbols[i].text).arg(positions[i]));
 			}
 
 
