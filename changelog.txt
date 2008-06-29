@@ -1,6 +1,12 @@
 
 Changelog for Structure Synth:
 ------------------------------
+30 Jun 08 [MHC] Fixed a bug which caused errors to be highlighted on the wrong text line in GUI, when comments were present.
+[1h]            
+
+29 Jun 08 [MHC] Fixed a newly introduced bug which caused the 'maxdepth' property for a custom rule to fail.
+[2h]            Added some more web documentation.
+                
 22 Jun 08 [MHC] Started working on Export of Camera settings.
 [2h]
 
