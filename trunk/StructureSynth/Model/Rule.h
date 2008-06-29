@@ -6,7 +6,7 @@
 namespace StructureSynth {
 	namespace Model {	
 
-		struct ExecutionStack; // forward declaration.
+		
 		class RuleRef; // forward decl.
 		class Builder; // forward decl.
 

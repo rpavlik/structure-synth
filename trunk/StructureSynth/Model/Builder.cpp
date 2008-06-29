@@ -28,7 +28,7 @@ namespace StructureSynth {
 			INFO("Starting builder...");
 			
 			/// Push first generation state
-			stack.currentStack.append(RuleState(ruleSet->getStartRule(), State()));
+			stack.append(RuleState(ruleSet->getStartRule(), State()));
 			int generationCounter = 0;
 			
 			QProgressDialog progressDialog("Building objects...", "Cancel", 0, 100, 0);
@@ -61,7 +61,7 @@ namespace StructureSynth {
 					progressDialog.setValue((int)(progress*100.0));
 					progressDialog.setLabelText(
 						QString("Building objects...\r\n\r\nGeneration: %1\r\nObjects: %2\r\nPending rules: %3")
-						.arg(generationCounter).arg(objects).arg(stack.currentStack.size()));
+						.arg(generationCounter).arg(objects).arg(stack.size()));
 					qApp->processEvents();
 				}
 
@@ -74,16 +74,16 @@ namespace StructureSynth {
 				generationCounter++;
 
 				// Now iterate though all RuleState's on stack and create next generation.
-				//INFO(QString("Executing generation %1 with %2 individuals").arg(generationCounter).arg(stack.currentStack.size()));
-				nextStack.currentStack.clear();
-				for (int i = 0; i < stack.currentStack.size(); i++) {
-					//	INFO("Executing: " + stack.currentStack[i].rule->getName());
-					state = stack.currentStack[i].state;
-					stack.currentStack[i].rule->apply(this);
+				//INFO(QString("Executing generation %1 with %2 individuals").arg(generationCounter).arg(stack.size()));
+				nextStack.clear();
+				for (int i = 0; i < stack.size(); i++) {
+					//	INFO("Executing: " + stack[i].rule->getName());
+					state = stack[i].state;
+					stack[i].rule->apply(this);
 				}
 				stack = nextStack;
 
-				if (stack.currentStack.size() == 0) break; // no need to continue...
+				if (stack.size() == 0) break; // no need to continue...
 			}
 
 			progressDialog.setValue(100); 
@@ -158,7 +158,7 @@ namespace StructureSynth {
 			}
 		}
 		
-		ExecutionStack& Builder::getExecutionStack() {
+		ExecutionStack& Builder::getNextStack() {
 			return nextStack;
 		}
 
