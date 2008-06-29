@@ -31,7 +31,32 @@ namespace StructureSynth {
 			QString current;
 			int startPos = 0;
 			input += " "; // to ensure last symbol gets parsed.
+			bool inMultiComment = false;
+			bool inComment = false;
+			int newlines = 0;
 			for (int i = 0; i < input.length(); i++) {
+				
+				if (input.at(i) == '\r') {
+					inComment = false;
+				    newlines++;
+			    }
+				
+				if (i < input.length()-1) {
+					if (input.at(i) == '*' && input.at(i+1) == '/') {
+						inMultiComment = false; i++; continue;
+					}
+
+					if (input.at(i) == '/' && input.at(i+1) == '/') {
+						inComment = true; i++; continue;
+					}
+
+					if (input.at(i) == '/' && input.at(i+1) == '*') {
+						inMultiComment = true; i++; continue;
+					}
+				}
+
+				if (inMultiComment || inComment) continue;
+
 				if (input.at(i) == '[') {
 					while (input.at(i) != ']' && i < input.length()) {
 						current += input.at(i);
@@ -44,14 +69,14 @@ namespace StructureSynth {
 					}
 
 					l.append(current);
-					positions.append(startPos);
+					positions.append(startPos-newlines);
 					startPos = i;
 					current = "";
 				} else 
 				if (input.at(i) == '{' || input.at(i) == '}' || input.at(i) == ' ' || (input.at(i) == '\r') || (input.at(i) == '\n')) {
 					QString trimmed = current.remove(QRegExp("\\s|\\r|\\n"));
-					if (!current.trimmed().isEmpty()) { l.append(trimmed); positions.append(startPos);	}
-					if (input.at(i) == '{' || input.at(i) == '}') { l.append(QString(input.at(i))); positions.append(i);	}
+					if (!current.trimmed().isEmpty()) { l.append(trimmed); positions.append(startPos-newlines);	}
+					if (input.at(i) == '{' || input.at(i) == '}') { l.append(QString(input.at(i))); positions.append(i-newlines);	}
 					current = "";
 					startPos = i;
 				} else {
@@ -150,7 +175,7 @@ namespace StructureSynth {
 
 			for (int i = 0; i < symbols.size(); i++) {
 
-//				INFO(QString("%1. Symbol: %2, Position: %3").arg(i).arg(symbols[i].text).arg(positions[i]));
+				INFO(QString("%1. Symbol: %2, Position: %3").arg(i).arg(symbols[i].text).arg(positions[i]));
 			}
 
 
