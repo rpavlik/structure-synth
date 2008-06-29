@@ -26,7 +26,7 @@ namespace StructureSynth {
 				if (callingRule) {
 					s.maxDepths[callingRule] = ruleDepth;
 				}
-				b->getExecutionStack().currentStack.append(RuleState(rule->rule(), s));
+				b->getNextStack().append(RuleState(rule->rule(), s));
 				return;
 			}
 
@@ -47,7 +47,7 @@ namespace StructureSynth {
 				if (callingRule) {
 					s0.maxDepths[callingRule] = ruleDepth;
 				}
-				b->getExecutionStack().currentStack.append(RuleState(rule->rule(), s0));
+				b->getNextStack().append(RuleState(rule->rule(), s0));
 
 				// increase lowest counter...
 				counters[0]++;

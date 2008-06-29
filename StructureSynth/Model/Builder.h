@@ -20,7 +20,7 @@ namespace StructureSynth {
 			void build();
 
 			void setCommand(QString command, QString param);
-			ExecutionStack& getExecutionStack();
+			ExecutionStack& getNextStack();
 			State& getState() { return state; };
 			Rendering::Renderer* getRenderer() { return renderTarget; };
 			void increaseObjectCount() { objects++; };

@@ -18,9 +18,13 @@ namespace StructureSynth {
 		///  The rules on the stack are all executed in each generation,
 		///  and each rule will add a number of new rules to the next generation of the stack.
 		///  Only one level is recursion is followed at each generation.
+		typedef QList<RuleState> ExecutionStack;
+
+		/*
 		struct ExecutionStack {
 			QList< RuleState > currentStack;
 		};
+		*/
 
 		
 	}
