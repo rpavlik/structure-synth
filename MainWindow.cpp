@@ -227,9 +227,9 @@ namespace StructureSynth {
 
 			QMessageBox mb(this);
 			mb.setText(text);
-			mb.setMinimumWidth(800);
 			mb.setWindowTitle("About Structure Synth");
 			mb.setIconPixmap(getMiscDir() + QDir::separator() + "icon.jpg");
+			mb.setMinimumWidth(800);
 			mb.exec();
 
 		}
@@ -286,8 +286,7 @@ namespace StructureSynth {
 			loadFile(d.absoluteFilePath("Default.es"));
 			tabChanged(0); // to update title.
 
-			readSettings();
-
+			
 			// Log widget (in dockable window)
 			dockLog = new QDockWidget(this);
 			dockLog->setWindowTitle("Log");
@@ -316,6 +315,8 @@ namespace StructureSynth {
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 
+
+			readSettings();
 
 		}
 
@@ -626,7 +627,7 @@ namespace StructureSynth {
 		{
 			QSettings settings("Syntopia Software", "Structure Synth");
 			QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-			QSize size = settings.value("size", QSize(400, 400)).toSize();
+			QSize size = settings.value("size", QSize(1024, 800)).toSize();
 			move(pos);
 			resize(size);
 		}
@@ -767,16 +768,33 @@ namespace StructureSynth {
 
 		}
 
+		namespace {
+			// Returns the first valid directory.
+			QString findDirectory(QStringList guesses) {
+				for (int i = 0; i < guesses.size(); i++) {
+					if (QFile::exists(guesses[i])) return guesses[i];
+				}
+
+				// not found.
+				WARNING("Could not locate directory in: " + guesses.join(",") + ".");
+				return "[not found]";
+			}
+		}
+		// Mac needs to step two directies up, when debugging in XCode...
 		QString MainWindow::getExamplesDir() {
-			return "Examples";
+			QStringList examplesDir;
+			examplesDir << "Examples" << "../../Examples";
+			return findDirectory(examplesDir);
 		}
 
 		QString MainWindow::getMiscDir() {
-			return "Misc";
+			QStringList miscDir;
+			miscDir << "Misc" << "../../Misc";
+			return findDirectory(miscDir);
 		}
 
 		QString MainWindow::getTemplateDir() {
-			return "Misc";
+			return getMiscDir();
 		}
 
 		void MainWindow::resetView() {
@@ -787,9 +805,19 @@ namespace StructureSynth {
 			return (stackedTextEdits->currentWidget() ? (QTextEdit*)stackedTextEdits->currentWidget() : 0);
 		}
 
+		void MainWindow::cursorPositionChanged() {
+			if (!this->getTextEdit()) return;
+			int pos = this->getTextEdit()->textCursor().position();
+			int blockNumber = this->getTextEdit()->textCursor().blockNumber();
+			statusBar()->showMessage(QString("Position: %1, Line: %2").arg(pos).arg(blockNumber+1), 5000);
+					
+		}
+
 		void MainWindow::insertTabPage(QString filename) {
 
 			QTextEdit* textEdit = new QTextEdit();
+			connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+
 			textEdit->setLineWrapMode(QTextEdit::NoWrap);
 			textEdit->setTabStopWidth(20);
 			new EisenScriptHighlighter(textEdit);

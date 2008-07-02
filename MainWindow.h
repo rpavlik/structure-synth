@@ -49,6 +49,7 @@ namespace StructureSynth {
 
 		private slots:
 			void insertCameraSettings();
+			void cursorPositionChanged();
 			void seedChanged();
 			void tabChanged(int index);
 			void makeScreenshot();
