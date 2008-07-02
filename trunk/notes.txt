@@ -1,6 +1,7 @@
-This file is my personal TODO list and scratch pad for Structure Synth. /Mikael
+TODO list and scratch pad for Structure Synth. /Mikael
 
-
+About box sizing on Mac.
+Change 'mac.pro' -> 'StructureSynth.pro'
 Check copy paste menu
 
 Template Render Dialog

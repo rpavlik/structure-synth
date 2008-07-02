@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+1 Jul 08 [MHC] Fixed a bug, which caused compile errors on Mac.
+               The default windows size is now larger.
+               Now shows Line number and position when moving cursor.
+               
 30 Jun 08 [MHC] Fixed a bug which caused errors to be highlighted on the wrong text line in GUI, when comments were present.
 [1h]            
 

@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QStringList>
 #include <cmath>
 
 
