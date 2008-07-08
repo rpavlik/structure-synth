@@ -35,7 +35,7 @@ namespace StructureSynth {
 		
 		State::State(const State& rhs) : matrix(rhs.matrix), 
 			hsv(rhs.hsv), 
-			alpha(rhs.alpha), prevMatrix(0), maxDepths(rhs.maxDepths) {
+			alpha(rhs.alpha), maxDepths(rhs.maxDepths), prevMatrix(0) {
 			if (rhs.prevMatrix) {
 				this->prevMatrix = new SyntopiaCore::Math::Matrix4f();
 				*(this->prevMatrix) = *rhs.prevMatrix;
