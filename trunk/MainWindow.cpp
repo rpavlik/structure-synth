@@ -879,7 +879,10 @@ namespace StructureSynth {
 
 		}
 
-		void MainWindow::tabChanged(int index) {			
+		void MainWindow::tabChanged(int index) {
+			if (index > tabInfo.size()) return;
+			if (index < 0) return;
+
 			TabInfo t = tabInfo[index];
 			QString tabTitle = QString("%1%3").arg(strippedName(t.filename)).arg(t.unsaved ? "*" : "");
 			setWindowTitle(QString("%1 - %2").arg(tabTitle).arg("Structure Synth"));
@@ -896,11 +899,13 @@ namespace StructureSynth {
 				int answer = QMessageBox::warning(this, QString("Unsaved changes"), "Close this tab without saving changes?", "OK", "Cancel");
 				if (answer == 1) return;
 			}
+			
+			tabInfo.remove(index);
+			tabBar->removeTab(index);
+			
 			stackedTextEdits->removeWidget(t.textEdit);
 			delete(t.textEdit); // ?
-			tabBar->removeTab(index);
-			tabInfo.remove(index);
-
+			
 		}
 
 		void MainWindow::launchSfHome() {
