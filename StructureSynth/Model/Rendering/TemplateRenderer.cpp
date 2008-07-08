@@ -255,13 +255,13 @@ namespace StructureSynth {
 				// TODO
 			}
 
-			void TemplateRenderer::drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
-										SyntopiaCore::Math::Vector3f startDir1, 
-										SyntopiaCore::Math::Vector3f startDir2, 
-										SyntopiaCore::Math::Vector3f endBase, 
-										SyntopiaCore::Math::Vector3f endDir1, 
-										SyntopiaCore::Math::Vector3f endDir2, 
-										const QString& classID) {
+			void TemplateRenderer::drawMesh(  SyntopiaCore::Math::Vector3f /*startBase*/, 
+										SyntopiaCore::Math::Vector3f /*startDir1*/, 
+										SyntopiaCore::Math::Vector3f /*startDir2*/, 
+										SyntopiaCore::Math::Vector3f /*endBase*/, 
+										SyntopiaCore::Math::Vector3f /*endDir1*/, 
+										SyntopiaCore::Math::Vector3f /*endDir2*/, 
+										const QString& /*classID*/) {
 			};
 
 			void TemplateRenderer::callCommand(const QString& renderClass, const QString& /*command*/) {
