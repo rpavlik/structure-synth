@@ -6,6 +6,7 @@
 
 #include <QStringList>
 #include <QMap>
+#include <typeinfo>
 
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../SyntopiaCore/Logging/Logging.h"
