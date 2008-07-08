@@ -1,8 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+8 Jul 08 [MHC] Found some faults with the build instructions which caused compilation to fail with Qt 4.4.0 and a small error causing compilation to fail on Debian.
+[1½h]
+
 1 Jul 08 [MHC] Fixed a bug, which caused compile errors on Mac.
-               The default windows size is now larger.
+[1h]           The default windows size is now larger.
                Now shows Line number and position when moving cursor.
                
 30 Jun 08 [MHC] Fixed a bug which caused errors to be highlighted on the wrong text line in GUI, when comments were present.
