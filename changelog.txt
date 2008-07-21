@@ -1,30 +1,40 @@
 
 Changelog for Structure Synth:
 ------------------------------
+----- Release of v0.8.5 (Exonautica Reloaded) [13 Jul 2008 ] ----------------------------------------------------------
+This release: 14 hours of work: 12 hours coding, 2 hours non-coding. (9 log entries)
+Stats total: 133 hours total shared over 70 log entries. 92 hours coding, 41 hours non-coding
+
+
+13 Jul 08 [MHC] Bug fix: window position and size were not persisted.
+[1h]C           Build/Deploy: wrong dependencies for Windows Binaries (VS2005 instead of VS2008)
+[1h]A
+
 8 Jul 08 [MHC] Found some faults with the build instructions which caused compilation to fail with Qt 4.4.0 and a small error causing compilation to fail on Debian.
-[1½h]
+[1½h]C
 
 1 Jul 08 [MHC] Fixed a bug, which caused compile errors on Mac.
-[1h]           The default windows size is now larger.
+[1h]C          The default windows size is now larger.
                Now shows Line number and position when moving cursor.
                
 30 Jun 08 [MHC] Fixed a bug which caused errors to be highlighted on the wrong text line in GUI, when comments were present.
-[1h]            
+[1h]C            
 
 29 Jun 08 [MHC] Fixed a newly introduced bug which caused the 'maxdepth' property for a custom rule to fail.
-[2h]            Added some more web documentation.
+[1h]C           Added some more web documentation.
+[1h]A 
                 
 22 Jun 08 [MHC] Started working on Export of Camera settings.
-[2h]
+[2h]C
 
 15 Jun 08 [MHC] BugFix: TemplateExporter: All objects may now use the {UID} tag.
-[1h]
+[1h]C
 
 12 Jun 08 [MHC] Started playing around with a 'mesh' object (requires some internal changes).
-[3h]
+[3h]C
 
 7  Jun 08 [MHC] Bugfix: Reset View did not reset scale.
-[½h]
+[½h]C
 
 ----- Release of v0.8.0 (Exonautica) [5 Jun 2008 ] ----------------------------------------------------------
 This release: 24 hours of work: 17½ hours coding, 6½ hours non-coding. (12 log entries)
