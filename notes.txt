@@ -1,5 +1,22 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+Make Debug moc'ing on release...
+
+Debug.Info(...);
+Debug.ShowProgress(...);
+Debug.SetProgress(...);   // TODO: Should throw exception if cancelled...
+Debug.HideProgress();
+Debug.Message(...);
+
+Builder.load(filename);
+Builder.replace(before, after);
+QString text = Builder.applyTemplate(...);
+Builder.run();
+
+IO.save(text, filename);
+IO.spawnProcess(...);
+IO.saveImage(filename); // For OpenGL output...
+
 About box sizing on Mac.
 Change 'mac.pro' -> 'StructureSynth.pro'
 Check copy paste menu

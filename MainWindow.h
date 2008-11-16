@@ -75,6 +75,7 @@ namespace StructureSynth {
 			
 
 		private:
+			void parseJavaScript(QString scripture);
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
 			void init();

@@ -17,6 +17,7 @@
 #include "StructureSynth/Parser/Preprocessor.h"
 #include "StructureSynth/Model/RuleSet.h"
 #include "StructureSynth/Model/Builder.h"
+#include "StructureSynth/JavaScriptSupport/JavaScriptParser.h"
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "SyntopiaCore/Math/Matrix4.h"
@@ -27,6 +28,7 @@ using namespace StructureSynth::Model::Rendering;
 using namespace SyntopiaCore::Exceptions;
 using namespace StructureSynth::Parser;
 using namespace StructureSynth::Model;
+using namespace StructureSynth::JavaScriptSupport;
 
 namespace StructureSynth {
 	namespace GUI {
@@ -713,6 +715,15 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::render() {
+			INFO(getTextEdit()->toPlainText());
+			if (getTextEdit()->toPlainText().startsWith("#javascript", Qt::CaseInsensitive)) {
+			    // This is javascript...
+				QString text = getTextEdit()->toPlainText();
+				text = text.remove("#javascript", Qt::CaseInsensitive);
+				parseJavaScript(text);
+				return;
+			}
+
 			if (autoIncrementCheckbox->isChecked()) updateRandom();
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
@@ -1082,6 +1093,12 @@ namespace StructureSynth {
 		}
 
 
+		void MainWindow::parseJavaScript(QString scripture) {
+			JavaScriptParser jsp;
+			jsp.parse(scripture);
+
+		}
+			
 	}
 }
 
