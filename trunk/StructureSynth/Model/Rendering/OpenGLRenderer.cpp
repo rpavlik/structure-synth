@@ -35,7 +35,7 @@ namespace StructureSynth {
 										SyntopiaCore::Math::Vector3f endBase, 
 										SyntopiaCore::Math::Vector3f endDir1, 
 										SyntopiaCore::Math::Vector3f endDir2, 
-										const QString& classID) {
+										const QString& /*classID*/) {
 					Object3D* o =new Mesh( startBase, startDir1, startDir2, endBase, endDir1, endDir2);
 					o->setColor(rgb, alpha);
 				

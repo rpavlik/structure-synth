@@ -1,6 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+
+16 Nov 08 [MHC] Started added stub code for the JavaScript controller interface. 
+                This will make it possible to use JavaScript (using Qt's embedded JavaScript interpreter) to make e.g. animations.
+                
 ----- Release of v0.8.5 (Exonautica Reloaded) [13 Jul 2008 ] ----------------------------------------------------------
 This release: 14 hours of work: 12 hours coding, 2 hours non-coding. (9 log entries)
 Stats total: 133 hours total shared over 70 log entries. 92 hours coding, 41 hours non-coding

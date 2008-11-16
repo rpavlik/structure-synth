@@ -46,7 +46,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -EHsc"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(QT4DIR)\include\QtCore&quot;;&quot;$(QT4DIR)\include\QtXml&quot;;&quot;$(QT4DIR)\include\QtGui&quot;;&quot;$(QT4DIR)\include\QtOpenGL&quot;;&quot;$(QT4DIR)\include&quot;;&quot;$(QT4DIR)\include\ActiveQt&quot;;tmp\moc\debug_shared;.;&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot;"
+				AdditionalIncludeDirectories="&quot;$(QT4DIR)\include\QtScript&quot;;&quot;$(QT4DIR)\include\QtCore&quot;;&quot;$(QT4DIR)\include\QtXml&quot;;&quot;$(QT4DIR)\include\QtGui&quot;;&quot;$(QT4DIR)\include\QtOpenGL&quot;;&quot;$(QT4DIR)\include&quot;;&quot;$(QT4DIR)\include\ActiveQt&quot;;tmp\moc\debug_shared;.;&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot;"
 				PreprocessorDefinitions="_WINDOWS;UNICODE;QT_LARGEFILE_SUPPORT;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;QT_DLL;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -74,7 +74,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="opengl32.lib glu32.lib gdi32.lib user32.lib qtmaind.lib QtGuid4.lib QtCored4.lib QtOpenGLd4.lib QtXmld4.lib"
+				AdditionalDependencies="QtScriptd4.lib opengl32.lib glu32.lib gdi32.lib user32.lib qtmaind.lib QtGuid4.lib QtCored4.lib QtOpenGLd4.lib QtXmld4.lib"
 				OutputFile="debug\StructureSynth.exe"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(QT4DIR)\lib"
@@ -138,7 +138,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -EHsc"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(QT4DIR)\include\QtCore&quot;;&quot;$(QT4DIR)\include\QtXml&quot;;&quot;$(QT4DIR)\include\QtGui&quot;;&quot;$(QT4DIR)\include&quot;;&quot;$(QT4DIR)\include\ActiveQt&quot;;tmp\moc\debug_shared;.;&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot;;&quot;$(QT4DIR)\include\QtOpenGL&quot;"
+				AdditionalIncludeDirectories="&quot;$(QT4DIR)\include\QtScript&quot;;&quot;$(QT4DIR)\include\QtCore&quot;;&quot;$(QT4DIR)\include\QtXml&quot;;&quot;$(QT4DIR)\include\QtGui&quot;;&quot;$(QT4DIR)\include&quot;;&quot;$(QT4DIR)\include\ActiveQt&quot;;tmp\moc\debug_shared;.;&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot;;&quot;$(QT4DIR)\include\QtOpenGL&quot;"
 				PreprocessorDefinitions="NDEBUG,_WINDOWS,UNICODE,QT_LARGEFILE_SUPPORT,WIN32,_CRT_SECURE_NO_DEPRECATE,_CRT_NONSTDC_NO_DEPRECATE,QT_DLL,QT_NO_DEBUG,QT_GUI_LIB,QT_CORE_LIB,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -166,7 +166,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="opengl32.lib glu32.lib gdi32.lib user32.lib qtmain.lib QtGui4.lib QtCore4.lib QtOpenGL4.lib QtXml4.lib"
+				AdditionalDependencies="QtScript4.lib opengl32.lib glu32.lib gdi32.lib user32.lib qtmain.lib QtGui4.lib QtCore4.lib QtOpenGL4.lib QtXml4.lib"
 				OutputFile="release\StructureSynth.exe"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(QT4DIR)\lib"
@@ -348,7 +348,7 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
+				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -358,6 +358,10 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tmp\moc\release_shared\moc_Debug.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\tmp\moc\release_shared\moc_MainWindow.cpp"
@@ -383,7 +387,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -414,6 +418,18 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -648,6 +664,54 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="JavaScriptSupport"
+				>
+				<File
+					RelativePath=".\StructureSynth\JavaScriptSupport\Debug.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\JavaScriptSupport\Debug.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Mocing Debug"
+							CommandLine="$(QT4DIR)\bin\moc.exe -DNDEBUG -D_WINDOWS -DUNICODE -DQT_LARGEFILE_SUPPORT -DWIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT  -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include&quot; -I &quot;$(QT4DIR)\include\ActiveQt&quot; -I &quot;tmp\moc\debug_shared&quot; -I &quot;.&quot; -I&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot; StructureSynth\JavaScriptSupport\Debug.h -o tmp\moc\debug_shared\moc_Debug.cpp"
+							Outputs="tmp\moc\debug_shared\moc_Debug.cpp"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Mocing Debug (for Release)"
+							CommandLine="$(QT4DIR)\bin\moc.exe -DNDEBUG -D_WINDOWS -DUNICODE -DQT_LARGEFILE_SUPPORT -DWIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT  -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;..\..\..\include&quot; -I &quot;$(QT4DIR)\include\ActiveQt&quot; -I &quot;tmp\moc\release_shared&quot; -I &quot;.&quot; -I&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot; StructureSynth\JavaScriptSupport\Debug.h -o tmp\moc\release_shared\moc_Debug.cpp"
+							Outputs="tmp\moc\release_shared\moc_Debug.cpp"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\JavaScriptSupport\JavaScriptParser.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\JavaScriptSupport\JavaScriptParser.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine=""
+						/>
+					</FileConfiguration>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
