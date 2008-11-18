@@ -1,10 +1,15 @@
 
 Changelog for Structure Synth:
 ------------------------------
+18 Nov 08 [MHC] Fixed a bug when going into full screen mode (not all chrome was hidden).
 
-
+17 Nov 08 [MHC] Tried to find out why I could not run in Release mode without crashing on Windows anymore.
+[1h]            Turns out, that QtScriptd4.dll works just fine, but my QtScript4.dll does not, and crashes when called into. This is weird.
+                Well, I tried linking to another set of DLL found here (http://pallas.copai.de/index.php?option=com_content&view=article&id=49&Itemid=58), and these works too.
+                Weirdness. Well, recompiling the entire Qt just takes too long, so I will not test this.
+                
 16 Nov 08 [MHC] Started added stub code for the JavaScript controller interface. 
-                This will make it possible to use JavaScript (using Qt's embedded JavaScript interpreter) to make e.g. animations.
+[2h]            This will make it possible to use JavaScript (using Qt's embedded JavaScript interpreter) to make e.g. animations.
                 
 ----- Release of v0.8.5 (Exonautica Reloaded) [13 Jul 2008 ] ----------------------------------------------------------
 This release: 14 hours of work: 12 hours coding, 2 hours non-coding. (9 log entries)

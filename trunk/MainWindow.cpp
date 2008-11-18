@@ -269,10 +269,10 @@ namespace StructureSynth {
 			tabBar = new QTabBar(this);
 
 			QFrame* f = new QFrame(this);
-			QVBoxLayout* vboxLayout = new QVBoxLayout();
-			vboxLayout->setSpacing(0);
-			vboxLayout->setMargin(4);
-			f->setLayout(vboxLayout);
+			frameMainWindow = new QVBoxLayout();
+			frameMainWindow->setSpacing(0);
+			frameMainWindow->setMargin(4);
+			f->setLayout(frameMainWindow);
 			f->layout()->addWidget(tabBar);
 			f->layout()->addWidget(splitter);
 			setCentralWidget(f);
@@ -336,6 +336,7 @@ namespace StructureSynth {
 
 		void MainWindow::toggleFullScreen() {
 			if (fullScreenEnabled) {
+				frameMainWindow->setMargin(4);
 				showNormal();
 				fullScreenEnabled = false;
 				fullScreenAction->setChecked(false);
@@ -347,8 +348,10 @@ namespace StructureSynth {
 				editToolBar->show();
 				renderToolBar->show();
 				tabBar->show();
+				randomToolBar->show();
+				
 			} else {
-				showFullScreen();
+				frameMainWindow->setMargin(0);
 				fullScreenAction->setChecked(true);
 				fullScreenEnabled = true;
 
@@ -360,6 +363,9 @@ namespace StructureSynth {
 				fileToolBar->hide();
 				editToolBar->hide();
 				renderToolBar->hide();
+				randomToolBar->hide();
+				showFullScreen();
+				
 			}
 		}
 

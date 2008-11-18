@@ -135,6 +135,8 @@ namespace StructureSynth {
 			QVector<TabInfo> tabInfo;
 
 			int oldDirtyPosition;
+
+			QVBoxLayout* frameMainWindow;
 		};
 
 	}
