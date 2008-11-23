@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+23 Nov 08 [MHC] Started experimenting with QtScript'ing.
+[4h]
+
 18 Nov 08 [MHC] Fixed a bug when going into full screen mode (not all chrome was hidden).
 
 17 Nov 08 [MHC] Tried to find out why I could not run in Release mode without crashing on Windows anymore.

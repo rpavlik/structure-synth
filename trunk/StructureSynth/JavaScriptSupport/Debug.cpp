@@ -5,8 +5,11 @@
 #include <QApplication>
 #include <QThread>
 #include "SyntopiaCore/Logging/Logging.h"
+#include "../../SyntopiaCore/GLEngine/Sphere.h"
+
 
 using namespace SyntopiaCore::Logging;
+
 
 
 namespace StructureSynth {
@@ -18,6 +21,8 @@ namespace StructureSynth {
 			public:
 				static void sleep(unsigned long msecs) { msleep(msecs); }
 			};
+
+			
 		};
 
 		Debug::Debug(){
@@ -55,6 +60,12 @@ namespace StructureSynth {
 
 		void Debug::Sleep(int ms) {
 			MyThread::sleep(ms);
+		}
+
+		void World::addSphere(Vector3 center, float radius) {
+			SyntopiaCore::GLEngine::Object3D* o = new SyntopiaCore::GLEngine::Sphere( center.getObj(), radius);
+			//o->setColor(rgb, alpha);
+			engine->addObject(o);
 		}
 	}
 }
