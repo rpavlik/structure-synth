@@ -40,7 +40,12 @@ namespace StructureSynth {
 					inComment = false;
 				    newlines++;
 			    }
-				
+
+				if (input.at(i) == '#') {
+					inComment = true; i++; continue;
+				}
+
+
 				if (i < input.length()-1) {
 					if (input.at(i) == '*' && input.at(i+1) == '/') {
 						inMultiComment = false; i++; continue;
