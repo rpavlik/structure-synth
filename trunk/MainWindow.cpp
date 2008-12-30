@@ -45,6 +45,8 @@ namespace StructureSynth {
 				primitiveFormat.setForeground(Qt::darkYellow);
 				commentFormat.setForeground(Qt::darkGreen);
 				warningFormat.setBackground(QBrush(Qt::yellow));
+				preprocessorFormat.setForeground(QBrush(Qt::blue));
+				preprocessorFormat.setFontWeight(QFont::Bold);
 
 			};
 
@@ -94,6 +96,12 @@ namespace StructureSynth {
 						continue;
 					}
 
+					if (text.at(i) == '#') {
+						// Preprocessor format
+						setFormat(0, text.length(), preprocessorFormat);
+						continue;
+					}
+
 					if ((i > 0) && (i < text.length()-2) && text.at(i) == '/' && text.at(i-1) == '/') {
 						// Single-line comments
 						setFormat(i-1, text.length()-i+1, commentFormat);
@@ -122,6 +130,7 @@ namespace StructureSynth {
 			QTextCharFormat primitiveFormat;
 			QTextCharFormat commentFormat;
 			QTextCharFormat warningFormat;
+			QTextCharFormat preprocessorFormat;
 
 
 		};
