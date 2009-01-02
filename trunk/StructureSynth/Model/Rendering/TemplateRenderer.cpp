@@ -44,7 +44,7 @@ namespace StructureSynth {
 					return;
 				}
 				if (!doc.setContent(&file)) {
-					WARNING("Unable to parsefile: " + xmlDefinitionFile);
+					WARNING("Unable to parse file: " + xmlDefinitionFile);
 					file.close();
 					return;
 				}
