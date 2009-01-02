@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+2  Jan 09 [MHC] Some refactoring. Started sketching a framework for GUI editors for the '#define' statements.
+[2h]
+
 30 Dec 08 [MHC] Added support for '#define varname value' preprocessor substitutions. (Useful for declaring constant variables)
 [1h]
 
