@@ -57,6 +57,22 @@ namespace StructureSynth {
 					engine->addObject(o);
 			};
 
+			void OpenGLRenderer::drawPolygon(SyntopiaCore::Math::Vector3f p1,
+										 SyntopiaCore::Math::Vector3f p2,
+									     SyntopiaCore::Math::Vector3f p3,
+										 const QString& classID) {
+				   // Dummy implementation...
+				   Object3D* o = new Line( p1, p2);
+				   o->setColor(rgb, alpha);
+				   engine->addObject(o);
+				   o = new Line( p2, p3);
+				   o->setColor(rgb, alpha);
+				   engine->addObject(o);
+				   o = new Line( p3, p1);
+				   o->setColor(rgb, alpha);
+				   engine->addObject(o);
+			}
+
 			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v, const QString &) {
 					Object3D* o = new Dot(v);
 					o->setColor(rgb, alpha);
