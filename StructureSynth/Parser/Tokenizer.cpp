@@ -41,7 +41,8 @@ namespace StructureSynth {
 				    newlines++;
 			    }
 
-				if (input.at(i) == '#') {
+				// Check if we found a preprocessor comment (there must occur at the beginning of a line.
+				if (input.at(i) == '#' && ((i == 0) || (input.at(i-1) == '\r') || (input.at(i-1) == '\n'))) {
 					inComment = true; i++; continue;
 				}
 

@@ -96,7 +96,7 @@ namespace StructureSynth {
 						continue;
 					}
 
-					if (text.at(i) == '#') {
+					if (text.at(0) == '#') {
 						// Preprocessor format
 						setFormat(0, text.length(), preprocessorFormat);
 						continue;

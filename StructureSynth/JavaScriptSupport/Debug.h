@@ -45,11 +45,15 @@ namespace StructureSynth {
 			Q_PROPERTY(float z READ readZ WRITE writeZ)
      
 		public:
-			Vector3(){};
-			Vector3(float x, float y, float z){ v = SyntopiaCore::Math::Vector3f(x,y,z); };
-			Vector3(const StructureSynth::JavaScriptSupport::Vector3 & vx) : QObject() {
-				v = vx.v;
+			Vector3();
+			void operator=(const Vector3& rhs) { 
+				writeX(rhs.readX()); 
+				writeY(rhs.readY()); 
+				writeZ(rhs.readZ());
 			}
+
+			Vector3(float x, float y, float z);
+			Vector3(const StructureSynth::JavaScriptSupport::Vector3 & vx);
 			
 			float readX() const { return v.x(); }
 			float readY() const { return v.y(); }
@@ -57,12 +61,23 @@ namespace StructureSynth {
 			void writeX(float v) { this->v.x() = v; }
 			void writeY(float v) { this->v.y() = v; }
 			void writeZ(float v) { this->v.z() = v; }
+			
 
 			SyntopiaCore::Math::Vector3f getObj() { return v; }
-		
+
+			
+			
 		public slots:
 			QString toString() const { return QString("(%1,%2,%3)").arg(v.x()).arg(v.y()).arg(v.z()); };
 			float length() const { return v.length(); };
+			void add(const StructureSynth::JavaScriptSupport::Vector3& rhs) { 
+				v.x() = v.x() + rhs.v.x();
+				v.y() = v.y() + rhs.v.y();
+				v.z() = v.z() + rhs.v.z();
+			}
+
+			
+		
 
 		private:
 			SyntopiaCore::Math::Vector3f v;
@@ -73,18 +88,32 @@ namespace StructureSynth {
 			Q_OBJECT
 
 		public:
-			World(SyntopiaCore::GLEngine::EngineWidget* engine) : engine(engine) {};
+			
+			World(SyntopiaCore::GLEngine::EngineWidget* engine) : 
+				engine(engine), 
+				rgb(SyntopiaCore::Math::Vector3f(1,0,0)),
+				alpha(1.0f) {};
+
+			SyntopiaCore::GLEngine::EngineWidget* getEngine() { return engine; }
+			SyntopiaCore::Math::Vector3f getRgb() { return rgb; };
+			float getAlpha() { return alpha; };
 			
 		public slots:
-			void addSphere(Vector3 center, float radius);
+			void addSphere2(StructureSynth::JavaScriptSupport::Vector3 center, float radius);
+			void setColor2(StructureSynth::JavaScriptSupport::Vector3 center, float alpha);
+			void clear() { engine->clearWorld(); };
 			
 		private:
 			QProgressDialog* progress;
 			SyntopiaCore::GLEngine::EngineWidget* engine;
+			SyntopiaCore::Math::Vector3f rgb;
+			float alpha;
 		};
 		
 	}
 }
+
+Q_DECLARE_METATYPE(StructureSynth::JavaScriptSupport::Vector3)
 
 
 
