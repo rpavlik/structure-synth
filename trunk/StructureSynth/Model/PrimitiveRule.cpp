@@ -31,6 +31,8 @@ namespace StructureSynth {
 				name = "line";
 			} else if (type == Mesh) {
 				name = "mesh";
+			} else if (type == Other) {
+				name = "other";
 			} else {
 				WARNING("PrimitiveRule constructor: unknown PrimitiveType");
 			}
@@ -101,7 +103,22 @@ namespace StructureSynth {
 
 		};
 	
-				
+			
+			
+		TriangleRule::TriangleRule(SyntopiaCore::Math::Vector3f p1,
+					          SyntopiaCore::Math::Vector3f p2,
+							  SyntopiaCore::Math::Vector3f p3) : PrimitiveRule(Other), p1(p1), p2(p2), p3(p3) {
+			name = "Triangle";
+		}
+
+		void TriangleRule::apply(Builder* b) const {
+			Vector3f v1 = b->getState().matrix * p1;
+			Vector3f v2 = b->getState().matrix * p2;
+			Vector3f v3 = b->getState().matrix * p3;
+			
+			b->getRenderer()->drawPolygon(v1,v2,v3,classID);
+		}
+	
 	}
 }
 

@@ -43,17 +43,25 @@ Main Focus: Template rendering
 + GUI Seed
 + Add Template Renderer (user customizable text templats)
 + Splash screen.
+
+Version 0.8.5: 'Exonautica Reloaded'
+------------------------------------
++ Bug Fixes 
  
 Version 0.9: 'Kolberger Heide'
 ---------------
-- save view as eisenscript code.
-- Set initial viewport (create expression by right clicking mouse canvas)
-- Export view settings to Template Renderers
++ '#define varname value' (preprocessor constant definitions)
++ save view as eisenscript code.
++ Set initial viewport (create expression by right clicking mouse canvas)
+- Add new Polygon/Triangle Primitive
+- Export view settings to Template Renderers (this is tricky - but a very requested feature)
 ? 'Zoom to fit'
 
 
 Version 1.0: 'Potemkin'
 -------------------------------
+? GUI for '#define consts' for exploring variations.
+- VRML/OBJ Template (many requests)
 - Preferences (saving with QProperties) [For what?]
 - Installers (for Windows at least - using InnoSetup)
 - Packaging: Icons, Eula, file associations.
@@ -67,6 +75,8 @@ Instead of EisenScript it should be possible to script the object generation usi
 
 Version 2.0: '?'
 ----------------
+Polygon Grammars (a la CGA Shape Grammar)
+
 Emphasizing the 'Synth' of 'Structure Synth (Live Coding / Drawing)
 I want to be able to somehow 'play' and 'compose' structures interactively.
 I'm thinking about implementing this by making rules dependent on some kind of controller:

@@ -1,5 +1,6 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+
 Make Debug moc'ing on release...
 
 Debug.Info(...);
@@ -53,8 +54,6 @@ Help -> add weblinks...
     - tutorials: 'EisenScript Kata'
 
 - Connected polygonal objects.
-	
-- SpinOff: 2D Version (JavaScript/Canvas) of CFDG where each mouseclicks spawns a new rule
 
 - JanJacobSV has some interesting 3D experiments with CFDG and Virtools. http://www.youtube.com/watch?v=KWgQ8XIPAio
 	

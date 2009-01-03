@@ -136,6 +136,14 @@ namespace StructureSynth {
 
 			};
 
+			void TemplateRenderer::drawPolygon(SyntopiaCore::Math::Vector3f p1,
+										 SyntopiaCore::Math::Vector3f p2,
+									     SyntopiaCore::Math::Vector3f p3,
+										 const QString& classID) {
+				// TODO...
+			}
+
+
 			void TemplateRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1, 
 				SyntopiaCore::Math::Vector3f dir2, 

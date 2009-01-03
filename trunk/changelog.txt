@@ -1,8 +1,12 @@
 
 Changelog for Structure Synth:
 ------------------------------
+3  Jan 09 [MHC] Implemented a 'Triangle'. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive.
+[2h]
+
 2  Jan 09 [MHC] Some refactoring. Started sketching a framework for GUI editors for the '#define' statements.
 [2h]
+[2h]            Some more work on the QtScripting.
 
 30 Dec 08 [MHC] Added support for '#define varname value' preprocessor substitutions. (Useful for declaring constant variables)
 [1h]
