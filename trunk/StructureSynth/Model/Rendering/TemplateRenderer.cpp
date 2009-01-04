@@ -139,7 +139,7 @@ namespace StructureSynth {
 			void TemplateRenderer::drawPolygon(SyntopiaCore::Math::Vector3f /*p1*/,
 										 SyntopiaCore::Math::Vector3f /*p2*/,
 									     SyntopiaCore::Math::Vector3f /*p3*/,
-										 const QString& classID) {
+										 const QString& /*classID*/) {
 				// TODO...
 			}
 
