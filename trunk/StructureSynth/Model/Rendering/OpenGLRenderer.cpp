@@ -5,6 +5,7 @@
 #include "../../../SyntopiaCore/GLEngine/Dot.h"
 #include "../../../SyntopiaCore/GLEngine/Line.h"
 #include "../../../SyntopiaCore/GLEngine/Mesh.h"
+#include "../../../SyntopiaCore/GLEngine/Triangle.h"
 #include "../../../SyntopiaCore/Math/Vector3.h"
 
 using namespace SyntopiaCore::GLEngine;
@@ -61,14 +62,7 @@ namespace StructureSynth {
 										 SyntopiaCore::Math::Vector3f p2,
 									     SyntopiaCore::Math::Vector3f p3,
 										 const QString& classID) {
-				   // Dummy implementation...
-				   Object3D* o = new Line( p1, p2);
-				   o->setColor(rgb, alpha);
-				   engine->addObject(o);
-				   o = new Line( p2, p3);
-				   o->setColor(rgb, alpha);
-				   engine->addObject(o);
-				   o = new Line( p3, p1);
+				   Object3D* o = new Triangle(p1, p2,p3);
 				   o->setColor(rgb, alpha);
 				   engine->addObject(o);
 			}

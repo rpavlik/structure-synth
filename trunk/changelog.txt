@@ -2,11 +2,10 @@
 Changelog for Structure Synth:
 ------------------------------
 3  Jan 09 [MHC] Implemented a 'Triangle'. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive.
-[2h]
+[3h]
 
 2  Jan 09 [MHC] Some refactoring. Started sketching a framework for GUI editors for the '#define' statements.
-[2h]
-[2h]            Some more work on the QtScripting.
+[4h]            Some more work on the QtScripting.
 
 30 Dec 08 [MHC] Added support for '#define varname value' preprocessor substitutions. (Useful for declaring constant variables)
 [1h]
@@ -15,6 +14,7 @@ Changelog for Structure Synth:
 [4h]
 
 18 Nov 08 [MHC] Fixed a bug when going into full screen mode (not all chrome was hidden).
+[1h]
 
 17 Nov 08 [MHC] Tried to find out why I could not run in Release mode without crashing on Windows anymore.
 [1h]            Turns out, that QtScriptd4.dll works just fine, but my QtScript4.dll does not, and crashes when called into. This is weird.

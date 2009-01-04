@@ -23,6 +23,15 @@ namespace SyntopiaCore {
 			vertex(v3); 
 			vertex(v4); 
 		}
+
+		void Object3D::vertex3n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3) const { 
+			Vector3f n = (v2-v1).cross(v3-v1);
+			n = n.normalize();
+			normal(n);
+			vertex(v1); 
+			vertex(v2); 
+			vertex(v3); 
+		}
 		
 		void Object3D::vertex4rn(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { 			
 			Vector3f n = (v1-v2).cross(v4-v1);

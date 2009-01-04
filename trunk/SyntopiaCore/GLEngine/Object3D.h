@@ -25,6 +25,7 @@ namespace SyntopiaCore {
 			void vertex(SyntopiaCore::Math::Vector3f v) const { glVertex3f(v.x(), v.y(), v.z()); }
 			void normal(SyntopiaCore::Math::Vector3f v) const { glNormal3f(v.x(), v.y(), v.z()); }
 			void vertex4(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { vertex(v1); vertex(v2); vertex(v3); vertex(v4); }
+			void vertex3n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3) const;
 			void vertex4r(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { vertex(v4); vertex(v3); vertex(v2); vertex(v1); }
 			void vertex4n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const;
 			void vertex4rn(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const ;
