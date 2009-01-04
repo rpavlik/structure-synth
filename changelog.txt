@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+4  Jan 09 [MHC] Restored GCC/Linux code compatibility. (Some header paths were invalid)
+[1h]
+
 3  Jan 09 [MHC] Implemented a 'Triangle'. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive.
 [3h]
 
