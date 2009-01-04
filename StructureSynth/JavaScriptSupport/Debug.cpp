@@ -80,7 +80,7 @@ namespace StructureSynth {
 			v = SyntopiaCore::Math::Vector3f(x,y,z); 
 		};
 
-		Vector3::Vector3(const StructureSynth::JavaScriptSupport::Vector3 & vx) : QObject() {
+		Vector3::Vector3(const StructureSynth::JavaScriptSupport::Vector3 & vx) : QObject(), QScriptable() {
 			v = vx.v;
 			//INFO(QString("Vector3 CopyConstructor(%1,%2,%3)").arg(v.x()).arg(v.y()).arg(v.z()));
 

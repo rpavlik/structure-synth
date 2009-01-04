@@ -60,7 +60,7 @@ namespace StructureSynth {
 				s.writeZ( obj.property("z").toNumber() );
 			} 
 
-			QScriptValue addSphereStatic(QScriptContext *context, QScriptEngine *engine)
+			QScriptValue addSphereStatic(QScriptContext* context, QScriptEngine* /*engine*/)
 			{
 				QScriptValue thisObject = context->thisObject();
 				QObject* w = thisObject.toQObject();
@@ -78,7 +78,7 @@ namespace StructureSynth {
 				return QScriptValue();
 			}
 				
-			QScriptValue setColorStatic(QScriptContext *context, QScriptEngine *engine)
+			QScriptValue setColorStatic(QScriptContext* context, QScriptEngine* /*engine*/)
 			{
 				QScriptValue thisObject = context->thisObject();
 				QObject* w = thisObject.toQObject();
