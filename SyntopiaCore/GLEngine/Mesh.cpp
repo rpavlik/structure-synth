@@ -31,6 +31,9 @@ namespace SyntopiaCore {
 		Mesh::~Mesh() { };
 
 		void Mesh::draw() const {
+
+			// --- TODO: Rewrite - way to many state changes...
+
 			glPushMatrix();
 			glTranslatef( startBase.x(), startBase.y(), startBase.z() );
 			
@@ -42,14 +45,6 @@ namespace SyntopiaCore {
 			glPolygonMode(GL_FRONT, GL_FILL);
 			glPolygonMode(GL_BACK, GL_FILL);
 				
-
-			/*
-			glEnable (GL_BLEND);
-			glBlendFnc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			
-			glDisable (GL_DEPTH_TEST) ;
-			*/
-
 			Vector3f O(0,0,0);
 			Vector3f end = endBase - startBase;
 			

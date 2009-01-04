@@ -293,6 +293,14 @@
 					RelativePath=".\SyntopiaCore\GLEngine\Sphere.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SyntopiaCore\GLEngine\Triangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\GLEngine\Triangle.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Math"

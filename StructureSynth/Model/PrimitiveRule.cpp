@@ -112,6 +112,14 @@ namespace StructureSynth {
 		}
 
 		void TriangleRule::apply(Builder* b) const {
+			b->increaseObjectCount();
+			b->getRenderer()->setColor(
+				SyntopiaCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)
+			);
+
+			b->getRenderer()->setAlpha( b->getState().alpha );
+			
+			
 			Vector3f v1 = b->getState().matrix * p1;
 			Vector3f v2 = b->getState().matrix * p2;
 			Vector3f v3 = b->getState().matrix * p3;
