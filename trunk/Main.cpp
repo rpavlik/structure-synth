@@ -1,6 +1,6 @@
 #include <QApplication>
 
-#include "GUI/MainWindow.h"
+#include "StructureSynth/GUI/MainWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,11 +12,9 @@ int main(int argc, char *argv[])
 	splash.show();
 	qApp->processEvents();
 
-
 	StructureSynth::GUI::MainWindow *mainWin = new StructureSynth::GUI::MainWindow();
     mainWin->show();
 	splash.show();
-	//splash.finish(mainWin);
-    return app.exec();
+	return app.exec();
 }
 
