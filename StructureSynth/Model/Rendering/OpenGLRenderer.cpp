@@ -61,7 +61,7 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawPolygon(SyntopiaCore::Math::Vector3f p1,
 										 SyntopiaCore::Math::Vector3f p2,
 									     SyntopiaCore::Math::Vector3f p3,
-										 const QString& classID) {
+										 const QString& /*classID*/) {
 				   Object3D* o = new Triangle(p1, p2,p3);
 				   o->setColor(rgb, alpha);
 				   engine->addObject(o);
