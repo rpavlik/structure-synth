@@ -7,20 +7,20 @@
 #include <QStack>
 
 #include "MainWindow.h"
-#include "SyntopiaCore/Logging/ListWidgetLogger.h"
-#include "SyntopiaCore/Exceptions/Exception.h"
-#include "StructureSynth/Parser/EisenParser.h"
-#include "StructureSynth/Model/Rendering/OpenGLRenderer.h"
-#include "StructureSynth/Model/Rendering/POVRenderer.h"
-#include "StructureSynth/Model/Rendering/TemplateRenderer.h"
-#include "StructureSynth/Parser/Tokenizer.h"
-#include "StructureSynth/Parser/Preprocessor.h"
-#include "StructureSynth/Model/RuleSet.h"
-#include "StructureSynth/Model/Builder.h"
-#include "StructureSynth/JavaScriptSupport/JavaScriptParser.h"
+#include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
+#include "../../StructureSynth/Parser/EisenParser.h"
+#include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
+#include "../../StructureSynth/Model/Rendering/POVRenderer.h"
+#include "../../StructureSynth/Model/Rendering/TemplateRenderer.h"
+#include "../../StructureSynth/Parser/Tokenizer.h"
+#include "../../StructureSynth/Parser/Preprocessor.h"
+#include "../../StructureSynth/Model/RuleSet.h"
+#include "../../StructureSynth/Model/Builder.h"
+#include "../../StructureSynth/JavaScriptSupport/JavaScriptParser.h"
 
-#include "SyntopiaCore/Math/Vector3.h"
-#include "SyntopiaCore/Math/Matrix4.h"
+#include "../../SyntopiaCore/Math/Vector3.h"
+#include "../../SyntopiaCore/Math/Matrix4.h"
 
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Logging;

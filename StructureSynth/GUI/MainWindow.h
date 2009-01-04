@@ -5,8 +5,8 @@
 #include <QStackedWidget>
 
 
-#include "SyntopiaCore/GLEngine/EngineWidget.h"
-#include "SyntopiaCore/Misc/Version.h"
+#include "../../SyntopiaCore/GLEngine/EngineWidget.h"
+#include "../../SyntopiaCore/Misc/Version.h"
 
 
 class QAction;

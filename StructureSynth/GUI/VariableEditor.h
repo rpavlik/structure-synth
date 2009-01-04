@@ -1,3 +1,5 @@
+// --- SKELETON CODE - not used yet!
+
 #pragma once
 
 #include <QString>
