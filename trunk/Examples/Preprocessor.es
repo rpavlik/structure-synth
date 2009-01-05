@@ -8,21 +8,22 @@
 set maxdepth 100
 set background black
 
-36 * { rx 10  x 0.2 sat 0.95 } R
+18 * { rx 10  x 0.2 sat 0.95  } R
 
 
-rule R { R1 R2 }
+rule R { R1  }
 
 rule R1 {
   {  x 0.6 rz angle ry angle s sizeStep hue 1 a 0.99 } R1
-  { s 2 2 0.1  } sbox
+  { s 1 1  0.1  } sbox
 }
 
 rule R2 {
-  { x -0.6 rz angle ry angle s sizeStep hue -1  sat 1 a 0.99  } R2
-  { s 2 2  0.1 } sbox
+  { x -0.6 rz angle ry angle s sizeStep hue 1  sat 1 a 0.99  } R2
+  { s 1 1  0.1 } sbox
 } 
 
 rule sbox {
-  box
+ { color black } grid
+  {  b 0.8 hue 67 } box
 }
