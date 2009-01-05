@@ -48,13 +48,15 @@ namespace StructureSynth {
 				preprocessorFormat.setForeground(QBrush(Qt::blue));
 				preprocessorFormat.setFontWeight(QFont::Bold);
 
+				expression = QRegExp("(set|translation|pivot|rotation|scale|maxobjects|background|color|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
+				primitives = QRegExp("(triangle\\[.*\\]|sphere(::\\w+)?|box(::\\w+)?|dot(::\\w+)?|line(::\\w+)?|grid(::\\w+)?)");
+				expression.setCaseSensitivity(Qt::CaseInsensitive);
+				primitives.setCaseSensitivity(Qt::CaseInsensitive);
 			};
 
 			void highlightBlock(const QString &text)
 			{
-				static QRegExp expression("(set|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
-				static QRegExp primitives("(sphere(::\\w+)?|box(::\\w+)?|dot(::\\w+)?|line(::\\w+)?|grid(::\\w+)?)");
-
+				
 				if (currentBlockState() == 2) {
 					setFormat(0, text.length(), warningFormat);
 					setCurrentBlockState(-1);
@@ -108,7 +110,7 @@ namespace StructureSynth {
 						break;
 					}
 
-					bool delimiter = (text.at(i) == '{' || text.at(i) == '}' || text.at(i) == ' '  || (text.at(i) == '\r') || (text.at(i) == '\n'));
+					bool delimiter = (text.at(i) == '{' || text.at(i) == '\t' || text.at(i) == '}' || text.at(i) == ' '  || (text.at(i) == '\r') || (text.at(i) == '\n'));
 					bool lastChar = (i==text.length()-1);
 					if (delimiter || lastChar) {
 						if (lastChar && !delimiter) current += text.at(i);
@@ -132,6 +134,9 @@ namespace StructureSynth {
 			QTextCharFormat warningFormat;
 			QTextCharFormat preprocessorFormat;
 
+			QRegExp expression;
+			QRegExp primitives;
+			
 
 		};
 

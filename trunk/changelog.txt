@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------------------------
+5  Jan 09 [MHC] Corrected some syntax highlighter bugs...
+
 4  Jan 09 [MHC] Restored GCC/Linux code compatibility. (Some header paths were invalid)
 [1h]
 
