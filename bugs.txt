@@ -2,6 +2,7 @@ Bug List:
 ---------
 Priority 0-5, 5 is worst:
 
+Fix mouse zoom
 - [3] Syntax highlightning has issues: missing keywords, fails after \t, (Notice: '\tTriangles' does not parse!), does not update properly after copy and paste.
 - [3] 'Template Render to File' saves files with \d\d\a carriage returns
 - [3] Parser do not allow operator names as rule names. 'rule R1 maxdepth 2 > c ' fails.
