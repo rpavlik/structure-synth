@@ -7,6 +7,7 @@
 #include <QStack>
 
 #include "MainWindow.h"
+#include "VariableEditor.h"
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../StructureSynth/Parser/EisenParser.h"
@@ -320,6 +321,28 @@ namespace StructureSynth {
 			vboxLayout1->addWidget(logger->getListWidget());
 			dockLog->setWidget(dockLogContents);
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
+
+
+			// Variable editor (in dockable window)
+			bool experimental = false;
+			if (experimental) {
+				QDockWidget* editorDockWidget = new QDockWidget(this);
+				editorDockWidget->setWindowTitle("Variables");
+				editorDockWidget->setObjectName(QString::fromUtf8("editorDockWidget"));
+				editorDockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
+				QWidget* editorLogContents = new QWidget(dockLog);
+				editorLogContents->setObjectName(QString::fromUtf8("editorLogContents"));
+				QVBoxLayout* vboxLayout2 = new QVBoxLayout(editorLogContents);
+				vboxLayout2->setObjectName(QString::fromUtf8("vboxLayout2"));
+				vboxLayout2->setContentsMargins(0, 0, 0, 0);
+
+				VariableEditor* variableEditor = new VariableEditor(editorDockWidget);
+				vboxLayout2->addWidget(variableEditor);
+				editorDockWidget->setWidget(editorLogContents);
+				addDockWidget(Qt::RightDockWidgetArea, editorDockWidget);
+			}
+
+
 			INFO("Welcome to Structure Synth. A Syntopia Project.");
 			INFO("Hold 'CTRL' for speed draw'.");
 			INFO("Press 'Reset View' if the view disappears...");
@@ -735,6 +758,8 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::render() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			INFO(getTextEdit()->toPlainText());
 			if (getTextEdit()->toPlainText().startsWith("#javascript", Qt::CaseInsensitive)) {
 			    // This is javascript...
@@ -1005,6 +1030,8 @@ namespace StructureSynth {
 		};
 
 		void MainWindow::insertCameraSettings() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			///xxx
 			Vector3f translation = engine->getTranslation();
 			Matrix4f rotation = engine->getRotation();
@@ -1040,11 +1067,15 @@ namespace StructureSynth {
 
 		void MainWindow::templateRender()
 		{
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			templateRender(""); // Renders to clip board when file name is empty.
 		}
 
 		void MainWindow::templateRender(const QString& fileName)
 		{
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
 			QAction *action = qobject_cast<QAction *>(sender());
 			if (action) {
 				QDir d(getTemplateDir());

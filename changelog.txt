@@ -1,7 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+14 Jan 09 [MHC] Updated web page
+[2h]            More work on the GUI editors.
+
 5  Jan 09 [MHC] Corrected some syntax highlighter bugs...
+[1h]
 
 4  Jan 09 [MHC] Restored GCC/Linux code compatibility. (Some header paths were invalid)
 [1h]
