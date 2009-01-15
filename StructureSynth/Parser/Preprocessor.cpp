@@ -19,7 +19,7 @@ namespace StructureSynth {
 
 			QMap<QString, QString> substitutions;
 			QRegExp ppCommand("^#"); // Look for #define varname value
-			QRegExp defineCommand("^#define\\s(\\S+)\\s(\\S+)\\s*$"); // Look for #define varname value
+			QRegExp defineCommand("^#define\\s([^\\s]+)\\s(.*)*$"); // Look for #define varname value
 
 
 			for (QStringList::iterator it = in.begin(); it != in.end(); ++it) {
@@ -36,11 +36,19 @@ namespace StructureSynth {
 					// Non-preprocessor command
 					// Check for substitutions.
 					QMap<QString, QString>::const_iterator it2 = substitutions.constBegin();
+					int subst = 0;
 					while (it2 != substitutions.constEnd()) {
+						if (subst>100) {
+							WARNING("More than 100 recursive preprocessor substitutions... breaking.");
+							break;
+						}
 						if ((*it).contains(it2.key())) {
 							(*it).replace(it2.key(), it2.value());
+							it2 = substitutions.constBegin();
+							subst++;
+						} else {
+							it2++;
 						}
-						it2++;
 				    }
 				}
 			}
