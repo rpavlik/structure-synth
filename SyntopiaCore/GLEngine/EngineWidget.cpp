@@ -75,15 +75,8 @@ namespace SyntopiaCore {
 		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
 			
 		void EngineWidget::paintGL() {
-			static Sphere* sphere = 0;
-			static Sphere* sphere2 = 0;
-
-			if (sphere==0) {
-				sphere = new Sphere(Vector3f(0,0,0),0.1f);
-			}
 			
-		
-
+			
 			static int count = 0;
 			count++;
 
@@ -107,23 +100,10 @@ namespace SyntopiaCore {
 			cameraUp = screenTo3D(width()/2, height()/2-height()/4, 0)-cameraPosition;
 			cameraUp.normalize();
 
-			INFO(QString("Pos: %1, Target: %2, UP: %3")
-				.arg(cameraPosition.toString()).arg(cameraTarget.toString()).arg(cameraUp.toString()));
-			
-			//if (QApplication::keyboardModifiers() != Qt::ShiftModifier) {
-				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-			//}
-			
+			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-				for (double i = 0; i < 1; i+=0.01) {
-					sphere->setColor(Vector3f(1,1,0),1);
-				sphere->setCenter((cameraPosition + cameraTarget)/2.0 + cameraUp*(1-i));
-				sphere->draw();
-				}
-		
+			renderText(10, 20, infoText);
 			
-
-
 			if (QApplication::keyboardModifiers() == Qt::AltModifier) {
 				// Fast-draw
 
@@ -131,7 +111,6 @@ namespace SyntopiaCore {
 				int step = objs/5000;
 				if (step < 1) step = 1;
 				if (count >= step) count = 0;
-
 
 				glDisable (GL_LIGHTING);
 				glLineWidth( 1.0 );
@@ -200,8 +179,8 @@ namespace SyntopiaCore {
 			if (height() == 0) return;
 
 			GLfloat w = (float) width() / (float) height();
-			INFO(QString("OpenGL Canvas size: %1, %2, Aspect Ratio: %3")
-				.arg(width()).arg(height()).arg((float)width()/height()));
+			infoText = QString("[%1x%2] Aspect=%3").arg(width()).arg(height()).arg((float)width()/height());
+			textTimer = QTime::currentTime();
 			//GLfloat h = 1.0;
 
 			glViewport( 0, 0, width(), height() );
@@ -218,7 +197,15 @@ namespace SyntopiaCore {
 				firstTime = false;
 				updatePerspective(); 
 				requireRedraw();
+				infoText = "";
 			}
+
+			// Check if we are displaying a message.
+			if (infoText != "" && abs((int)(textTimer.msecsTo(QTime::currentTime()))>1000)) {
+				infoText = "";
+				requireRedraw();
+			}
+
 			if (pendingRedraws) updateGL();
 		}
 
