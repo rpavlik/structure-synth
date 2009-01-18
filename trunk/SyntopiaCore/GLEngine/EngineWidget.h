@@ -110,6 +110,7 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Matrix4f rotation;
 
 			QList<Object3D*> objects;
+			QString infoText;
 
 			QMenu* contextMenu;
 			bool rmbDragging;
@@ -117,6 +118,8 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f cameraPosition;
 			SyntopiaCore::Math::Vector3f cameraUp;
 			SyntopiaCore::Math::Vector3f cameraTarget;
+
+			QTime textTimer;
 			
 
 		};
