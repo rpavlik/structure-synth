@@ -12,6 +12,8 @@ namespace StructureSynth {
 	namespace Model {	
 		namespace Rendering {
 			
+			using namespace SyntopiaCore::Math;
+
 			class Template; // Forward...
 
 			/// A renderer implementation based on the SyntopiaCore POV widget.
@@ -75,9 +77,19 @@ namespace StructureSynth {
 
 				void assertTemplateExists(QString templateName);
 			
+				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraTarget) {
+					this->cameraPosition = cameraPosition;
+					this->cameraUp = cameraUp;
+					this->cameraTarget = cameraTarget;
+				}
 
 			private:
 				
+				SyntopiaCore::Math::Vector3f cameraPosition;
+				SyntopiaCore::Math::Vector3f cameraUp;
+				SyntopiaCore::Math::Vector3f cameraTarget;
+
+
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
 				QMap<QString, Template> templates;

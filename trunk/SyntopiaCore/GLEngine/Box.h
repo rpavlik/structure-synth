@@ -22,7 +22,7 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f v1;
 			SyntopiaCore::Math::Vector3f v2;
 			SyntopiaCore::Math::Vector3f v3;
-			GLUquadric* myQuad;    
+  
 		};
 
 	}

@@ -764,7 +764,6 @@ namespace StructureSynth {
 		void MainWindow::render() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 			
-			INFO(getTextEdit()->toPlainText());
 			if (getTextEdit()->toPlainText().startsWith("#javascript", Qt::CaseInsensitive)) {
 			    // This is javascript...
 				QString text = getTextEdit()->toPlainText();
@@ -809,6 +808,8 @@ namespace StructureSynth {
 					oldDirtyPosition = -1;
 				}
 
+				rs = 0;
+				delete(rs);
 				//if (getTextEdit()->isWindowModified()) getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
 
 
@@ -1117,7 +1118,9 @@ namespace StructureSynth {
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";
 					TemplateRenderer rendering(templateFileName);
-					rendering.begin(); // we clear before parsing...
+					rendering.setCamera(engine->getCameraPosition(), engine->getCameraUp(), engine->getCameraTarget());
+
+					rendering.begin(); 
 
 					Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
 					EisenParser e(&tokenizer);

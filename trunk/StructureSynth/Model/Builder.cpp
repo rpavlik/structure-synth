@@ -39,7 +39,6 @@ namespace StructureSynth {
 
 			while (generationCounter < maxGenerations && objects < maxObjects) {
 
-
 				double p = 0;
 				if (maxObjects>0) {
 					p = objects/(double)maxObjects;
