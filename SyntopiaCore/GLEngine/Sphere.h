@@ -12,6 +12,7 @@ namespace SyntopiaCore {
 			virtual ~Sphere();
 
 			virtual void draw() const;
+			void setCenter(SyntopiaCore::Math::Vector3f center) { this->center = center; }
 
 		private:
 			SyntopiaCore::Math::Vector3f center;
