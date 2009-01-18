@@ -53,6 +53,9 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f getPivot() { return pivot; }
 			SyntopiaCore::Math::Matrix4f getRotation() { return rotation; }
 			SyntopiaCore::Math::Vector3f getTranslation() { return translation; }
+			SyntopiaCore::Math::Vector3f getCameraPosition();
+			SyntopiaCore::Math::Vector3f getCameraUp();
+			SyntopiaCore::Math::Vector3f getCameraTarget();
 			double getScale() { return scale; }
 
 			void setPivot(SyntopiaCore::Math::Vector3f pivot) { this->pivot = pivot; }
@@ -110,6 +113,12 @@ namespace SyntopiaCore {
 
 			QMenu* contextMenu;
 			bool rmbDragging;
+
+			SyntopiaCore::Math::Vector3f cameraPosition;
+			SyntopiaCore::Math::Vector3f cameraUp;
+			SyntopiaCore::Math::Vector3f cameraTarget;
+			
+
 		};
 	};
 

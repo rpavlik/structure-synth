@@ -75,6 +75,14 @@ namespace SyntopiaCore {
 		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
 			
 		void EngineWidget::paintGL() {
+			static Sphere* sphere = 0;
+			static Sphere* sphere2 = 0;
+
+			if (sphere==0) {
+				sphere = new Sphere(Vector3f(0,0,0),0.1f);
+			}
+			
+		
 
 			static int count = 0;
 			count++;
@@ -93,10 +101,27 @@ namespace SyntopiaCore {
 			Vector3f v2 = rotation*v;
 			glMultMatrixf(rotation.getArray());
 			glTranslatef( -pivot.x(), -pivot.y(), -pivot.z() );
+		
+			cameraPosition = screenTo3D(width()/2, height()/2, 0);
+			cameraTarget = screenTo3D(width()/2, height()/2, 1);
+			cameraUp = screenTo3D(width()/2, height()/2-height()/4, 0)-cameraPosition;
+			cameraUp.normalize();
+
+			INFO(QString("Pos: %1, Target: %2, UP: %3")
+				.arg(cameraPosition.toString()).arg(cameraTarget.toString()).arg(cameraUp.toString()));
 			
 			//if (QApplication::keyboardModifiers() != Qt::ShiftModifier) {
 				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 			//}
+			
+
+				for (double i = 0; i < 1; i+=0.01) {
+					sphere->setColor(Vector3f(1,1,0),1);
+				sphere->setCenter((cameraPosition + cameraTarget)/2.0 + cameraUp*(1-i));
+				sphere->draw();
+				}
+		
+			
 
 
 			if (QApplication::keyboardModifiers() == Qt::AltModifier) {
@@ -175,6 +200,8 @@ namespace SyntopiaCore {
 			if (height() == 0) return;
 
 			GLfloat w = (float) width() / (float) height();
+			INFO(QString("OpenGL Canvas size: %1, %2, Aspect Ratio: %3")
+				.arg(width()).arg(height()).arg((float)width()/height()));
 			//GLfloat h = 1.0;
 
 			glViewport( 0, 0, width(), height() );
@@ -362,7 +389,17 @@ namespace SyntopiaCore {
 			objects.append(object);
 		}
 
-		
+		SyntopiaCore::Math::Vector3f EngineWidget::getCameraPosition() {
+			return cameraPosition;
+		};
+
+		SyntopiaCore::Math::Vector3f EngineWidget::getCameraUp() {
+			return cameraUp;
+		};
+
+		SyntopiaCore::Math::Vector3f EngineWidget::getCameraTarget() {
+			return cameraTarget;
+		};
 	}
 }
 

@@ -364,6 +364,7 @@ namespace StructureSynth {
 		void MainWindow::createOpenGLContextMenu() {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(insertCameraSettingsAction);
+			openGLContextMenu->addAction(copyCameraSettingsAction);
 			openGLContextMenu->addAction(fullScreenAction);
 			openGLContextMenu->addAction(screenshotAction);
 			openGLContextMenu->addAction(panicAction);
@@ -417,6 +418,9 @@ namespace StructureSynth {
 
 			insertCameraSettingsAction  = new QAction(tr("&Copy Camera settings to EisenScript Window"), this);
 			connect(insertCameraSettingsAction, SIGNAL(triggered()), this, SLOT(insertCameraSettings()));
+
+			copyCameraSettingsAction  = new QAction(tr("&Copy Camera settings to Clip board (exp)"), this);
+			connect(copyCameraSettingsAction, SIGNAL(triggered()), this, SLOT(copyCameraSettings()));
 
 
 			screenshotAction = new QAction(tr("&Save as bitmap..."), this);
@@ -1049,6 +1053,32 @@ namespace StructureSynth {
 			getTextEdit()->insertPlainText(sl.join("\r\n"));
 			INFO("Camera settings are now pasted into the script window.");
 			INFO("Remember to clear previous 'set' commands if neccesary.");
+		}
+
+		void MainWindow::copyCameraSettings() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			
+			///xxx
+			Vector3f pos = engine->getCameraPosition();
+			Vector3f up = engine->getCameraUp();
+			Vector3f target = engine->getCameraTarget();
+			// double scale = engine->getScale();
+
+			QStringList sl;
+			sl 
+			   << QString("eye %1").arg(pos.toString())
+			   << QString("target %1").arg(target.toString())
+			   << QString("up %1").arg(up.toString())
+			   
+			  ;
+
+			QClipboard *clipboard = QApplication::clipboard();
+			clipboard->setText(sl.join("\r\n")); 
+
+
+
+			INFO("Camera settings are copied to clipboard.");
+			
 		}
 
 		void MainWindow::templateRenderToFile()

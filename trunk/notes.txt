@@ -1,5 +1,6 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+TODO: Fast draw button. Fast draw doesn't work for white background...
 
 Make Debug moc'ing on release...
 
