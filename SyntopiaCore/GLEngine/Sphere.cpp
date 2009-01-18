@@ -10,10 +10,9 @@ namespace SyntopiaCore {
 		//GLUquadric* Sphere::myQuad = 0;    
 
 		Sphere::Sphere(SyntopiaCore::Math::Vector3f center, float radius) : center(center), radius(radius) {
-			if (true) {
-				myQuad = gluNewQuadric();    
-				gluQuadricDrawStyle(myQuad, GLU_FILL);
-			}
+			myQuad = gluNewQuadric();    
+			gluQuadricDrawStyle(myQuad, GLU_FILL);
+			
 			/// Bounding box
 			Vector3f v = Vector3f(radius,radius,radius);
 			from = center-v;

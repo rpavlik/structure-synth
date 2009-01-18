@@ -26,8 +26,7 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f startDir2;
 			SyntopiaCore::Math::Vector3f endBase;
 			SyntopiaCore::Math::Vector3f endDir1;
-			SyntopiaCore::Math::Vector3f endDir2;
-			GLUquadric* myQuad;    
+			SyntopiaCore::Math::Vector3f endDir2;   
 		};
 
 	}

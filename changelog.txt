@@ -1,6 +1,16 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+18 Jan 09 [MHC] Added Camera Export. Now in the 'begin' template, it is possible to do stuff like:
+[5h]			   eye    {CamPosX} {CamPosY} {CamPosZ}
+				   target {CamTargetX} {CamTargetY} {CamTargetZ}
+				   up     {CamUpX} {CamUpY} {CamUpZ}
+				   fov    29
+				When resizing OpenGL window, width/height/a.r. is shown.
+				Removed an extensive memoryleak (leaked 16 bytes per created state).
+			 
+
 14 Jan 09 [MHC] Updated web page
 [2h]            More work on the GUI editors.
 

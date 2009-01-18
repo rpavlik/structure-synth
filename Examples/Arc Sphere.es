@@ -1,10 +1,18 @@
 // Master sphere
-set maxobjects  30400
+set maxobjects  10400
 set background #454
 
-15 * { s 0.9 z -2 y 0.5   } 1 * {  color #5a5 s 0.92  rz 0  }  r1
-15 * { s 0.9 z -2 y 0.5    } 1 * {  color #aaa  s 0.87   rz 0 }  r1
-15 * { s 0.9 z -2 y 0.5   } 1 * {  color #fff }  r1
+// Camera settings. Place these before first rule call.
+set translation [-3.33009 0.0259899 -20]
+set rotation [0.147791 -0.237766 -0.960012 -0.822766 -0.568209 0.014066 -0.548833 0.787786 -0.279602]
+set pivot [0 0 0]
+set scale 0.18957
+
+{ ry 90  s 200 200 1   } box
+
+7 * { s 0.9 z -2 y 0.5   } 1 * {  color #5a5 s 0.92  rz 0  }  r1
+7 * { s 0.9 z -2 y 0.5    } 1 * {  color #aaa  s 0.87   rz 0 }  r1
+7 * { s 0.9 z -2 y 0.5   } 1 * {  color #fff }  r1
 
 
 rule r1 w 40  {

@@ -41,10 +41,10 @@ bucket 32 row
 
 camera {
    type pinhole
-   eye    3.27743673325 -9.07978439331 9.93055152893
-   target 0 0 0
-   up     0 0 1
-   fov    40
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    29
    aspect 1
 }
 

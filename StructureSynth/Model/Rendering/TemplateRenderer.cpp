@@ -250,6 +250,17 @@ namespace StructureSynth {
 			void TemplateRenderer::begin() {
 				assertTemplateExists("begin");
 				Template t(templates["begin"]); 
+				
+				t.substitute("{CamPosX}", QString::number(cameraPosition.x()));
+				t.substitute("{CamPosY}", QString::number(cameraPosition.y()));
+				t.substitute("{CamPosZ}", QString::number(cameraPosition.z()));
+				t.substitute("{CamUpX}", QString::number(cameraUp.x()));
+				t.substitute("{CamUpY}", QString::number(cameraUp.y()));
+				t.substitute("{CamUpZ}", QString::number(cameraUp.z()));
+				t.substitute("{CamTargetX}", QString::number(cameraTarget.x()));
+				t.substitute("{CamTargetY}", QString::number(cameraTarget.y()));
+				t.substitute("{CamTargetZ}", QString::number(cameraTarget.z()));
+				
 				output.append(t.getText());
 			};
 

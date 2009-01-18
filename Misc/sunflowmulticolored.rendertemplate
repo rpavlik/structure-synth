@@ -31,10 +31,10 @@ bucket 32 spiral
 %% camera
 camera {
    type pinhole
-   eye    0 10 40
-   target 0 0 0
-   up     0 1 0
-   fov    40
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    29
    aspect 1
 }
 
