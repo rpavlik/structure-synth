@@ -12,7 +12,7 @@
 
 %% common settings
 image {
-	resolution 500 500
+   resolution {width} {height}
 	aa 0 2
 }
 
@@ -34,8 +34,8 @@ camera {
    eye    {CamPosX} {CamPosY} {CamPosZ}
    target {CamTargetX} {CamTargetY} {CamTargetZ}
    up     {CamUpX} {CamUpY} {CamUpZ}
-   fov    29
-   aspect 1
+   fov    {fov}
+   aspect {aspect}
 }
 
 
