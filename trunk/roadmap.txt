@@ -61,6 +61,7 @@ Version 1.0: 'Potemkin'
 -------------------------------
 ? 'Zoom to fit'
 ? GUI for '#define consts' for exploring variations.
+- Mesh?
 - VRML/OBJ Template (many requests)
 - Preferences (saving with QProperties) [For what?]
 - Installers (for Windows at least - using InnoSetup)
