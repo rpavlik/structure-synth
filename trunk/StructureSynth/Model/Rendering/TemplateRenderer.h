@@ -77,10 +77,14 @@ namespace StructureSynth {
 
 				void assertTemplateExists(QString templateName);
 			
-				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraTarget) {
+				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraTarget, int width, int height, double aspect, double fov) {
 					this->cameraPosition = cameraPosition;
 					this->cameraUp = cameraUp;
 					this->cameraTarget = cameraTarget;
+					this->width = width;
+					this->height = height;
+					this->aspect = aspect;
+					this->fov = fov;
 				}
 
 			private:
@@ -95,6 +99,10 @@ namespace StructureSynth {
 				QMap<QString, Template> templates;
 				QStringList output;
 				int counter;
+				int width;
+				int height;
+				double aspect;
+				double fov;
 			};
 
 		}

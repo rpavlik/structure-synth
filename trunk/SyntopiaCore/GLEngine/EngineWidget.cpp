@@ -187,6 +187,7 @@ namespace SyntopiaCore {
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 
+			//settings.perspectiveAngle = 90;
 			gluPerspective(settings.perspectiveAngle, w,  (float)settings.nearClipping, (float)settings.farClipping);
 			//glOrtho( -w, w, -h, h, (float)0, (float) 60 );
 		}
@@ -387,6 +388,12 @@ namespace SyntopiaCore {
 		SyntopiaCore::Math::Vector3f EngineWidget::getCameraTarget() {
 			return cameraTarget;
 		};
+
+		double EngineWidget::getFOV() {
+			double ar = width()/(double)height();
+			return 29.0*ar; // Hack - this is not entirely accurate for large AR's.
+		}
+		
 	}
 }
 

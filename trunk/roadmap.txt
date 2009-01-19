@@ -48,18 +48,18 @@ Version 0.8.5: 'Exonautica Reloaded'
 ------------------------------------
 + Bug Fixes 
  
-Version 0.9: 'Kolberger Heide'
----------------
+Version 0.9: 'Kolberger Heide' (or 'Glasnost')
+----------------------------------------------
 + '#define varname value' (preprocessor constant definitions)
 + save view as eisenscript code.
 + Set initial viewport (create expression by right clicking mouse canvas)
-- Add new Polygon/Triangle Primitive
-- Export view settings to Template Renderers (this is tricky - but a very requested feature)
-? 'Zoom to fit'
++ Add new Polygon/Triangle Primitive
++ Export view settings to Template Renderers 
 
 
 Version 1.0: 'Potemkin'
 -------------------------------
+? 'Zoom to fit'
 ? GUI for '#define consts' for exploring variations.
 - VRML/OBJ Template (many requests)
 - Preferences (saving with QProperties) [For what?]
