@@ -2,6 +2,7 @@ TODO list and scratch pad for Structure Synth. /Mikael
 
 TODO: 
 - Fast draw button. Fast draw doesn't work for white background...
+-> Output is copied to clipboard for file saving???
 - Add 'polygon template thingie'.
 - Add 'Grid' to templates... (or continue when missing...)
 - OpenGL infotext has fixed color
@@ -17,7 +18,8 @@ Choose Template:
 [Sunflow.template] [<]
 
 (o) Render to file: [c:\testmig.es] [File...]
-( ) Render to clipboard:
+	[x] add unique ID to filename
+( ) Render to clipboard.
 
 Output Size:
 X: 640 Y: 400. [x] Lock Aspect
@@ -25,9 +27,9 @@ X: 640 Y: 400. [x] Lock Aspect
 [x] Modify Template before applying:
 (changes to template are not saved on disk)
 
-[x] Modify Output before saving
-
-[x] Run the following commands on the output:
+Post processing:
+[x] Modify export before saving
+[x] Run the following commands after export:
     C:\sunflow\sunflow.bat {File}
 
 
@@ -80,15 +82,12 @@ On startup -> show 3D view nav info...
 Help -> add weblinks...
 
 - Restructure: 
-	-GUI files the proper place
 	-Check directory structure.
 	-Comments
 				
 - Website: 
     - add section links.
     - tutorials: 'EisenScript Kata'
-
-- Connected polygonal objects.
 
 - JanJacobSV has some interesting 3D experiments with CFDG and Virtools. http://www.youtube.com/watch?v=KWgQ8XIPAio
 	
