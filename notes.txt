@@ -2,9 +2,9 @@ TODO list and scratch pad for Structure Synth. /Mikael
 
 TODO: 
 - Fast draw button. Fast draw doesn't work for white background...
+- Add 'polygon template thingie'.
 - Add 'Grid' to templates... (or continue when missing...)
 - OpenGL infotext has fixed color
-- Add 'fov' 'aspect' 'xsize,ysize' to begin template.
 - Show hour-glass when making long operations (before progress when rendering...)    
 
 Request:
@@ -26,6 +26,9 @@ X: 640 Y: 400. [x] Lock Aspect
 (changes to template are not saved on disk)
 
 [x] Modify Output before saving
+
+[x] Run the following commands on the output:
+    C:\sunflow\sunflow.bat {File}
 
 
 

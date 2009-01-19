@@ -261,6 +261,12 @@ namespace StructureSynth {
 				t.substitute("{CamTargetY}", QString::number(cameraTarget.y()));
 				t.substitute("{CamTargetZ}", QString::number(cameraTarget.z()));
 				
+				t.substitute("{aspect}", QString::number(aspect));	
+				t.substitute("{width}", QString::number(width));
+				t.substitute("{height}", QString::number(height));
+				t.substitute("{fov}", QString::number(fov));
+				
+
 				output.append(t.getText());
 			};
 

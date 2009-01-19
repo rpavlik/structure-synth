@@ -49,7 +49,6 @@ namespace StructureSynth {
 
 		private slots:
 			void insertCameraSettings();
-			void copyCameraSettings();
 			void cursorPositionChanged();
 			void seedChanged();
 			void tabChanged(int index);
@@ -136,7 +135,7 @@ namespace StructureSynth {
 			int oldDirtyPosition;
 
 			QVBoxLayout* frameMainWindow;
-			QAction* copyCameraSettingsAction;
+
 		};
 
 	}

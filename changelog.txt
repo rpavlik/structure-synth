@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------------------------
+19 Jan 09 [MHC] More Cam Export stuff. Now works with more aspect ratios. Added the following exports to the 'begin' template:
+[1h]			{fov},{aspect},{width} {height} [Width and Height being the size of the OpenGL viewport, aspect their proprotion and for=29*aspect (pretty close for SunFlow export)]
 
 18 Jan 09 [MHC] Added Camera Export. Now in the 'begin' template, it is possible to do stuff like:
 [5h]			   eye    {CamPosX} {CamPosY} {CamPosZ}

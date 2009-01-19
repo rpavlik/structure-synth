@@ -70,6 +70,8 @@ namespace SyntopiaCore {
 		
 			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
 
+			double getFOV();
+		
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );
@@ -87,7 +89,7 @@ namespace SyntopiaCore {
 			void rotateWorldZ(double z);
 			void translateWorld(double x, double y, double z);
 
-		
+			
 		private:
 			// Creates the appropriate GL_PROJECTION matrix
 			void updatePerspective();	
