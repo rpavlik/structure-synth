@@ -1121,6 +1121,8 @@ namespace StructureSynth {
 					if (fileName.isEmpty()){
 						QClipboard *clipboard = QApplication::clipboard();
 						clipboard->setText(rendering.getOutput()); 
+						INFO("Done...");
+						INFO("Script is now copied to the clipboard");
 					} else {
 						QFile file(fileName);
 						INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
@@ -1139,8 +1141,7 @@ namespace StructureSynth {
 						INFO("File saved.");
 					}
 
-					INFO("Done...");
-					INFO("Script is now copied to the clipboard");
+					
 
 
 				} catch (Exception& er) {

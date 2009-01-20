@@ -101,6 +101,7 @@ namespace SyntopiaCore {
 			cameraUp.normalize();
 
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			qglColor(getVisibleForegroundColor());
 
 			renderText(10, 20, infoText);
 			
@@ -114,7 +115,7 @@ namespace SyntopiaCore {
 
 				glDisable (GL_LIGHTING);
 				glLineWidth( 1.0 );
-				glColor3f( 1.0f, 1.0f, 1.0f );
+				qglColor(getVisibleForegroundColor());
 				for (int i = count; i < objects.size(); i+=step) {
 					glColor3f(
 						objects[i]->getColor()[0],
@@ -394,6 +395,12 @@ namespace SyntopiaCore {
 			return 29.0*ar; // Hack - this is not entirely accurate for large AR's.
 		}
 		
+		QColor EngineWidget::getVisibleForegroundColor() {
+			int r = backgroundColor.red() < 127 ? 255 : 0;
+			int g = backgroundColor.green() < 127 ? 255 : 0;
+			int b = backgroundColor.blue() < 127 ? 255 : 0;
+			return QColor(r,g,b);
+		}
 	}
 }
 
