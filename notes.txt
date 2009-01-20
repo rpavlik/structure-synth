@@ -2,10 +2,8 @@ TODO list and scratch pad for Structure Synth. /Mikael
 
 TODO: 
 - Fast draw button. Fast draw doesn't work for white background...
--> Output is copied to clipboard for file saving???
 - Add 'polygon template thingie'.
 - Add 'Grid' to templates... (or continue when missing...)
-- OpenGL infotext has fixed color
 - Show hour-glass when making long operations (before progress when rendering...)    
 
 Request:

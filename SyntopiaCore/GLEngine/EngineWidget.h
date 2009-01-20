@@ -72,6 +72,7 @@ namespace SyntopiaCore {
 
 			double getFOV();
 		
+			QColor getVisibleForegroundColor();
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );

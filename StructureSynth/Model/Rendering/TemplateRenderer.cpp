@@ -294,6 +294,15 @@ namespace StructureSynth {
 				
 			}
 
+			QString TemplateRenderer::getOutput() { 
+				QString out = output.join(""); 
+
+				// Normalize output (seems the '\n' converts to CR+LF on windows while saving
+				// whereas '\r\n' converts to CR+CR+LF? so we remove the \r's).
+				out = out.replace("\r","");
+				return out;
+			}
+				
 
 		}
 	}
