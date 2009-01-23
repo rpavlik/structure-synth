@@ -1,8 +1,11 @@
 
 Changelog for Structure Synth:
 ------------------------------
+23 Jan 09 [MHC] Created builds and updated webpages.
+[2h]
+
 21 Jan 09 [MHC] Template Renderer: Missing primitives no longer cancels the renderer
-                OpenGL renderer now turns off GLWidget when rendering...
+[2h]            OpenGL renderer now turns off GLWidget when rendering...
                 Add 'FastRotate' button. 
 
 20 Jan 09 [MHC] Fixed CR+CR+LF export bug.
@@ -22,7 +25,6 @@ Changelog for Structure Synth:
 				When resizing OpenGL window, width/height/a.r. is shown.
 				Removed an extensive memoryleak (leaked 16 bytes per created state).
 			 
-
 14 Jan 09 [MHC] Updated web page
 [2h]            More work on the GUI editors.
 
