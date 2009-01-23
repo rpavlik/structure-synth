@@ -22,7 +22,7 @@ namespace StructureSynth {
 			class VariableWidget : public QWidget {
 			public:
 				/// FloatVariable constructor.
-				VariableWidget(QWidget* parent, QString name) : QWidget(parent) {};
+				VariableWidget(QWidget* parent, QString /*name*/) : QWidget(parent) {};
 
 				virtual QString getValueAsText() { return ""; };
 				QString getName() const { return name; };
