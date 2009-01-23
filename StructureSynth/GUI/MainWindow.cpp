@@ -265,7 +265,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 8, 5, -1, " (\"Exonautica\")");
+			version = SyntopiaCore::Misc::Version(0, 9, 0, -1, " (\"Glasnost\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
@@ -273,11 +273,7 @@ namespace StructureSynth {
 			splitter->setObjectName(QString::fromUtf8("splitter"));
 			splitter->setOrientation(Qt::Horizontal);
 
-
 			stackedTextEdits = new QStackedWidget(splitter);
-
-
-
 
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
@@ -322,7 +318,6 @@ namespace StructureSynth {
 			dockLog->setWidget(dockLogContents);
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
 
-
 			// Variable editor (in dockable window)
 			bool experimental = false;
 			if (experimental) {
@@ -344,18 +339,16 @@ namespace StructureSynth {
 
 
 			INFO("Welcome to Structure Synth. A Syntopia Project.");
-			INFO("Hold 'CTRL' for speed draw'.");
+			INFO("Hold 'ALT' for fast rotate (quick draw mode).");
+			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button.");
 			INFO("Press 'Reset View' if the view disappears...");
-			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel.");
-			INFO("Translate using right mouse button.");
-
+			INFO("");
+			INFO("This is beta software. Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
 
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
-
-
 
 			readSettings();
 
@@ -456,19 +449,19 @@ namespace StructureSynth {
 			cutAction->setShortcut(tr("Ctrl+X"));
 			cutAction->setStatusTip(tr("Cut the current selection's contents to the "
 				"clipboard"));
-			//connect(cutAction, SIGNAL(triggered()), textEdit, SLOT(cut()));
+			connect(cutAction, SIGNAL(triggered()), this, SLOT(cut()));
 
 			copyAction = new QAction(QIcon(":/images/copy.png"), tr("&Copy"), this);
 			copyAction->setShortcut(tr("Ctrl+C"));
 			copyAction->setStatusTip(tr("Copy the current selection's contents to the "
 				"clipboard"));
-			//connect(copyAction, SIGNAL(triggered()), textEdit, SLOT(copy()));
+			connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));
 
 			pasteAction = new QAction(QIcon(":/images/paste.png"), tr("&Paste"), this);
 			pasteAction->setShortcut(tr("Ctrl+V"));
 			pasteAction->setStatusTip(tr("Paste the clipboard's contents into the current "
 				"selection"));
-			//connect(pasteAction, SIGNAL(triggered()), textEdit, SLOT(paste()));
+			connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 
 			renderAction = new QAction(QIcon(":/images/render.png"), tr("&Render"), this);
 			renderAction->setShortcut(tr("F5"));
@@ -503,8 +496,6 @@ namespace StructureSynth {
 			galleryAction->setStatusTip(tr("Opens the main Flickr group for Structure Synth creations."));
 			connect(galleryAction, SIGNAL(triggered()), this, SLOT(launchGallery()));
 
-			cutAction->setEnabled(false);
-			copyAction->setEnabled(false);
 		}
 
 		void MainWindow::createMenus()
@@ -655,12 +646,21 @@ namespace StructureSynth {
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
+			fastRotateCheckbox = new QCheckBox("Fast rotate", randomToolBar);
+			connect(fastRotateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(fastRotateChanged()));
+			renderToolBar->addWidget(fastRotateCheckbox);
+			fastRotateCheckbox->setChecked(true);
+
 
 
 
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
 
+		void MainWindow::fastRotateChanged() {
+			INFO("Changed()");
+			engine->setFastRotate(fastRotateCheckbox->isChecked());
+		}
 
 		void MainWindow::seedChanged() {
 			autoIncrementCheckbox->setChecked(false);
@@ -773,6 +773,8 @@ namespace StructureSynth {
 			srand(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
 
+			engine->setDisabled(true);
+
 			try {
 				
 				Rendering::OpenGLRenderer renderTarget(engine);
@@ -825,6 +827,8 @@ namespace StructureSynth {
 				engine->clearWorld();
 				engine->requireRedraw();
 			} 
+
+			engine->setDisabled(false);
 
 		}
 
@@ -1050,7 +1054,7 @@ namespace StructureSynth {
 
 			getTextEdit()->insertPlainText(sl.join("\r\n"));
 			INFO("Camera settings are now pasted into the script window.");
-			INFO("Remember to clear previous 'set' commands if neccesary.");
+			INFO("Remember to clear previous 'set' commands if necessary.");
 		}
 
 		
@@ -1158,6 +1162,22 @@ namespace StructureSynth {
 			JavaScriptParser jsp(engine);
 			jsp.parse(scripture);
 
+		}
+
+		void MainWindow::copy() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			getTextEdit()->copy();
+		}
+
+		
+		void MainWindow::cut() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			getTextEdit()->cut();
+		}
+
+		void MainWindow::paste() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+			getTextEdit()->paste();
 		}
 			
 	}

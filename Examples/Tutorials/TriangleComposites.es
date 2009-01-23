@@ -1,5 +1,7 @@
 // This example shows how to build
 // custom primitives from individual polygons.
+// Note that the Triangle primitives are NOT supported
+// by most of the templates.
 
 5 * { x 2 } 5 * { y 2 hue 20 } house
 

@@ -124,7 +124,7 @@ namespace StructureSynth {
 			Vector3f v2 = b->getState().matrix * p2;
 			Vector3f v3 = b->getState().matrix * p3;
 			
-			b->getRenderer()->drawPolygon(v1,v2,v3,classID);
+			b->getRenderer()->drawTriangle(v1,v2,v3,classID);
 		}
 	
 	}

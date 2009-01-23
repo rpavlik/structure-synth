@@ -1,9 +1,15 @@
 
 Changelog for Structure Synth:
 ------------------------------
+21 Jan 09 [MHC] Template Renderer: Missing primitives no longer cancels the renderer
+                OpenGL renderer now turns off GLWidget when rendering...
+                Add 'FastRotate' button. 
+
 20 Jan 09 [MHC] Fixed CR+CR+LF export bug.
-[2]             Fixed infoText bg color.
-				Removed 'copied to clipboard' for file renders. 
+[3h]            Fixed infoText bg color.
+				Removed 'copied to clipboard' info text for file renders.
+				Update info text to correct ALT modifier for fast draw.
+				Enabled the Cut,Paste,Copy main menu (this did not work before :-))				
 
 19 Jan 09 [MHC] More Cam Export stuff. Now works with more aspect ratios. Added the following exports to the 'begin' template:
 [1h]			{fov},{aspect},{width} {height} [Width and Height being the size of the OpenGL viewport, aspect their proprotion and for=29*aspect (pretty close for SunFlow export)]
@@ -215,7 +221,7 @@ Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hou
 3  Sep 07 [MHC]:    Tried to create a build that it is not dependend on a side-by-side installed DLL ('C:\WINDOWS\WinSxS\'...). I want the app to be distributable without any installation.
 [1½h]a
 
-31 Augc 07 [MHC]:    Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
+31 Augc 07 [MHC]:   Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
 [1h]c
 
 29 Aug 07 [MHC]:    Website modifications. (Added 'news', 'for Context Free users', 'Build - Linux')
@@ -227,8 +233,8 @@ Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hou
 26 Aug 07 [MHC]:    Added progress dialog.
 [½h]c
 
-25 Aug 07 [MHC]:    Created Flickr group (http://www.flickr.com/groups/structuresynth)
-[1½h]a              Web site modifications.
+25 Aug 07 [MHC]:    Web site modifications.
+[1½h]a              
 
 22 Aug 07 [MHC]:    Size transformation now has a three parameter overload.
 [½h]c
