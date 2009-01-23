@@ -338,9 +338,9 @@ namespace StructureSynth {
 			}
 
 
-			INFO("Welcome to Structure Synth. A Syntopia Project.");
-			INFO("Hold 'ALT' for fast rotate (quick draw mode).");
-			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button.");
+			INFO(QString("Welcome to Structure Synth version %1. A Syntopia Project.").arg(version.toLongString()));
+			INFO("");
+			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button. Hold 'ALT' for fast rotate (quick draw mode).");
 			INFO("Press 'Reset View' if the view disappears...");
 			INFO("");
 			INFO("This is beta software. Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
