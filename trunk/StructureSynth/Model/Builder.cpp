@@ -33,7 +33,9 @@ namespace StructureSynth {
 			
 			QProgressDialog progressDialog("Building objects...", "Cancel", 0, 100, 0);
 			progressDialog.setWindowModality(Qt::WindowModal);
+			progressDialog.setMinimumDuration(0);
 			progressDialog.show();
+			progressDialog.setValue(0);
 
 			int lastValue = 0;
 

@@ -49,7 +49,7 @@ namespace StructureSynth {
 				virtual void drawDot(SyntopiaCore::Math::Vector3f pos,
 								const QString& classID);
 
-				virtual void drawPolygon(SyntopiaCore::Math::Vector3f p1,
+				virtual void drawTriangle(SyntopiaCore::Math::Vector3f p1,
 										 SyntopiaCore::Math::Vector3f p2,
 									     SyntopiaCore::Math::Vector3f p3,
 											const QString& classID);

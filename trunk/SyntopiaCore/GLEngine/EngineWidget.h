@@ -73,6 +73,10 @@ namespace SyntopiaCore {
 			double getFOV();
 		
 			QColor getVisibleForegroundColor();
+
+			void setDisabled(bool disabled) { this->disabled = disabled; }
+			void setFastRotate(bool enabled);
+
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );
@@ -123,7 +127,9 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f cameraTarget;
 
 			QTime textTimer;
-			
+			bool disabled;
+			bool fastRotate;
+			bool doingRotate;
 
 		};
 	};

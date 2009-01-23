@@ -15,7 +15,7 @@ namespace SyntopiaCore {
 
 		EngineWidget::EngineWidget(QWidget* parent) : QGLWidget(parent) {
 
-			
+			disabled = false;
 			updatePerspective();
 
 			pendingRedraws = 0;
@@ -38,13 +38,22 @@ namespace SyntopiaCore {
 			contextMenu = 0;
 
 			rmbDragging = false;
-			
+
+			fastRotate = false;
+			doingRotate = false;
 		}
+
+		void EngineWidget::setFastRotate(bool enabled) {
+			fastRotate = enabled;
+		}
+
 
 		EngineWidget::~EngineWidget() {
 		}
 
 		void EngineWidget::mouseReleaseEvent(QMouseEvent* ev)  {
+			doingRotate = false;
+
 			if (ev->button() != Qt::RightButton) return;
 			if (rmbDragging) { return; }
 			if (contextMenu) contextMenu->exec(ev->globalPos());
@@ -82,6 +91,13 @@ namespace SyntopiaCore {
 
 			if (pendingRedraws > 0) pendingRedraws--;
 
+			if (disabled) {
+				qglClearColor(backgroundColor);
+				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+				return;
+			}
+			
+
 			qglClearColor(backgroundColor);
 			glMatrixMode(GL_MODELVIEW);
 
@@ -105,7 +121,7 @@ namespace SyntopiaCore {
 
 			renderText(10, 20, infoText);
 			
-			if (QApplication::keyboardModifiers() == Qt::AltModifier) {
+			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
 				// Fast-draw
 
 				int objs =  objects.size();
@@ -160,6 +176,7 @@ namespace SyntopiaCore {
 
 				glEnable (GL_LIGHTING);
 
+				//if (doingRotate && fastRotate) doingRotate = false;
 				requireRedraw();
 
 			} else {
@@ -250,7 +267,7 @@ namespace SyntopiaCore {
 
 		void EngineWidget::wheelEvent(QWheelEvent* e) {
 			e->accept();
-
+			
 			// e->delta() is (typically) multipla of 4000
 			double interval = (double)e->delta() / 8000.0;
 
@@ -280,6 +297,8 @@ namespace SyntopiaCore {
 			if ( (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ShiftModifier ) 
 				|| e->buttons() == (Qt::LeftButton | Qt::RightButton )) 
 			{
+				doingRotate = true;
+
 				// 1) dragging with left mouse button + shift down, or
 				// 2) dragging with left and right mouse button down
 				//
@@ -299,6 +318,8 @@ namespace SyntopiaCore {
 				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier ) 
 				|| (e->buttons() == Qt::LeftButton && e->modifiers() == Qt::MetaModifier ) ) 
 			{ 
+				doingRotate = true;
+
 				// 1) dragging with right mouse button, 
 				// 2) dragging with left button + control button,
 				// 3) dragging with left button + meta button (Mac)
@@ -311,6 +332,8 @@ namespace SyntopiaCore {
 					rmbDragging = true;
 				} 
 			} else if ( e->buttons() == Qt::LeftButton ) {
+				doingRotate = true;
+
 				// Dragging with left mouse button.
 				// Results in rotation.
 

@@ -73,7 +73,7 @@ namespace StructureSynth {
 
 
 						QString name = e.attribute("name") + type;
-						INFO(QString("%1 = %2").arg(name).arg(e.text()));
+						//INFO(QString("%1 = %2").arg(name).arg(e.text()));
 						templates[name] = Template(e.text());
 					}
 					n = n.nextSibling();
@@ -91,12 +91,20 @@ namespace StructureSynth {
 			TemplateRenderer::~TemplateRenderer() {
 			}
 
-			void TemplateRenderer::assertTemplateExists(QString templateName) {
+			bool TemplateRenderer::assertTemplateExists(QString templateName) {
 				if (!templates.contains(templateName)) {
-						throw SyntopiaCore::Exceptions::Exception(
-							QString("Template error: the primitive '%1' is not defined.").arg(templateName));
+						QString error = 
+							QString("Template error: the primitive '%1' is not defined.").arg(templateName);
 					
+						if (!missingTypes.contains(error)) {
+							// Only show each error once.
+							WARNING(error);
+							INFO("(A template may not support all drawing primitives. Either update the template or choose another primitive)");
+							missingTypes.insert(error);
+						} 
+						return false;
 				}
+				return true;
 					
 			} 
 
@@ -107,7 +115,7 @@ namespace StructureSynth {
 				const QString& classID) 
 			{
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				assertTemplateExists("box"+alternateID);
+				if (!assertTemplateExists("box"+alternateID)) return;
 				Template t(templates["box"+alternateID]); 
 				if (t.contains("{matrix}")) {
 					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
@@ -136,11 +144,35 @@ namespace StructureSynth {
 
 			};
 
-			void TemplateRenderer::drawPolygon(SyntopiaCore::Math::Vector3f /*p1*/,
-										 SyntopiaCore::Math::Vector3f /*p2*/,
-									     SyntopiaCore::Math::Vector3f /*p3*/,
-										 const QString& /*classID*/) {
-				// TODO...
+			void TemplateRenderer::drawTriangle(SyntopiaCore::Math::Vector3f p1,
+										 SyntopiaCore::Math::Vector3f p2,
+									     SyntopiaCore::Math::Vector3f p3,
+										 const QString& classID) {
+
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				if (!assertTemplateExists("triangle"+alternateID)) return;
+				Template t(templates["triangle"+alternateID]); 
+				
+				if (t.contains("{uid}")) {
+					t.substitute("{uid}", QString("Triangle%1").arg(counter++));
+				}
+
+				t.substitute("{p1x}", QString::number(p1.x()));
+				t.substitute("{p1y}", QString::number(p1.y()));
+				t.substitute("{p1z}", QString::number(p1.z()));
+				t.substitute("{p2x}", QString::number(p2.x()));
+				t.substitute("{p2y}", QString::number(p2.y()));
+				t.substitute("{p2z}", QString::number(p2.z()));
+				t.substitute("{p3x}", QString::number(p3.x()));
+				t.substitute("{p3y}", QString::number(p3.y()));
+				t.substitute("{p3z}", QString::number(p3.z()));
+				
+				t.substitute("{alpha}", QString::number(alpha));
+				t.substitute("{oneminusalpha}", QString::number(1-alpha));
+				
+
+				output.append(t.getText());
+
 			}
 
 
@@ -151,7 +183,7 @@ namespace StructureSynth {
 								const QString& classID) {
 
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				assertTemplateExists("grid"+alternateID);
+				if (!assertTemplateExists("grid"+alternateID)) return;
 				Template t(templates["grid"+alternateID]); 
 				if (t.contains("{matrix}")) {
 					QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
@@ -181,7 +213,7 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				assertTemplateExists("line"+alternateID);
+				if (!assertTemplateExists("line"+alternateID)) return;
 				Template t(templates["line"+alternateID]); 
 				t.substitute("{x1}", QString::number(from.x()));
 				t.substitute("{y1}", QString::number(from.y()));
@@ -203,7 +235,7 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f v,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				assertTemplateExists("dot"+alternateID);
+				if (!assertTemplateExists("dot"+alternateID)) return;
 				Template t(templates["dot"+alternateID]); 
 				t.substitute("{x}", QString::number(v.x()));
 				t.substitute("{y}", QString::number(v.y()));
@@ -225,7 +257,7 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				assertTemplateExists("sphere"+alternateID);
+				if (!assertTemplateExists("sphere"+alternateID)) return;
 				Template t(templates["sphere"+alternateID]); 
 				t.substitute("{cx}", QString::number(center.x()));
 				t.substitute("{cy}", QString::number(center.y()));
@@ -248,7 +280,7 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::begin() {
-				assertTemplateExists("begin");
+				if (!assertTemplateExists("begin")) return;
 				Template t(templates["begin"]); 
 				
 				t.substitute("{CamPosX}", QString::number(cameraPosition.x()));
@@ -271,7 +303,7 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::end() {
-				assertTemplateExists("end");
+				if (assertTemplateExists("end")) return;
 				Template t(templates["end"]); 
 				output.append(t.getText());
 			};

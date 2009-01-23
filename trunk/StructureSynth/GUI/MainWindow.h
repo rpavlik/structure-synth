@@ -48,6 +48,9 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void cut();
+			void copy();
+			void paste();
 			void insertCameraSettings();
 			void cursorPositionChanged();
 			void seedChanged();
@@ -55,6 +58,7 @@ namespace StructureSynth {
 			void makeScreenshot();
 			void closeTab();
 			void launchSfHome();
+			void fastRotateChanged();
 			void launchGallery();
 			void launchReferenceHome();
 			void templateRender();
@@ -135,6 +139,7 @@ namespace StructureSynth {
 			int oldDirtyPosition;
 
 			QVBoxLayout* frameMainWindow;
+			QCheckBox* fastRotateCheckbox;
 
 		};
 

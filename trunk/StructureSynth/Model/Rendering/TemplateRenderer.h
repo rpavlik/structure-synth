@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QSet>
 #include <QStringList>
 #include "Renderer.h"
 
@@ -58,7 +59,7 @@ namespace StructureSynth {
 				virtual void drawDot(SyntopiaCore::Math::Vector3f pos,
 								const QString& classID);
 
-				virtual void drawPolygon(SyntopiaCore::Math::Vector3f p1,
+				virtual void drawTriangle(SyntopiaCore::Math::Vector3f p1,
 										 SyntopiaCore::Math::Vector3f p2,
 									     SyntopiaCore::Math::Vector3f p3,
 											const QString& classID);
@@ -75,7 +76,7 @@ namespace StructureSynth {
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& renderClass, const QString& command);
 
-				void assertTemplateExists(QString templateName);
+				bool assertTemplateExists(QString templateName);
 			
 				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraTarget, int width, int height, double aspect, double fov) {
 					this->cameraPosition = cameraPosition;
@@ -103,6 +104,7 @@ namespace StructureSynth {
 				int height;
 				double aspect;
 				double fov;
+				QSet<QString> missingTypes;
 			};
 
 		}
