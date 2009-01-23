@@ -17,34 +17,30 @@ Windows:
 
 Template for SourceForge news updates:
 
-Structure Synth 0.9.0 ("Odessa") Released
+Structure Synth 0.9.0 ("Glasnost") Released
 -------------------------------------------
 
-Binaries for Windows XP and Vista. Source for Linux and Mac.  
+Binaries for Windows XP and Vista. Source for Linux and Mac. 
+(Mac binaries will be available shortly)
  
-Changes: 
-- The new template rendering system allows for easily defining custom exporters (with examples for PovRay and Sunflow)
-- Control of the random seed from GUI.
-- Minor bug fixes.
-- Splash Screen.
+New features: 
+- Template renderers: camera export is now working.
+- Implemented a 'Triangle' primitive. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive. 
+- Added support for '#define varname value' preprocessor substitutions (useful for declaring constant variables).
+
+Minor changes and bug fixes:
+- Added 'FastRotate' button (draws a subset while rotating/translating the view).
+- Template Renderer: Missing primitives no longer cancels the renderer, but only warns.
+- OpenGL renderer now turns off GLWidget when rendering (makes build phase faster).
+- Fixed CR+CR+LF export bug.
+- Enabled the Cut,Paste,Copy main menu
+- Removed an extensive memory leak (leaked 16 bytes per created state).
+- When resizing the OpenGL window, width/height/aspect ratio is shown.
+- Corrected some syntax highlighter bugs
+- Fixed a bug when going into full screen mode (not all chrome was hidden)
 
 Download instructions at:
 http://structuresynth.sourceforge.net/download.php
 
-
---->
-21 Jan 09 [MHC] Template Renderer: Missing primitives no longer cancels the renderer
-                OpenGL renderer now turns off GLWidget when rendering...
-                Add 'FastRotate' button. 
-20 Jan 09 [MHC] Fixed CR+CR+LF export bug.
-[3h]           	Enabled the Cut,Paste,Copy main menu (this did not work before :-))				
-18 Jan 09 [MHC] Added Camera Export. Now in the 'begin' template, it is possible to do stuff like:
-				When resizing OpenGL window, width/height/a.r. is shown.
-				Removed an extensive memoryleak (leaked 16 bytes per created state).
-5  Jan 09 [MHC] Corrected some syntax highlighter bugs...
-3  Jan 09 [MHC] Implemented a 'Triangle'. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive.
-30 Dec 08 [MHC] Added support for '#define varname value' preprocessor substitutions. (Useful for declaring constant variables)
-18 Nov 08 [MHC] Fixed a bug when going into full screen mode (not all chrome was hidden).
-[1h]
 
                 
