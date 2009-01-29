@@ -268,11 +268,11 @@ namespace SyntopiaCore {
 		void EngineWidget::wheelEvent(QWheelEvent* e) {
 			e->accept();
 			
-			// e->delta() is (typically) multipla of 4000
-			double interval = (double)e->delta() / 8000.0;
-
-			if ( scale <= minimumScale ) return;
-			scale -= mouseSpeed*interval ;
+			double interval = (double)e->delta() / 800.0;
+			
+			if ( scale <= mouseSpeed*interval ) return;
+			scale -= mouseSpeed*interval;
+			requireRedraw();
 		}
 
 		void EngineWidget::mouseMoveEvent( QMouseEvent *e ) {

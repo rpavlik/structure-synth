@@ -145,12 +145,17 @@ namespace StructureSynth {
 		MainWindow::MainWindow()
 		{
 			init();
+			loadFile(QDir(getExamplesDir()).absoluteFilePath("Default.es"));
+			tabChanged(0); // to update title.
+		
 		}
 
 		MainWindow::MainWindow(const QString &fileName)
 		{
 			init();
 			loadFile(fileName);
+			tabChanged(0); // to update title.
+		
 		}
 
 		void MainWindow::closeEvent(QCloseEvent *ev)
@@ -261,7 +266,8 @@ namespace StructureSynth {
 
 		void MainWindow::init()
 		{
-			
+			setAcceptDrops(true);
+
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
@@ -298,9 +304,6 @@ namespace StructureSynth {
 			createStatusBar();
 
 			QDir d(getExamplesDir());
-			loadFile(d.absoluteFilePath("Default.es"));
-			tabChanged(0); // to update title.
-
 			
 			// Log widget (in dockable window)
 			dockLog = new QDockWidget(this);
@@ -1179,7 +1182,29 @@ namespace StructureSynth {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 			getTextEdit()->paste();
 		}
+	
+		void MainWindow::dragEnterEvent(QDragEnterEvent *ev)
+		{
+			if (ev->mimeData()->hasUrls()) {
+				ev->acceptProposedAction();
+			} else {
+				INFO("Cannot accept MIME object: " + ev->mimeData()->formats().join(" - "));
+			}
+		}
+
+		void MainWindow::dropEvent(QDropEvent *ev) {
+			if (ev->mimeData()->hasUrls()) {
+				QList<QUrl> urls = ev->mimeData()->urls();
+				for (unsigned int i = 0; i < urls.size() ; i++) {
+					INFO("Loading: " + urls[i].toLocalFile());
+					loadFile(urls[i].toLocalFile());
+				}
+			} else {
+				INFO("Cannot accept MIME object: " + ev->mimeData()->formats().join(" - "));
+			}
+		}
 			
 	}
+
 }
 

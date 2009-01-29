@@ -44,6 +44,8 @@ namespace StructureSynth {
 			static QString getTemplateDir();
 			
 		protected:
+			void dragEnterEvent(QDragEnterEvent *ev);
+			void dropEvent(QDropEvent *ev);
 			void closeEvent(QCloseEvent* ev);
 			void keyReleaseEvent(QKeyEvent* ev);
 
