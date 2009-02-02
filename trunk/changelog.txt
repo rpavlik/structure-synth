@@ -2,8 +2,11 @@
 Changelog for Structure Synth:
 ------------------------------
 
+02 Feb 09 [MHC] Web: updated references, Added icons for downloads.
+[1h Adm]
+
 29 Jan 09 [MHC] Added support for specifying a startup .es file on the Commandline (this makes file associations possible). Notice this should work with Unicode paths.
-                Added support for drag'and'drop (drop a .es file onto the clipboard...)
+[1h]            Added support for drag'and'drop (drop a .es file onto the clipboard...)
                 -> TODO: Check on Linux/Mac.
                 BugFix: The scroll can now be used to zoom again.
 
