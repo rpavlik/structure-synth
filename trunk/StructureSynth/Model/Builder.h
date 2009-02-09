@@ -40,6 +40,8 @@ namespace StructureSynth {
 			int objects;
 			int newSeed;
 			bool hasSeedChanged;
+			float minDim;
+			float maxDim;
 		};
 
 	}
