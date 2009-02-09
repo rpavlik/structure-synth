@@ -59,18 +59,18 @@ Version 0.9: 'Kolberger Heide' (or 'Glasnost')
 
 Version 1.0: 'Potemkin'
 -------------------------------
-? 'Zoom to fit'
++ Drag'n'Drop of EisenScript files.
 ? GUI for '#define consts' for exploring variations.
-- Mesh?
+? 'Zoom to fit'
 - VRML/OBJ Template (many requests)
 - Preferences (saving with QProperties) [For what?]
-- Installers (for Windows at least - using InnoSetup)
 - Packaging: Icons, Eula, file associations.
 ? Version object with check for updates on internet.
-? Drag'n'Drop of EisenScript files.
 
 Version 1.5: '?'
 ----------------
+- Mesh?
+Installers (for Windows at least - using InnoSetup)
 Instead of EisenScript it should be possible to script the object generation using JavaScript.
 (Qt has a builtin JavaScript interpreter which should make this somewhat easy).
 

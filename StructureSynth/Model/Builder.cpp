@@ -18,6 +18,8 @@ namespace StructureSynth {
 			maxGenerations = 1000;
 			maxObjects = 100000;
 			objects = 0;
+			minDim = 0;
+			maxDim = 0;
 			newSeed = 0;
 			hasSeedChanged = false;
 		};
@@ -38,6 +40,8 @@ namespace StructureSynth {
 			progressDialog.setValue(0);
 
 			int lastValue = 0;
+			int maxTerminated = 0;
+			int minTerminated = 0;
 
 			while (generationCounter < maxGenerations && objects < maxObjects) {
 
@@ -80,6 +84,24 @@ namespace StructureSynth {
 				for (int i = 0; i < stack.size(); i++) {
 					//	INFO("Executing: " + stack[i].rule->getName());
 					state = stack[i].state;
+					if (maxDim != 0 || minDim != 0) {
+						Vector3f s = state.matrix * Vector3f(1,1,1) - state.matrix * Vector3f(0,0,0);
+						if (s.x() < 0) s.x() = -s.x();
+						if (s.y() < 0) s.y() = -s.y();
+						if (s.z() < 0) s.z() = -s.z();
+						float max = (s.x() > s.y()) ? s.x() : s.y();
+						max = (max > s.z()) ? max : s.z();
+						float min = (s.x() < s.y()) ? s.x() : s.y();
+						min = (min < s.z()) ? min : s.z();
+
+						if (maxDim && max > maxDim) {
+							maxTerminated++; continue;
+						}
+						if (minDim && min < minDim) {
+							minTerminated++; continue;
+						}
+						
+					}
 					stack[i].rule->apply(this);
 				}
 				stack = nextStack;
@@ -103,6 +125,14 @@ namespace StructureSynth {
 				INFO(QString("Terminated because maximum number of generations reached (%1).").arg(maxGenerations));
 				INFO(QString("Use 'Set Maxdepth' command to increase this number."));
 			}
+
+			if (maxTerminated != 0) {
+				INFO(QString("Terminated %1 branches, because the dimension was greater than max size (%2)").arg(maxTerminated).arg(maxDim));
+			}
+			if (minTerminated != 0) {
+				INFO(QString("Terminated %1 branches, because the dimension was less than min size (%2)").arg(minTerminated).arg(minDim));
+			}
+
 			INFO("Done building...");
 		}
 
@@ -113,6 +143,18 @@ namespace StructureSynth {
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'maxdepth' expected integer parameter. Found: %1").arg(param));
 				maxGenerations = i;
+			} else if (command == "maxsize") {
+				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
+				bool succes;
+				float f = param.toFloat(&succes);
+				if (!succes) throw Exception(QString("Command 'maxsize' expected floating-point parameter. Found: %1").arg(param));
+				maxDim = f;
+			} else if (command == "minsize") {
+				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
+				bool succes;
+				float f = param.toFloat(&succes);
+				if (!succes) throw Exception(QString("Command 'minsize' expected floating-point parameter. Found: %1").arg(param));
+				minDim = f;
 			} else if (command == "maxobjects") {
 				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
 				bool succes;

@@ -2,6 +2,9 @@
 Changelog for Structure Synth:
 ------------------------------
 
+09 Feb 09 [MHC] Added 'set maxsize ...' and 'set minsize ...'.
+[2h]            Started working on a Sunflow-Ward template.
+
 02 Feb 09 [MHC] Web: updated references, Added icons for downloads.
 [1h Adm]
 
