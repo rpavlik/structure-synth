@@ -416,7 +416,7 @@ namespace StructureSynth {
 
 
 
-			screenshotAction = new QAction(tr("&Save as bitmap..."), this);
+			screenshotAction = new QAction(tr("&Save as Bitmap..."), this);
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
 
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
@@ -1195,7 +1195,7 @@ namespace StructureSynth {
 		void MainWindow::dropEvent(QDropEvent *ev) {
 			if (ev->mimeData()->hasUrls()) {
 				QList<QUrl> urls = ev->mimeData()->urls();
-				for (unsigned int i = 0; i < urls.size() ; i++) {
+				for (int i = 0; i < urls.size() ; i++) {
 					INFO("Loading: " + urls[i].toLocalFile());
 					loadFile(urls[i].toLocalFile());
 				}

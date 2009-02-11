@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------------------------
+11 Feb 09 [MHC] Added 'set seed initial' for syncing random seed. This required adding a seed field to each state.
+[3h]
 
 09 Feb 09 [MHC] Added 'set maxsize ...' and 'set minsize ...'.
 [2h]            Started working on a Sunflow-Ward template.
