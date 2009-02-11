@@ -42,6 +42,9 @@ namespace StructureSynth {
 			bool hasSeedChanged;
 			float minDim;
 			float maxDim;
+			bool syncRandom;
+			int initialSeed;
+			State* currentState;
 		};
 
 	}

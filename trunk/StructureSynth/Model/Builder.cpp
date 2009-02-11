@@ -22,6 +22,8 @@ namespace StructureSynth {
 			maxDim = 0;
 			newSeed = 0;
 			hasSeedChanged = false;
+			syncRandom = false;
+			initialSeed = 0;
 		};
 			
 
@@ -43,7 +45,14 @@ namespace StructureSynth {
 			int maxTerminated = 0;
 			int minTerminated = 0;
 
+			int syncSeed = 0;
+			if (syncRandom) {
+				syncSeed = rand();
+			}
+
 			while (generationCounter < maxGenerations && objects < maxObjects) {
+
+				syncSeed = rand();
 
 				double p = 0;
 				if (maxObjects>0) {
@@ -83,7 +92,20 @@ namespace StructureSynth {
 				nextStack.clear();
 				for (int i = 0; i < stack.size(); i++) {
 					//	INFO("Executing: " + stack[i].rule->getName());
-					state = stack[i].state;
+					currentState = &stack[i].state;
+					if (currentState->seed != 0) {
+						srand(currentState->seed);
+						currentState->seed = rand();	
+					}
+					state = stack[i].state; 
+					
+
+					// if we are synchronizing random numbers every state must get the same rands
+					if (syncRandom) {
+						srand(syncSeed);
+					}
+
+					// Check the dimensions against the min and max limits.
 					if (maxDim != 0 || minDim != 0) {
 						Vector3f s = state.matrix * Vector3f(1,1,1) - state.matrix * Vector3f(0,0,0);
 						if (s.x() < 0) s.x() = -s.x();
@@ -99,9 +121,11 @@ namespace StructureSynth {
 						}
 						if (minDim && min < minDim) {
 							minTerminated++; continue;
-						}
-						
+						}				
 					}
+					
+					
+
 					stack[i].rule->apply(this);
 				}
 				stack = nextStack;
@@ -143,14 +167,21 @@ namespace StructureSynth {
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'maxdepth' expected integer parameter. Found: %1").arg(param));
 				maxGenerations = i;
+			} else if (command == "syncrandom") {
+				if (param.toLower() == "true") {
+					syncRandom = true;
+				} else if (param.toLower() == "false") {
+					syncRandom = false;
+				} else { 
+				  throw Exception(QString("Command 'syncrandom' expected either 'true' or 'false'. Found: %1").arg(param));
+				}
+
 			} else if (command == "maxsize") {
-				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
 				bool succes;
 				float f = param.toFloat(&succes);
 				if (!succes) throw Exception(QString("Command 'maxsize' expected floating-point parameter. Found: %1").arg(param));
 				maxDim = f;
 			} else if (command == "minsize") {
-				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
 				bool succes;
 				float f = param.toFloat(&succes);
 				if (!succes) throw Exception(QString("Command 'minsize' expected floating-point parameter. Found: %1").arg(param));
@@ -162,12 +193,22 @@ namespace StructureSynth {
 				if (!succes) throw Exception(QString("Command 'maxobjects' expected integer parameter. Found: %1").arg(param));
 				maxObjects = i;
 			} else if (command == "seed") {
-				bool succes;
-				int i = param.toInt(&succes);
-				if (!succes) throw Exception(QString("Command 'seed' expected integer parameter. Found: %1").arg(param));
-				srand(i);
-				hasSeedChanged = true;
-				newSeed = i;
+				
+				if (param.toLower() == "initial") {
+					if (initialSeed == 0) {
+						initialSeed = rand();
+					}
+					currentState->seed = initialSeed;
+					state.seed = initialSeed;
+					
+				} else {
+					bool succes;
+					int i = param.toInt(&succes);
+					if (!succes) throw Exception(QString("Command 'seed' expected integer parameter or 'same'. Found: %1").arg(param));
+					srand(i);
+					hasSeedChanged = true;
+					newSeed = i;
+				}
 			} else if (command == "background") {
 				QColor c(param);
 				if (!c.isValid()) throw Exception(QString("Command 'background' expected a valid color identifier: Found: %1").arg(param));
