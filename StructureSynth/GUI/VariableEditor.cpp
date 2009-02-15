@@ -13,76 +13,136 @@ using namespace SyntopiaCore::Logging;
 
 namespace StructureSynth {
 	namespace GUI {
-		namespace {
-		
-			/// The supported types of variables.
-			enum VariableType { StringVariable, FloatVariable };
 
-			/// A widget editor for a constant variable.
-			class VariableWidget : public QWidget {
-			public:
-				/// FloatVariable constructor.
-				VariableWidget(QWidget* parent, QString /*name*/) : QWidget(parent) {};
+		/// The supported types of variables.
+		enum VariableType { StringVariable, FloatVariable };
 
-				virtual QString getValueAsText() { return ""; };
-				QString getName() const { return name; };
-				VariableType getType() const { return type; };
-				bool isUpdated() const { return updated; };
-				void setUpdated(bool value) { updated = value; };
+		/// A widget editor for a constant variable.
+		class VariableWidget : public QWidget {
+		public:
+			/// FloatVariable constructor.
+			VariableWidget(QWidget* parent, QString name) : QWidget(parent), name(name) {};
 
-			private:
-				QString name;
-				VariableType type;
-				bool updated;
-				QWidget* widget;
+			virtual QString getValueAsText() { return ""; };
+			QString getName() const { return name; };
+			VariableType getType() const { return type; };
+			bool isUpdated() const { return updated; };
+			void setUpdated(bool value) { updated = value; };
+
+		private:
+			QString name;
+			VariableType type;
+			bool updated;
+			QWidget* widget;
+		};
+
+
+	
+
+		/// A widget editor for a constant variable.
+		class FloatWidget : public VariableWidget {
+		public:
+			/// FloatVariable constructor.
+			FloatWidget(QWidget* parent, QString name, double defaultValue, double min, double max) 
+				: VariableWidget(parent, name)  {
+					QHBoxLayout* l = new QHBoxLayout(this);
+					l->setSpacing(2);
+					setContentsMargins (0,0,0,0);
+					//setLayout(l);
+					QLabel* label = new QLabel(this);
+					label->setText(name);
+					l->addWidget(label);
+					comboSlider = new ComboSlider(parent, defaultValue, min, max);
+					l->addWidget(comboSlider);
 			};
 
-			/// A widget editor for a constant variable.
-			class FloatWidget : public VariableWidget {
-			public:
-				/// FloatVariable constructor.
-				FloatWidget(QWidget* parent, QString name, double defaultValue, double min, double max) 
-					: VariableWidget(parent, name), defaultValue(defaultValue), min(min), max(max) {
-						QHBoxLayout* l = new QHBoxLayout(this);
-						//setLayout(l);
-						QLabel* label = new QLabel(this);
-						label->setText(name);
-						l->addWidget(label);
-						slider = new QSlider(Qt::Horizontal,this);
-						slider->setRange(0,1000);
-						slider->setValue(500);
-						spinner = new QDoubleSpinBox(this);
-						spinner->setMaximum(max);
-						spinner->setMinimum(min);
-						spinner->setValue(defaultValue);
-						l->addWidget(slider);
-						l->addWidget(spinner);
-				};
+			virtual QString getValueAsText() { return QString::number(comboSlider->getValue()); };
 
-				virtual QString getValueAsText() { return ""; };
-				
-			private:
-				QSlider* slider;
-				QDoubleSpinBox* spinner;
-				double defaultValue;
-				double min;
-				double max;
-			};
+		private:
+			ComboSlider* comboSlider;
+		};
 
-		}
+
+		VariableEditor::VariableEditor(QWidget* parent) : QWidget(parent) {
+			layout = new QVBoxLayout(this);
+			layout->setSpacing(1);
+
+		};
+
+	
+		QString VariableEditor::updateFromPreprocessor(Parser::Preprocessor* pp, QString in, bool* showGUI) {
+
+			QVector<Parser::GuiParameter*> ps = pp->getParameters();
+			QMap<QString, QString> substitutions;
+
+
+			for (int i = 0; i < variables.count(); i++) {
+				QString name = variables[i]->getName();
+				variables[i]->setUpdated(false);
+			}
+
+			for (int i = 0; i < ps.count(); i++) {
+				bool found = false;
+				for (int j = 0; j < variables.count(); j++) {
+					QString name = variables[j]->getName();
+					if (name == ps[i]->getName()) {
+						substitutions[name] = variables[j]->getValueAsText();
+						found = true;
+						variables[j]->setUpdated(true);
+						INFO("Found existing: " + variables[j]->getName() + QString(" value: %1").arg(variables[j]->getValueAsText()));
+					}
+				}
+
+				if (!found) {
+					if (dynamic_cast<Parser::FloatParameter*>(ps[i])) {
+						Parser::FloatParameter* fp = dynamic_cast<Parser::FloatParameter*>(ps[i]);
+						QString name = fp->getName();
+						FloatWidget* fw = new FloatWidget(this, name, fp->getDefaultValue(), fp->getFrom(), fp->getTo());
+						variables.append(fw);
+						fw->setUpdated(true);
+						layout->addWidget(fw);
+
+						INFO("Creating : " + ps[i]->getName());
+						substitutions[name] = fw->getValueAsText();
+						
+					}
+				}
+			}
+
+			for (int i = 0; i < variables.count(); i++) {
+				if (!variables[i]->isUpdated()) {
+					INFO("Deleting : " + variables[i]->getName());
+					delete(variables[i]);
+					variables.remove(i);
+
+
+				}
+			}
+
+			if (showGUI) (*showGUI) = (variables.count() != 0);
+
 
 			
 
-		VariableEditor::VariableEditor(QWidget* parent) : QWidget(parent) {
-			QVBoxLayout* l = new QVBoxLayout(this);
-			l->addWidget(new FloatWidget(this, "alpha", 0.5, 0.0, 1.0));
-			l->addWidget(new FloatWidget(this, "beta", 0.5, 0.0, 1.0));
-			l->addWidget(new FloatWidget(this, "gamma", 0.5, 0.0, 1.0));
-			l->addItem(new QSpacerItem(1,1, QSizePolicy::Expanding,  QSizePolicy::Expanding));
-		};
+			QMap<QString, QString>::const_iterator it2 = substitutions.constBegin();
+			int subst = 0;
+			while (it2 != substitutions.constEnd()) {
+				if (subst>100) {
+					WARNING("More than 100 recursive preprocessor substitutions... breaking.");
+					break;
+				}
+				if (in.contains(it2.key())) {
+					INFO("Replacing: " + it2.key() + " with " + it2.value());
+					in.replace(it2.key(), it2.value());
 
-		void VariableEditor::addFloatVariable(QString /*name*/, double /*defaultValue*/) {};
-		void VariableEditor::addStringVariable(QString /*name*/, QString /*defaultValue*/) {};
+					it2 = substitutions.constBegin();
+					subst++;
+				} else {
+					it2++;
+				}
+			}
+			return in;
+		}
 
 	}
 }

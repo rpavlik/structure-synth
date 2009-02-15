@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
 #endif
 
 	StructureSynth::GUI::MainWindow *mainWin;
-	if (args.size() == 1) {
+	if (args.size() <= 1) {
 		mainWin = new StructureSynth::GUI::MainWindow();
-	} else if (args.size() > 1) {
+	} else {
 		// We ignore more then one argument
 		mainWin = new StructureSynth::GUI::MainWindow(args[1]);
 	}

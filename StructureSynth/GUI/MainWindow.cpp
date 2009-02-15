@@ -322,9 +322,12 @@ namespace StructureSynth {
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
 
 			// Variable editor (in dockable window)
-			bool experimental = false;
+			variableEditor = 0;
+			editorDockWidget = 0;
+			bool experimental = true;
 			if (experimental) {
-				QDockWidget* editorDockWidget = new QDockWidget(this);
+				editorDockWidget = new QDockWidget(this);
+				editorDockWidget->setMinimumWidth(250);
 				editorDockWidget->setWindowTitle("Variables");
 				editorDockWidget->setObjectName(QString::fromUtf8("editorDockWidget"));
 				editorDockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
@@ -334,7 +337,8 @@ namespace StructureSynth {
 				vboxLayout2->setObjectName(QString::fromUtf8("vboxLayout2"));
 				vboxLayout2->setContentsMargins(0, 0, 0, 0);
 
-				VariableEditor* variableEditor = new VariableEditor(editorDockWidget);
+				variableEditor = new VariableEditor(editorDockWidget);
+				variableEditor->setMinimumWidth(250);
 				vboxLayout2->addWidget(variableEditor);
 				editorDockWidget->setWidget(editorLogContents);
 				addDockWidget(Qt::RightDockWidgetArea, editorDockWidget);
@@ -783,7 +787,14 @@ namespace StructureSynth {
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
 
-				Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
+				Preprocessor pp;
+				QString out = pp.Process(getTextEdit()->toPlainText());
+				bool showGUI = false;
+				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
+				editorDockWidget->setHidden(!showGUI);
+
+				
+				Tokenizer tokenizer(out);
 				EisenParser e(&tokenizer);
 				INFO("Parsing...");
 				RuleSet* rs = e.parseRuleset();
@@ -1105,7 +1116,14 @@ namespace StructureSynth {
 
 					rendering.begin(); 
 
-					Tokenizer tokenizer(Preprocessor::Process(getTextEdit()->toPlainText()));
+					Preprocessor pp;
+					QString out = pp.Process(getTextEdit()->toPlainText());
+					bool showGUI = false;
+					out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
+					editorDockWidget->setHidden(!showGUI);
+
+				
+					Tokenizer tokenizer(out);
 					EisenParser e(&tokenizer);
 					INFO("Parsing...");
 					RuleSet* rs = e.parseRuleset();

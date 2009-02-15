@@ -7,6 +7,8 @@
 
 #include "../../SyntopiaCore/GLEngine/EngineWidget.h"
 #include "../../SyntopiaCore/Misc/Version.h"
+#include "VariableEditor.h"
+
 
 
 class QAction;
@@ -142,6 +144,8 @@ namespace StructureSynth {
 
 			QVBoxLayout* frameMainWindow;
 			QCheckBox* fastRotateCheckbox;
+			VariableEditor* variableEditor;
+			QDockWidget* editorDockWidget;
 
 		};
 
