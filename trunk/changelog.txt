@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 ------------------------------
+15 Feb 09 [MHC] Continued work on GUI for vars. Floats working now. Needs polish. 
+[3h]
+
 11 Feb 09 [MHC] Added 'set seed initial' for syncing random seed. This required adding a seed field to each state.
 [3h]
 
