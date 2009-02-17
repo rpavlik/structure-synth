@@ -34,7 +34,7 @@ namespace StructureSynth {
 			//  A pre-processor strips comments, and imports '#include's
 			//
 			#include "../basicstuff.es"
-			SET BackgroundColor = #F00  // All 'SET' commands outside the scope of a rule are executed at startup.
+			set background #F00  // All 'SET' commands outside the scope of a rule are executed at startup.
 
 			RULE core {
 				r1 
@@ -191,6 +191,13 @@ namespace StructureSynth {
 				if (!QColor(param).isValid()) throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text, symbol.pos));
 				getSymbol();
 				return Transformation::createColor(param);
+			} else if (type == "blend") {
+				QString param = symbol.text;
+				if (!QColor(param).isValid()) throw (ParseError("Transformation 'blend': Expected a valid color as first argument. Found: " + symbol.text, symbol.pos));
+				getSymbol();
+				double param2 = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'blend': Expected a numerical value as second argument. Found: " + symbol.text, symbol.pos));
+				return Transformation::createBlend(param, param2);
 			} else if (type == "alpha") {
 				double param = symbol.getNumerical();
 				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'alpha': Expected numerical parameter. Found: " + symbol.text, symbol.pos));

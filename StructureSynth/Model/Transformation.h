@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QColor>
 #include "State.h"
 #include "../../SyntopiaCore/Math/Matrix4.h"
 
@@ -38,16 +39,23 @@ namespace StructureSynth {
 			// Color stuff
 			static Transformation createHSV(float h, float s, float v, float a);
 			static Transformation createColor(QString color);
+			static Transformation createBlend(QString color, double strength);
 		
 		
 		private:
 			// Matrix and Color transformations here.
 			SyntopiaCore::Math::Matrix4f matrix;
+
+			// For color alterations
 			float deltaH;
 			float scaleS;
 			float scaleV;
 			float scaleAlpha;
 			bool absoluteColor;
+
+			// For color blends.
+			QColor blendColor;
+			double strength;
 		};
 
 	}
