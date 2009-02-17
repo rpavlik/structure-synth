@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------------------------
+
+17 Feb 09 [MHC] Added 'blend {color} {strenght}' operator
+[1h]
+
 15 Feb 09 [MHC] Continued work on GUI for vars. Floats working now. Needs polish. 
 [3h]
 
