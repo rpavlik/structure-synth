@@ -108,18 +108,12 @@ namespace StructureSynth {
 					// Check the dimensions against the min and max limits.
 					if (maxDim != 0 || minDim != 0) {
 						Vector3f s = state.matrix * Vector3f(1,1,1) - state.matrix * Vector3f(0,0,0);
-						if (s.x() < 0) s.x() = -s.x();
-						if (s.y() < 0) s.y() = -s.y();
-						if (s.z() < 0) s.z() = -s.z();
-						float max = (s.x() > s.y()) ? s.x() : s.y();
-						max = (max > s.z()) ? max : s.z();
-						float min = (s.x() < s.y()) ? s.x() : s.y();
-						min = (min < s.z()) ? min : s.z();
+						double l = s.length();
 
-						if (maxDim && max > maxDim) {
+						if (maxDim && l > maxDim) {
 							maxTerminated++; continue;
 						}
-						if (minDim && min < minDim) {
+						if (minDim && l < minDim) {
 							minTerminated++; continue;
 						}				
 					}
