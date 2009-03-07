@@ -39,23 +39,6 @@ camera {
 }
 
 
-%% light sources
-light {
-   type meshlight
-   name "meshlight"
-   emit 1 1 1
-   radiance 16
-   samples 32
-   points 4
-      -1.79750967026 -6.22097349167 5.70054674149
-      -2.28231739998 -7.26064729691 4.06224298477
-      -4.09493303299 -6.41541051865 4.06224298477
-      -3.61012482643 -5.37573671341 5.70054721832
-   triangles 2
-      0 1 2
-      0 2 3
-}
-
 %% common shaders
 shader {
 	name "floor"
