@@ -28,10 +28,11 @@ plane {
 
 // Camera
 camera {
-  location <-0.0,0.0,-15.0>
-  look_at <-0.0,-0.0,-0.0>
-  right -x
-  up y
+  location <{CamPosX},{CamPosY},{CamPosZ}>
+  look_at <{CamTargetX},{CamTargetY},{CamTargetZ}>
+  direction <{CamDirX},{CamDirY},{CamDirZ}>
+  right <{CamRightX}*{aspect},{CamRightY}*{aspect},{CamRightZ}*{aspect}>
+  up <{CamUpX},{CamUpY},{CamUpZ}>
   angle 60
 }
 
@@ -54,7 +55,7 @@ light_source { <-500,500,1000> rgb <1,1,1> shadowless }
 		<![CDATA[
 object {   
   box { <0,  0.0, 0>, <1,  1,  1> }
-  matrix < 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.5, -0.5, -0.5 > 
+  matrix < {povmatrix} > 
   texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } finish { DEFFIN } normal { DEFNOR } }
 }
 		]]>
