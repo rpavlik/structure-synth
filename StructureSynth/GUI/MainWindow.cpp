@@ -1108,9 +1108,12 @@ namespace StructureSynth {
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";
 					TemplateRenderer rendering(templateFileName);
+					Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
+					cameraRight = cameraRight.normalize();
 					rendering.setCamera(
 						engine->getCameraPosition(), 
-						engine->getCameraUp(), 
+						engine->getCameraUp().normalize(), 
+					    cameraRight,
 						engine->getCameraTarget(),
 						engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
 

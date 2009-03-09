@@ -78,9 +78,10 @@ namespace StructureSynth {
 
 				bool assertTemplateExists(QString templateName);
 			
-				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraTarget, int width, int height, double aspect, double fov) {
+				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraRight, Vector3f cameraTarget, int width, int height, double aspect, double fov) {
 					this->cameraPosition = cameraPosition;
 					this->cameraUp = cameraUp;
+					this->cameraRight = cameraRight;
 					this->cameraTarget = cameraTarget;
 					this->width = width;
 					this->height = height;
@@ -88,14 +89,23 @@ namespace StructureSynth {
 					this->fov = fov;
 				}
 
+				void doStandardSubstitutions(SyntopiaCore::Math::Vector3f base, 
+					SyntopiaCore::Math::Vector3f dir1,
+					SyntopiaCore::Math::Vector3f dir2, 
+					SyntopiaCore::Math::Vector3f dir3, 
+					Template& t);
+			
+
 			private:
 				
 				SyntopiaCore::Math::Vector3f cameraPosition;
 				SyntopiaCore::Math::Vector3f cameraUp;
+				SyntopiaCore::Math::Vector3f cameraRight;
 				SyntopiaCore::Math::Vector3f cameraTarget;
 
 
 				SyntopiaCore::Math::Vector3f rgb;
+				SyntopiaCore::Math::Vector3f backRgb;
 				double alpha;
 				QMap<QString, Template> templates;
 				QStringList output;

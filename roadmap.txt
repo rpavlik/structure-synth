@@ -60,6 +60,8 @@ Version 0.9: 'Kolberger Heide' (or 'Glasnost')
 Version 1.0: 'Potemkin'
 -------------------------------
 + Drag'n'Drop of EisenScript files.
+- Fix PovRay template system
+- Template bg color.
 ? GUI for '#define consts' for exploring variations.
 ? 'Zoom to fit'
 - VRML/OBJ Template (many requests)

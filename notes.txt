@@ -3,8 +3,8 @@ TODO list and scratch pad for Structure Synth. /Mikael
 Next version:
 - Show hour-glass when making long operations (before progress when rendering...)    
 - Better sphere implementation (remember transformation thing...)
+- 
 
-Add Synchronized random
 
 Request:
 - Remember file extension.
