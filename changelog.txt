@@ -2,6 +2,10 @@
 Changelog for Structure Synth:
 ------------------------------
 
+18 Mar 09 [MHC] Fixed a bug where a recursive rule not producing objects could fill memory (making system very unresponsive)
+                Added export of background color to templates.
+                Added templates by Neon22 and Groovelock to SVN.
+
 17 Feb 09 [MHC] Added 'blend {color} {strenght}' operator
 [1h]
 
