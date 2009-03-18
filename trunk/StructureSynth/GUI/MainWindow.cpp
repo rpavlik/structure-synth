@@ -1117,6 +1117,10 @@ namespace StructureSynth {
 						engine->getCameraTarget(),
 						engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
 
+					rendering.setBackgroundColor(engine->getBackgroundColor());
+
+					INFO(QString("COlor:%1").arg(engine->getBackgroundColor().toString()));
+
 					rendering.begin(); 
 
 					Preprocessor pp;

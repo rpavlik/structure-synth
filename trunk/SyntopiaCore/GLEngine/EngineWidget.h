@@ -67,6 +67,10 @@ namespace SyntopiaCore {
 			void setBackgroundColor(double r, double g, double b) { 
 				backgroundColor = QColor((int)(r*255.0), (int)(g*255.0), (int)(b*255.0)); 
 			};
+
+			SyntopiaCore::Math::Vector3f getBackgroundColor() {
+				return SyntopiaCore::Math::Vector3f(backgroundColor.red()/255,backgroundColor.green()/255,backgroundColor.blue()/255);
+			}
 		
 			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
 

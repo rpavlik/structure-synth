@@ -50,7 +50,7 @@ namespace StructureSynth {
 				syncSeed = rand();
 			}
 
-			while (generationCounter < maxGenerations && objects < maxObjects) {
+			while (generationCounter < maxGenerations && objects < maxObjects && stack.size() < maxObjects) {
 
 				syncSeed = rand();
 
@@ -134,9 +134,14 @@ namespace StructureSynth {
 				INFO("User terminated.");
 			}
 
-			if (objects == maxObjects) {
+			if (objects >= maxObjects) {
 				INFO(QString("Terminated because maximum number of objects reached (%1).").arg(maxObjects));
 				INFO(QString("Use 'Set MaxObjects' command to increase this number."));
+			}
+
+			if (stack.size() >= objects) {
+				INFO(QString("Terminated because the number of pending rules reached (%1).").arg(maxObjects));
+				INFO(QString("Use 'Set MaxObjects' command to run for longer time."));
 			}
 			
 			if (generationCounter == maxGenerations) {

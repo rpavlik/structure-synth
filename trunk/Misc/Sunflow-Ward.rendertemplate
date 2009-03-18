@@ -59,10 +59,14 @@ light {
       0 2 3
 }
 
+
+
 %% scene background - comment out if not needed
 background {
-   color  { "sRGB nonlinear" 1 1 1 }
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
 }
+
+
 
 %% geometry
 object {

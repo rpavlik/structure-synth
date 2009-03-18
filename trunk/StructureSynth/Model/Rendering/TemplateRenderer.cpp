@@ -311,12 +311,12 @@ namespace StructureSynth {
 				t.substitute("{fov}", QString::number(fov));
 
 				t.substitute("{BR}", QString::number(backRgb.x()));
-				t.substitute("{BG}", QString::number(backRgb.x()));
-				t.substitute("{BB}", QString::number(backRgb.x()));
+				t.substitute("{BG}", QString::number(backRgb.y()));
+				t.substitute("{BB}", QString::number(backRgb.z()));
 
-				t.substitute("{BR256}", QString::number(backRgb.x()*256));
-				t.substitute("{BG256}", QString::number(backRgb.x()*256));
-				t.substitute("{BB256}", QString::number(backRgb.x()*256));
+				t.substitute("{BR256}", QString::number(backRgb.x()*255));
+				t.substitute("{BG256}", QString::number(backRgb.y()*255));
+				t.substitute("{BB256}", QString::number(backRgb.z()*255));
 
 
 

@@ -37,6 +37,14 @@ filter mitchell
 bucket 32 row
 
 
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+
 %% camera
 
 camera {
