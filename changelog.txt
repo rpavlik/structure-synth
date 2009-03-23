@@ -1,7 +1,10 @@
 
 Changelog for Structure Synth:
-------------------------------
-
+-------------------------
+23 Mar 09 [MHC] Changed to Qt 4.5.0
+				Added close icon to tabs.
+				Compiler settings: now global optimization, SSE2 instructions, fast fp-math. (much more responsive!)
+				
 18 Mar 09 [MHC] Fixed a bug where a recursive rule not producing objects could fill memory (making system very unresponsive)
                 Added export of background color to templates.
                 Added templates by Neon22 and Groovelock to SVN.

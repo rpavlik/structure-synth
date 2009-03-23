@@ -52,6 +52,7 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void closeTab(int id);
 			void cut();
 			void copy();
 			void paste();
