@@ -227,7 +227,7 @@ namespace StructureSynth {
 			
 			TabInfo t = tabInfo[index];
 
-			QString filter = "EisenScript (*.es); All Files (*.*)";
+			QString filter = "EisenScript (*.es);;All Files (*.*)";
 			
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename, filter);
 			if (fileName.isEmpty())
