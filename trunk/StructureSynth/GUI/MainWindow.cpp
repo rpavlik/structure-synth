@@ -1,3 +1,4 @@
+
 #include <QtGui>
 #include <QDir>
 #include <QClipboard>
@@ -284,6 +285,9 @@ namespace StructureSynth {
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
 			tabBar = new QTabBar(this);
+			tabBar->setTabsClosable(true);
+
+			connect(tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
 			QFrame* f = new QFrame(this);
 			frameMainWindow = new QVBoxLayout();
@@ -656,7 +660,7 @@ namespace StructureSynth {
 			fastRotateCheckbox = new QCheckBox("Fast rotate", randomToolBar);
 			connect(fastRotateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(fastRotateChanged()));
 			renderToolBar->addWidget(fastRotateCheckbox);
-			fastRotateCheckbox->setChecked(true);
+			fastRotateCheckbox->setChecked(false);
 
 
 
@@ -971,8 +975,11 @@ namespace StructureSynth {
 		void MainWindow::closeTab() {
 			int index = tabBar->currentIndex();
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
-			TabInfo t = tabInfo[tabBar->currentIndex()];
+			closeTab(index);
+		}
+
+		void MainWindow::closeTab(int index) {		
+			TabInfo t = tabInfo[index];
 			if (t.unsaved) {
 				int answer = QMessageBox::warning(this, QString("Unsaved changes"), "Close this tab without saving changes?", "OK", "Cancel");
 				if (answer == 1) return;

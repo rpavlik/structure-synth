@@ -1,3 +1,8 @@
+#if defined(_MSC_VER) 
+    // disable warning "'QtConcurrent::BlockSizeManager' : assignment operator could not be generated"
+    #pragma warning( disable : 4512 )
+#endif
+
 #include "Debug.h"
 
 #include <QScriptEngine>
