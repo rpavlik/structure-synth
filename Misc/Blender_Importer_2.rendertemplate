@@ -1,0 +1,27 @@
+<!--
+   This is an exporter that can be used together with the Blender_Importer_2.py script.
+   Author: David Bucciarelli, modded by SourceZuka.
+   (I added the above info, please correct me if I'm wrong - Mikael/Syntopia)
+-->
+<template name="BuxrenderTemplate2" inherits="" >
+	<substitution name="begin">
+	    <![CDATA[]]>
+	</substitution>
+
+
+	<substitution name="end">
+	    <![CDATA[]]>
+	</substitution>
+
+
+	<substitution name="box">
+		<![CDATA[b {matrix} {r} {g} {b}
+]]>
+	</substitution>
+
+
+	<substitution name="sphere">
+		<![CDATA[s {cx} {cy} {cz} {rad} {r} {g} {b}
+]]>
+	</substitution>
+</template>
