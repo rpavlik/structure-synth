@@ -33,8 +33,15 @@ namespace StructureSynth {
 			s2.matrix = s.matrix*matrix; 
 
 			if (absoluteColor) {
-				s2.hsv = Vector3f(deltaH,scaleS,scaleV);
-				s2.alpha = scaleAlpha;
+				// if the absolute hue is larger than 360, we will choose a random color.
+				if (deltaH > 360) {
+
+					s2.hsv = Vector3f(360.0*rand()/(double)RAND_MAX, 1.0, 1.0);
+					s2.alpha = 1.0;
+				} else {
+					s2.hsv = Vector3f(deltaH,scaleS,scaleV);
+					s2.alpha = scaleAlpha;
+				}
 			} else {
 				float h = s2.hsv[0] + deltaH;
 				float sat = s2.hsv[1]*scaleS;
@@ -101,12 +108,16 @@ namespace StructureSynth {
 			
 		void Transformation::append(const Transformation& t) {
 			this->matrix = this->matrix * t.matrix; 
-			if (!t.absoluteColor) {
+			if (!(t.absoluteColor && absoluteColor)) {
+				if (t.absoluteColor) this->absoluteColor = true;
+				if (absoluteColor) this->absoluteColor = true;
+				
 				this->scaleAlpha = this->scaleAlpha * t.scaleAlpha;
 				this->deltaH = this->deltaH + t.deltaH;
 				this->scaleS = this->scaleS * t.scaleS;
 				this->scaleV = this->scaleV * t.scaleV;
-			} else {
+			} else  {
+				// Mix two absolute colors - this is not possible, so we will just choose one of them
 				this->absoluteColor = true;
 				this->scaleAlpha = t.scaleAlpha;
 				this->deltaH = t.deltaH;
@@ -185,13 +196,19 @@ namespace StructureSynth {
 		Transformation Transformation::createColor(QString color) {
 
 			Transformation t;
-			QColor c(color);
-			QColor hsv = c.toHsv();
-			t.deltaH = hsv.hue();
-			t.scaleAlpha = hsv.alpha()/255.0;
-			t.scaleS = hsv.saturation()/255.0;
-			t.scaleV = hsv.value()/255.0;
-			t.absoluteColor = true;
+
+			if (color.toLower() != "random") {
+				QColor c(color);
+				QColor hsv = c.toHsv();
+				t.deltaH = hsv.hue();
+				t.scaleAlpha = hsv.alpha()/255.0;
+				t.scaleS = hsv.saturation()/255.0;
+				t.scaleV = hsv.value()/255.0;
+				t.absoluteColor = true;
+			} else {
+				t.deltaH = 1000;
+				t.absoluteColor = true;
+			}
 
 			//Debug(QString("Abs Color: %1, %2, %3, %4").arg(t.deltaH).arg(t.scaleS).arg(t.scaleV).arg(t.scaleAlpha));
 
