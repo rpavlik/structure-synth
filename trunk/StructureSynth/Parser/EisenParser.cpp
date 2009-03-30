@@ -188,7 +188,7 @@ namespace StructureSynth {
 				return Transformation::createHSV(0, 1,param,1);
 			} else if (type == "color") {
 				QString param = symbol.text;
-				if (!QColor(param).isValid()) throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text, symbol.pos));
+				if (!QColor(param).isValid() && param.toLower()!="random") throw (ParseError("Transformation 'color': Expected a valid color. Found: " + symbol.text, symbol.pos));
 				getSymbol();
 				return Transformation::createColor(param);
 			} else if (type == "blend") {
