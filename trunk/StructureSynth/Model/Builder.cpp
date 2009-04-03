@@ -3,6 +3,7 @@
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../SyntopiaCore/Misc/ColorUtils.h"
 #include "../../SyntopiaCore/Math/Vector3.h"
+#include "RandomStreams.h"
 
 #include <QProgressDialog>
 #include <QApplication>
@@ -24,6 +25,7 @@ namespace StructureSynth {
 			hasSeedChanged = false;
 			syncRandom = false;
 			initialSeed = 0;
+			colorPool = new ColorPool("RandomHue");
 		};
 			
 
@@ -47,12 +49,12 @@ namespace StructureSynth {
 
 			int syncSeed = 0;
 			if (syncRandom) {
-				syncSeed = rand();
+				syncSeed = RandomStreams::Geometry()->getInt();
 			}
 
 			while (generationCounter < maxGenerations && objects < maxObjects && stack.size() < maxObjects) {
 
-				syncSeed = rand();
+				syncSeed = RandomStreams::Geometry()->getInt();
 
 				double p = 0;
 				if (maxObjects>0) {
@@ -94,15 +96,15 @@ namespace StructureSynth {
 					//	INFO("Executing: " + stack[i].rule->getName());
 					currentState = &stack[i].state;
 					if (currentState->seed != 0) {
-						srand(currentState->seed);
-						currentState->seed = rand();	
+						RandomStreams::SetSeed(currentState->seed);
+						currentState->seed = RandomStreams::Geometry()->getInt();	
 					}
 					state = stack[i].state; 
 					
 
 					// if we are synchronizing random numbers every state must get the same rands
 					if (syncRandom) {
-						srand(syncSeed);
+						RandomStreams::SetSeed(syncSeed);
 					}
 
 					// Check the dimensions against the min and max limits.
@@ -161,11 +163,27 @@ namespace StructureSynth {
 
 		void Builder::setCommand(QString command, QString param) {
 			if (command == "maxdepth") {
-				//INFO(QString("Setting 'maxgenerations' to %1").arg(param));
 				bool succes;
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'maxdepth' expected integer parameter. Found: %1").arg(param));
 				maxGenerations = i;
+			} else if (command == "colorpool") {
+				delete colorPool;
+				colorPool = 0; // Important - prevents crash if ColorPool constructor throws exception
+				colorPool = new ColorPool(param); // will throw exception for invalid pools.
+				
+			} else if (command == "rng") {
+				if (param.toLower() == "old") {
+					RandomStreams::UseOldRandomGenerators(true);
+					WARNING("Using the old random number generators is an obsolete option.");
+				} else if (param.toLower() == "new") {
+					RandomStreams::UseOldRandomGenerators(false);
+				} else {
+					throw Exception("Command 'set rng' expects either 'old' or 'new' as argument.");
+				
+
+				}
+				
 			} else if (command == "syncrandom") {
 				if (param.toLower() == "true") {
 					syncRandom = true;
@@ -174,7 +192,6 @@ namespace StructureSynth {
 				} else { 
 				  throw Exception(QString("Command 'syncrandom' expected either 'true' or 'false'. Found: %1").arg(param));
 				}
-
 			} else if (command == "maxsize") {
 				bool succes;
 				float f = param.toFloat(&succes);
@@ -195,16 +212,15 @@ namespace StructureSynth {
 				
 				if (param.toLower() == "initial") {
 					if (initialSeed == 0) {
-						initialSeed = rand();
+						initialSeed = RandomStreams::Geometry()->getInt();
 					}
 					currentState->seed = initialSeed;
-					state.seed = initialSeed;
-					
+					state.seed = initialSeed;	
 				} else {
 					bool succes;
 					int i = param.toInt(&succes);
 					if (!succes) throw Exception(QString("Command 'seed' expected integer parameter or 'same'. Found: %1").arg(param));
-					srand(i);
+					RandomStreams::SetSeed(i);
 					hasSeedChanged = true;
 					newSeed = i;
 				}
@@ -245,6 +261,11 @@ namespace StructureSynth {
 			return nextStack;
 		}
 
+		Builder::~Builder() {
+			delete(ruleSet);
+			//delete(currentState);
+			delete(colorPool);
+		}
 	}
 }
 

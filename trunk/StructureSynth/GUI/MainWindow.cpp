@@ -9,6 +9,7 @@
 
 #include "MainWindow.h"
 #include "VariableEditor.h"
+#include "../Model/RandomStreams.h"
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../StructureSynth/Parser/EisenParser.h"
@@ -766,7 +767,7 @@ namespace StructureSynth {
 				// We will auto-increment random seed.
 			}
 
-			srand(getSeed());
+			RandomStreams::SetSeed(getSeed());
 		}
 
 		void MainWindow::render() {
@@ -781,7 +782,7 @@ namespace StructureSynth {
 			}
 
 			if (autoIncrementCheckbox->isChecked()) updateRandom();
-			srand(getSeed());
+			RandomStreams::SetSeed(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
 
 			engine->setDisabled(true);
@@ -1110,7 +1111,7 @@ namespace StructureSynth {
 				QString templateFileName = d.absoluteFilePath(action->data().toString());
 				INFO("Starting Template Renderer: " + fileName);
 				
-				srand(getSeed());
+				RandomStreams::SetSeed(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";

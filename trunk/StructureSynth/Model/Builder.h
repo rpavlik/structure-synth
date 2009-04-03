@@ -4,6 +4,7 @@
 #include "Rendering/Renderer.h"
 #include "RuleSet.h"
 #include "State.h"
+#include "ColorPool.h"
 #include "ExecutionStack.h"
 
 #include "../../../SyntopiaCore/Math/Matrix4.h"
@@ -17,6 +18,7 @@ namespace StructureSynth {
 		class Builder {
 		public:
 			Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet);
+			~Builder();
 			void build();
 
 			void setCommand(QString command, QString param);
@@ -28,6 +30,7 @@ namespace StructureSynth {
 			// True, if the random seed was changed by the builder (by 'set seed <int>')
 			bool seedChanged() { return hasSeedChanged; }
 			int getNewSeed() { return newSeed; }
+			ColorPool* getColorPool() { return colorPool; }
 
 		private:
 			State state;
@@ -45,6 +48,7 @@ namespace StructureSynth {
 			bool syncRandom;
 			int initialSeed;
 			State* currentState;
+			ColorPool* colorPool;
 		};
 
 	}

@@ -318,6 +318,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\Math\Random.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\Math\Random.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\Math\Vector3.cpp"
 					>
 				</File>
@@ -354,23 +362,19 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="ThirdPartyCode"
+				>
+				<File
+					RelativePath=".\ThirdPartyCode\MersenneTwister\MersenneTwister.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Generated Files"
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
-			<File
-				RelativePath=".\tmp\moc\release_shared\moc_Debug.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
 				>
@@ -384,10 +388,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
+				RelativePath=".\tmp\moc\release_shared\moc_Debug.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -408,7 +412,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -439,6 +443,18 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -596,6 +612,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\StructureSynth\Model\ColorPool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Model\ColorPool.h"
+					>
+				</File>
+				<File
 					RelativePath=".\StructureSynth\Model\CustomRule.cpp"
 					>
 				</File>
@@ -617,6 +641,14 @@
 				</File>
 				<File
 					RelativePath=".\StructureSynth\Model\PrimitiveRule.h"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Model\RandomStreams.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Model\RandomStreams.h"
 					>
 				</File>
 				<File
