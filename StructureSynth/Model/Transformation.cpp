@@ -1,4 +1,5 @@
 #include "Transformation.h"
+#include "ColorPool.h"
 
 #include "../../SyntopiaCore/Math/Matrix4.h"
 
@@ -28,7 +29,7 @@ namespace StructureSynth {
 		Transformation::~Transformation() {
 		};
 
-		State Transformation::apply(const State& s) const {
+		State Transformation::apply(const State& s, ColorPool* colorPool) const {
 			State s2(s);
 			s2.matrix = s.matrix*matrix; 
 
@@ -36,7 +37,8 @@ namespace StructureSynth {
 				// if the absolute hue is larger than 360, we will choose a random color.
 				if (deltaH > 360) {
 
-					s2.hsv = Vector3f(360.0*rand()/(double)RAND_MAX, 1.0, 1.0);
+					QColor c = colorPool->drawColor();
+					s2.hsv = Vector3f(c.hue(), c.saturation()/255.0, c.value()/255.0);
 					s2.alpha = 1.0;
 				} else {
 					s2.hsv = Vector3f(deltaH,scaleS,scaleV);

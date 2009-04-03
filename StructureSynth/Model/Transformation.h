@@ -3,6 +3,7 @@
 #include <QString>
 #include <QColor>
 #include "State.h"
+#include "ColorPool.h"
 #include "../../SyntopiaCore/Math/Matrix4.h"
 
 namespace StructureSynth {
@@ -16,7 +17,7 @@ namespace StructureSynth {
 			/// 'Applies' the transformation 'T' to this transformation.
 			/// (For the matrix this corresponds to matrix multiplication).
 			void append(const Transformation& T);
-			State apply(const State& s) const;
+			State apply(const State& s, ColorPool* colorPool) const;
 
 			// The predefined operators
 			// Translations
