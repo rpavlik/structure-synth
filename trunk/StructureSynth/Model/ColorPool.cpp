@@ -26,8 +26,8 @@ namespace StructureSynth {
 				type = GreyScale;
 			} else if (initString == "randomrgb") {
 				type = RandomRGB;
-			}  else if (initString.startsWith("picture:")) {
-				initString = initString.remove("picture:");
+			}  else if (initString.startsWith("image:")) {
+				initString = initString.remove("image:");
 				type = Picture;
 
 				if (!QFile::exists(initString)) {
@@ -39,8 +39,8 @@ namespace StructureSynth {
 						throw Exception(QString("Could not parse image file: %1").arg(QFileInfo(initString).absoluteFilePath()));				
 				}
 
-			}  else if (initString.startsWith("colorlist:")) {
-				initString = initString.remove("colorlist:");
+			}  else if (initString.startsWith("list:")) {
+				initString = initString.remove("list:");
 				QStringList l = initString.split(",");
 				for (int i = 0; i < l.count(); i++) {
 					QColor c(l[i]);
@@ -61,7 +61,7 @@ namespace StructureSynth {
 
 		QColor ColorPool::drawColor() {
 			if (type == RandomHue) {
-				return QColor::fromHsv(RandomStreams::Color()->getInt(360),255,255);
+				return QColor::fromHsv(RandomStreams::Color()->getInt(359),255,255);
 			} else if (type == GreyScale) {
 				int r = RandomStreams::Color()->getInt(255);
 				return QColor(r,r,r).toHsv();
