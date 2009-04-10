@@ -1,18 +1,14 @@
 /*
-	An example of using preprocessor defines.
-
-      A preprocessor '#define' makes it easier
-      to explore parameter settings that are used
-      multiple times in the script.
+	An example of using preprocessor defines
 */
 
-#define sizeStep 0.98
-#define angle 6
+#define sizeStep 0.998
+#define angle 13
 
 set maxdepth 100
 set background black
 
-18 * { rx 10  x 0.2 sat 0.95  } R
+180 * { rx 10  x 0.2 sat 0.95  } R
 
 
 rule R { R1  }

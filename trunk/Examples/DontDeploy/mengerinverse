@@ -1,0 +1,47 @@
+// Write EisenScript code here...
+
+
+{ color white rx 90 b 0.3} r1 
+{ color white ry 90 b 0.3 } r1 
+{ color white rx 0  b 0.3 } r1 
+#define mod b 1.3
+
+rule r1 maxdepth 4 {
+	{ s 1/3  1/3 1  x -1 y -1 mod } r1
+{s 1/3  1/3 1 x -1 y 0 mod } r1
+{ s 1/3  1/3 1  x -1 y 1  mod} r1
+
+{s 1/3  1/3 1 x  0 y -1  mod } r1
+{ s 1/3  1/3 1  x  0 y +1  mod } r1
+{s 1/3  1/3 1  x -1 y -1 mod } r1
+
+{s 1/3  1/3 1  x +1 y -1 mod } r1
+{s 1/3  1/3 1   x +1 y 0 mod } r1
+{s 1/3  1/3 1   x +1 y 1  mod } r1
+{s 1/6  1/6 1  mod  } dbox
+
+}
+
+rule dbox {
+ { z 0.02  } box 
+}
+
+
+rule dbox {
+ { z -0.02  } box 
+}
+
+
+rule dbox {
+ { z 0.0  } box 
+}
+
+
+rule dbox {
+ { z 0.01  } box 
+}
+
+
+rule dbox {
+ { z -0.01  } box 
+}
