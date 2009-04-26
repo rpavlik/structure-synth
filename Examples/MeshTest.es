@@ -1,5 +1,6 @@
 /*
-	A simple demonstration of Structure Synth.
+	I'm still experimenting with a 'meshed' primitive (a connected box thingy)
+      It is still very experimental...
 */
 
 set maxobjects 4200
