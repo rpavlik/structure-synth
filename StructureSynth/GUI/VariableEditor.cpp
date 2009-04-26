@@ -67,11 +67,13 @@ namespace StructureSynth {
 			layout = new QVBoxLayout(this);
 			layout->setSpacing(1);
 
-		};
+			spacer=0;
+		};	
 
 	
 		QString VariableEditor::updateFromPreprocessor(Parser::Preprocessor* pp, QString in, bool* showGUI) {
 
+			delete(spacer); spacer = 0;
 			QVector<Parser::GuiParameter*> ps = pp->getParameters();
 			QMap<QString, QString> substitutions;
 
@@ -114,7 +116,7 @@ namespace StructureSynth {
 					INFO("Deleting : " + variables[i]->getName());
 					delete(variables[i]);
 					variables.remove(i);
-
+					i = 0;
 
 				}
 			}
@@ -122,6 +124,8 @@ namespace StructureSynth {
 			if (showGUI) (*showGUI) = (variables.count() != 0);
 
 
+			spacer = new QSpacerItem(1,1, QSizePolicy::Minimum,QSizePolicy::Expanding);
+			layout->addItem(spacer);
 			
 
 			QMap<QString, QString>::const_iterator it2 = substitutions.constBegin();
