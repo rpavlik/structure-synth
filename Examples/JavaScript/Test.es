@@ -6,7 +6,7 @@ v.y+=8;
 Debug.Info(v.toString());
 Debug.Info(v.length());
 
-World.add(Vector3(1,1,1),2);
+World.addSphere(Vector3(1,1,1),2);
 
 Debug.ShowProgress("My progress:");
 for ( i = 0; i < 2; i++) {
