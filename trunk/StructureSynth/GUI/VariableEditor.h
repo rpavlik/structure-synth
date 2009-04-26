@@ -25,6 +25,8 @@ namespace StructureSynth {
 			QString updateFromPreprocessor(Parser::Preprocessor* pp, QString in, bool* showGUI);
 
 		private:
+			
+			QSpacerItem* spacer;
 			QVector<VariableWidget*> variables;
 			QVBoxLayout* layout;
 		};
@@ -64,6 +66,7 @@ namespace StructureSynth {
 			}
 
 		private:
+			
 			QSlider* slider;
 			QDoubleSpinBox* spinner;
 			double defaultValue;

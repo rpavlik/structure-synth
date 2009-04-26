@@ -273,7 +273,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 9, 0, -1, " (\"Glasnost\")");
+			version = SyntopiaCore::Misc::Version(0, 9, 5, -1, " (\"Kwazam\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
@@ -327,27 +327,24 @@ namespace StructureSynth {
 			addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLog);
 
 			// Variable editor (in dockable window)
-			variableEditor = 0;
-			editorDockWidget = 0;
-			bool experimental = true;
-			if (experimental) {
-				editorDockWidget = new QDockWidget(this);
-				editorDockWidget->setMinimumWidth(250);
-				editorDockWidget->setWindowTitle("Variables");
-				editorDockWidget->setObjectName(QString::fromUtf8("editorDockWidget"));
-				editorDockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
-				QWidget* editorLogContents = new QWidget(dockLog);
-				editorLogContents->setObjectName(QString::fromUtf8("editorLogContents"));
-				QVBoxLayout* vboxLayout2 = new QVBoxLayout(editorLogContents);
-				vboxLayout2->setObjectName(QString::fromUtf8("vboxLayout2"));
-				vboxLayout2->setContentsMargins(0, 0, 0, 0);
+			editorDockWidget = new QDockWidget(this);
+			editorDockWidget->setMinimumWidth(250);
+			editorDockWidget->setWindowTitle("Variables");
+			editorDockWidget->setObjectName(QString::fromUtf8("editorDockWidget"));
+			editorDockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
+			QWidget* editorLogContents = new QWidget(dockLog);
+			editorLogContents->setObjectName(QString::fromUtf8("editorLogContents"));
+			QVBoxLayout* vboxLayout2 = new QVBoxLayout(editorLogContents);
+			vboxLayout2->setObjectName(QString::fromUtf8("vboxLayout2"));
+			vboxLayout2->setContentsMargins(0, 0, 0, 0);
 
-				variableEditor = new VariableEditor(editorDockWidget);
-				variableEditor->setMinimumWidth(250);
-				vboxLayout2->addWidget(variableEditor);
-				editorDockWidget->setWidget(editorLogContents);
-				addDockWidget(Qt::RightDockWidgetArea, editorDockWidget);
-			}
+			variableEditor = new VariableEditor(editorDockWidget);
+			variableEditor->setMinimumWidth(250);
+			vboxLayout2->addWidget(variableEditor);
+			editorDockWidget->setWidget(editorLogContents);
+			addDockWidget(Qt::RightDockWidgetArea, editorDockWidget);
+
+			editorDockWidget->setHidden(true);
 
 
 			INFO(QString("Welcome to Structure Synth version %1. A Syntopia Project.").arg(version.toLongString()));
