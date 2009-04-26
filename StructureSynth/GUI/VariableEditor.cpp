@@ -73,7 +73,11 @@ namespace StructureSynth {
 	
 		QString VariableEditor::updateFromPreprocessor(Parser::Preprocessor* pp, QString in, bool* showGUI) {
 
-			delete(spacer); spacer = 0;
+			if (spacer) {
+				layout->removeItem(spacer);
+				delete(spacer);
+				spacer = 0;
+			}
 			QVector<Parser::GuiParameter*> ps = pp->getParameters();
 			QMap<QString, QString> substitutions;
 
@@ -91,7 +95,7 @@ namespace StructureSynth {
 						substitutions[name] = variables[j]->getValueAsText();
 						found = true;
 						variables[j]->setUpdated(true);
-						INFO("Found existing: " + variables[j]->getName() + QString(" value: %1").arg(variables[j]->getValueAsText()));
+						//INFO("Found existing: " + variables[j]->getName() + QString(" value: %1").arg(variables[j]->getValueAsText()));
 					}
 				}
 
@@ -104,28 +108,28 @@ namespace StructureSynth {
 						fw->setUpdated(true);
 						layout->addWidget(fw);
 
-						INFO("Creating : " + ps[i]->getName());
+						//INFO("Creating : " + ps[i]->getName());
 						substitutions[name] = fw->getValueAsText();
 						
 					}
 				}
 			}
 
-			for (int i = 0; i < variables.count(); i++) {
+			for (int i = 0; i < variables.count(); ) {
 				if (!variables[i]->isUpdated()) {
-					INFO("Deleting : " + variables[i]->getName());
+					//INFO("Deleting : " + variables[i]->getName());
 					delete(variables[i]);
 					variables.remove(i);
 					i = 0;
 
+				} else {
+					i++;
 				}
 			}
 
 			if (showGUI) (*showGUI) = (variables.count() != 0);
 
 
-			spacer = new QSpacerItem(1,1, QSizePolicy::Minimum,QSizePolicy::Expanding);
-			layout->addItem(spacer);
 			
 
 			QMap<QString, QString>::const_iterator it2 = substitutions.constBegin();
@@ -136,7 +140,7 @@ namespace StructureSynth {
 					break;
 				}
 				if (in.contains(it2.key())) {
-					INFO("Replacing: " + it2.key() + " with " + it2.value());
+					//INFO("Replacing: " + it2.key() + " with " + it2.value());
 					in.replace(it2.key(), it2.value());
 
 					it2 = substitutions.constBegin();
@@ -145,8 +149,13 @@ namespace StructureSynth {
 					it2++;
 				}
 			}
+			spacer = new QSpacerItem(1,1, QSizePolicy::Minimum,QSizePolicy::Expanding);
+			layout->addItem(spacer);
+		
 			return in;
 		}
+
+			
 
 	}
 }
