@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 -------------------------
+
+26 Apr 09 [MHC] Cleaned up preprocesser GUI a bit, cleaned up examples.
+
 3  Apr 09 [MHC] Added new random number system. Now uses two independent Mersenne Twisters for generating random numbers: one for geometry and one for colors.
 [2h]
 
@@ -36,7 +39,7 @@ Changelog for Structure Synth:
 29 Jan 09 [MHC] Added support for specifying a startup .es file on the Commandline (this makes file associations possible). Notice this should work with Unicode paths.
 [1h]            Added support for drag'and'drop (drop a .es file onto the clipboard...)
                 -> TODO: Check on Linux/Mac.
-                BugFix: The scroll can now be used to zoom again.
+                BugFix: The scrollwheel can now be used to zoom again.
 
 ----- Release of v0.9.0 (Glasnost) [23 Jan 2009 ] ----------------------------------------------------------
 This release: 33 hours of work (30 hours coding + 3 hours non-coding). 15 log entries.

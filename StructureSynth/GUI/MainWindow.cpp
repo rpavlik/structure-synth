@@ -273,7 +273,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 9, 5, -1, " (\"Kwazam\")");
+			version = SyntopiaCore::Misc::Version(0, 9, 5, -1, " (\"Haiku\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 
