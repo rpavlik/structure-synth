@@ -324,7 +324,7 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::end() {
-				if (assertTemplateExists("end")) return;
+				if (!assertTemplateExists("end")) return;
 				Template t(templates["end"]); 
 				output.append(t.getText());
 			};

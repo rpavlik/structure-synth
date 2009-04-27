@@ -1,16 +1,40 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+Structure Synth 0.9.5 ("Haiku") Released
+-------------------------------------------
+Binaries for XP and Vista. 
+Mac binaries will hopefully be available soon.
+Linux is still source only.
+ 
+New features: 
+- New color features: a 'random color' operator with different palettes (random hue, random rgb, greyscale, sampling from image, or from user-defined list). 
+- Now uses two independent (Mersenne Twisters) random number generators: one for geometry and one for colors.
+- Upgraded to Qt 4.5.0. Now Structure Synth is dual licensed under GPL and LGPL.
+- Added 'blend {color} {strength}' operator.
+- Added 'set seed initial' for syncing random seed. 
+- Added 'set maxsize ...' and 'set minsize ...'.
+- Added support for specifying a startup .es file on the Commandline (this makes file associations possible). 
+- Added support for drag'and'drop (drop a .es file onto the clipboard).
+- Added simple GUI for manipulating preprocessor defines.
+- Added templates by Neon22 and Groovelock to SVN.
+
+Minor changes and bug fixes:
+- Added close icon to tabs.
+- Applied more agressive optimization on Windows build (SSE2/fast fp-math). SSE2 is now required! 
+- Fixed a bug where a recursive rule (not producing objects) could fill memory.
+- Added export of background color to templates.
+- BugFix: The scrollwheel can now be used to zoom again.
+
+
 Next version:
 - Show hour-glass when making long operations (before progress when rendering...)    
 - Better sphere implementation (remember transformation thing...)
 - 
 
-
 Request:
 - Remember file extension.
 
 Template Rendering Dialog:
-
 
 Choose Template:
 [Sunflow.template] [<]
