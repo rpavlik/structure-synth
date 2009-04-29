@@ -2,7 +2,10 @@
 Changelog for Structure Synth:
 -------------------------
 
+---- Release of v0.9.5.1 (Haiku) - Source Only [29 April 2009] -------------------------------------------
+
 29 Apr 09 [MHC] Corrected a bug, causing compile errors on Linux. Changed build name from "Kwazam" to "Haiku". Restored compatibility for Qt 4.x (x<5). Updated about.html to include LGPL option.
+[1h]
 
 ----- Release of v0.9.5 (Haiku) [27 April 2009 ] ----------------------------------------------------------
 This release: 26 hours of work (22 hours coding + 4 hours non-coding). 13 log entries.
