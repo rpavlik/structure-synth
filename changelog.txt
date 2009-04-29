@@ -2,42 +2,53 @@
 Changelog for Structure Synth:
 -------------------------
 
+29 Apr 09 [MHC] Corrected a bug, causing compile errors on Linux. Changed build name from "Kwazam" to "Haiku". Restored compatibility for Qt 4.x (x<5). Updated about.html to include LGPL option.
+
+----- Release of v0.9.5 (Haiku) [27 April 2009 ] ----------------------------------------------------------
+This release: 26 hours of work (22 hours coding + 4 hours non-coding). 13 log entries.
+Stats total: 192 hours of work (144 hours coding + 48 hours non-coding). 98 log entries.
+
+27/28 Apr 09 [MHC] Created builds, updated web pages, wrote release notes.
+[2h]C
+[2h]Adm
+
 26 Apr 09 [MHC] Cleaned up preprocesser GUI a bit, cleaned up examples.
+[2h]C
 
 3  Apr 09 [MHC] Added new random number system. Now uses two independent Mersenne Twisters for generating random numbers: one for geometry and one for colors.
-[2h]
+[2h]C
 
 1  Apr 09 [MHC] Added 'set colorpool' operator. Can be either: 'randomhue', 'randomrgb', 'greyscale'/'grayscale', 'image:001.png', or 'colorlist:orange,yellow,red'. Do not use spaces in color lists!
-[2h]
+[2h]C
 
 30 Mar 09 [MHC] Added 'random color' operator.
-[1h]
+[1h]C
 
 23 Mar 09 [MHC] Changed to Qt 4.5.0
-[2h]			Added close icon to tabs.
+[2h]C			Added close icon to tabs.
 				Compiler settings: now global optimization, SSE2 instructions, fast fp-math. (much more responsive!)
 				
 18 Mar 09 [MHC] Fixed a bug where a recursive rule not producing objects could fill memory (making system very unresponsive)
-[1h]            Added export of background color to templates.
+[1h]C           Added export of background color to templates.
                 Added templates by Neon22 and Groovelock to SVN.
 
 17 Feb 09 [MHC] Added 'blend {color} {strenght}' operator
-[1h]
+[1h]C
 
 15 Feb 09 [MHC] Continued work on GUI for vars. Floats working now. Needs polish. 
-[3h]
+[3h]C
 
 11 Feb 09 [MHC] Added 'set seed initial' for syncing random seed. This required adding a seed field to each state.
-[3h]
+[3h]C
 
 09 Feb 09 [MHC] Added 'set maxsize ...' and 'set minsize ...'.
-[2h]            Started working on a Sunflow-Ward template.
+[2h]C           Started working on a Sunflow-Ward template.
 
 02 Feb 09 [MHC] Web: updated references, Added icons for downloads.
 [1h Adm]
 
 29 Jan 09 [MHC] Added support for specifying a startup .es file on the Commandline (this makes file associations possible). Notice this should work with Unicode paths.
-[1h]            Added support for drag'and'drop (drop a .es file onto the clipboard...)
+[1h]C           Added support for drag'and'drop (drop a .es file onto the clipboard...)
                 -> TODO: Check on Linux/Mac.
                 BugFix: The scrollwheel can now be used to zoom again.
 
