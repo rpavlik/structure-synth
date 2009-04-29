@@ -286,9 +286,11 @@ namespace StructureSynth {
 			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
 
 			tabBar = new QTabBar(this);
-			tabBar->setTabsClosable(true);
 
+			#if QT_VERSION >= 0x040500
+			tabBar->setTabsClosable(true);
 			connect(tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+			#endif 
 
 			QFrame* f = new QFrame(this);
 			frameMainWindow = new QVBoxLayout();
