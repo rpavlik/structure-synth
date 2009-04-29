@@ -6,8 +6,8 @@
 #include "RandomStreams.h"
 
 
-#include <QFile.h>
-#include <QFileInfo.h>
+#include <QFile>
+#include <QFileInfo>
 
 
 using namespace SyntopiaCore::Logging;
