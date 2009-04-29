@@ -323,7 +323,7 @@ Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hou
  9 Aug 07 [MHC]:	Fixed rotation, scale offset. Rotations now in degrees instead of rad. 
 [1h]c               Added Grid, Box, Line, Dot primitives.
 	                
- 7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weigth' rule modifier. Added 'fx','fy','fz' commands.
+ 7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weight' rule modifier. Added 'fx','fy','fz' commands.
 [1h]c
 
  6 Aug 07 [MHC]:	Initial SF.NET checkin + mini webpage. Added coloring to logger.
