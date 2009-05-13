@@ -31,7 +31,9 @@ namespace StructureSynth {
 					if (depth <= 0) {
 						/// This rule is retired.
 						if (retirementRule) {
+							b->getState().maxDepths[this] = maxDepth;
 							retirementRule->rule()->apply(b);
+							
 						} 
 						return;
 					} else {
