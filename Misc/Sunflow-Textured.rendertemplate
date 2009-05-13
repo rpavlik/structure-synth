@@ -60,6 +60,15 @@ shader {
 }
 
 shader {
+	name "plain"
+	type amb-occ
+	bright { "sRGB nonlinear" 1.0 1.0 1.0 }
+	dark { "sRGB nonlinear"   0 0 0 }
+	samples  32
+	dist     6
+}
+
+shader {
 	name "textureshader2"
 	type amb-occ
    texture "texture2.png"
@@ -168,6 +177,19 @@ instance {
 	geometry "Box"
 	transform col {matrix}
 	shader "textureshader3"
+}
+		]]>
+	</substitution>
+	
+	<substitution name="box">
+		<![CDATA[
+
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "plain"
 }
 		]]>
 	</substitution>

@@ -2,6 +2,9 @@
 Changelog for Structure Synth:
 -------------------------
 
+04 May 09 [MHC] Added application (and .es) icons
+[4h]
+
 ---- Release of v0.9.5.1 (Haiku) - Source Only [29 April 2009] -------------------------------------------
 
 29 Apr 09 [MHC] Corrected a bug, causing compile errors on Linux. Changed build name from "Kwazam" to "Haiku". Restored compatibility for Qt 4.x (x<5). Updated about.html to include LGPL option.
