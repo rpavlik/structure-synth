@@ -34,27 +34,46 @@ Next version:
 Request:
 - Remember file extension.
 
+Filename (and 'run the following') should be possible to set in template.
+If changed in dialog it should be persistent.
+
 Template Rendering Dialog:
+
+Setup Tab:
 
 Choose Template:
 [Sunflow.template] [<]
 
+Notes:
+(This template was created by MHC....)
+
+Primitives in template:
+Box::spheres   comment
+Box::float     comment
+Grid           Warning: not found in template. (shown in red)
+
 (o) Render to file: [c:\testmig.es] [File...]
-	[x] add unique ID to filename
+	[x] add unique ID to filename (testmig-1.es) <- autoreview
 ( ) Render to clipboard.
+
+[x] Run the following commands after export:
+    C:\sunflow\sunflow.bat {File}
+
+Template details tab:
 
 Output Size:
 X: 640 Y: 400. [x] Lock Aspect
 
 [x] Modify Template before applying:
-(changes to template are not saved on disk)
 
-Post processing:
-[x] Modify export before saving
-[x] Run the following commands after export:
-    C:\sunflow\sunflow.bat {File}
+[                 ]
+[                 ]
+[				  ]
+[                 ]
+		[Save modifications] [Undo]
 
-
+[x] Modify Template output before saving
+    (Spawns an edit window)
 
 
 
