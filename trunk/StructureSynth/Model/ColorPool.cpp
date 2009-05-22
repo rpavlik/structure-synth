@@ -51,7 +51,7 @@ namespace StructureSynth {
 				}
 				type = ColorList;
 			} else {
-				throw Exception(QString("Could not understand the color pool: %1. Try: RandomHue, RandomRGB, GrayScale, Picture:test.png, ColorList:#234,Red,Blue").arg(initString));
+				throw Exception(QString("Could not understand the color pool: %1. Try: RandomHue, RandomRGB, GrayScale, Image:test.png, List:#234,Red,Blue").arg(initString));
 			}
 		}
 

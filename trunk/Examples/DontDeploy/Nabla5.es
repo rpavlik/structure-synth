@@ -5,12 +5,12 @@
 set maxdepth 40
 //set maxsize 10
 set colorpool randomrgb
-//set colorpool colorlist:orange,white,white,white,white,white,white,grey
+set colorpool list:orange,white,white,white,white,white,white,grey
 // Camera settings. Place these before first rule call.
-set translation [-25.9557 -3.34381 -20]
-set rotation [0.653426 0.755741 0.0415757 0.531119 -0.418698 -0.736492 -0.539223 0.503358 -0.675026]
-set pivot [0 0 0]
-set scale 0.319395
+
+20 * { y 20 } 1 * { z -10 x 100 s 200 5 0.1 color white  } box
+20 * { y 20 } 1 * { y 10 z -10 x 100 s 200 2 0.1 color white  } box
+
 
 10 * { y 10 } 10 * { x 10 }  1 * { ry -90 b 0.2 } R1
 set background black
