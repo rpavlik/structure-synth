@@ -8,7 +8,7 @@
 #include "../../SyntopiaCore/GLEngine/EngineWidget.h"
 #include "../../SyntopiaCore/Misc/Version.h"
 #include "VariableEditor.h"
-
+#include "TemplateExportDialog.h"
 
 
 class QAction;
@@ -52,6 +52,8 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void templateExport();
+			
 			void closeTab(int id);
 			void cut();
 			void copy();
@@ -129,6 +131,7 @@ namespace StructureSynth {
 			QAction *aboutAction;
 
 			QAction *renderAction;
+			QAction *exportAction;
 			QAction *panicAction;
 			SyntopiaCore::GLEngine::EngineWidget* engine;
 			QTabBar* tabBar;

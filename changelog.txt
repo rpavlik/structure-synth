@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 -------------------------
+25 May 09 [MHC] Added TemplateExportDialog skeleton
+[3h]            Changed to Cleanlooks.
 
 04 May 09 [MHC] Added application (and .es) icons
 [4h]

@@ -479,6 +479,12 @@ namespace StructureSynth {
 			renderAction->setStatusTip(tr("Render the current ruleset"));
 			connect(renderAction, SIGNAL(triggered()), this, SLOT(render()));
 
+			exportAction = new QAction(QIcon(":/images/render.png"), tr("&Template Export"), this);
+			exportAction->setShortcut(tr("F6"));
+			exportAction->setStatusTip(tr("Export the structure using a template."));
+			connect(exportAction, SIGNAL(triggered()), this, SLOT(templateExport()));
+
+
 			/*
 			povRenderAction = new QAction(QIcon(":/images/render.png"), tr("&Export as POV-Ray script"), this);
 			povRenderAction->setShortcut(tr("F6"));
@@ -528,6 +534,7 @@ namespace StructureSynth {
 
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
+			renderMenu->addAction(exportAction);
 			//renderMenu->addAction(povRenderAction);
 
 			// Scan render templates...
@@ -1234,6 +1241,11 @@ namespace StructureSynth {
 			} else {
 				INFO("Cannot accept MIME object: " + ev->mimeData()->formats().join(" - "));
 			}
+		}
+
+		void MainWindow::templateExport() {
+			TemplateExportDialog* dialog = new TemplateExportDialog(this);
+			dialog->exec();
 		}
 			
 	}
