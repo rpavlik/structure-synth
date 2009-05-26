@@ -6,6 +6,7 @@
 #include <QDomDocument>
 #include <QIODevice>
 #include <QFile>
+#include <QFileInfo>
 #include <QMap>
 
 using namespace SyntopiaCore::Math;
@@ -15,71 +16,78 @@ namespace StructureSynth {
 	namespace Model {	
 		namespace Rendering {
 
-			class Template {
-			public:
-				Template() {};
-				Template(QString def) : def(def) {};
-				Template(const Template& t) { this->def = t.def; };
 
-				QString getText() { return def; }
-
-				void substitute(QString before, QString after) {
-					def.replace(before, after);
-				};
-
-				bool contains(QString input) {
-					return def.contains(input);
-				};
-
-			private:
-				QString def;
-			};
-
-			TemplateRenderer::TemplateRenderer(QString xmlDefinitionFile) {
-				counter = 0;
+			void Template::read(QString xml) {
 				QDomDocument doc;
-				QFile file(xmlDefinitionFile);
+
+				if (!doc.setContent(xml)) {
+					WARNING("Unable to parse xml.");
+					return;
+				}
+
+				parse(doc);
+			}
+
+			void Template::read(QFile& file) {
+				QDomDocument doc;
 				if (!file.open(QIODevice::ReadOnly)) {
-					WARNING("Unable to open file: " + xmlDefinitionFile);
+					WARNING("Unable to open file: " + QFileInfo(file).absoluteFilePath());
 					return;
 				}
 				if (!doc.setContent(&file)) {
-					WARNING("Unable to parse file: " + xmlDefinitionFile);
+					WARNING("Unable to parse file: " + QFileInfo(file).absoluteFilePath());
 					file.close();
 					return;
 				}
 				file.close();
 
+				parse(doc);
+			}
+
+			void Template::parse(QDomDocument& doc) {
 				QDomElement docElem = doc.documentElement();
 
 				QDomNode n = docElem.firstChild();
 				while(!n.isNull()) {
 					QDomElement e = n.toElement(); // try to convert the node to an element.
 					if(!e.isNull()) {
-						if (e.tagName() != "substitution") {
-							WARNING("Expected 'substitution' element, found: " + e.tagName());
+						if (e.tagName() == "substitution") {
+
+							if (!e.hasAttribute("name")) {
+								WARNING("Substitution without name attribute found!");
+								continue;
+							}
+
+
+							QString type = "";
+							if (e.hasAttribute("type")) {
+								type = "::" + e.attribute("type");
+							}
+
+
+							QString name = e.attribute("name") + type;
+							//INFO(QString("%1 = %2").arg(name).arg(e.text()));
+							primitives[name] = TemplatePrimitive(e.text());
+						} else if (e.tagName() == "description") {
+							description = e.text();
+						} else {
+
+							WARNING("Expected 'substitution' or 'description' element, found: " + e.tagName());
 							continue;
+
 						}
-						if (!e.hasAttribute("name")) {
-							WARNING("Substitution without name attribute found!");
-							continue;
-						}
-
-
-						QString type = "";
-						if (e.hasAttribute("type")) {
-							type = "::" + e.attribute("type");
-						}
-
-
-						QString name = e.attribute("name") + type;
-						//INFO(QString("%1 = %2").arg(name).arg(e.text()));
-						templates[name] = Template(e.text());
 					}
 					n = n.nextSibling();
 				}
 
 
+			}
+
+			TemplateRenderer::TemplateRenderer(QString xmlDefinitionFile) {
+				counter = 0;
+				QFile file(xmlDefinitionFile);
+
+				workingTemplate.read(file);
 			}
 
 
@@ -91,8 +99,8 @@ namespace StructureSynth {
 			TemplateRenderer::~TemplateRenderer() {
 			}
 
-			bool TemplateRenderer::assertTemplateExists(QString templateName) {
-				if (!templates.contains(templateName)) {
+			bool TemplateRenderer::assertPrimitiveExists(QString templateName) {
+				if (!workingTemplate.getPrimitives().contains(templateName)) {
 					QString error = 
 						QString("Template error: the primitive '%1' is not defined.").arg(templateName);
 
@@ -111,7 +119,7 @@ namespace StructureSynth {
 			void TemplateRenderer::doStandardSubstitutions(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3, Template& t) {
+				SyntopiaCore::Math::Vector3f dir3, TemplatePrimitive& t) {
 					if (t.contains("{matrix}")) {
 						QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 1")
 							.arg(dir1.x()).arg(dir1.y()).arg(dir1.z())
@@ -149,8 +157,8 @@ namespace StructureSynth {
 				const QString& classID) 
 			{
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				if (!assertTemplateExists("box"+alternateID)) return;
-				Template t(templates["box"+alternateID]); 
+				if (!assertPrimitiveExists("box"+alternateID)) return;
+				TemplatePrimitive t(workingTemplate.get("box"+alternateID)); 
 
 				doStandardSubstitutions(base, dir1, dir2, dir3, t);
 
@@ -167,8 +175,8 @@ namespace StructureSynth {
 				const QString& classID) {
 
 					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-					if (!assertTemplateExists("triangle"+alternateID)) return;
-					Template t(templates["triangle"+alternateID]); 
+					if (!assertPrimitiveExists("triangle"+alternateID)) return;
+					TemplatePrimitive t(workingTemplate.get("triangle"+alternateID)); 
 
 					if (t.contains("{uid}")) {
 						t.substitute("{uid}", QString("Triangle%1").arg(counter++));
@@ -200,8 +208,8 @@ namespace StructureSynth {
 				const QString& classID) {
 
 					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-					if (!assertTemplateExists("grid"+alternateID)) return;
-					Template t(templates["grid"+alternateID]); 
+					if (!assertPrimitiveExists("grid"+alternateID)) return;
+					TemplatePrimitive t(workingTemplate.get("grid"+alternateID)); 
 
 
 					doStandardSubstitutions(base, dir1, dir2, dir3, t);
@@ -217,8 +225,8 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				if (!assertTemplateExists("line"+alternateID)) return;
-				Template t(templates["line"+alternateID]); 
+				if (!assertPrimitiveExists("line"+alternateID)) return;
+				TemplatePrimitive t(workingTemplate.get("line"+alternateID)); 
 				t.substitute("{x1}", QString::number(from.x()));
 				t.substitute("{y1}", QString::number(from.y()));
 				t.substitute("{z1}", QString::number(from.z()));
@@ -239,8 +247,8 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f v,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				if (!assertTemplateExists("dot"+alternateID)) return;
-				Template t(templates["dot"+alternateID]); 
+				if (!assertPrimitiveExists("dot"+alternateID)) return;
+				TemplatePrimitive t(workingTemplate.get("dot"+alternateID)); 
 				t.substitute("{x}", QString::number(v.x()));
 				t.substitute("{y}", QString::number(v.y()));
 				t.substitute("{z}", QString::number(v.z()));
@@ -261,8 +269,8 @@ namespace StructureSynth {
 
 			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,const QString& classID) {
 				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
-				if (!assertTemplateExists("sphere"+alternateID)) return;
-				Template t(templates["sphere"+alternateID]); 
+				if (!assertPrimitiveExists("sphere"+alternateID)) return;
+				TemplatePrimitive t(workingTemplate.get("sphere"+alternateID)); 
 				t.substitute("{cx}", QString::number(center.x()));
 				t.substitute("{cy}", QString::number(center.y()));
 				t.substitute("{cz}", QString::number(center.z()));
@@ -284,8 +292,8 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::begin() {
-				if (!assertTemplateExists("begin")) return;
-				Template t(templates["begin"]); 
+				if (!assertPrimitiveExists("begin")) return;
+				TemplatePrimitive t(workingTemplate.get("begin")); 
 
 				t.substitute("{CamPosX}", QString::number(cameraPosition.x()));
 				t.substitute("{CamPosY}", QString::number(cameraPosition.y()));
@@ -324,8 +332,8 @@ namespace StructureSynth {
 			};
 
 			void TemplateRenderer::end() {
-				if (!assertTemplateExists("end")) return;
-				Template t(templates["end"]); 
+				if (!assertPrimitiveExists("end")) return;
+				TemplatePrimitive t(workingTemplate.get("end")); 
 				output.append(t.getText());
 			};
 

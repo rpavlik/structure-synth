@@ -1244,8 +1244,10 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::templateExport() {
-			TemplateExportDialog* dialog = new TemplateExportDialog(this);
-			dialog->exec();
+			TemplateExportDialog dialog(this);
+			dialog.setTemplatePath(getTemplateDir());
+			dialog.exec();
+			
 		}
 			
 	}

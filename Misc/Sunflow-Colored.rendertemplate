@@ -1,9 +1,9 @@
-<!--
-   This is an example of a render template, using one shader for each object.  
+<template name="Sun Flow Template" inherits="" >
+    <description>
+	   This is an example of a render template, using one shader for each object.  
    
    Based on a template by Tom Beddard ('subblue')
--->
-<template name="Sun Flow Template" inherits="" >
+	</description>
 	<substitution name="begin">
 	    <![CDATA[
 %photons {

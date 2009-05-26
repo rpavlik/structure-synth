@@ -5,20 +5,32 @@
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QDir>
 
+#include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
+#include "../../SyntopiaCore/Misc/Persistence.h"
+#include "../Model/Rendering/TemplateRenderer.h"
+using namespace SyntopiaCore::Logging;
 
-
+using namespace SyntopiaCore::Misc;
 
 namespace StructureSynth {
+	using namespace Model::Rendering;
+
 	namespace GUI {
 
-
+		
 		TemplateExportDialog::TemplateExportDialog(QWidget* parent) : QDialog(parent) {
-		setupUi();
-		retranslateUi();
+			setupUi();
+			retranslateUi();
 
 		}
-		
+
+		TemplateExportDialog::~TemplateExportDialog() {
+			// Persist (should only be done on OK?)
+			Persistence::Store(fileNameLineEdit);
+		}
+			
 		void TemplateExportDialog::setupUi()
 		{
 			if (objectName().isEmpty())
@@ -42,6 +54,9 @@ namespace StructureSynth {
 			sizePolicy.setVerticalStretch(0);
 			sizePolicy.setHeightForWidth(templateComboBox->sizePolicy().hasHeightForWidth());
 			templateComboBox->setSizePolicy(sizePolicy);
+			connect(templateComboBox, SIGNAL(currentIndexChanged(const QString &)), 
+				this, SLOT(templateChanged(const QString &)));
+
 
 			horizontalLayout->addWidget(templateComboBox);
 
@@ -94,7 +109,10 @@ namespace StructureSynth {
 			horizontalLayout_2->addWidget(fileRadioButton);
 
 			fileNameLineEdit = new QLineEdit(templateOutputGroupBox);
-			fileNameLineEdit->setObjectName(QString::fromUtf8("fileNameLineEdit"));
+			fileNameLineEdit->setObjectName(QString::fromUtf8("TemplateExportDialog.fileNameLineEdit"));
+			fileNameLineEdit->setText(QApplication::translate("Dialog", "C:\\Output\\test.es", 0, QApplication::UnicodeUTF8));
+			Persistence::Restore(fileNameLineEdit);
+			
 
 			horizontalLayout_2->addWidget(fileNameLineEdit);
 
@@ -267,11 +285,61 @@ namespace StructureSynth {
 			QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 			QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-			tabWidget->setCurrentIndex(1);
+			tabWidget->setCurrentIndex(0);
 
 
-			QMetaObject::connectSlotsByName(this);
+			//QMetaObject::connectSlotsByName(this);
 		} // setupUi
+
+		void TemplateExportDialog::setTemplatePath(QString templatePath) {
+
+			// Scan render templates...
+			QDir dir(templatePath);
+			QStringList filters;
+			filters << "*.rendertemplate";
+			dir.setNameFilters(filters);
+			if (!dir.exists()) {
+				WARNING("Unable to locate: "+dir.absolutePath());
+			} else {
+				QStringList sl = dir.entryList();
+				templateComboBox->clear();
+				for (int i = 0; i < sl.size(); i++) {
+					templateComboBox->insertItem(10000, sl[i].remove(".rendertemplate", Qt::CaseInsensitive), 
+						dir.absoluteFilePath(sl[i]));
+				}
+			}
+
+
+		}
+
+		void TemplateExportDialog::templateChanged(const QString &) {
+			int id = templateComboBox->currentIndex();
+			if (id<0) return;
+			QVariant q = templateComboBox->itemData(id);
+
+			QFile file(q.toString());
+			Template t(file);
+
+			descriptionTextBrowser->setText(t.getDescription());
+
+			primitivesTableWidget->setRowCount(t.getPrimitives().count());
+			primitivesTableWidget->setColumnCount(2);
+			primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Primitive"));
+			primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Comment"));
+			QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
+			int count = 0;
+			while (i.hasNext()) {
+				i.next();
+
+				primitivesTableWidget->setItem(count, 0, new QTableWidgetItem( i.key()));
+				primitivesTableWidget->setItem(count, 1, new QTableWidgetItem("..."));
+
+				count++;
+			}
+		}
+
+
+
 
 
 		void TemplateExportDialog::retranslateUi()
@@ -288,7 +356,6 @@ namespace StructureSynth {
 			primitivesLabel->setText(QApplication::translate("Dialog", "Primitives in Template", 0, QApplication::UnicodeUTF8));
 			templateOutputGroupBox->setTitle(QApplication::translate("Dialog", "Template Output", 0, QApplication::UnicodeUTF8));
 			fileRadioButton->setText(QApplication::translate("Dialog", "File:", 0, QApplication::UnicodeUTF8));
-			fileNameLineEdit->setText(QApplication::translate("Dialog", "C:\\Output\\test.es", 0, QApplication::UnicodeUTF8));
 			filePushButton->setText(QApplication::translate("Dialog", "File...", 0, QApplication::UnicodeUTF8));
 			uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename (testmig-1.es)", 0, QApplication::UnicodeUTF8));
 			clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0, QApplication::UnicodeUTF8));
@@ -305,7 +372,7 @@ namespace StructureSynth {
 			pushButton_4->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0, QApplication::UnicodeUTF8));
 			modifyOutputCheckBox->setText(QApplication::translate("Dialog", "Modify output before saving (spawns edit window when pressing OK)", 0, QApplication::UnicodeUTF8));
 			tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Advanced", 0, QApplication::UnicodeUTF8));
-			
+
 		} // retranslateUi
 
 	};
