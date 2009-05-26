@@ -354,6 +354,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\Misc\Persistence.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\Misc\Persistence.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\Misc\Version.cpp"
 					>
 				</File>
@@ -424,6 +432,22 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\tmp\moc\moc_TemplateExportDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
 				>
 				<FileConfiguration
@@ -443,18 +467,6 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -534,6 +546,16 @@
 				<File
 					RelativePath=".\StructureSynth\GUI\TemplateExportDialog.h"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="moc_TemplateExportDialog"
+							CommandLine="$(QT4DIR)\bin\moc.exe -DNDEBUG -D_WINDOWS -DUNICODE -DQT_LARGEFILE_SUPPORT -DWIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT  -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include&quot; -I &quot;$(QT4DIR)\include\ActiveQt&quot; -I &quot;tmp\moc&quot; -I &quot;.&quot; -I&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot; StructureSynth/GUI/TemplateExportDialog.h -o tmp\moc\moc_TemplateExportDialog.cpp"
+							Outputs="moc_TemplateExportDialog"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\StructureSynth\GUI\VariableEditor.cpp"

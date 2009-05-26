@@ -33,14 +33,25 @@ namespace StructureSynth {
 
 		/// The Variable Editor window.
 		class TemplateExportDialog : public QDialog {
+			Q_OBJECT
 		public:
 			TemplateExportDialog(QWidget* parent);
+			~TemplateExportDialog();
+
+
+			void setTemplatePath(QString templatePath);
+
+		public slots:
+			void templateChanged(const QString &);
+
 
 		protected:
 			void retranslateUi();
+
 			void setupUi();
 
 		private:
+			QString path;
 			QVBoxLayout *verticalLayout;
 			QHBoxLayout *horizontalLayout;
 			QLabel *label;

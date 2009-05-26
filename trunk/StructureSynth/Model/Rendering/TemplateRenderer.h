@@ -4,6 +4,8 @@
 #include <QMap>
 #include <QSet>
 #include <QStringList>
+#include <QFile>
+#include <QDomDocument>
 #include "Renderer.h"
 
 #include "../../../SyntopiaCore/Math/Vector3.h"
@@ -15,7 +17,49 @@ namespace StructureSynth {
 			
 			using namespace SyntopiaCore::Math;
 
-			class Template; // Forward...
+			/// A TemplatePrimitive is the definition for a single primitive (like Box or Sphere).
+			/// It is a simple text string with placeholders for stuff like coordinates and color.
+			class TemplatePrimitive {
+			public:
+				TemplatePrimitive() {};
+				TemplatePrimitive(QString def) : def(def) {};
+				TemplatePrimitive(const TemplatePrimitive& t) { this->def = t.def; };
+
+				QString getText() { return def; }
+
+				void substitute(QString before, QString after) {
+					def.replace(before, after);
+				};
+
+				bool contains(QString input) {
+					return def.contains(input);
+				};
+
+			private:
+				QString def;
+			};
+
+			// A Template contains a number of TemplatePrimitives:
+			// text definitions for each of the standard primitives (box, sphere, ...) with placeholders
+			// for stuff like coordinates and color.
+			class Template {
+			public:
+				Template() {};
+				Template(QFile& file) { read(file); }
+				Template(QString xmlString) { read(xmlString); }
+
+				void read(QFile& file);
+				void read(QString xmlString);
+				void parse(QDomDocument& doc);
+
+				QMap<QString, TemplatePrimitive>& getPrimitives() { return primitives; }
+				TemplatePrimitive get(QString name) { return primitives[name]; }
+				QString getDescription() { return description; }
+
+			private:
+				QMap<QString, TemplatePrimitive> primitives;
+				QString description;
+			};
 
 			/// A renderer implementation based on the SyntopiaCore POV widget.
 			class TemplateRenderer : public Renderer {
@@ -76,7 +120,7 @@ namespace StructureSynth {
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& renderClass, const QString& command);
 
-				bool assertTemplateExists(QString templateName);
+				bool assertPrimitiveExists(QString templateName);
 			
 				void setCamera(Vector3f cameraPosition, Vector3f cameraUp, Vector3f cameraRight, Vector3f cameraTarget, int width, int height, double aspect, double fov) {
 					this->cameraPosition = cameraPosition;
@@ -93,7 +137,7 @@ namespace StructureSynth {
 					SyntopiaCore::Math::Vector3f dir1,
 					SyntopiaCore::Math::Vector3f dir2, 
 					SyntopiaCore::Math::Vector3f dir3, 
-					Template& t);
+					TemplatePrimitive& t);
 			
 
 			private:
@@ -107,7 +151,7 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f rgb;
 				SyntopiaCore::Math::Vector3f backRgb;
 				double alpha;
-				QMap<QString, Template> templates;
+				Template workingTemplate;
 				QStringList output;
 				int counter;
 				int width;
