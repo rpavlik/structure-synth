@@ -36,6 +36,10 @@ using namespace StructureSynth::JavaScriptSupport;
 namespace StructureSynth {
 	namespace GUI {
 
+		namespace {
+			int MaxRecentFiles = 5;
+		}
+
 		class EisenScriptHighlighter : public QSyntaxHighlighter {
 		public:
 
@@ -59,7 +63,7 @@ namespace StructureSynth {
 
 			void highlightBlock(const QString &text)
 			{
-				
+
 				if (currentBlockState() == 2) {
 					setFormat(0, text.length(), warningFormat);
 					setCurrentBlockState(-1);
@@ -139,7 +143,7 @@ namespace StructureSynth {
 
 			QRegExp expression;
 			QRegExp primitives;
-			
+
 
 		};
 
@@ -149,7 +153,7 @@ namespace StructureSynth {
 			init();
 			loadFile(QDir(getExamplesDir()).absoluteFilePath("Default.es"));
 			tabChanged(0); // to update title.
-		
+
 		}
 
 		MainWindow::MainWindow(const QString &fileName)
@@ -157,7 +161,7 @@ namespace StructureSynth {
 			init();
 			loadFile(fileName);
 			tabChanged(0); // to update title.
-		
+
 		}
 
 		void MainWindow::closeEvent(QCloseEvent *ev)
@@ -225,11 +229,11 @@ namespace StructureSynth {
 		{
 			int index = tabBar->currentIndex();
 			if (index == -1) { WARNING("No open tab"); return false; } 
-			
+
 			TabInfo t = tabInfo[index];
 
 			QString filter = "EisenScript (*.es);;All Files (*.*)";
-			
+
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), t.filename, filter);
 			if (fileName.isEmpty())
 				return false;
@@ -287,10 +291,10 @@ namespace StructureSynth {
 
 			tabBar = new QTabBar(this);
 
-			#if QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x040500
 			tabBar->setTabsClosable(true);
 			connect(tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-			#endif 
+#endif 
 
 			QFrame* f = new QFrame(this);
 			frameMainWindow = new QVBoxLayout();
@@ -311,7 +315,7 @@ namespace StructureSynth {
 			createStatusBar();
 
 			QDir d(getExamplesDir());
-			
+
 			// Log widget (in dockable window)
 			dockLog = new QDockWidget(this);
 			dockLog->setWindowTitle("Log");
@@ -390,7 +394,7 @@ namespace StructureSynth {
 				renderToolBar->show();
 				tabBar->show();
 				randomToolBar->show();
-				
+
 			} else {
 				frameMainWindow->setMargin(0);
 				fullScreenAction->setChecked(true);
@@ -406,7 +410,7 @@ namespace StructureSynth {
 				renderToolBar->hide();
 				randomToolBar->hide();
 				showFullScreen();
-				
+
 			}
 		}
 
@@ -513,6 +517,12 @@ namespace StructureSynth {
 			galleryAction->setStatusTip(tr("Opens the main Flickr group for Structure Synth creations."));
 			connect(galleryAction, SIGNAL(triggered()), this, SLOT(launchGallery()));
 
+			for (int i = 0; i < MaxRecentFiles; ++i) {
+				QAction* a = new QAction(this);
+				a->setVisible(false);
+				connect(a, SIGNAL(triggered()),	this, SLOT(openRecentFile()));
+				recentFileActions.append(a);				
+			}
 		}
 
 		void MainWindow::createMenus()
@@ -522,6 +532,11 @@ namespace StructureSynth {
 			fileMenu->addAction(openAction);
 			fileMenu->addAction(saveAction);
 			fileMenu->addAction(saveAsAction);
+			
+			recentFileSeparator = fileMenu->addSeparator();
+			for (int i = 0; i < MaxRecentFiles; ++i)
+				fileMenu->addAction(recentFileActions[i]);
+
 			fileMenu->addSeparator();
 			fileMenu->addAction(closeAction);
 			fileMenu->addAction(exitAction);
@@ -590,7 +605,7 @@ namespace StructureSynth {
 
 				QMap< QString , QMenu* > menuMap;
 				while (!pathStack.isEmpty()) {
-					
+
 					QMenu* currentMenu = examplesMenu;
 					QString path = pathStack.pop();
 					if (menuMap.contains(path)) currentMenu = menuMap[path];
@@ -613,17 +628,17 @@ namespace StructureSynth {
 						INFO(QString("Found item:")+ sl[i]);
 						QAction* a = new QAction(sl[i], this);
 						a->setIcon(QIcon(":/images/mail_new.png"));
-						
+
 
 						QString absPath = QDir(path ).absoluteFilePath(sl[i]);
-						
+
 						a->setData(absPath);
 						connect(a, SIGNAL(triggered()), this, SLOT(openFile()));
 						currentMenu->addAction(a);
 					}
 				}
 
-				
+
 			}
 
 			helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -659,7 +674,7 @@ namespace StructureSynth {
 			randomToolBar->addWidget(autoIncrementCheckbox);
 			autoIncrementCheckbox->setChecked(true);
 
-			
+
 
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
@@ -724,8 +739,10 @@ namespace StructureSynth {
 		bool MainWindow::saveFile(const QString &fileName)
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return false; } 
-			
 
+
+			
+			
 			QFile file(fileName);
 			if (!file.open(QFile::WriteOnly | QFile::Text)) {
 				QMessageBox::warning(this, tr("Structure Synth"),
@@ -746,6 +763,8 @@ namespace StructureSynth {
 			tabChanged(tabBar->currentIndex()); // to update displayed name;
 
 			statusBar()->showMessage(tr("File saved"), 2000);
+			setRecentFile(fileName);
+
 			return true;
 		}
 
@@ -760,7 +779,7 @@ namespace StructureSynth {
 		void MainWindow::updateRandom() {
 
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
+
 			seedSpinBox->blockSignals(true);
 			setSeed((getSeed()+1) % 32768);
 			seedSpinBox->blockSignals(false);
@@ -778,9 +797,9 @@ namespace StructureSynth {
 
 		void MainWindow::render() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
+
 			if (getTextEdit()->toPlainText().startsWith("#javascript", Qt::CaseInsensitive)) {
-			    // This is javascript...
+				// This is javascript...
 				QString text = getTextEdit()->toPlainText();
 				text = text.remove("#javascript", Qt::CaseInsensitive);
 				parseJavaScript(text);
@@ -794,7 +813,7 @@ namespace StructureSynth {
 			engine->setDisabled(true);
 
 			try {
-				
+
 				Rendering::OpenGLRenderer renderTarget(engine);
 				renderTarget.begin(); // we clear before parsing...
 
@@ -804,7 +823,7 @@ namespace StructureSynth {
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);
 
-				
+
 				Tokenizer tokenizer(out);
 				EisenParser e(&tokenizer);
 				INFO("Parsing...");
@@ -899,7 +918,7 @@ namespace StructureSynth {
 			int pos = this->getTextEdit()->textCursor().position();
 			int blockNumber = this->getTextEdit()->textCursor().blockNumber();
 			statusBar()->showMessage(QString("Position: %1, Line: %2").arg(pos).arg(blockNumber+1), 5000);
-					
+
 		}
 
 		void MainWindow::insertTabPage(QString filename) {
@@ -957,6 +976,8 @@ namespace StructureSynth {
 
 			if (loadingSucceded) {
 				tabInfo.append(TabInfo(displayName, textEdit, false, true));
+				setRecentFile(filename);
+
 			} else {
 				tabInfo.append(TabInfo(displayName, textEdit, true));
 			}
@@ -991,13 +1012,13 @@ namespace StructureSynth {
 				int answer = QMessageBox::warning(this, QString("Unsaved changes"), "Close this tab without saving changes?", "OK", "Cancel");
 				if (answer == 1) return;
 			}
-			
+
 			tabInfo.remove(index);
 			tabBar->removeTab(index);
-			
+
 			stackedTextEdits->removeWidget(t.textEdit);
 			delete(t.textEdit); // ?
-			
+
 		}
 
 		void MainWindow::launchSfHome() {
@@ -1019,7 +1040,7 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::makeScreenshot() {
-			
+
 			QList<QByteArray> a = QImageWriter::supportedImageFormats();
 			QStringList allowedTypesFilter;
 			QStringList allowedTypes;
@@ -1065,7 +1086,7 @@ namespace StructureSynth {
 
 		void MainWindow::insertCameraSettings() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
+
 			///xxx
 			Vector3f translation = engine->getTranslation();
 			Matrix4f rotation = engine->getRotation();
@@ -1074,10 +1095,10 @@ namespace StructureSynth {
 
 			QStringList sl;
 			sl << "// Camera settings. Place these before first rule call." 
-			   << QString("set translation %1").arg(translation.toString())
-			   << QString("set rotation %1").arg(rotation.toStringAs3x3())
-			   << QString("set pivot %1").arg(pivot.toString())
-			   << QString("set scale %1").arg(scale);
+				<< QString("set translation %1").arg(translation.toString())
+				<< QString("set rotation %1").arg(rotation.toStringAs3x3())
+				<< QString("set pivot %1").arg(pivot.toString())
+				<< QString("set scale %1").arg(scale);
 
 
 			getTextEdit()->insertPlainText(sl.join("\r\n"));
@@ -1085,7 +1106,7 @@ namespace StructureSynth {
 			INFO("Remember to clear previous 'set' commands if necessary.");
 		}
 
-		
+
 		void MainWindow::templateRenderToFile()
 		{
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), "output.txt");
@@ -1094,29 +1115,29 @@ namespace StructureSynth {
 				return;
 			}
 
-			
+
 			templateRender(fileName);
-			
-			
+
+
 		}
 
 		void MainWindow::templateRender()
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
+
 			templateRender(""); // Renders to clip board when file name is empty.
 		}
 
 		void MainWindow::templateRender(const QString& fileName)
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
-			
+
 			QAction *action = qobject_cast<QAction *>(sender());
 			if (action) {
 				QDir d(getTemplateDir());
 				QString templateFileName = d.absoluteFilePath(action->data().toString());
 				INFO("Starting Template Renderer: " + fileName);
-				
+
 				RandomStreams::SetSeed(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
@@ -1127,7 +1148,7 @@ namespace StructureSynth {
 					rendering.setCamera(
 						engine->getCameraPosition(), 
 						engine->getCameraUp().normalize(), 
-					    cameraRight,
+						cameraRight,
 						engine->getCameraTarget(),
 						engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
 
@@ -1143,7 +1164,7 @@ namespace StructureSynth {
 					out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 					editorDockWidget->setHidden(!showGUI);
 
-				
+
 					Tokenizer tokenizer(out);
 					EisenParser e(&tokenizer);
 					INFO("Parsing...");
@@ -1187,7 +1208,7 @@ namespace StructureSynth {
 						INFO("File saved.");
 					}
 
-					
+
 
 
 				} catch (Exception& er) {
@@ -1211,7 +1232,7 @@ namespace StructureSynth {
 			getTextEdit()->copy();
 		}
 
-		
+
 		void MainWindow::cut() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 			getTextEdit()->cut();
@@ -1221,7 +1242,7 @@ namespace StructureSynth {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 			getTextEdit()->paste();
 		}
-	
+
 		void MainWindow::dragEnterEvent(QDragEnterEvent *ev)
 		{
 			if (ev->mimeData()->hasUrls()) {
@@ -1247,9 +1268,34 @@ namespace StructureSynth {
 			TemplateExportDialog dialog(this);
 			dialog.setTemplatePath(getTemplateDir());
 			dialog.exec();
-			
+
 		}
+
+		void MainWindow::setRecentFile(const QString &fileName)
+		{
+			QSettings settings("Syntopia Software", "Structure Synth");
 			
+			QStringList files = settings.value("recentFileList").toStringList();
+			files.removeAll(fileName);
+			files.prepend(fileName);
+			while (files.size() > MaxRecentFiles) files.removeLast();
+
+			settings.setValue("recentFileList", files);
+
+			int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
+
+			for (int i = 0; i < numRecentFiles; ++i) {
+				QString text = tr("&%1 %2").arg(i + 1).arg(QFileInfo(files[i]).fileName());
+				recentFileActions[i]->setText(text);
+				recentFileActions[i]->setData(files[i]);
+				recentFileActions[i]->setVisible(true);
+			}
+			
+			for (int j = numRecentFiles; j < MaxRecentFiles; ++j) recentFileActions[j]->setVisible(false);
+
+			recentFileSeparator->setVisible(numRecentFiles > 0);
+		}
+
 	}
 
 }

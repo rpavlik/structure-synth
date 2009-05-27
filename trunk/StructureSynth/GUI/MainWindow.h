@@ -85,6 +85,7 @@ namespace StructureSynth {
 			
 
 		private:
+			void setRecentFile(const QString &fileName);
 			void parseJavaScript(QString scripture);
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
@@ -150,6 +151,9 @@ namespace StructureSynth {
 			QCheckBox* fastRotateCheckbox;
 			VariableEditor* variableEditor;
 			QDockWidget* editorDockWidget;
+
+			QVector<QAction*> recentFileActions;
+			QAction* recentFileSeparator;
 
 		};
 
