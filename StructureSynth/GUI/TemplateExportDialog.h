@@ -82,7 +82,6 @@ namespace StructureSynth {
 			QLineEdit *afterCommandLineEdit;
 			QWidget *advancedTab;
 			QVBoxLayout *verticalLayout_5;
-			QLabel *outputSizeLabel;
 			QHBoxLayout *horizontalLayout_5;
 			QLabel *label_4;
 			QSpinBox *widthSpinBox;

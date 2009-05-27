@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDir>
+#include <QSplitter>
 
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "../../SyntopiaCore/Misc/Persistence.h"
@@ -73,27 +74,47 @@ namespace StructureSynth {
 			settingstab = new QWidget();
 			settingstab->setObjectName(QString::fromUtf8("settingstab"));
 			settingstab->setAutoFillBackground(false);
+
 			verticalLayout_3 = new QVBoxLayout(settingstab);
 			verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+			
+			QSplitter* splitter = new QSplitter(settingstab);
+			verticalLayout_3->addWidget(splitter);
+			
+
+			QWidget* box1 = new QWidget(splitter);
+			QVBoxLayout* box1Layout = new QVBoxLayout(box1);
+
+			QWidget* box2 = new QWidget(splitter);
+			QVBoxLayout* box2Layout = new QVBoxLayout(box2);
+
+			splitter->addWidget(box1);
+			splitter->addWidget(box2);
+			QList<int> list;
+			list.append(200);
+			list.append(100);
+			splitter->setSizes(list);
+
+
+
 			descriptionLabel = new QLabel(settingstab);
 			descriptionLabel->setObjectName(QString::fromUtf8("descriptionLabel"));
-
-			verticalLayout_3->addWidget(descriptionLabel);
-
+			box1Layout->addWidget(descriptionLabel);
 			descriptionTextBrowser = new QTextBrowser(settingstab);
 			descriptionTextBrowser->setObjectName(QString::fromUtf8("descriptionTextBrowser"));
+			box1Layout->addWidget(descriptionTextBrowser);
 
-			verticalLayout_3->addWidget(descriptionTextBrowser);
 
 			primitivesLabel = new QLabel(settingstab);
 			primitivesLabel->setObjectName(QString::fromUtf8("primitivesLabel"));
 
-			verticalLayout_3->addWidget(primitivesLabel);
+			box2Layout->addWidget(primitivesLabel);
 
 			primitivesTableWidget = new QTableWidget(settingstab);
+			primitivesTableWidget->horizontalHeader()->setStretchLastSection(true);
 			primitivesTableWidget->setObjectName(QString::fromUtf8("primitivesTableWidget"));
 
-			verticalLayout_3->addWidget(primitivesTableWidget);
+			box2Layout->addWidget(primitivesTableWidget);
 
 			templateOutputGroupBox = new QGroupBox(settingstab);
 			templateOutputGroupBox->setObjectName(QString::fromUtf8("templateOutputGroupBox"));
@@ -149,6 +170,55 @@ namespace StructureSynth {
 			verticalLayout_2->addWidget(clipboardRadioButton);
 
 
+
+//--
+			
+			horizontalLayout_5 = new QHBoxLayout();
+			horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+			label_4 = new QLabel(templateOutputGroupBox);
+			label_4->setObjectName(QString::fromUtf8("label_4"));
+			label_4->setMinimumSize(QSize(10, 10));
+
+			horizontalLayout_5->addWidget(label_4);
+
+			widthSpinBox = new QSpinBox(templateOutputGroupBox);
+			widthSpinBox->setObjectName(QString::fromUtf8("widthSpinBox"));
+
+			horizontalLayout_5->addWidget(widthSpinBox);
+
+			label_5 = new QLabel(templateOutputGroupBox);
+			label_5->setObjectName(QString::fromUtf8("label_5"));
+
+			horizontalLayout_5->addWidget(label_5);
+
+			heightSpinBox = new QSpinBox(templateOutputGroupBox);
+			heightSpinBox->setObjectName(QString::fromUtf8("heightSpinBox"));
+
+			horizontalLayout_5->addWidget(heightSpinBox);
+
+			line = new QFrame(templateOutputGroupBox);
+			line->setObjectName(QString::fromUtf8("line"));
+			line->setMinimumSize(QSize(20, 2));
+			line->setFrameShape(QFrame::HLine);
+			line->setFrameShadow(QFrame::Sunken);
+
+			horizontalLayout_5->addWidget(line);
+
+			lockAspectRatioCheckBox = new QCheckBox(templateOutputGroupBox);
+			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("lockAspectRatioCheckBox"));
+
+			horizontalLayout_5->addWidget(lockAspectRatioCheckBox);
+
+			horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+			horizontalLayout_5->addItem(horizontalSpacer_4);
+
+
+			verticalLayout_2->addLayout(horizontalLayout_5);
+
+         //--
+
+
 			verticalLayout_3->addWidget(templateOutputGroupBox);
 
 			postProcessingGroupBox = new QGroupBox(settingstab);
@@ -187,54 +257,7 @@ namespace StructureSynth {
 			advancedTab->setObjectName(QString::fromUtf8("advancedTab"));
 			verticalLayout_5 = new QVBoxLayout(advancedTab);
 			verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-			outputSizeLabel = new QLabel(advancedTab);
-			outputSizeLabel->setObjectName(QString::fromUtf8("outputSizeLabel"));
-
-			verticalLayout_5->addWidget(outputSizeLabel);
-
-			horizontalLayout_5 = new QHBoxLayout();
-			horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-			label_4 = new QLabel(advancedTab);
-			label_4->setObjectName(QString::fromUtf8("label_4"));
-			label_4->setMinimumSize(QSize(10, 10));
-
-			horizontalLayout_5->addWidget(label_4);
-
-			widthSpinBox = new QSpinBox(advancedTab);
-			widthSpinBox->setObjectName(QString::fromUtf8("widthSpinBox"));
-
-			horizontalLayout_5->addWidget(widthSpinBox);
-
-			label_5 = new QLabel(advancedTab);
-			label_5->setObjectName(QString::fromUtf8("label_5"));
-
-			horizontalLayout_5->addWidget(label_5);
-
-			heightSpinBox = new QSpinBox(advancedTab);
-			heightSpinBox->setObjectName(QString::fromUtf8("heightSpinBox"));
-
-			horizontalLayout_5->addWidget(heightSpinBox);
-
-			line = new QFrame(advancedTab);
-			line->setObjectName(QString::fromUtf8("line"));
-			line->setMinimumSize(QSize(20, 2));
-			line->setFrameShape(QFrame::HLine);
-			line->setFrameShadow(QFrame::Sunken);
-
-			horizontalLayout_5->addWidget(line);
-
-			lockAspectRatioCheckBox = new QCheckBox(advancedTab);
-			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("lockAspectRatioCheckBox"));
-
-			horizontalLayout_5->addWidget(lockAspectRatioCheckBox);
-
-			horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-			horizontalLayout_5->addItem(horizontalSpacer_4);
-
-
-			verticalLayout_5->addLayout(horizontalLayout_5);
-
+			
 			modifyTemplateCheckBox = new QCheckBox(advancedTab);
 			modifyTemplateCheckBox->setObjectName(QString::fromUtf8("modifyTemplateCheckBox"));
 
@@ -323,17 +346,17 @@ namespace StructureSynth {
 			descriptionTextBrowser->setText(t.getDescription());
 
 			primitivesTableWidget->setRowCount(t.getPrimitives().count());
-			primitivesTableWidget->setColumnCount(2);
-			primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Primitive"));
-			primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Comment"));
+			primitivesTableWidget->setColumnCount(1);
+			primitivesTableWidget->horizontalHeader()->hide();
+			//primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Primitive"));
+			//primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Comment"));
 			QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
 			int count = 0;
 			while (i.hasNext()) {
 				i.next();
 
 				primitivesTableWidget->setItem(count, 0, new QTableWidgetItem( i.key()));
-				primitivesTableWidget->setItem(count, 1, new QTableWidgetItem("..."));
-
+				
 				count++;
 			}
 		}
@@ -363,7 +386,6 @@ namespace StructureSynth {
 			runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0, QApplication::UnicodeUTF8));
 			afterCommandLineEdit->setText(QApplication::translate("Dialog", "C:\\sunflow\\sunflow.bat $FILE", 0, QApplication::UnicodeUTF8));
 			tabWidget->setTabText(tabWidget->indexOf(settingstab), QApplication::translate("Dialog", "Settings", 0, QApplication::UnicodeUTF8));
-			outputSizeLabel->setText(QApplication::translate("Dialog", "Output size:", 0, QApplication::UnicodeUTF8));
 			label_4->setText(QApplication::translate("Dialog", "Width:", 0, QApplication::UnicodeUTF8));
 			label_5->setText(QApplication::translate("Dialog", "Height:", 0, QApplication::UnicodeUTF8));
 			lockAspectRatioCheckBox->setText(QApplication::translate("Dialog", "Lock aspect ratio (Current = 1.23)", 0, QApplication::UnicodeUTF8));
@@ -371,7 +393,7 @@ namespace StructureSynth {
 			pushButton_3->setText(QApplication::translate("Dialog", "Save Modifications", 0, QApplication::UnicodeUTF8));
 			pushButton_4->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0, QApplication::UnicodeUTF8));
 			modifyOutputCheckBox->setText(QApplication::translate("Dialog", "Modify output before saving (spawns edit window when pressing OK)", 0, QApplication::UnicodeUTF8));
-			tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Advanced", 0, QApplication::UnicodeUTF8));
+			tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Modify", 0, QApplication::UnicodeUTF8));
 
 		} // retranslateUi
 
