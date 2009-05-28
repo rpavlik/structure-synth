@@ -1266,6 +1266,7 @@ namespace StructureSynth {
 
 		void MainWindow::templateExport() {
 			TemplateExportDialog dialog(this);
+			dialog.setDefaultSize(engine->width(), engine->height());
 			dialog.setTemplatePath(getTemplateDir());
 			dialog.exec();
 
