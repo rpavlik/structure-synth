@@ -40,9 +40,15 @@ namespace StructureSynth {
 
 
 			void setTemplatePath(QString templatePath);
+			void setDefaultSize(int width, int height);
+		
 
 		public slots:
 			void templateChanged(const QString &);
+
+			void lockAspectChanged();
+			void heightChanged(int);
+			void widthChanged(int);
 
 
 		protected:
@@ -85,6 +91,7 @@ namespace StructureSynth {
 			QHBoxLayout *horizontalLayout_5;
 			QLabel *label_4;
 			QSpinBox *widthSpinBox;
+			double aspectRatio;
 			QLabel *label_5;
 			QSpinBox *heightSpinBox;
 			QFrame *line;

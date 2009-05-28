@@ -32,6 +32,43 @@ namespace StructureSynth {
 			Persistence::Store(fileNameLineEdit);
 		}
 			
+		void TemplateExportDialog::setDefaultSize(int width, int height) {
+			lockAspectRatioCheckBox->setChecked(false);
+			heightSpinBox->setValue(height);
+			widthSpinBox->setValue(width);
+			aspectRatio = width/(double)height;
+			lockAspectRatioCheckBox->setChecked(true);
+			lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
+			
+		}
+
+		void TemplateExportDialog::lockAspectChanged() {
+		}
+
+		void TemplateExportDialog::heightChanged(int) {			
+			if (lockAspectRatioCheckBox->isChecked()) {
+				widthSpinBox->blockSignals(true);
+				widthSpinBox->setValue((int)(aspectRatio*heightSpinBox->value()));
+				INFO(QString("width set: %1").arg((int)(aspectRatio*heightSpinBox->value())));
+				widthSpinBox->blockSignals(false);
+			} else {
+				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
+				lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
+			}
+		}
+
+		void TemplateExportDialog::widthChanged(int) {
+			if (lockAspectRatioCheckBox->isChecked()) {
+				heightSpinBox->blockSignals(true);
+				heightSpinBox->setValue((int)(widthSpinBox->value()/aspectRatio));
+				INFO(QString("height set: %1").arg((int)(widthSpinBox->value()/aspectRatio)));
+				heightSpinBox->blockSignals(false);			
+			} else {
+				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
+				lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));	
+			}
+		}
+
 		void TemplateExportDialog::setupUi()
 		{
 			if (objectName().isEmpty())
@@ -182,6 +219,7 @@ namespace StructureSynth {
 			horizontalLayout_5->addWidget(label_4);
 
 			widthSpinBox = new QSpinBox(templateOutputGroupBox);
+			widthSpinBox->setRange(0,20000);
 			widthSpinBox->setObjectName(QString::fromUtf8("widthSpinBox"));
 
 			horizontalLayout_5->addWidget(widthSpinBox);
@@ -193,6 +231,9 @@ namespace StructureSynth {
 
 			heightSpinBox = new QSpinBox(templateOutputGroupBox);
 			heightSpinBox->setObjectName(QString::fromUtf8("heightSpinBox"));
+			heightSpinBox->setRange(0,20000);
+			connect(heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightChanged(int)));
+			connect(widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthChanged(int)));
 
 			horizontalLayout_5->addWidget(heightSpinBox);
 
@@ -206,6 +247,8 @@ namespace StructureSynth {
 
 			lockAspectRatioCheckBox = new QCheckBox(templateOutputGroupBox);
 			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("lockAspectRatioCheckBox"));
+			//connect(lockAspectRatioCheckBox, SIGNAL(valueChanged()), this, SLOT(lockAspectChanged()));
+
 
 			horizontalLayout_5->addWidget(lockAspectRatioCheckBox);
 
