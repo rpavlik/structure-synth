@@ -1,8 +1,18 @@
 
 Changelog for Structure Synth:
 -------------------------
-Add 'runAfter' tag to templates.
-Template filename: color when erronous.
+Pending:
+- Add 'runAfter' tag to templates.
+- Template filename: color when erronous.
+- <!-- box::shiny --> error
+- Add missing rules
+- XML modifications
+- Post modifications
+- File output 
+- Unique filename generation.
+
+02 Jun 09 [MHC] TemplateExporter. Added XML view, XML syntaxhighlightning
+[2h]            
 
 28 May 09 [MHC] More TemplateExport Code.
 [1½h]

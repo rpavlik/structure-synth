@@ -19,11 +19,13 @@ namespace StructureSynth {
 
 			void Template::read(QString xml) {
 				QDomDocument doc;
-
+				
 				if (!doc.setContent(xml)) {
 					WARNING("Unable to parse xml.");
 					return;
 				}
+
+				fullText = doc.toString();
 
 				parse(doc);
 			}
@@ -41,6 +43,8 @@ namespace StructureSynth {
 				}
 				file.close();
 
+				fullText = doc.toString();
+				
 				parse(doc);
 			}
 
