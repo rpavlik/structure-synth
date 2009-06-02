@@ -55,10 +55,12 @@ namespace StructureSynth {
 				QMap<QString, TemplatePrimitive>& getPrimitives() { return primitives; }
 				TemplatePrimitive get(QString name) { return primitives[name]; }
 				QString getDescription() { return description; }
+				QString getFullText() { return fullText; }
 
 			private:
 				QMap<QString, TemplatePrimitive> primitives;
 				QString description;
+				QString fullText;
 			};
 
 			/// A renderer implementation based on the SyntopiaCore POV widget.

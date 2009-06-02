@@ -87,18 +87,21 @@ namespace StructureSynth {
 
 
 		/// Resolve symbolic names into pointers
-		void RuleSet::resolveNames() {
+		QStringList RuleSet::resolveNames() {
 
 			// build map
 			QMap<QString, Rule*> map;
 			for (int i = 0; i < rules.size(); i++) map[rules[i]->getName()] = rules[i];
 
+			QStringList usedPrimitives;
+			
 
 
 			// resolve rules.
 			for (int i = 0; i < rules.size(); i++) {
 
 				QList<RuleRef*> refs = rules[i]->getRuleRefs();
+
 
 				for (int j = 0; j < refs.size(); j++) {
 					QString name = refs[j]->getReference();
@@ -165,10 +168,16 @@ namespace StructureSynth {
 							}
 						}
 					}
+					if ( dynamic_cast<PrimitiveRule*>(map[name]) ) {
+						if (!usedPrimitives.contains(name)) usedPrimitives.append(name);
+					}
 					refs[j]->setRef(map[name]);
 				}
 
 			}
+
+			
+			return usedPrimitives;
 
 		}
 

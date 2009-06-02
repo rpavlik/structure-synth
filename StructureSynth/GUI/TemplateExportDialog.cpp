@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QDir>
 #include <QSplitter>
+#include <QSyntaxHighlighter>
 
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "../../SyntopiaCore/Misc/Persistence.h"
@@ -20,18 +21,143 @@ namespace StructureSynth {
 
 	namespace GUI {
 
-		
-		TemplateExportDialog::TemplateExportDialog(QWidget* parent) : QDialog(parent) {
+
+		namespace {
+
+			class XmlHighlighter : public QSyntaxHighlighter {
+			public:
+
+				XmlHighlighter(QTextEdit* e) : QSyntaxHighlighter(e) {
+					elementFormat.setForeground(Qt::blue);
+					attributeFormat.setForeground(Qt::red);
+					commentFormat.setForeground(Qt::darkGreen);
+					cdataFormat.setForeground(Qt::darkBlue);
+				};
+
+				void highlightBlock(const QString &text)
+				{
+
+					
+
+					if (previousBlockState() != 1 && currentBlockState() == 1) {
+						// This line was previously a multi-line start 
+						if (!text.contains("<!--")) setCurrentBlockState(0);
+					}
+
+					if (previousBlockState() == 1) {
+						// Part of multi-line comment. Skip the rest...
+						if (!text.contains("-->")) {
+							setFormat(0, text.length(), commentFormat);
+							setCurrentBlockState(1);
+							return;
+						}
+					}
+
+					if (previousBlockState() != 2 && currentBlockState() == 2) {
+						if (!text.contains("<![CDATA[")) setCurrentBlockState(0);
+					}
+
+					if (previousBlockState() == 2) {
+						// Part of multi-line comment. Skip the rest...
+						if (!text.contains("]]>")) {
+							setFormat(0, text.length(), cdataFormat);
+							setCurrentBlockState(2);
+							return;
+						}
+					}
+
+					// Line parsing
+					QString current;
+					int startMatch = 0;
+					bool inElement = false;
+					bool expectingAttribute = false;
+					for (int i = 0; i < text.length(); i++) {
+							
+						if ((i >= 3) && (text.mid(i-3,4)=="<!--")) {
+							// Multi-line comment begins
+							setFormat(i-3, text.length()-(i-3), commentFormat);
+							setCurrentBlockState(1);
+							return;
+						}
+
+						if ((i >= 2) && (text.mid(i-2,3)=="-->")) {
+							// Multi-line comment ends
+							setFormat(0, i+1, commentFormat);
+							if (currentBlockState() != 0) {
+								setCurrentBlockState(0);
+							}
+							continue;
+						}
+
+						if ((i >= 8) && (text.mid(i-8,9)=="<![CDATA[")) {
+							// Multi-line comment begins
+							setFormat(i-8, text.length()-(i-8), cdataFormat);
+							setCurrentBlockState(2);
+							return;
+						}
+
+						if ((i >= 2) && (text.mid(i-2,3)=="]]>")) {
+							// Multi-line comment ends
+							setFormat(0, i+1, cdataFormat);
+							if (currentBlockState() != 0) {
+								setCurrentBlockState(0);
+							}
+							continue;
+						}
+				
+						current += text.at(i);
+						if (text.at(i) == '<') {
+							inElement = true;
+							expectingAttribute = false; 
+						}
+
+						if (text.at(i) == ' ') expectingAttribute = true;
+						if (text.at(i) == '=') expectingAttribute = false;
+						
+						
+						if (inElement) {
+							if (expectingAttribute) {
+								setFormat(i, i+1, attributeFormat);
+							} else {
+								setFormat(i, i+1, elementFormat);
+							}
+						} else {
+							setFormat(i, i+1, standardFormat);
+						}
+
+						if (text.at(i) == '>') inElement = false;
+
+						
+					}
+
+				}; 
+			private:
+				QTextCharFormat elementFormat;
+				QTextCharFormat cdataFormat;
+				QTextCharFormat standardFormat;
+				QTextCharFormat attributeFormat;
+				QTextCharFormat commentFormat;
+
+			};
+		};
+
+
+
+
+		TemplateExportDialog::TemplateExportDialog(QWidget* parent, QStringList primitives) : primitives(primitives), QDialog(parent) {
+			// 'primitives' contain a list of used primitives.
+			// We add 'begin' and 'end' since these are always used.
+			this->primitives.append("begin");
+			this->primitives.append("end");
 			setupUi();
 			retranslateUi();
-
 		}
 
 		TemplateExportDialog::~TemplateExportDialog() {
 			// Persist (should only be done on OK?)
 			Persistence::Store(fileNameLineEdit);
 		}
-			
+
 		void TemplateExportDialog::setDefaultSize(int width, int height) {
 			lockAspectRatioCheckBox->setChecked(false);
 			heightSpinBox->setValue(height);
@@ -39,7 +165,7 @@ namespace StructureSynth {
 			aspectRatio = width/(double)height;
 			lockAspectRatioCheckBox->setChecked(true);
 			lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
-			
+
 		}
 
 		void TemplateExportDialog::lockAspectChanged() {
@@ -114,10 +240,10 @@ namespace StructureSynth {
 
 			verticalLayout_3 = new QVBoxLayout(settingstab);
 			verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-			
+
 			QSplitter* splitter = new QSplitter(settingstab);
 			verticalLayout_3->addWidget(splitter);
-			
+
 
 			QWidget* box1 = new QWidget(splitter);
 			QVBoxLayout* box1Layout = new QVBoxLayout(box1);
@@ -170,7 +296,7 @@ namespace StructureSynth {
 			fileNameLineEdit->setObjectName(QString::fromUtf8("TemplateExportDialog.fileNameLineEdit"));
 			fileNameLineEdit->setText(QApplication::translate("Dialog", "C:\\Output\\test.es", 0, QApplication::UnicodeUTF8));
 			Persistence::Restore(fileNameLineEdit);
-			
+
 
 			horizontalLayout_2->addWidget(fileNameLineEdit);
 
@@ -208,8 +334,8 @@ namespace StructureSynth {
 
 
 
-//--
-			
+			//--
+
 			horizontalLayout_5 = new QHBoxLayout();
 			horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
 			label_4 = new QLabel(templateOutputGroupBox);
@@ -259,7 +385,7 @@ namespace StructureSynth {
 
 			verticalLayout_2->addLayout(horizontalLayout_5);
 
-         //--
+			//--
 
 
 			verticalLayout_3->addWidget(templateOutputGroupBox);
@@ -300,14 +426,16 @@ namespace StructureSynth {
 			advancedTab->setObjectName(QString::fromUtf8("advancedTab"));
 			verticalLayout_5 = new QVBoxLayout(advancedTab);
 			verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-			
+
 			modifyTemplateCheckBox = new QCheckBox(advancedTab);
 			modifyTemplateCheckBox->setObjectName(QString::fromUtf8("modifyTemplateCheckBox"));
 
 			verticalLayout_5->addWidget(modifyTemplateCheckBox);
 
 			templateTextEdit = new QTextEdit(advancedTab);
+			templateTextEdit->setTabStopWidth(30);
 			templateTextEdit->setObjectName(QString::fromUtf8("templateTextEdit"));
+			XmlHighlighter *highlighter = new XmlHighlighter(templateTextEdit);
 
 			verticalLayout_5->addWidget(templateTextEdit);
 
@@ -386,6 +514,8 @@ namespace StructureSynth {
 			QFile file(q.toString());
 			Template t(file);
 
+			templateTextEdit->setText(t.getFullText());
+
 			descriptionTextBrowser->setText(t.getDescription());
 
 			primitivesTableWidget->setRowCount(t.getPrimitives().count());
@@ -397,8 +527,11 @@ namespace StructureSynth {
 			int count = 0;
 			while (i.hasNext()) {
 				i.next();
-
-				primitivesTableWidget->setItem(count, 0, new QTableWidgetItem( i.key()));
+				QTableWidgetItem* item = new QTableWidgetItem( i.key());
+				if (primitives.contains(i.key())) {
+					item->setBackground(QBrush(Qt::green));
+				}
+				primitivesTableWidget->setItem(count, 0, item);
 				
 				count++;
 			}

@@ -1265,17 +1265,108 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::templateExport() {
-			TemplateExportDialog dialog(this);
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+
+			// We must parse first...
+			RuleSet* rs = 0;
+			QStringList primitives;
+			try {	
+				Preprocessor pp;
+				QString out = pp.Process(getTextEdit()->toPlainText());
+				bool showGUI = false;
+				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
+				editorDockWidget->setHidden(!showGUI);
+
+				Tokenizer tokenizer(out);
+				EisenParser e(&tokenizer);
+				INFO("Parsing...");
+				rs = e.parseRuleset();
+
+				INFO("Resolving named references...");
+				primitives = rs->resolveNames();
+
+				rs->dumpInfo();
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+				return; // something went wrong...
+			}
+
+			TemplateExportDialog dialog(this, primitives);
 			dialog.setDefaultSize(engine->width(), engine->height());
 			dialog.setTemplatePath(getTemplateDir());
 			dialog.exec();
+
+			/*
+			RandomStreams::SetSeed(getSeed());
+			INFO(QString("Random seed: %1").arg(getSeed()));
+			try {
+				QString text = "// Structure Synth Export. \r\n\r\n";
+				TemplateRenderer rendering(templateFileName);
+				Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
+				cameraRight = cameraRight.normalize();
+				rendering.setCamera(
+					engine->getCameraPosition(), 
+					engine->getCameraUp().normalize(), 
+					cameraRight,
+					engine->getCameraTarget(),
+					engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
+
+				rendering.setBackgroundColor(engine->getBackgroundColor());
+
+				INFO(QString("COlor:%1").arg(engine->getBackgroundColor().toString()));
+
+				rendering.begin(); 
+
+				
+				INFO("Building....");
+				Builder b(&rendering, rs);
+				b.build();
+				rendering.end();
+
+				if (b.seedChanged()) {
+					setSeed(b.getNewSeed());
+					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
+				} 
+
+				if (fileName.isEmpty()){
+					QClipboard *clipboard = QApplication::clipboard();
+					clipboard->setText(rendering.getOutput()); 
+					INFO("Done...");
+					INFO("Script is now copied to the clipboard");
+				} else {
+					QFile file(fileName);
+					INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
+					if (!file.open(QFile::WriteOnly | QFile::Text)) {
+						QMessageBox::warning(this, tr("Structure Synth"),
+							tr("Cannot write file %1:\n%2.")
+							.arg(fileName)
+							.arg(file.errorString()));
+						return;
+					}
+
+					QTextStream out(&file);
+					QApplication::setOverrideCursor(Qt::WaitCursor);
+					out << rendering.getOutput();
+					QApplication::restoreOverrideCursor();
+					INFO("File saved.");
+				}
+
+
+
+
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+			}
+
+			*/
+		
 
 		}
 
 		void MainWindow::setRecentFile(const QString &fileName)
 		{
 			QSettings settings("Syntopia Software", "Structure Synth");
-			
+
 			QStringList files = settings.value("recentFileList").toStringList();
 			files.removeAll(fileName);
 			files.prepend(fileName);

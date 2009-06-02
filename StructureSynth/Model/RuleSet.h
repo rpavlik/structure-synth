@@ -19,7 +19,8 @@ namespace StructureSynth {
 				void addRule(Rule* rule);
 
 				/// Resolve symbolic names into pointers
-				void resolveNames();
+				/// Returns a list of the primitives used
+				QStringList resolveNames();
 
 				/// TODO: Implement
 				QStringList getUnreferencedNames();

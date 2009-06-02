@@ -35,7 +35,7 @@ namespace StructureSynth {
 		class TemplateExportDialog : public QDialog {
 			Q_OBJECT
 		public:
-			TemplateExportDialog(QWidget* parent);
+			TemplateExportDialog(QWidget* parent, QStringList primitives);
 			~TemplateExportDialog();
 
 
@@ -57,6 +57,7 @@ namespace StructureSynth {
 			void setupUi();
 
 		private:
+			QStringList primitives;
 			QString path;
 			QVBoxLayout *verticalLayout;
 			QHBoxLayout *horizontalLayout;
