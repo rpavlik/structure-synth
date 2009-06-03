@@ -13,6 +13,12 @@
 	    <![CDATA[]]>
 	</substitution>
 
+	<substitution name="mesh">
+
+      <![CDATA[m {matrix} {r} {g} {b}
+]]>
+
+   </substitution>
 
 	<substitution name="box">
 		<![CDATA[b {matrix} {r} {g} {b}

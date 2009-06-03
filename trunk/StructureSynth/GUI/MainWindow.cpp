@@ -205,6 +205,10 @@ namespace StructureSynth {
 		void MainWindow::keyReleaseEvent(QKeyEvent* ev) {
 			if (ev->key() == Qt::Key_Escape) {
 				toggleFullScreen();
+			} else if (ev->key() == Qt::Key_F5 && fullScreenEnabled) {
+				render();
+			} else if (ev->key() == Qt::Key_F6 && fullScreenEnabled) {
+				templateExport();
 			} else {
 				ev->ignore();
 			}
@@ -358,7 +362,8 @@ namespace StructureSynth {
 			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button. Hold 'ALT' for fast rotate (quick draw mode).");
 			INFO("Press 'Reset View' if the view disappears...");
 			INFO("");
-			INFO("This is beta software. Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
+			INFO("Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
+			WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
@@ -1287,6 +1292,7 @@ namespace StructureSynth {
 
 				rs->dumpInfo();
 			} catch (Exception& er) {
+				WARNING("Could not export, because script could not be parsed:");
 				WARNING(er.getMessage());
 				return; // something went wrong...
 			}

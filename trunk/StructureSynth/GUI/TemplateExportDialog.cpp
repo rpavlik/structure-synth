@@ -12,8 +12,10 @@
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
 #include "../../SyntopiaCore/Misc/Persistence.h"
 #include "../Model/Rendering/TemplateRenderer.h"
-using namespace SyntopiaCore::Logging;
+#include "../../SyntopiaCore/Exceptions/Exception.h"
 
+using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::Exceptions;
 using namespace SyntopiaCore::Misc;
 
 namespace StructureSynth {
@@ -38,7 +40,6 @@ namespace StructureSynth {
 				{
 
 					
-
 					if (previousBlockState() != 1 && currentBlockState() == 1) {
 						// This line was previously a multi-line start 
 						if (!text.contains("<!--")) setCurrentBlockState(0);
@@ -68,16 +69,16 @@ namespace StructureSynth {
 
 					// Line parsing
 					QString current;
-					int startMatch = 0;
 					bool inElement = false;
 					bool expectingAttribute = false;
+					bool insideBracket = false;
 					for (int i = 0; i < text.length(); i++) {
 							
 						if ((i >= 3) && (text.mid(i-3,4)=="<!--")) {
 							// Multi-line comment begins
 							setFormat(i-3, text.length()-(i-3), commentFormat);
 							setCurrentBlockState(1);
-							return;
+							insideBracket = true;
 						}
 
 						if ((i >= 2) && (text.mid(i-2,3)=="-->")) {
@@ -86,6 +87,8 @@ namespace StructureSynth {
 							if (currentBlockState() != 0) {
 								setCurrentBlockState(0);
 							}
+							insideBracket = false;
+						
 							continue;
 						}
 
@@ -93,7 +96,7 @@ namespace StructureSynth {
 							// Multi-line comment begins
 							setFormat(i-8, text.length()-(i-8), cdataFormat);
 							setCurrentBlockState(2);
-							return;
+							insideBracket = true;
 						}
 
 						if ((i >= 2) && (text.mid(i-2,3)=="]]>")) {
@@ -102,8 +105,12 @@ namespace StructureSynth {
 							if (currentBlockState() != 0) {
 								setCurrentBlockState(0);
 							}
+							insideBracket = false;
+						
 							continue;
 						}
+						
+						if (insideBracket) continue;
 				
 						current += text.at(i);
 						if (text.at(i) == '<') {
@@ -435,7 +442,7 @@ namespace StructureSynth {
 			templateTextEdit = new QTextEdit(advancedTab);
 			templateTextEdit->setTabStopWidth(30);
 			templateTextEdit->setObjectName(QString::fromUtf8("templateTextEdit"));
-			XmlHighlighter *highlighter = new XmlHighlighter(templateTextEdit);
+			/*XmlHighlighter *highlighter =*/ new XmlHighlighter(templateTextEdit);
 
 			verticalLayout_5->addWidget(templateTextEdit);
 
@@ -512,29 +519,38 @@ namespace StructureSynth {
 			QVariant q = templateComboBox->itemData(id);
 
 			QFile file(q.toString());
-			Template t(file);
-
-			templateTextEdit->setText(t.getFullText());
-
-			descriptionTextBrowser->setText(t.getDescription());
-
-			primitivesTableWidget->setRowCount(t.getPrimitives().count());
+			
 			primitivesTableWidget->setColumnCount(1);
 			primitivesTableWidget->horizontalHeader()->hide();
-			//primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Primitive"));
-			//primitivesTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Comment"));
-			QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
-			int count = 0;
-			while (i.hasNext()) {
-				i.next();
-				QTableWidgetItem* item = new QTableWidgetItem( i.key());
-				if (primitives.contains(i.key())) {
-					item->setBackground(QBrush(Qt::green));
-				}
-				primitivesTableWidget->setItem(count, 0, item);
 				
-				count++;
+			try {
+				Template t(file);
+
+				templateTextEdit->setText(t.getFullText());
+				descriptionTextBrowser->setText(t.getDescription());
+
+				primitivesTableWidget->setRowCount(t.getPrimitives().count());
+				QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
+				int count = 0;
+				while (i.hasNext()) {
+					i.next();
+					QTableWidgetItem* item = new QTableWidgetItem( i.key());
+					if (primitives.contains(i.key())) {
+						item->setBackground(QBrush(Qt::green));
+					}
+					primitivesTableWidget->setItem(count, 0, item);
+
+					count++;
+				}
+			} catch (Exception& e) {
+				primitivesTableWidget->setRowCount(0);
+				
+				WARNING(e.getMessage());
+				//templateTextEdit->setText(e.getMessage());	
+				descriptionTextBrowser->setText(e.getMessage());
 			}
+
+			
 		}
 
 

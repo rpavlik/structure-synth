@@ -174,6 +174,50 @@ def ImportFunction(fileName):
             for v in verts:
                 transVerts.append(Vector(v) * transMatrix)
                 transVertNormals.append([])
+			
+		elif args[argsIndex] == "m":
+			argsIndex += 1;
+			existingvertcount = len(transVerts)
+#         print "vertcount" + str(existingvertcount) 
+			startBase = Vector([args[argsIndex+0], args[argsIndex+1], args[argsIndex+2]])
+			startTransMatrix = TranslationMatrix(startBase);
+			startDir1 = Vector([args[argsIndex+4], args[argsIndex+5], args[argsIndex+6]])
+			startDir2 = Vector([args[argsIndex+8], args[argsIndex+9], args[argsIndex+10]])
+			endBase = Vector([args[argsIndex+12], args[argsIndex+13], args[argsIndex+14]])
+			endTransMatrix = TranslationMatrix(endBase);
+			endDir1 = Vector([args[argsIndex+16], args[argsIndex+17], args[argsIndex+18]])
+			endDir2 = Vector([args[argsIndex+20], args[argsIndex+21], args[argsIndex+22]])
+         
+			end = endBase - startBase;
+			transVerts.append(startBase);
+			transVerts.append(startDir1*startTransMatrix);
+			transVerts.append(startDir2*startTransMatrix);
+			transVerts.append((startDir1+startDir2)*startTransMatrix);
+			transVerts.append((end+endDir1)*startTransMatrix);
+			transVerts.append((end+endDir2)*startTransMatrix);
+			transVerts.append((end+endDir1+endDir2)*startTransMatrix);
+			transVerts.append(end*startTransMatrix);
+                  
+#         transFaces.append([existingvertcount+0, existingvertcount+1, existingvertcount+3,existingvertcount+2])
+			transFaces.append([existingvertcount+0, existingvertcount+1, existingvertcount+4,existingvertcount+7])
+			transFaces.append([existingvertcount+0, existingvertcount+2, existingvertcount+5,existingvertcount+7])
+			transFaces.append([existingvertcount+1, existingvertcount+3, existingvertcount+6,existingvertcount+4])
+			transFaces.append([existingvertcount+2, existingvertcount+3, existingvertcount+6,existingvertcount+5])
+#         transFaces.append([existingvertcount+7, existingvertcount+4, existingvertcount+6,existingvertcount+5])
+         
+			argsIndex = 25
+
+			colR = eval(args[argsIndex+0])
+			colG = eval(args[argsIndex+1])
+			colB = eval(args[argsIndex+2])
+         
+			matindex = handleColor(obj,colR,colG,colB)
+         
+			transFaceMat.append(matindex)
+			transFaceMat.append(matindex)
+			transFaceMat.append(matindex)
+			transFaceMat.append(matindex)
+				
         else:
             print "Unknown primitive type: " + args[argsIndex]
 

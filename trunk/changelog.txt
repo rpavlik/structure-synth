@@ -11,6 +11,9 @@ Pending:
 - File output 
 - Unique filename generation.
 
+03 Jun 09 [MHC] Added SourceZuka's Mesh exports [needs some polish to be of generic value]
+[1h]            Added structure-synth.desktop file [for Linux desktop
+
 02 Jun 09 [MHC] TemplateExporter. Added XML view, XML syntaxhighlightning
 [2h]            
 
