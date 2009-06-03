@@ -11,6 +11,7 @@
 
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::Exceptions;
 
 namespace StructureSynth {
 	namespace Model {	
@@ -19,9 +20,14 @@ namespace StructureSynth {
 
 			void Template::read(QString xml) {
 				QDomDocument doc;
-				
-				if (!doc.setContent(xml)) {
-					WARNING("Unable to parse xml.");
+
+				QString errorMessage;
+				int errorLine = 0;
+				int errorColumn = 0; 
+
+				if (!doc.setContent(xml, false, &errorMessage, &errorLine, &errorColumn )) {
+					QString error = QString("[Line %1, Col %2] %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
+					WARNING("Unable to parse xml: " + error);
 					return;
 				}
 
@@ -33,18 +39,22 @@ namespace StructureSynth {
 			void Template::read(QFile& file) {
 				QDomDocument doc;
 				if (!file.open(QIODevice::ReadOnly)) {
-					WARNING("Unable to open file: " + QFileInfo(file).absoluteFilePath());
-					return;
+					throw Exception("Unable to open file: " + QFileInfo(file).absoluteFilePath());					
 				}
-				if (!doc.setContent(&file)) {
-					WARNING("Unable to parse file: " + QFileInfo(file).absoluteFilePath());
+				QString errorMessage;
+				int errorLine = 0;
+				int errorColumn = 0; 
+
+				if (!doc.setContent(&file, false, &errorMessage, &errorLine, &errorColumn)) {
 					file.close();
-					return;
+					QString error = QString("[Line %1, Col %2] %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
+					
+					throw Exception("Unable to parse file: " + error + " in file: " + QFileInfo(file).absoluteFilePath());					
 				}
 				file.close();
 
 				fullText = doc.toString();
-				
+
 				parse(doc);
 			}
 
@@ -345,13 +355,42 @@ namespace StructureSynth {
 				backRgb = rgb;
 			}
 
-			void TemplateRenderer::drawMesh(  SyntopiaCore::Math::Vector3f /*startBase*/, 
-				SyntopiaCore::Math::Vector3f /*startDir1*/, 
-				SyntopiaCore::Math::Vector3f /*startDir2*/, 
-				SyntopiaCore::Math::Vector3f /*endBase*/, 
-				SyntopiaCore::Math::Vector3f /*endDir1*/, 
-				SyntopiaCore::Math::Vector3f /*endDir2*/, 
-				const QString& /*classID*/) {
+			void TemplateRenderer::drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
+				SyntopiaCore::Math::Vector3f startDir1, 
+				SyntopiaCore::Math::Vector3f startDir2, 
+				SyntopiaCore::Math::Vector3f endBase, 
+				SyntopiaCore::Math::Vector3f endDir1, 
+				SyntopiaCore::Math::Vector3f endDir2, 
+				const QString& classID) {
+					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+					if (!assertPrimitiveExists("mesh"+alternateID)) return;
+					TemplatePrimitive t(workingTemplate.get("mesh"));
+					if (t.contains("{uid}")) {
+						t.substitute("{uid}", QString("Box%1").arg(counter++));
+					}
+
+					// TODO: This really isn't a matrix, we need to find a better way to export the mesh.
+					if (t.contains("{matrix}")) {
+						QString mat = QString("%1 %2 %3 0 %4 %5 %6 0 %7 %8 %9 0 %10 %11 %12 0 %13 %14 %15 0 %16 %17 %18 1")
+							.arg(startBase.x()).arg(startBase.y()).arg(startBase.z())
+							.arg(startDir1.x()).arg(startDir1.y()).arg(startDir1.z())
+							.arg(startDir2.x()).arg(startDir2.y()).arg(startDir2.z())
+							.arg(endBase.x()).arg(endBase.y()).arg(endBase.z())
+							.arg(endDir1.x()).arg(endDir1.y()).arg(endDir1.z())
+							.arg(endDir2.x()).arg(endDir2.y()).arg(endDir2.z());
+
+							t.substitute("{matrix}", mat);
+					}
+
+
+
+					t.substitute("{r}", QString::number(rgb.x()));
+					t.substitute("{g}", QString::number(rgb.y()));
+					t.substitute("{b}", QString::number(rgb.z()));
+					t.substitute("{alpha}", QString::number(alpha));
+					t.substitute("{oneminusalpha}", QString::number(1-alpha));
+
+					output.append(t.getText());
 			};
 
 			void TemplateRenderer::callCommand(const QString& renderClass, const QString& /*command*/) {
