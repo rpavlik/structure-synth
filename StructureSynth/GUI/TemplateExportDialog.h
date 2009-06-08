@@ -27,6 +27,8 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
+#include "../Model/Rendering/TemplateRenderer.h"
+
 namespace StructureSynth {
 	namespace GUI {
 
@@ -49,6 +51,7 @@ namespace StructureSynth {
 			void lockAspectChanged();
 			void heightChanged(int);
 			void widthChanged(int);
+			void selectFileName();
 
 
 		protected:
@@ -57,6 +60,9 @@ namespace StructureSynth {
 			void setupUi();
 
 		private:
+
+			Model::Rendering::Template currentTemplate;
+
 			QStringList primitives;
 			QString path;
 			QVBoxLayout *verticalLayout;

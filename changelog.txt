@@ -2,13 +2,16 @@
 Changelog for Structure Synth:
 -------------------------
 Pending:
-- Add 'runAfter', 'defaultExtension' tag to templates, remove primitive='',
+- Add 'runAfter' tag to templates
 - Template filename: color when erronous.
 - Add missing rules
 - XML modifications
 - Post modifications
 - File output (change only extension when changing templates)
 - Unique filename generation.
+
+08 Jun 09 [MHC] Template changes: 'substitution' -> 'primitive', added 'defaultExtension' tag.
+[1h]
 
 03 Jun 09 [MHC] Added SourceZuka's Mesh exports [needs some polish to be of generic value]
 [2h]            Added structure-synth.desktop file [for Linux desktop - might need a new icon]

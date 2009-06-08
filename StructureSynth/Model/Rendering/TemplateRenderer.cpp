@@ -62,13 +62,33 @@ namespace StructureSynth {
 				QDomElement docElem = doc.documentElement();
 
 				QDomNode n = docElem.firstChild();
+
+				QDomElement ne = docElem.toElement(); // try to convert the node to an element.
+				if(!ne.isNull()) {
+					INFO("--->TAG:" + ne.tagName());
+					if (ne.hasAttribute("name")) {
+						this->name = ne.attribute("name");
+					} else {
+						this->name = "NONAME";
+					}
+
+					if (ne.hasAttribute("defaultExtension")) {
+						this->defaultExtension = ne.attribute("defaultExtension");
+					} else {
+						this->defaultExtension = "Unknown file type (*.txt)";
+					}
+				}
+
 				while(!n.isNull()) {
 					QDomElement e = n.toElement(); // try to convert the node to an element.
 					if(!e.isNull()) {
-						if (e.tagName() == "substitution") {
+						if (e.tagName() == "primitive" || e.tagName() == "substitution") {
+							if (e.tagName() == "substitution") {
+								WARNING("Element-name 'substitution' is a deprecated name. Please rename to 'primitive'.");
+							}
 
 							if (!e.hasAttribute("name")) {
-								WARNING("Substitution without name attribute found!");
+								WARNING("Primitive without name attribute found!");
 								continue;
 							}
 
@@ -86,7 +106,7 @@ namespace StructureSynth {
 							description = e.text();
 						} else {
 
-							WARNING("Expected 'substitution' or 'description' element, found: " + e.tagName());
+							WARNING("Expected 'primitive' or 'description' element, found: " + e.tagName());
 							continue;
 
 						}

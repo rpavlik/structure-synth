@@ -1,9 +1,11 @@
 <!--
-   This is an example of a render template, using one Ward for each object.  
    
 -->
-<template name="Sun Flow Template" inherits="" >
-	<substitution name="begin">
+<template name="SunFlow Ward" defaultExtension="Sunflow scene file (*.sc)">
+<Description>
+This is an example of a render template, using one Ward shader for each object.  
+</Description>
+	<primitive name="begin">
 	    <![CDATA[
 
 %% common settings
@@ -101,15 +103,15 @@ object {
    uvs none
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="end">
+	<primitive name="end">
 	    <![CDATA[
 
 		]]>
-	</substitution>
+	</primitive>
 
-	<substitution name="box">
+	<primitive name="box">
 		<![CDATA[
 shader {
    name "shader{uid}"
@@ -126,9 +128,9 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="sphere">
+	<primitive name="sphere">
 		<![CDATA[
 
 shader {
@@ -147,5 +149,5 @@ object {
 	r {rad}
 }
 		]]>
-	</substitution>
+	</primitive>
 </template>
