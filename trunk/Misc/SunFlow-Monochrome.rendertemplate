@@ -1,8 +1,12 @@
 <!--
    This is an example of a render template. 
 -->
-<template name="Sun Flow Template" inherits="" >
-	<substitution name="begin">
+<template name="SunFlow Monochrome" defaultExtension="Sunflow scene file (*.sc)">
+<description>
+This is a simple monochrome export template for Sunflow.
+All objects colors will be white, except the background color, which may be changed.
+</description>
+	<primitive name="begin">
 	    <![CDATA[
 %photons {
 %  caustics 10000000 kd 64 0.5
@@ -96,15 +100,15 @@ object {
 
 
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="end">
+	<primitive name="end">
 	    <![CDATA[
 
 		]]>
-	</substitution>
+	</primitive>
 
-	<substitution name="box">
+	<primitive name="box">
 		<![CDATA[
 instance {
    name "{uid}"
@@ -113,9 +117,9 @@ instance {
    shader "shader05"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="sphere">
+	<primitive name="sphere">
 		<![CDATA[
 object {
   shader "shader05"
@@ -124,5 +128,5 @@ object {
   r {rad}
 }
 		]]>
-	</substitution>
+	</primitive>
 </template>

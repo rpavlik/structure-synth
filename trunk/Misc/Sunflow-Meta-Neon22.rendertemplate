@@ -1,9 +1,12 @@
-<!--
-   This is an example of a render template, using one shader for each object.
-   Based on a template by Tom Beddard ('subblue')
-   Modified for typed substitutions by Neon22
+
+
+<template name="Sunflow Neon 22" >
+<description>
+This is an example of a render template, using one shader for each object.
+Based on a template by Tom Beddard ('subblue')
+Modified for typed substitutions by Neon22
    
-   Includes substitutions for:
+Includes substitutions for:
     - box, box::color, box::color_occ,
 	- box::color_glass, box::copper,
 	- box::sphere, box::sphere_occ  (transformable/deformable spheres)
@@ -13,19 +16,17 @@
 	- sphere, sphere::color, sphere::color_occ
 	- sphere::color_glass
 	- sphere::light
-   Also has:
+Also has:
 	- choice of GI algorithms
 	- pinhole and thinlens (depth of field) cameras
 	- skylight, HDR IBL, and meshlight(for photons)
 	- optional manual floor
-   And predefined shaders for:
+And predefined shaders for:
     - glass_lblue, diff_white, diff_brick, mirror_copper, phong_bronze,
 	- ward_brushed_gold, constant_white, occ_white
 ( more samples here: http:%%www.crai.archi.fr/RubyLibraryDepot/Ruby/Sunflow/thumb.html )
--->
-
-<template name="Sun Flow Template" inherits="" >
-	<substitution name="begin">
+</description>
+	<primitive name="begin">
 	    <![CDATA[
 %%----------------------------------------
 %%   Common settings
@@ -287,20 +288,20 @@ object {
 	 1 1
 }
 		]]>
-	</substitution>
+	</primitive>
 
 %%----------------------------------------
 %% For adding to end of file (not required for Sunflow renderer)
-	<substitution name="end">
+	<primitive name="end">
 	    <![CDATA[
 
 		]]>
-	</substitution>
+	</primitive>
 
 	
 %%------------------------------
 %%--------- box ----------------	
-<substitution name="box">
+<primitive name="box">
 		<![CDATA[
 instance {
 	name "{uid}"
@@ -309,12 +310,12 @@ instance {
 	shader "occ_white"
 }
 		]]>
-	</substitution>
+	</primitive>
 
 %%-----------------------------------------
 %%--------- box:copper --------------------	
 
-<substitution name="box" type="copper">
+<primitive name="box" type="copper">
 		<![CDATA[
 instance {
    name "{uid}"
@@ -323,11 +324,11 @@ instance {
    shader "copper"
 }
 		]]>
-</substitution>
+</primitive>
 
 %%-----------------------------------------
 %%--------- box::color --------------------	
-<substitution name="box" type="color">
+<primitive name="box" type="color">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -341,11 +342,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>	
+	</primitive>	
 	
 %%-----------------------------------------
 %%--------- box::color_occ ----------------	
-<substitution name="box" type="color_occ">
+<primitive name="box" type="color_occ">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -362,12 +363,12 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%-----------------------------------------
 %%--------- box:color_glass ---------------
 
-<substitution name="box" type="color_glass">
+<primitive name="box" type="color_glass">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -382,11 +383,11 @@ instance {
    shader "shader{uid}"
 }
 		]]>
-</substitution>
+</primitive>
    
 %%----------------------------------------
 %%--------- box::sphere ------------------		
-<substitution name="box" type="sphere">
+<primitive name="box" type="sphere">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -400,11 +401,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- box::sphere_occ --------------		
-<substitution name="box" type="sphere_occ">
+<primitive name="box" type="sphere_occ">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -421,11 +422,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- box::torus -------------------		
-<substitution name="box" type="torus">
+<primitive name="box" type="torus">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -439,11 +440,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- box::torus_occ ---------------		
-<substitution name="box" type="torus_occ">
+<primitive name="box" type="torus_occ">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -460,11 +461,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- box::teapot -------------------		
-<substitution name="box" type="teapot">
+<primitive name="box" type="teapot">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -481,11 +482,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 
 %%----------------------------------------
 %%--------- box::gumbo -------------------		
-<substitution name="box" type="gumbo">
+<primitive name="box" type="gumbo">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -502,11 +503,11 @@ instance {
 	shader "shader{uid}"
 }
 		]]>
-	</substitution>
+	</primitive>
 
 %%----------------------------------------
 %%--------- sphere -----------------------		
-<substitution name="sphere">
+<primitive name="sphere">
 		<![CDATA[
 object {
 	shader "occ_white"
@@ -515,11 +516,11 @@ object {
 	r {rad}
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- sphere::color ----------------		
-<substitution name="sphere" type="color">
+<primitive name="sphere" type="color">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -533,11 +534,11 @@ object {
 	r {rad}
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 %%----------------------------------------
 %%--------- sphere::color_occ ------------		
-<substitution name="sphere" type="color_occ">
+<primitive name="sphere" type="color_occ">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -554,11 +555,11 @@ object {
 	r {rad}
 }
 		]]>
-	</substitution>	
+	</primitive>	
 	
 %%----------------------------------------
 %%--------- sphere::color_glass ----------		
-<substitution name="sphere" type="color_glass">
+<primitive name="sphere" type="color_glass">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -573,11 +574,11 @@ object {
 	r {rad}
 }
 		]]>
-	</substitution>	
+	</primitive>	
 
 %%----------------------------------------
 %%--------- sphere::light ----------------		
-<substitution name="sphere" type="light">
+<primitive name="sphere" type="light">
 		<![CDATA[
 light {
 	type spherical
@@ -588,6 +589,6 @@ light {
 	samples 16
 }
 		]]>
-	</substitution>
+	</primitive>
 
 </template>

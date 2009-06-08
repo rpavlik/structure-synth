@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QDir>
 #include <QSplitter>
+#include <QFileDialog>
 #include <QSyntaxHighlighter>
 
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
@@ -314,6 +315,7 @@ namespace StructureSynth {
 			sizePolicy1.setVerticalStretch(0);
 			sizePolicy1.setHeightForWidth(filePushButton->sizePolicy().hasHeightForWidth());
 			filePushButton->setSizePolicy(sizePolicy1);
+			connect(filePushButton, SIGNAL(clicked()), this, SLOT(selectFileName()));
 
 			horizontalLayout_2->addWidget(filePushButton);
 
@@ -513,6 +515,15 @@ namespace StructureSynth {
 
 		}
 
+		void TemplateExportDialog::selectFileName() {
+			QString filter = currentTemplate.getDefaultExtension();
+			
+			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), fileNameLineEdit->text(), filter);
+			if (fileName.isEmpty()) {
+				return;
+			}
+		}
+
 		void TemplateExportDialog::templateChanged(const QString &) {
 			int id = templateComboBox->currentIndex();
 			if (id<0) return;
@@ -526,8 +537,13 @@ namespace StructureSynth {
 			try {
 				Template t(file);
 
-				templateTextEdit->setText(t.getFullText());
-				descriptionTextBrowser->setText(t.getDescription());
+				templateTextEdit->setText(
+					t.getFullText());
+				QString html = t.getDescription();
+				html = html.replace("\n", "<br>");
+				descriptionTextBrowser->setText(
+					"<b>Name:</b> "+ t.getName() + "<br>\r\n" + "<b>File type:</b> " + t.getDefaultExtension() + "\r\n<br>" + "\r\n" +
+					html);
 
 				primitivesTableWidget->setRowCount(t.getPrimitives().count());
 				QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
@@ -542,12 +558,17 @@ namespace StructureSynth {
 
 					count++;
 				}
+
+				
+				currentTemplate = t;
 			} catch (Exception& e) {
 				primitivesTableWidget->setRowCount(0);
 				
 				WARNING(e.getMessage());
 				//templateTextEdit->setText(e.getMessage());	
 				descriptionTextBrowser->setText(e.getMessage());
+
+				currentTemplate = Template();
 			}
 
 			

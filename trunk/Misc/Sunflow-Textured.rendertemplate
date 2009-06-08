@@ -1,11 +1,14 @@
 <!--
+
+ -->
+<template name="Textured Sun Flow Template" defaultExtension="Sunflow scene file (*.sc)">
+	<description>
 This is an example of a render template, defining three textured types:
 box::texture1 -> uses texture "texture1.png"
 box::texture2 -> uses texture "texture2.png"
 box::texture3 -> uses texture "texture3.png"
- -->
-<template name="Sun Flow Template" inherits="" >
-	<substitution name="begin">
+	</description>
+	<primitive name="begin">
 	    <![CDATA[
 %photons {
 %  caustics 10000000 kd 64 0.5
@@ -136,15 +139,15 @@ object {
 	  0 0 1 1 1 0
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="end">
+	<primitive name="end">
 	    <![CDATA[
 
 		]]>
-	</substitution>
+	</primitive>
 
-	<substitution name="box" type="texture1">
+	<primitive name="box" type="texture1">
 		<![CDATA[
 
 instance {
@@ -154,9 +157,9 @@ instance {
 	shader "textureshader1"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="box" type="texture2">
+	<primitive name="box" type="texture2">
 		<![CDATA[
 
 instance {
@@ -166,9 +169,9 @@ instance {
 	shader "textureshader2"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="box" type="texture3">
+	<primitive name="box" type="texture3">
 		<![CDATA[
 
 
@@ -179,9 +182,9 @@ instance {
 	shader "textureshader3"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
-	<substitution name="box">
+	<primitive name="box">
 		<![CDATA[
 
 
@@ -192,10 +195,10 @@ instance {
 	shader "plain"
 }
 		]]>
-	</substitution>
+	</primitive>
 	
 	
-	<substitution name="sphere">
+	<primitive name="sphere">
 		<![CDATA[
 shader {
 	name "shader{uid}"
@@ -217,8 +220,8 @@ object {
 
 
 		]]>
-	</substitution>
-		<substitution name="sphere" type="light">
+	</primitive>
+		<primitive name="sphere" type="light">
 		<![CDATA[
 light {
 	type spherical
@@ -229,5 +232,5 @@ light {
 	samples 16
 }
 		]]>
-	</substitution>
+	</primitive>
 </template>

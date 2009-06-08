@@ -56,10 +56,14 @@ namespace StructureSynth {
 				TemplatePrimitive get(QString name) { return primitives[name]; }
 				QString getDescription() { return description; }
 				QString getFullText() { return fullText; }
+				QString getName() { return name; }
+				QString getDefaultExtension() { return defaultExtension; }
 
 			private:
 				QMap<QString, TemplatePrimitive> primitives;
 				QString description;
+				QString name;
+				QString defaultExtension;
 				QString fullText;
 			};
 

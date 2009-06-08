@@ -1,11 +1,17 @@
-<!--
-   Structure Synth export template for Renderman compliant renderers.  
-   
-   This template is created by Tom Beddard ('subblue')
--->
 
-<template name="Renderman Template" inherits="" >
-<substitution name="begin">
+<template name="Renderman Template" defaultExtension="Renderman file (*.RENDERMAN)" >
+<description>
+Structure Synth export template for Renderman compliant renderers.  
+   
+This template is created by Tom Beddard ('subblue')
+   
+# Open-source renderman solutions
+# Aqsis: http://www.aqsis.org/
+# Pixie: http://www.renderpixie.com/
+# Lots more info from the Renderman Repository:
+# http://www.renderman.org/RMR/
+</description>
+<primitive name="begin">
 <![CDATA[
 # Open-source renderman solutions
 # Aqsis: http://www.aqsis.org/
@@ -37,15 +43,15 @@ ObjectBegin "box"
 ObjectEnd
 
 ]]>
-</substitution>
+</primitive>
 
-<substitution name="end">
+<primitive name="end">
 <![CDATA[
 WorldEnd
 ]]>
-</substitution>
+</primitive>
 
-<substitution name="box">
+<primitive name="box">
 <![CDATA[
 Color [{r} {g} {b}]
 Surface "plastic"
@@ -54,9 +60,9 @@ TransformBegin
     ObjectInstance "box"
 TransformEnd
 ]]>
-</substitution>
+</primitive>
 
-<substitution name="sphere">
+<primitive name="sphere">
 <![CDATA[
 Color [{r} {g} {b}]
 Surface "plastic"
@@ -65,9 +71,9 @@ TransformBegin
     Sphere {rad} -{rad} {rad} 360
 TransformEnd
 ]]>
-</substitution>
+</primitive>
 
-<substitution name="grid">
+<primitive name="grid">
 <![CDATA[
 Color [{r} {g} {b}]
 Surface "plastic"
@@ -76,5 +82,5 @@ TransformBegin
     ObjectInstance "box"
 TransformEnd
 ]]>
-</substitution>
+</primitive>
 </template>

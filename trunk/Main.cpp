@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(StructureSynth);
-	QApplication::setStyle("cleanlooks");
+	//QApplication::setStyle("cleanlooks");
     QApplication app(argc, argv);
 
 	QPixmap pixmap(QDir(StructureSynth::GUI::MainWindow::getMiscDir()).absoluteFilePath("splash.png"));
