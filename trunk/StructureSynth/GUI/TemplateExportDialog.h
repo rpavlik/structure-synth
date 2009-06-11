@@ -43,6 +43,7 @@ namespace StructureSynth {
 
 			void setTemplatePath(QString templatePath);
 			void setDefaultSize(int width, int height);
+			void changeFileNameExtension(QString extension);
 		
 
 		public slots:

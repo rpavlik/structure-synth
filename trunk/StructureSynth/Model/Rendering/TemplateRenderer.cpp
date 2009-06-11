@@ -89,6 +89,7 @@ namespace StructureSynth {
 
 							if (!e.hasAttribute("name")) {
 								WARNING("Primitive without name attribute found!");
+								n = n.nextSibling();
 								continue;
 							}
 
@@ -107,8 +108,7 @@ namespace StructureSynth {
 						} else {
 
 							WARNING("Expected 'primitive' or 'description' element, found: " + e.tagName());
-							continue;
-
+							
 						}
 					}
 					n = n.nextSibling();

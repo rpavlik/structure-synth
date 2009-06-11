@@ -73,6 +73,7 @@ namespace StructureSynth {
 					bool inElement = false;
 					bool expectingAttribute = false;
 					bool insideBracket = false;
+					bool inQuote = false;
 					for (int i = 0; i < text.length(); i++) {
 							
 						if ((i >= 3) && (text.mid(i-3,4)=="<!--")) {
@@ -84,7 +85,7 @@ namespace StructureSynth {
 
 						if ((i >= 2) && (text.mid(i-2,3)=="-->")) {
 							// Multi-line comment ends
-							setFormat(0, i+1, commentFormat);
+							setFormat(i-2, text.length()-(i-2), standardFormat);
 							if (currentBlockState() != 0) {
 								setCurrentBlockState(0);
 							}
@@ -102,7 +103,7 @@ namespace StructureSynth {
 
 						if ((i >= 2) && (text.mid(i-2,3)=="]]>")) {
 							// Multi-line comment ends
-							setFormat(0, i+1, cdataFormat);
+							setFormat(i-2, text.length()-(i-2), standardFormat);
 							if (currentBlockState() != 0) {
 								setCurrentBlockState(0);
 							}
@@ -114,13 +115,21 @@ namespace StructureSynth {
 						if (insideBracket) continue;
 				
 						current += text.at(i);
-						if (text.at(i) == '<') {
-							inElement = true;
-							expectingAttribute = false; 
-						}
+						
 
-						if (text.at(i) == ' ') expectingAttribute = true;
-						if (text.at(i) == '=') expectingAttribute = false;
+						if (text.at(i) == '"') {
+							inQuote = !inQuote;
+						}
+						
+						if (!inQuote) {
+							if (text.at(i) == '<') {
+								inElement = true;
+								expectingAttribute = false; 
+							}
+
+							if (text.at(i) == ' ') expectingAttribute = true;
+							if (text.at(i) == '=') expectingAttribute = false;
+						}
 						
 						
 						if (inElement) {
@@ -545,9 +554,22 @@ namespace StructureSynth {
 					"<b>Name:</b> "+ t.getName() + "<br>\r\n" + "<b>File type:</b> " + t.getDefaultExtension() + "\r\n<br>" + "\r\n" +
 					html);
 
-				primitivesTableWidget->setRowCount(t.getPrimitives().count());
-				QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
 				int count = 0;
+				foreach (QString p, primitives) {
+					if (!t.getPrimitives().contains(p)) {
+						QTableWidgetItem* item = new QTableWidgetItem( p);
+						item->setBackground(QBrush(Qt::red));
+						
+						primitivesTableWidget->setRowCount(count+1);
+
+						primitivesTableWidget->setItem(count, 0, item);
+						count++;						
+					}
+				}
+				primitivesTableWidget->setRowCount(count+t.getPrimitives().count());
+
+
+				QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
 				while (i.hasNext()) {
 					i.next();
 					QTableWidgetItem* item = new QTableWidgetItem( i.key());
@@ -558,9 +580,10 @@ namespace StructureSynth {
 
 					count++;
 				}
-
 				
 				currentTemplate = t;
+
+				changeFileNameExtension(t.getDefaultExtension());
 			} catch (Exception& e) {
 				primitivesTableWidget->setRowCount(0);
 				
@@ -575,6 +598,21 @@ namespace StructureSynth {
 		}
 
 
+
+		void TemplateExportDialog::changeFileNameExtension(QString extension) {
+
+			QRegExp rx("\\(\\*\\.(.*)\\)"); // extract stuff inside brackets
+			int pos = 0;
+
+			QString realExtension = "*.unknown";
+			if (rx.indexIn(extension, pos) != -1) {
+				realExtension = rx.cap(1);
+			}
+
+
+			QString stripped = fileNameLineEdit->text().section(".",0,-2); // find everything until extension.
+			fileNameLineEdit->setText(stripped + "." + realExtension);
+		}
 
 
 
