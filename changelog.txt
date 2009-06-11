@@ -3,12 +3,14 @@ Changelog for Structure Synth:
 -------------------------
 Pending:
 - Add 'runAfter' tag to templates
-- Template filename: color when erronous.
-- Add missing rules
+- Output filename: color when erronous.
 - XML modifications
 - Post modifications
-- File output (change only extension when changing templates)
-- Unique filename generation.
+ Unique filename generation.
+
+11 Jun 09 [MHC] Fixed XML syntax highlighning.
+[1h]            Added check for missing primitives.
+				Added extension change
 
 08 Jun 09 [MHC] Template changes: 'substitution' -> 'primitive', added 'defaultExtension' tag.
 [1h]

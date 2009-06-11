@@ -1,6 +1,6 @@
 
 
-<template name="Sunflow Neon 22" >
+<template name="Sunflow Neon 22" defaultExtension="Sunflow scene file (*.sc)" >
 <description>
 This is an example of a render template, using one shader for each object.
 Based on a template by Tom Beddard ('subblue')
