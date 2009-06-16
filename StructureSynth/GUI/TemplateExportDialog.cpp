@@ -192,7 +192,6 @@ namespace StructureSynth {
 			if (lockAspectRatioCheckBox->isChecked()) {
 				widthSpinBox->blockSignals(true);
 				widthSpinBox->setValue((int)(aspectRatio*heightSpinBox->value()));
-				INFO(QString("width set: %1").arg((int)(aspectRatio*heightSpinBox->value())));
 				widthSpinBox->blockSignals(false);
 			} else {
 				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
@@ -204,7 +203,6 @@ namespace StructureSynth {
 			if (lockAspectRatioCheckBox->isChecked()) {
 				heightSpinBox->blockSignals(true);
 				heightSpinBox->setValue((int)(widthSpinBox->value()/aspectRatio));
-				INFO(QString("height set: %1").arg((int)(widthSpinBox->value()/aspectRatio)));
 				heightSpinBox->blockSignals(false);			
 			} else {
 				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
@@ -313,6 +311,7 @@ namespace StructureSynth {
 			fileNameLineEdit->setObjectName(QString::fromUtf8("TemplateExportDialog.fileNameLineEdit"));
 			fileNameLineEdit->setText(QApplication::translate("Dialog", "C:\\Output\\test.es", 0, QApplication::UnicodeUTF8));
 			Persistence::Restore(fileNameLineEdit);
+			connect(fileNameLineEdit, SIGNAL(textChanged(const QString &)),this, SLOT(updateUniqueFileName(const QString &)));
 
 
 			horizontalLayout_2->addWidget(fileNameLineEdit);
@@ -339,6 +338,7 @@ namespace StructureSynth {
 
 			uniqueCheckBox = new QCheckBox(templateOutputGroupBox);
 			uniqueCheckBox->setObjectName(QString::fromUtf8("uniqueCheckBox"));
+			connect(uniqueCheckBox, SIGNAL(toggled(bool)), this, SLOT(uniqueToggled(bool)));
 
 			horizontalLayout_3->addWidget(uniqueCheckBox);
 
@@ -615,6 +615,53 @@ namespace StructureSynth {
 		}
 
 
+		void TemplateExportDialog::uniqueToggled(bool) {
+			updateUniqueFileName("");
+		}
+
+		void TemplateExportDialog::updateUniqueFileName(const QString &) {
+			QString uname = "";
+			QString file = fileNameLineEdit->text();
+			QFileInfo fi(file);
+			bool error = false;
+			if (!fi.absoluteDir().exists()) {
+				uname = "dir does not exist";
+				error = true;
+				QPalette p = fileNameLineEdit->palette();
+				p.setColor(QPalette::Base, QColor(255,70,70));
+				fileNameLineEdit->setPalette(p);
+			} else {
+				fileNameLineEdit->setPalette(QApplication::palette());
+			}
+				
+			if (uniqueCheckBox->isChecked()) {
+				if (!error) {
+
+					QString stripped = fileNameLineEdit->text().section(".",0,-2); // find everything until extension.
+					QString extension = fileNameLineEdit->text().section(".",-1,-1); 
+
+					QString lastNumber = stripped.section("-", -1, -1);
+					bool succes = false;
+					int number = lastNumber.toInt(&succes);
+					if (!succes) number = 2;
+					if (succes) {
+						// The filename already had a number extension.
+						stripped = stripped.section("-", 0, -2);
+					}
+
+					QString testName = fileNameLineEdit->text();
+					while (QFile(testName).exists()) {
+						testName = stripped + "-" + QString::number(number++) + "." + extension;
+					}
+					uname = testName;
+				}
+				
+				uniqueCheckBox->setText(QString("Add unique ID to filename (%1)").arg(uname));
+			} else {
+				
+				uniqueCheckBox->setText("Add unique ID to filename");
+			}
+		}
 
 		void TemplateExportDialog::retranslateUi()
 		{
@@ -631,7 +678,7 @@ namespace StructureSynth {
 			templateOutputGroupBox->setTitle(QApplication::translate("Dialog", "Template Output", 0, QApplication::UnicodeUTF8));
 			fileRadioButton->setText(QApplication::translate("Dialog", "File:", 0, QApplication::UnicodeUTF8));
 			filePushButton->setText(QApplication::translate("Dialog", "File...", 0, QApplication::UnicodeUTF8));
-			uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename (testmig-1.es)", 0, QApplication::UnicodeUTF8));
+			uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename", 0, QApplication::UnicodeUTF8));
 			clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0, QApplication::UnicodeUTF8));
 			postProcessingGroupBox->setTitle(QApplication::translate("Dialog", "Post Processing", 0, QApplication::UnicodeUTF8));
 			runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0, QApplication::UnicodeUTF8));

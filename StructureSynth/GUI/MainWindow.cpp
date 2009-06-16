@@ -525,7 +525,7 @@ namespace StructureSynth {
 			for (int i = 0; i < MaxRecentFiles; ++i) {
 				QAction* a = new QAction(this);
 				a->setVisible(false);
-				connect(a, SIGNAL(triggered()),	this, SLOT(openRecentFile()));
+				connect(a, SIGNAL(triggered()),	this, SLOT(openFile()));
 				recentFileActions.append(a);				
 			}
 		}
@@ -1385,7 +1385,8 @@ namespace StructureSynth {
 			for (int i = 0; i < numRecentFiles; ++i) {
 				QString text = tr("&%1 %2").arg(i + 1).arg(QFileInfo(files[i]).fileName());
 				recentFileActions[i]->setText(text);
-				recentFileActions[i]->setData(files[i]);
+				QString absPath = QFileInfo(files[i]).absoluteFilePath();
+				recentFileActions[i]->setData(absPath);
 				recentFileActions[i]->setVisible(true);
 			}
 			

@@ -65,7 +65,6 @@ namespace StructureSynth {
 
 				QDomElement ne = docElem.toElement(); // try to convert the node to an element.
 				if(!ne.isNull()) {
-					INFO("--->TAG:" + ne.tagName());
 					if (ne.hasAttribute("name")) {
 						this->name = ne.attribute("name");
 					} else {
@@ -101,7 +100,6 @@ namespace StructureSynth {
 
 
 							QString name = e.attribute("name") + type;
-							//INFO(QString("%1 = %2").arg(name).arg(e.text()));
 							primitives[name] = TemplatePrimitive(e.text());
 						} else if (e.tagName() == "description") {
 							description = e.text();

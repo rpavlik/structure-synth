@@ -2,11 +2,24 @@
 Changelog for Structure Synth:
 -------------------------
 Pending:
-- Add 'runAfter' tag to templates
-- Output filename: color when erronous.
-- XML modifications
-- Post modifications
- Unique filename generation.
+Template Dialog
+- Add 'runAfter' tag to templates.
+- Template Path Change.
+- File/Clipboard switch and greying.
+- Run the following command greying.
+- Run the following command functionality.
+- XML modifications.
+  - Save mods
+  - Detects mods
+  - Undo mods
+- Post modifications. 
+- OK button functionality.
+
+
+ - Filename in QFileDialog should support *.*
+
+16 Jun 09 [MHC] Fixed Recent Files.
+[1½h]           Unique filename generation.
 
 11 Jun 09 [MHC] Fixed XML syntax highlighning.
 [1h]            Added check for missing primitives.
@@ -26,7 +39,7 @@ Pending:
 [1½h]
 
 27 May 09 [MHC] More TemplateExport Code.
-[2h]			Recent files (not finisuhed).
+[2h]			Recent files.
 				
 26 May 09 [MHC] More TemplateExport Code. 
 [3h]			Persistence skeleton.
@@ -35,8 +48,6 @@ Pending:
 				
 25 May 09 [MHC] Added TemplateExportDialog skeleton
 [3h]            Changed to Cleanlooks.
-
-Added Icons
 
 04 May 09 [MHC] Added application (and .es) icons
 [4h]
