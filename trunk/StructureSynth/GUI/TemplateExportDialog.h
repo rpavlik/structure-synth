@@ -53,6 +53,9 @@ namespace StructureSynth {
 			void heightChanged(int);
 			void widthChanged(int);
 			void selectFileName();
+			void uniqueToggled(bool);
+			void updateUniqueFileName(const QString &);
+			
 
 
 		protected:
@@ -61,7 +64,6 @@ namespace StructureSynth {
 			void setupUi();
 
 		private:
-
 			Model::Rendering::Template currentTemplate;
 
 			QStringList primitives;

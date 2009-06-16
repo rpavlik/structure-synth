@@ -219,7 +219,7 @@ namespace StructureSynth {
 				} else {
 					bool succes;
 					int i = param.toInt(&succes);
-					if (!succes) throw Exception(QString("Command 'seed' expected integer parameter or 'same'. Found: %1").arg(param));
+					if (!succes) throw Exception(QString("Command 'seed' expected integer parameter or 'initial'. Found: %1").arg(param));
 					RandomStreams::SetSeed(i);
 					hasSeedChanged = true;
 					newSeed = i;
