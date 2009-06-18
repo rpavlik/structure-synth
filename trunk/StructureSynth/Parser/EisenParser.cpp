@@ -49,6 +49,7 @@ namespace StructureSynth {
 
 
 		EisenParser::EisenParser(Tokenizer* tokenizer) : tokenizer(tokenizer) {
+			recurseDepth = false;
 		};
 
 		EisenParser::~EisenParser() {
@@ -304,6 +305,8 @@ namespace StructureSynth {
 				} else if (!accept(Symbol::UserString)) throw (ParseError("Expected a valid setting name. Found: " + symbol.text, symbol.pos));
 				QString value = symbol.text; 
 				getSymbol(); // We will accept everything here! 
+
+				if (key == "recursion" && value == "depth") recurseDepth = true;
 				
 				return Action(key,value);
 		}
@@ -327,6 +330,7 @@ namespace StructureSynth {
 			}
 
 			if (!accept(Symbol::End)) throw (ParseError("Unexpected symbol found. At this scope only RULE and SET statements are allowed. Found: " + symbol.text, symbol.pos));
+			if (recurseDepth) rs->setRecurseDepthFirst(true);
 			return rs;
 		}
 

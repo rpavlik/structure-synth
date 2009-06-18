@@ -31,6 +31,8 @@ namespace StructureSynth {
 				name = "line";
 			} else if (type == Mesh) {
 				name = "mesh";
+			} else if (type == Template) {
+				name = "template";
 			} else if (type == Other) {
 				name = "other";
 			} else {
@@ -40,6 +42,12 @@ namespace StructureSynth {
 		};
 
 		void PrimitiveRule::apply(Builder* b) const {
+			if (type == Template) {
+				INFO("Template: " + classID);
+				b->getRenderer()->callGeneric(classID);
+				return;
+			}
+
 			b->increaseObjectCount();
 			b->getRenderer()->setColor(
 				SyntopiaCore::Misc::ColorUtils::HSVtoRGB( b->getState().hsv)

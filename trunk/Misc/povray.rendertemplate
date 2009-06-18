@@ -71,4 +71,16 @@ object {
 }
 		]]>
 	</primitive>
+	<primitive name="template" type="intersection-begin" >
+	   intersection {
+	</primitive>
+	<primitive name="template" type="intersection-end" >
+		}
+	</primitive>
+	<primitive name="template" type="union-begin" >
+	    union {
+	</primitive>
+	<primitive name="template" type="union-end" >
+	    }
+	</primitive>
 </template>

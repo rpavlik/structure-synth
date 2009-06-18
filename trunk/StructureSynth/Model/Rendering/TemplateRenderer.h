@@ -114,6 +114,8 @@ namespace StructureSynth {
 									     SyntopiaCore::Math::Vector3f p3,
 											const QString& classID);
 
+				virtual void callGeneric(const QString& classID);
+				
 				virtual void begin();
 				virtual void end();
 				

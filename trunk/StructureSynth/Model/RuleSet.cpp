@@ -22,6 +22,7 @@ namespace StructureSynth {
 		/// Constructor. Automatically adds built-in rules.
 		RuleSet::RuleSet() {
 			topLevelRule = new CustomRule("TopLevelRule");
+			recurseDepth = false;
 
 			/// Add instances of predefined built-in types.
 			rules.append(new PrimitiveRule(PrimitiveRule::Box));
@@ -31,8 +32,17 @@ namespace StructureSynth {
 			rules.append(new PrimitiveRule(PrimitiveRule::Line));
 			rules.append(new PrimitiveRule(PrimitiveRule::Dot));
 			rules.append(new PrimitiveRule(PrimitiveRule::Grid));
+			rules.append(new PrimitiveRule(PrimitiveRule::Template));
 			rules.append(topLevelRule);
 		};
+
+		void RuleSet::setRulesMaxDepth(int maxDepth) {
+			for (int i = 0; i < rules.size(); i++) {
+				int md = rules[i]->getMaxDepth();
+				//INFO(QString("Rule: %1, %2 -> %3").arg(rules[i]->getName()).arg(md).arg(maxDepth));
+				if (md <= 0) rules[i]->setMaxDepth(maxDepth);
+			}
+		}
 
 
 		/// Deletes rules
