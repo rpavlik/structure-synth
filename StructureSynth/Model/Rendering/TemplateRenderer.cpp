@@ -369,6 +369,14 @@ namespace StructureSynth {
 				output.append(t.getText());
 			};
 
+			void TemplateRenderer::callGeneric(const QString& classID) {
+				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				if (!assertPrimitiveExists("template"+alternateID)) return;
+				TemplatePrimitive t(workingTemplate.get("template"+alternateID)); 
+				output.append(t.getText());
+			}
+				
+
 			void TemplateRenderer::setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) {
 				backRgb = rgb;
 			}

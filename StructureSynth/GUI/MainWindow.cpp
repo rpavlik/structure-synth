@@ -55,7 +55,7 @@ namespace StructureSynth {
 				preprocessorFormat.setForeground(QBrush(Qt::blue));
 				preprocessorFormat.setFontWeight(QFont::Bold);
 
-				expression = QRegExp("(set|blend|maxsize|minsize|translation|pivot|rotation|scale|maxobjects|background|color|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
+				expression = QRegExp("(set|blend|recursion|maxsize|minsize|translation|pivot|rotation|scale|maxobjects|background|color|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
 				primitives = QRegExp("(triangle\\[.*\\]|sphere(::\\w+)?|box(::\\w+)?|dot(::\\w+)?|line(::\\w+)?|grid(::\\w+)?)");
 				expression.setCaseSensitivity(Qt::CaseInsensitive);
 				primitives.setCaseSensitivity(Qt::CaseInsensitive);

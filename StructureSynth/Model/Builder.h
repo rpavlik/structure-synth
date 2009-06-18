@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QProgressDialog>
 #include "Rendering/Renderer.h"
 #include "RuleSet.h"
 #include "State.h"
@@ -33,7 +34,11 @@ namespace StructureSynth {
 			ColorPool* getColorPool() { return colorPool; }
 
 		private:
+			void recurseBreadthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
+			void recurseDepthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
+		
 			State state;
+			
 			ExecutionStack stack;
 			ExecutionStack nextStack;
 			Rendering::Renderer* renderTarget;

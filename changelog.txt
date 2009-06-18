@@ -18,6 +18,10 @@ Template Dialog
 
  - Filename in QFileDialog should support *.*
 
+18 Jun 09 [MHC] Optional depth-first recursion (use 'set recursion depth') - made for playing around with CSG in PovRay.
+[2h]			A new dummy primitive called 'template' which can be used for generic purposes (such as CSG).
+				[Depth-first still has issues with maxdepth]
+				
 16 Jun 09 [MHC] Fixed Recent Files.
 [1½h]           Unique filename generation.
 
