@@ -83,4 +83,10 @@ object {
 	<primitive name="template" type="union-end" >
 	    }
 	</primitive>
+	<primitive name="template" type="difference-begin" >
+	    difference {
+	</primitive>
+	<primitive name="template" type="difference-end" >
+	    }
+	</primitive>
 </template>
