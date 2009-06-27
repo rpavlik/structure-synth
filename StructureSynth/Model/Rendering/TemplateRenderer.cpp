@@ -28,6 +28,10 @@ namespace StructureSynth {
 				if (!doc.setContent(xml, false, &errorMessage, &errorLine, &errorColumn )) {
 					QString error = QString("[Line %1, Col %2] %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
 					WARNING("Unable to parse xml: " + error);
+
+					throw Exception("Unable to parse xml from string: " + error );					
+		
+
 					return;
 				}
 
@@ -121,6 +125,12 @@ namespace StructureSynth {
 
 				workingTemplate.read(file);
 			}
+
+			TemplateRenderer::TemplateRenderer(Template myTemplate) {
+				counter = 0;
+				workingTemplate = myTemplate;
+			}
+				
 
 
 			TemplateRenderer::TemplateRenderer()  

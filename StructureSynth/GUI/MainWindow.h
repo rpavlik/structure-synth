@@ -9,6 +9,8 @@
 #include "../../SyntopiaCore/Misc/Version.h"
 #include "VariableEditor.h"
 #include "TemplateExportDialog.h"
+#include "../Model/Rendering/TemplateRenderer.h"
+
 
 
 class QAction;
@@ -40,6 +42,8 @@ namespace StructureSynth {
 			MainWindow(const QString &fileName);
 			void setSeed(int randomSeed);
 			int getSeed();
+			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate);
+		
 
 			static QString getExamplesDir();
 			static QString getMiscDir();

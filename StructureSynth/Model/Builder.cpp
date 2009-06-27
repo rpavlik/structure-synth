@@ -110,6 +110,8 @@ namespace StructureSynth {
 
 			while (stack.size() != 0 && generationCounter < maxGenerations && objects < maxObjects && stack.size() < maxObjects) {
 
+
+				
 				syncSeed = RandomStreams::Geometry()->getInt();
 
 				double p = 0;
@@ -136,6 +138,7 @@ namespace StructureSynth {
 				if (progressDialog.wasCanceled()) {
 					break;
 				}
+				
 
 				generationCounter++;
 

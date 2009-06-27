@@ -33,11 +33,13 @@ namespace StructureSynth {
 	namespace GUI {
 
 
+		class MainWindow; // Forward declaration.
+
 		/// The Variable Editor window.
 		class TemplateExportDialog : public QDialog {
 			Q_OBJECT
 		public:
-			TemplateExportDialog(QWidget* parent, QStringList primitives);
+			TemplateExportDialog(MainWindow* parent, QStringList primitives);
 			~TemplateExportDialog();
 
 
@@ -47,7 +49,14 @@ namespace StructureSynth {
 		
 
 		public slots:
+			void accept();
+			void reject();
 			void templateChanged(const QString &);
+			void saveModifications();
+			void undo();
+			void textChanged();
+			void tabChanged(int i);
+		
 
 			void lockAspectChanged();
 			void heightChanged(int);
@@ -57,6 +66,8 @@ namespace StructureSynth {
 			void updateUniqueFileName(const QString &);
 			
 
+			void fileRadioButtonToggled(bool);
+			void changeTemplatePath();
 
 		protected:
 			void retranslateUi();
@@ -107,14 +118,16 @@ namespace StructureSynth {
 			QFrame *line;
 			QCheckBox *lockAspectRatioCheckBox;
 			QSpacerItem *horizontalSpacer_4;
-			QCheckBox *modifyTemplateCheckBox;
+			QLabel *modifyTemplateLabel;
 			QTextEdit *templateTextEdit;
 			QHBoxLayout *horizontalLayout_6;
 			QSpacerItem *horizontalSpacer_3;
-			QPushButton *pushButton_3;
-			QPushButton *pushButton_4;
+			QPushButton *saveModificationsButton;
+			QPushButton *undoButton;
 			QCheckBox *modifyOutputCheckBox;
 			QDialogButtonBox *buttonBox;
+			QString modifiedTemplate;
+			MainWindow* mainWindow;
 		};
 
 
