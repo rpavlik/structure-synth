@@ -72,6 +72,7 @@ namespace StructureSynth {
 			public:
 				TemplateRenderer();
 				TemplateRenderer(QString xmlDefinitionFile);
+				TemplateRenderer(Template myTemplate);
 				
 				virtual ~TemplateRenderer();
 

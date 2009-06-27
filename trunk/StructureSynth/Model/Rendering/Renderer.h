@@ -57,7 +57,7 @@ namespace StructureSynth {
 									     SyntopiaCore::Math::Vector3f p3,
 											const QString& classID) = 0;
 
-				virtual void callGeneric(const QString& classID) {};
+				virtual void callGeneric(const QString& /*classID*/) {};
 				
 				// Color
 				// RGB in [0;1] intervals.

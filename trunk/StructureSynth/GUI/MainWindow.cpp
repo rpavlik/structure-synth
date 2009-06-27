@@ -1142,12 +1142,25 @@ namespace StructureSynth {
 				QDir d(getTemplateDir());
 				QString templateFileName = d.absoluteFilePath(action->data().toString());
 				INFO("Starting Template Renderer: " + fileName);
+				try {
+					Template myTemplate(templateFileName);
+					templateRender(fileName, &myTemplate);
+				} catch (Exception& er) {
+					WARNING(er.getMessage());
+				}
+			} else {
+				WARNING("No data!");
+			}
+		}
 
+		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate)
+		{
+			
 				RandomStreams::SetSeed(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";
-					TemplateRenderer rendering(templateFileName);
+					TemplateRenderer rendering(*myTemplate);
 					Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
 					cameraRight = cameraRight.normalize();
 					rendering.setCamera(
@@ -1220,9 +1233,6 @@ namespace StructureSynth {
 					WARNING(er.getMessage());
 				}
 
-			} else {
-				WARNING("No data!");
-			}
 		}
 
 

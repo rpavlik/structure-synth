@@ -1,10 +1,12 @@
 #include "TemplateExportDialog.h"
+#include "MainWindow.h"
 
 #include <QPushButton>
 #include <QSlider>
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QDir>
 #include <QSplitter>
 #include <QFileDialog>
@@ -158,16 +160,14 @@ namespace StructureSynth {
 			};
 		};
 
-
-
-
-		TemplateExportDialog::TemplateExportDialog(QWidget* parent, QStringList primitives) : primitives(primitives), QDialog(parent) {
+		TemplateExportDialog::TemplateExportDialog(MainWindow* parent, QStringList primitives) : primitives(primitives), QDialog(parent) {
 			// 'primitives' contain a list of used primitives.
 			// We add 'begin' and 'end' since these are always used.
 			this->primitives.append("begin");
 			this->primitives.append("end");
 			setupUi();
 			retranslateUi();
+			mainWindow = parent;
 		}
 
 		TemplateExportDialog::~TemplateExportDialog() {
@@ -243,6 +243,7 @@ namespace StructureSynth {
 			templatePathButton->setObjectName(QString::fromUtf8("templatePathButton"));
 
 			horizontalLayout->addWidget(templatePathButton);
+			connect(templatePathButton, SIGNAL(clicked()), this, SLOT(changeTemplatePath()));
 
 
 			verticalLayout->addLayout(horizontalLayout);
@@ -304,7 +305,7 @@ namespace StructureSynth {
 			fileRadioButton = new QRadioButton(templateOutputGroupBox);
 			fileRadioButton->setObjectName(QString::fromUtf8("fileRadioButton"));
 			fileRadioButton->setChecked(true);
-
+			connect(fileRadioButton, SIGNAL(toggled(bool)), this, SLOT(fileRadioButtonToggled(bool)));
 			horizontalLayout_2->addWidget(fileRadioButton);
 
 			fileNameLineEdit = new QLineEdit(templateOutputGroupBox);
@@ -348,6 +349,8 @@ namespace StructureSynth {
 			clipboardRadioButton = new QRadioButton(templateOutputGroupBox);
 			clipboardRadioButton->setObjectName(QString::fromUtf8("clipboardRadioButton"));
 
+			connect(clipboardRadioButton, SIGNAL(toggled(bool)), this, SLOT(fileRadioButtonToggled(bool)));
+			
 			verticalLayout_2->addWidget(clipboardRadioButton);
 
 
@@ -415,7 +418,7 @@ namespace StructureSynth {
 			verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
 			runAfterCheckBox = new QCheckBox(postProcessingGroupBox);
 			runAfterCheckBox->setObjectName(QString::fromUtf8("runAfterCheckBox"));
-
+			
 			verticalLayout_4->addWidget(runAfterCheckBox);
 
 			horizontalLayout_4 = new QHBoxLayout();
@@ -426,6 +429,9 @@ namespace StructureSynth {
 
 			afterCommandLineEdit = new QLineEdit(postProcessingGroupBox);
 			afterCommandLineEdit->setObjectName(QString::fromUtf8("afterCommandLineEdit"));
+				connect(runAfterCheckBox, SIGNAL(toggled(bool)), afterCommandLineEdit, SLOT(setEnabled(bool)));
+			
+				afterCommandLineEdit->setEnabled(false);
 
 			horizontalLayout_4->addWidget(afterCommandLineEdit);
 
@@ -445,15 +451,16 @@ namespace StructureSynth {
 			verticalLayout_5 = new QVBoxLayout(advancedTab);
 			verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
 
-			modifyTemplateCheckBox = new QCheckBox(advancedTab);
-			modifyTemplateCheckBox->setObjectName(QString::fromUtf8("modifyTemplateCheckBox"));
+			modifyTemplateLabel = new QLabel(advancedTab);
+			modifyTemplateLabel->setObjectName(QString::fromUtf8("modifyTemplateCheckBox"));
 
-			verticalLayout_5->addWidget(modifyTemplateCheckBox);
+			verticalLayout_5->addWidget(modifyTemplateLabel);
 
 			templateTextEdit = new QTextEdit(advancedTab);
 			templateTextEdit->setTabStopWidth(30);
 			templateTextEdit->setObjectName(QString::fromUtf8("templateTextEdit"));
 			/*XmlHighlighter *highlighter =*/ new XmlHighlighter(templateTextEdit);
+			connect(templateTextEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 
 			verticalLayout_5->addWidget(templateTextEdit);
 
@@ -463,15 +470,21 @@ namespace StructureSynth {
 
 			horizontalLayout_6->addItem(horizontalSpacer_3);
 
-			pushButton_3 = new QPushButton(advancedTab);
-			pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+			saveModificationsButton = new QPushButton(advancedTab);
+			saveModificationsButton->setObjectName(QString::fromUtf8("pushButton_3"));
+			saveModificationsButton->setEnabled(false);
+			connect(saveModificationsButton, SIGNAL(clicked()), this, SLOT(saveModifications()));
 
-			horizontalLayout_6->addWidget(pushButton_3);
 
-			pushButton_4 = new QPushButton(advancedTab);
-			pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
+			horizontalLayout_6->addWidget(saveModificationsButton);
 
-			horizontalLayout_6->addWidget(pushButton_4);
+			undoButton = new QPushButton(advancedTab);
+			undoButton->setObjectName(QString::fromUtf8("pushButton_4"));
+			undoButton->setEnabled(false);
+			connect(undoButton, SIGNAL(clicked()), this, SLOT(undo()));
+
+
+			horizontalLayout_6->addWidget(undoButton);
 
 
 			verticalLayout_5->addLayout(horizontalLayout_6);
@@ -498,6 +511,8 @@ namespace StructureSynth {
 			QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 			tabWidget->setCurrentIndex(0);
+
+			connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 
 			//QMetaObject::connectSlotsByName(this);
@@ -533,9 +548,20 @@ namespace StructureSynth {
 			}
 		}
 
-		void TemplateExportDialog::templateChanged(const QString &) {
+		void TemplateExportDialog::templateChanged(const QString& s) {
+			INFO("Template Changed");
 			int id = templateComboBox->currentIndex();
 			if (id<0) return;
+
+			if (s.isEmpty()) {
+				WARNING("Forced call...");
+			}
+
+			if (!s.isEmpty() && saveModificationsButton->isEnabled()) {
+				WARNING("You have lost your changes...");
+				modifiedTemplate = "";
+			}
+
 			QVariant q = templateComboBox->itemData(id);
 
 			QFile file(q.toString());
@@ -543,20 +569,38 @@ namespace StructureSynth {
 			primitivesTableWidget->setColumnCount(1);
 			primitivesTableWidget->horizontalHeader()->hide();
 				
+			
+
 			try {
-				Template t(file);
+				// If the template has been modified, the modifications
+				// are stored in modifiedTemplate.
+				if (modifiedTemplate.isEmpty()) {
+					Template t(file);
+					currentTemplate = t;
+				} else {
+					INFO("Using modified template");
+					Template t(modifiedTemplate);
+					modifiedTemplate = "";
+					currentTemplate = t;
+				}
+
 
 				templateTextEdit->setText(
-					t.getFullText());
-				QString html = t.getDescription();
+					currentTemplate.getFullText());
+
+					
+				undoButton->setEnabled(false);
+				saveModificationsButton->setEnabled(false);
+
+				QString html = currentTemplate.getDescription();
 				html = html.replace("\n", "<br>");
 				descriptionTextBrowser->setText(
-					"<b>Name:</b> "+ t.getName() + "<br>\r\n" + "<b>File type:</b> " + t.getDefaultExtension() + "\r\n<br>" + "\r\n" +
+					"<b>Name:</b> "+ currentTemplate.getName() + "<br>\r\n" + "<b>File type:</b> " + currentTemplate.getDefaultExtension() + "\r\n<br>" + "\r\n" +
 					html);
 
 				int count = 0;
 				foreach (QString p, primitives) {
-					if (!t.getPrimitives().contains(p)) {
+					if (!currentTemplate.getPrimitives().contains(p)) {
 						QTableWidgetItem* item = new QTableWidgetItem( p);
 						item->setBackground(QBrush(Qt::red));
 						
@@ -566,10 +610,10 @@ namespace StructureSynth {
 						count++;						
 					}
 				}
-				primitivesTableWidget->setRowCount(count+t.getPrimitives().count());
+				primitivesTableWidget->setRowCount(count+currentTemplate.getPrimitives().count());
 
 
-				QMapIterator<QString, TemplatePrimitive> i(t.getPrimitives());
+				QMapIterator<QString, TemplatePrimitive> i(currentTemplate.getPrimitives());
 				while (i.hasNext()) {
 					i.next();
 					QTableWidgetItem* item = new QTableWidgetItem( i.key());
@@ -581,22 +625,30 @@ namespace StructureSynth {
 					count++;
 				}
 				
-				currentTemplate = t;
-
-				changeFileNameExtension(t.getDefaultExtension());
+				
+				changeFileNameExtension(currentTemplate.getDefaultExtension());
 			} catch (Exception& e) {
 				primitivesTableWidget->setRowCount(0);
 				
 				WARNING(e.getMessage());
-				//templateTextEdit->setText(e.getMessage());	
+				INFO(QString("Setting text to modTem: %1").arg(modifiedTemplate.count()));
+				templateTextEdit->setText(modifiedTemplate);	
 				descriptionTextBrowser->setText(e.getMessage());
-
+		
 				currentTemplate = Template();
 			}
 
 			
 		}
 
+		void TemplateExportDialog::tabChanged(int i) {
+			INFO(QString::number(i));
+			if ((i == 0) && saveModificationsButton->isEnabled()) {
+				INFO("Must recalc");
+				modifiedTemplate = templateTextEdit->toPlainText();
+				templateChanged("");
+			}
+		}
 
 
 		void TemplateExportDialog::changeFileNameExtension(QString extension) {
@@ -687,13 +739,94 @@ namespace StructureSynth {
 			label_4->setText(QApplication::translate("Dialog", "Width:", 0, QApplication::UnicodeUTF8));
 			label_5->setText(QApplication::translate("Dialog", "Height:", 0, QApplication::UnicodeUTF8));
 			lockAspectRatioCheckBox->setText(QApplication::translate("Dialog", "Lock aspect ratio (Current = 1.23)", 0, QApplication::UnicodeUTF8));
-			modifyTemplateCheckBox->setText(QApplication::translate("Dialog", "Modify template before applying", 0, QApplication::UnicodeUTF8));
-			pushButton_3->setText(QApplication::translate("Dialog", "Save Modifications", 0, QApplication::UnicodeUTF8));
-			pushButton_4->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0, QApplication::UnicodeUTF8));
+			modifyTemplateLabel->setText(QApplication::translate("Dialog", "Modify template before applying", 0, QApplication::UnicodeUTF8));
+			saveModificationsButton->setText(QApplication::translate("Dialog", "Save Modifications", 0, QApplication::UnicodeUTF8));
+			undoButton->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0, QApplication::UnicodeUTF8));
 			modifyOutputCheckBox->setText(QApplication::translate("Dialog", "Modify output before saving (spawns edit window when pressing OK)", 0, QApplication::UnicodeUTF8));
 			tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Modify", 0, QApplication::UnicodeUTF8));
 
 		} // retranslateUi
+
+		void TemplateExportDialog::fileRadioButtonToggled(bool) {
+			if (fileRadioButton->isChecked()) {
+				fileNameLineEdit->setEnabled(true);
+				uniqueCheckBox->setEnabled(true);
+				filePushButton->setEnabled(true);
+			} else {
+				fileNameLineEdit->setEnabled(false);
+				uniqueCheckBox->setEnabled(false);
+				filePushButton->setEnabled(false);
+			}
+		}
+
+		void TemplateExportDialog::undo() {
+			INFO("UNDO");
+			undoButton->setEnabled(false);
+			saveModificationsButton->setEnabled(false);
+		}
+
+		void TemplateExportDialog::saveModifications() {
+			INFO("SAVE");
+			int id = templateComboBox->currentIndex();
+			if (id<0) return;
+			QVariant q = templateComboBox->itemData(id);
+
+			QFile file(q.toString());
+
+			if (!QFileInfo(file).exists()) {
+				WARNING("Could not find file: " + QFileInfo(file).absoluteFilePath());
+				return;
+			}
+
+			if (QMessageBox::Ok != QMessageBox::warning (this, "Overwrite file?", 
+				QString("Overwrite template:\r\n%1").arg(QFileInfo(file).absoluteFilePath()), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel))
+			{
+				return;
+			}
+
+			if (file.open(QIODevice::WriteOnly)) {
+				file.write(templateTextEdit->toPlainText().toLatin1());
+				file.flush();
+				file.close();
+				INFO("Wrote template to file: " + QFileInfo(file).absoluteFilePath());	
+			} else {
+				WARNING("Could not write to file: " + QFileInfo(file).absoluteFilePath());
+				return;
+			}
+
+			modifiedTemplate = templateTextEdit->toPlainText();
+			templateChanged("");
+
+			undoButton->setEnabled(false);
+			saveModificationsButton->setEnabled(false);
+
+
+		}
+
+		void TemplateExportDialog::textChanged() {
+			//INFO("Text Changed");
+			undoButton->setEnabled(true);
+			saveModificationsButton->setEnabled(true);
+
+		}
+
+		void TemplateExportDialog::changeTemplatePath() {
+			INFO("Change path");
+		}
+
+		void TemplateExportDialog::accept() {
+			INFO("Accept");
+			// to clipboard...
+			INFO("Rendering to clipboard...");
+			mainWindow->templateRender("", &currentTemplate);
+			QDialog::accept();
+		};
+
+		void TemplateExportDialog::reject() {
+			INFO("reject");
+			QDialog::reject();
+		};
+			
 
 	};
 

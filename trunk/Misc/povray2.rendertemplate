@@ -12,10 +12,14 @@ global_settings {
   ambient_light rgb <1,1,1>
 }
 
-// Finish and normal
-#declare DEFFIN = finish { ambient 0.1 diffuse 0.5 specular 0.5 };
-#declare DEFNOR = normal { dents 0 scale 0.01 };
-
+#default {
+  texture { 
+    pigment { color rgb 1 }
+    finish { ambient 0.1 diffuse 0.5 specular 0.5 }
+   normal { dents 0 scale 0.01 }
+  }
+}
+    
 // Background
 plane {
   z, 100.0
@@ -29,17 +33,16 @@ plane {
 // Camera
 camera {
   location <{CamPosX},{CamPosY},{CamPosZ}>
-  look_at <{CamTargetX},{CamTargetY},{CamTargetZ}>
-  direction <{CamDirX},{CamDirY},{CamDirZ}>
   right <{CamRightX}*{aspect},{CamRightY}*{aspect},{CamRightZ}*{aspect}>
   up <{CamUpX},{CamUpY},{CamUpZ}>
-  angle 60
+  look_at <{CamTargetX},{CamTargetY},{CamTargetZ}>
+
 }
 
 // Lights
-light_source { <500,500,-1000> rgb <1,1,1> shadowless } 
-light_source { <-500,-500,-1000> rgb <1,1,1> shadowless } 
-light_source { <-500,500,1000> rgb <1,1,1> shadowless } 
+light_source { <500,500,-1000> rgb <1,1,1>  } 
+light_source { <-500,-500,-1000> rgb <1,1,1>  } 
+light_source { <-500,500,1000> rgb <1,1,1>  } 
 		]]></primitive>
  <primitive name="end" ><![CDATA[
 
@@ -50,13 +53,13 @@ light_source { <-500,500,1000> rgb <1,1,1> shadowless }
 object {   
   box { <0,  0.0, 0>, <1,  1,  1> }
   matrix < {povmatrix} > 
-  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } finish { DEFFIN } normal { DEFNOR } }
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } }
 }
 		]]></primitive>
  <primitive name="sphere" ><![CDATA[
 object {   
   sphere { <{cx}, {cy}, {cz}>, {rad} }
-  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } finish { DEFFIN } normal { DEFNOR } }
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } }
 }
 		]]></primitive>
  <primitive type="intersection-begin" name="template" >

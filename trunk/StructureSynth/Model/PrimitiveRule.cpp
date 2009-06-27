@@ -43,7 +43,6 @@ namespace StructureSynth {
 
 		void PrimitiveRule::apply(Builder* b) const {
 			if (type == Template) {
-				INFO("Template: " + classID);
 				b->getRenderer()->callGeneric(classID);
 				return;
 			}
