@@ -5,8 +5,6 @@ Pending:
 Template Dialog
 - Add 'runAfter' tag to templates.
 - Template Path Change.
-- File/Clipboard switch and greying.
-- Run the following command greying.
 - Run the following command functionality.
 - XML modifications.
   - Save mods

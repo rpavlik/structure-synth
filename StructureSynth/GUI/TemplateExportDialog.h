@@ -128,6 +128,9 @@ namespace StructureSynth {
 			QDialogButtonBox *buttonBox;
 			QString modifiedTemplate;
 			MainWindow* mainWindow;
+			QString uniqueFileName;
+			int screenWidth;
+			int screenHeight;
 		};
 
 
