@@ -168,19 +168,41 @@ namespace StructureSynth {
 			setupUi();
 			retranslateUi();
 			mainWindow = parent;
+			uniqueFileName = "";
+			
 		}
 
 		TemplateExportDialog::~TemplateExportDialog() {
 			// Persist (should only be done on OK?)
-			Persistence::Store(fileNameLineEdit);
+			
 		}
 
 		void TemplateExportDialog::setDefaultSize(int width, int height) {
+			screenWidth = width;
+			screenHeight = height;
+			double screenAspect = width/(double)height;
+			
 			lockAspectRatioCheckBox->setChecked(false);
 			heightSpinBox->setValue(height);
+			Persistence::Restore(heightSpinBox);
 			widthSpinBox->setValue(width);
-			aspectRatio = width/(double)height;
+			Persistence::Restore(widthSpinBox);
+			aspectRatio = widthSpinBox->value()/(double)heightSpinBox->value();
 			lockAspectRatioCheckBox->setChecked(true);
+			Persistence::Restore(lockAspectRatioCheckBox);
+
+			if (lockAspectRatioCheckBox->isChecked()) {
+				if ((int)(widthSpinBox->value() / screenAspect) != heightSpinBox->value()) {
+					WARNING("Aspect ratio has changed. Keeping width fixed, changing height.");
+					height = (int)(widthSpinBox->value() / screenAspect);
+					heightSpinBox->blockSignals(true);
+					heightSpinBox->setValue(height);
+					heightSpinBox->blockSignals(false);
+					aspectRatio = width/(double)height;
+			
+				}
+			}
+
 			lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
 
 		}
@@ -235,7 +257,7 @@ namespace StructureSynth {
 			templateComboBox->setSizePolicy(sizePolicy);
 			connect(templateComboBox, SIGNAL(currentIndexChanged(const QString &)), 
 				this, SLOT(templateChanged(const QString &)));
-
+			
 
 			horizontalLayout->addWidget(templateComboBox);
 
@@ -340,6 +362,7 @@ namespace StructureSynth {
 			uniqueCheckBox = new QCheckBox(templateOutputGroupBox);
 			uniqueCheckBox->setObjectName(QString::fromUtf8("uniqueCheckBox"));
 			connect(uniqueCheckBox, SIGNAL(toggled(bool)), this, SLOT(uniqueToggled(bool)));
+			Persistence::Restore(uniqueCheckBox);
 
 			horizontalLayout_3->addWidget(uniqueCheckBox);
 
@@ -348,6 +371,7 @@ namespace StructureSynth {
 
 			clipboardRadioButton = new QRadioButton(templateOutputGroupBox);
 			clipboardRadioButton->setObjectName(QString::fromUtf8("clipboardRadioButton"));
+			Persistence::Restore(clipboardRadioButton);
 
 			connect(clipboardRadioButton, SIGNAL(toggled(bool)), this, SLOT(fileRadioButtonToggled(bool)));
 			
@@ -379,9 +403,11 @@ namespace StructureSynth {
 			heightSpinBox = new QSpinBox(templateOutputGroupBox);
 			heightSpinBox->setObjectName(QString::fromUtf8("heightSpinBox"));
 			heightSpinBox->setRange(0,20000);
+			Persistence::Restore(widthSpinBox); 
 			connect(heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightChanged(int)));
 			connect(widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthChanged(int)));
 
+			
 			horizontalLayout_5->addWidget(heightSpinBox);
 
 			line = new QFrame(templateOutputGroupBox);
@@ -394,6 +420,7 @@ namespace StructureSynth {
 
 			lockAspectRatioCheckBox = new QCheckBox(templateOutputGroupBox);
 			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("lockAspectRatioCheckBox"));
+			Persistence::Restore(lockAspectRatioCheckBox);
 			//connect(lockAspectRatioCheckBox, SIGNAL(valueChanged()), this, SLOT(lockAspectChanged()));
 
 
@@ -418,6 +445,7 @@ namespace StructureSynth {
 			verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
 			runAfterCheckBox = new QCheckBox(postProcessingGroupBox);
 			runAfterCheckBox->setObjectName(QString::fromUtf8("runAfterCheckBox"));
+			Persistence::Restore(runAfterCheckBox);
 			
 			verticalLayout_4->addWidget(runAfterCheckBox);
 
@@ -514,6 +542,7 @@ namespace StructureSynth {
 
 			connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
+			uniqueToggled(true);
 
 			//QMetaObject::connectSlotsByName(this);
 		} // setupUi
@@ -536,6 +565,9 @@ namespace StructureSynth {
 				}
 			}
 
+			Persistence::Restore(templateComboBox);
+
+
 
 		}
 
@@ -546,6 +578,8 @@ namespace StructureSynth {
 			if (fileName.isEmpty()) {
 				return;
 			}
+			fileNameLineEdit->setText(fileName);
+			updateUniqueFileName("");
 		}
 
 		void TemplateExportDialog::templateChanged(const QString& s) {
@@ -672,6 +706,7 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::updateUniqueFileName(const QString &) {
+			uniqueFileName = "";
 			QString uname = "";
 			QString file = fileNameLineEdit->text();
 			QFileInfo fi(file);
@@ -706,6 +741,7 @@ namespace StructureSynth {
 						testName = stripped + "-" + QString::number(number++) + "." + extension;
 					}
 					uname = testName;
+					uniqueFileName = uname;
 				}
 				
 				uniqueCheckBox->setText(QString("Add unique ID to filename (%1)").arg(uname));
@@ -730,7 +766,7 @@ namespace StructureSynth {
 			templateOutputGroupBox->setTitle(QApplication::translate("Dialog", "Template Output", 0, QApplication::UnicodeUTF8));
 			fileRadioButton->setText(QApplication::translate("Dialog", "File:", 0, QApplication::UnicodeUTF8));
 			filePushButton->setText(QApplication::translate("Dialog", "File...", 0, QApplication::UnicodeUTF8));
-			uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename", 0, QApplication::UnicodeUTF8));
+			//uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename", 0, QApplication::UnicodeUTF8));
 			clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0, QApplication::UnicodeUTF8));
 			postProcessingGroupBox->setTitle(QApplication::translate("Dialog", "Post Processing", 0, QApplication::UnicodeUTF8));
 			runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0, QApplication::UnicodeUTF8));
@@ -761,6 +797,10 @@ namespace StructureSynth {
 
 		void TemplateExportDialog::undo() {
 			INFO("UNDO");
+
+			templateTextEdit->setText(
+			currentTemplate.getFullText());
+
 			undoButton->setEnabled(false);
 			saveModificationsButton->setEnabled(false);
 		}
@@ -817,8 +857,47 @@ namespace StructureSynth {
 		void TemplateExportDialog::accept() {
 			INFO("Accept");
 			// to clipboard...
-			INFO("Rendering to clipboard...");
-			mainWindow->templateRender("", &currentTemplate);
+
+
+
+
+			if (fileRadioButton->isChecked()) {
+				QString fileName = "";
+
+				if (uniqueCheckBox->isChecked()) {
+					fileName = uniqueFileName;
+				} else {
+					fileName = fileNameLineEdit->text();
+				}
+
+				
+				if (QFileInfo(fileName).exists()) {
+					if (QMessageBox::Ok != QMessageBox::warning (this, "File exists!", 
+						QString("Overwrite file:\r\n%1").arg(QFileInfo(fileName).absoluteFilePath()), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel))
+					{
+						return;
+					}
+				}
+
+				mainWindow->templateRender(fileName, &currentTemplate);
+
+			} else {
+				// Save to clipboard.
+				INFO("Rendering to clipboard...");
+				mainWindow->templateRender("", &currentTemplate);
+			}
+
+			// Persist changes to UI...
+			Persistence::Store(fileNameLineEdit);
+			Persistence::Store(lockAspectRatioCheckBox); // checkb
+			Persistence::Store(widthSpinBox); // spin
+			Persistence::Store(heightSpinBox); // spin
+			Persistence::Store(uniqueCheckBox); // checkb
+			Persistence::Store(clipboardRadioButton);
+			Persistence::Store(templateComboBox);
+			Persistence::Store(runAfterCheckBox);
+			
+
 			QDialog::accept();
 		};
 

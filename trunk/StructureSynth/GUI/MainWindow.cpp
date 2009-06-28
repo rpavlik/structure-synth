@@ -558,8 +558,9 @@ namespace StructureSynth {
 			//renderMenu->addAction(povRenderAction);
 
 			// Scan render templates...
-			QDir miscDir(getTemplateDir());
 			QStringList filters;
+			/*
+			QDir miscDir(getTemplateDir());
 			filters << "*.rendertemplate";
 			miscDir.setNameFilters(filters);
 			if (!miscDir.exists()) {
@@ -567,6 +568,7 @@ namespace StructureSynth {
 				a->setEnabled(false);
 				renderMenu->addAction(a);
 			} else {
+				
 				QStringList sl = miscDir.entryList();
 				QMenu* templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to Clipboard");
 				for (int i = 0; i < sl.size(); i++) {
@@ -583,7 +585,9 @@ namespace StructureSynth {
 					connect(a, SIGNAL(triggered()), this, SLOT(templateRenderToFile()));
 					templateMenu->addAction(a);
 				}
+				
 			}
+			*/
 
 			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
@@ -1172,8 +1176,7 @@ namespace StructureSynth {
 
 					rendering.setBackgroundColor(engine->getBackgroundColor());
 
-					INFO(QString("COlor:%1").arg(engine->getBackgroundColor().toString()));
-
+					
 					rendering.begin(); 
 
 					Preprocessor pp;
