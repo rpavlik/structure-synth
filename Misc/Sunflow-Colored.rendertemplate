@@ -1,4 +1,4 @@
-<template name="Sunflow" defaultExtension="Sunflow scene file (*.sc)">
+<template name="Sunflow" defaultExtension="Sunflow scene file (*.sc)" runAfter="C:\Users\mhc\Desktop\sunflow-bin-v0.07.2\sunflow\sunflow.bat $FILE">
     <description>
 A simple Sunflow render template, using one shader for each object. 
 The template uses ambient occlusion lightning, which means there is no need to worry about setting up light sources. 

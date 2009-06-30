@@ -1157,13 +1157,15 @@ namespace StructureSynth {
 			}
 		}
 
-		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate)
+		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, int width, int height)
 		{
 			
 				RandomStreams::SetSeed(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
 					QString text = "// Structure Synth Export. \r\n\r\n";
+					if (width == 0) width = engine->width();
+					if (height == 0) height = engine->height();
 					TemplateRenderer rendering(*myTemplate);
 					Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
 					cameraRight = cameraRight.normalize();
@@ -1172,7 +1174,7 @@ namespace StructureSynth {
 						engine->getCameraUp().normalize(), 
 						cameraRight,
 						engine->getCameraTarget(),
-						engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
+						width, height, width/(double)height, engine->getFOV());
 
 					rendering.setBackgroundColor(engine->getBackgroundColor());
 

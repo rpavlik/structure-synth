@@ -42,7 +42,7 @@ namespace StructureSynth {
 			MainWindow(const QString &fileName);
 			void setSeed(int randomSeed);
 			int getSeed();
-			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate);
+			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, int width = 0, int height = 0);
 		
 
 			static QString getExamplesDir();
