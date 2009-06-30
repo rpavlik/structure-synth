@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QSplitter>
 #include <QFileDialog>
+#include <QProcess>
 #include <QSyntaxHighlighter>
 
 #include "../../SyntopiaCore/Logging/ListWidgetLogger.h"
@@ -332,7 +333,8 @@ namespace StructureSynth {
 
 			fileNameLineEdit = new QLineEdit(templateOutputGroupBox);
 			fileNameLineEdit->setObjectName(QString::fromUtf8("TemplateExportDialog.fileNameLineEdit"));
-			fileNameLineEdit->setText(QApplication::translate("Dialog", "C:\\Output\\test.es", 0, QApplication::UnicodeUTF8));
+			QString initialFileName = QFileInfo("output.txt").absoluteFilePath();
+			fileNameLineEdit->setText(initialFileName);
 			Persistence::Restore(fileNameLineEdit);
 			connect(fileNameLineEdit, SIGNAL(textChanged(const QString &)),this, SLOT(updateUniqueFileName(const QString &)));
 
@@ -572,7 +574,7 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::selectFileName() {
-			QString filter = currentTemplate.getDefaultExtension();
+			QString filter = currentTemplate.getDefaultExtension() + ";;All Files (*.*)";
 			
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), fileNameLineEdit->text(), filter);
 			if (fileName.isEmpty()) {
@@ -622,6 +624,9 @@ namespace StructureSynth {
 				templateTextEdit->setText(
 					currentTemplate.getFullText());
 
+				if (!currentTemplate.getRunAfter().isEmpty()) {
+				afterCommandLineEdit->setText(currentTemplate.getRunAfter());
+				}
 					
 				undoButton->setEnabled(false);
 				saveModificationsButton->setEnabled(false);
@@ -770,7 +775,7 @@ namespace StructureSynth {
 			clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0, QApplication::UnicodeUTF8));
 			postProcessingGroupBox->setTitle(QApplication::translate("Dialog", "Post Processing", 0, QApplication::UnicodeUTF8));
 			runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0, QApplication::UnicodeUTF8));
-			afterCommandLineEdit->setText(QApplication::translate("Dialog", "C:\\sunflow\\sunflow.bat $FILE", 0, QApplication::UnicodeUTF8));
+			afterCommandLineEdit->setText(QApplication::translate("Dialog", "", 0, QApplication::UnicodeUTF8));
 			tabWidget->setTabText(tabWidget->indexOf(settingstab), QApplication::translate("Dialog", "Settings", 0, QApplication::UnicodeUTF8));
 			label_4->setText(QApplication::translate("Dialog", "Width:", 0, QApplication::UnicodeUTF8));
 			label_5->setText(QApplication::translate("Dialog", "Height:", 0, QApplication::UnicodeUTF8));
@@ -861,9 +866,9 @@ namespace StructureSynth {
 
 
 
+			QString fileName = "";
 			if (fileRadioButton->isChecked()) {
-				QString fileName = "";
-
+				
 				if (uniqueCheckBox->isChecked()) {
 					fileName = uniqueFileName;
 				} else {
@@ -879,12 +884,54 @@ namespace StructureSynth {
 					}
 				}
 
-				mainWindow->templateRender(fileName, &currentTemplate);
+				mainWindow->templateRender(fileName, &currentTemplate, widthSpinBox->value(), heightSpinBox->value());
 
 			} else {
 				// Save to clipboard.
 				INFO("Rendering to clipboard...");
-				mainWindow->templateRender("", &currentTemplate);
+				mainWindow->templateRender("", &currentTemplate, widthSpinBox->value(), heightSpinBox->value());
+			}
+
+			if (runAfterCheckBox->isChecked()) {
+				QString cmd = afterCommandLineEdit->text();
+				cmd = cmd.replace("$FILE", "\""+ QFileInfo(fileName).absoluteFilePath() + "\"");
+
+
+				bool inQuote = false;
+				QStringList args;
+				QString command;
+				int counter = 0;
+				QString buffer;
+				for (int i = 0; i < cmd.size(); ++i) {
+					 if (cmd.at(i) == QLatin1Char('"')) {
+						 inQuote = !inQuote;
+						 continue;
+					 }
+					 
+					 if (cmd.at(i) == ' ' && !inQuote) {
+						 if (counter == 0) {
+							 command = buffer;
+						 } else {
+							 args.append(buffer);
+						 }
+						 buffer = "";
+						 continue;
+					 }
+
+					 buffer += cmd.at(i);	
+				}
+				if (!buffer.isEmpty())  args.append(buffer);
+
+				INFO("Command: " + command);
+				INFO("Args: " + args.join(" "));
+				QString dir = QFileInfo(command).absolutePath();
+				INFO("Working Directory: " + dir);
+   
+				if (QProcess::startDetached(command, args, dir)) {
+					INFO("Started process");
+				} else {
+					WARNING("Failed to start process");
+				}
 			}
 
 			// Persist changes to UI...

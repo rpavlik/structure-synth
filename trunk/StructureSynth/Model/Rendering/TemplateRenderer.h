@@ -58,6 +58,7 @@ namespace StructureSynth {
 				QString getFullText() { return fullText; }
 				QString getName() { return name; }
 				QString getDefaultExtension() { return defaultExtension; }
+				QString getRunAfter() { return runAfter; }
 
 			private:
 				QMap<QString, TemplatePrimitive> primitives;
@@ -65,6 +66,7 @@ namespace StructureSynth {
 				QString name;
 				QString defaultExtension;
 				QString fullText;
+				QString runAfter;
 			};
 
 			/// A renderer implementation based on the SyntopiaCore POV widget.

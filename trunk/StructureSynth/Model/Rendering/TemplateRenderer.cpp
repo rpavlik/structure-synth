@@ -80,6 +80,12 @@ namespace StructureSynth {
 					} else {
 						this->defaultExtension = "Unknown file type (*.txt)";
 					}
+
+					if (ne.hasAttribute("runAfter")) {
+						this->runAfter = ne.attribute("runAfter");
+					} else {
+						this->runAfter = "";
+					}
 				}
 
 				while(!n.isNull()) {

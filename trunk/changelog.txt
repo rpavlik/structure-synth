@@ -3,18 +3,16 @@ Changelog for Structure Synth:
 -------------------------
 Pending:
 Template Dialog
-- Add 'runAfter' tag to templates.
 - Template Path Change.
-- Run the following command functionality.
-- XML modifications.
-  - Save mods
-  - Detects mods
-  - Undo mods
 - Post modifications. 
-- OK button functionality.
+- '*2' / '/2' / 'D'
+- Fix A.R. warning error.
 
+30 Jun 09 [MHC] The 'runAfter' command works now. Minor changes.
+[2h]
 
- - Filename in QFileDialog should support *.*
+28 Jun 09 [MHC] Persistence work, file saving. The template export dialog is working now.
+[2½h]
 
 18 Jun 09 [MHC] Optional depth-first recursion (use 'set recursion depth') - made for playing around with CSG in PovRay.
 [2h]			A new dummy primitive called 'template' which can be used for generic purposes (such as CSG).
