@@ -1168,7 +1168,8 @@ namespace StructureSynth {
 			}
 		}
 
-		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, int width, int height)
+		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, 
+			int width, int height, bool postModify)
 		{
 			
 				RandomStreams::SetSeed(getSeed());
@@ -1219,9 +1220,40 @@ namespace StructureSynth {
 						INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
 					} 
 
+					QString output = rendering.getOutput();
+
+					if (postModify) {
+						// Post modify output.
+						QDialog* d = new QDialog(this);
+						QVBoxLayout* vl = new QVBoxLayout(d);
+
+						d->resize(800,600);
+						QTextEdit* te = new QTextEdit(d);
+						vl->addWidget(te);
+						te->setText(output);
+
+						
+						
+						QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+							| QDialogButtonBox::Cancel);
+						vl->addWidget(buttonBox);
+						
+
+						connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+						connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+
+						
+						if (d->exec() == QDialog::Accepted) {
+							output = te->toPlainText();
+						} else {
+							WARNING("User cancelled...");
+							return;
+						}
+					}
+
 					if (fileName.isEmpty()){
 						QClipboard *clipboard = QApplication::clipboard();
-						clipboard->setText(rendering.getOutput()); 
+						clipboard->setText(output); 
 						INFO("Done...");
 						INFO("Script is now copied to the clipboard");
 					} else {
@@ -1237,7 +1269,7 @@ namespace StructureSynth {
 
 						QTextStream out(&file);
 						QApplication::setOverrideCursor(Qt::WaitCursor);
-						out << rendering.getOutput();
+						out << output;
 						QApplication::restoreOverrideCursor();
 						INFO("File saved.");
 					}

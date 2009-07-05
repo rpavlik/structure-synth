@@ -1,5 +1,5 @@
-<template name="Sunflow" defaultExtension="Sunflow scene file (*.sc)" runAfter="C:\Users\mhc\Desktop\sunflow-bin-v0.07.2\sunflow\sunflow.bat $FILE">
-    <description>
+<template defaultExtension="Sunflow scene file (*.sc)" name="Sunflow" runAfter='C:\Users\mhc\Desktop\sunflow-bin-v0.07.2\sunflow\sunflow.bat "$FILE" -o "$FILE.png"' >
+ <description>
 A simple Sunflow render template, using one shader for each object. 
 The template uses ambient occlusion lightning, which means there is no need to worry about setting up light sources. 
 
@@ -7,8 +7,7 @@ This template is a good choice for trying out Sunflow.
    
 Based on a template by Tom Beddard ('subblue')
 	</description>
-	<primitive name="begin">
-	    <![CDATA[
+ <primitive name="begin" ><![CDATA[
 %photons {
 %  caustics 10000000 kd 64 0.5
 %}
@@ -90,17 +89,11 @@ object {
    normals none
    uvs none
 }
-		]]>
-	</primitive>
-	
-	<primitive name="end">
-	    <![CDATA[
+		]]></primitive>
+ <primitive name="end" ><![CDATA[
 
-		]]>
-	</primitive>
-
-	<primitive name="box">
-		<![CDATA[
+		]]></primitive>
+ <primitive name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type amb-occ
@@ -116,11 +109,8 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-	
-	<primitive name="sphere">
-		<![CDATA[
+		]]></primitive>
+ <primitive name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -133,6 +123,5 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
+		]]></primitive>
 </template>
