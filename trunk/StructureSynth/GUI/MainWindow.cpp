@@ -6,6 +6,8 @@
 #include <QImageWriter>
 #include <QTextBlockUserData>
 #include <QStack>
+#include <QImage>
+#include <QPixmap>
 
 #include "MainWindow.h"
 #include "VariableEditor.h"
@@ -23,6 +25,7 @@
 #include "../../StructureSynth/JavaScriptSupport/JavaScriptParser.h"
 
 #include "../../SyntopiaCore/Math/Vector3.h"
+#include "../../SyntopiaCore/Math/Random.h"
 #include "../../SyntopiaCore/Math/Matrix4.h"
 
 using namespace SyntopiaCore::Math;
@@ -815,6 +818,14 @@ namespace StructureSynth {
 				return;
 			}
 
+			if (getTextEdit()->toPlainText().startsWith("#easter", Qt::CaseInsensitive)) {
+				// This is an easter egg...
+				QString text = getTextEdit()->toPlainText();
+				text = text.remove("#easter", Qt::CaseInsensitive);
+				parseEaster(text);
+				return;
+			}
+
 			if (autoIncrementCheckbox->isChecked()) updateRandom();
 			RandomStreams::SetSeed(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
@@ -1408,6 +1419,199 @@ namespace StructureSynth {
 			for (int j = numRecentFiles; j < MaxRecentFiles; ++j) recentFileActions[j]->setVisible(false);
 
 			recentFileSeparator->setVisible(numRecentFiles > 0);
+		}
+
+		namespace {
+			// Very simple complex numbers.
+			class Complex {
+			public:
+				Complex(double r, double i) : r(r), i(i) {};
+				Complex() : r(0), i(0) {};
+				
+				Complex operator*(const double& rhs) const { return Complex(r*rhs, i*rhs); }
+				Complex operator*(const Complex& rhs) const { return Complex(r*rhs.r-i*rhs.i,r*rhs.i+i*rhs.r); }
+				Complex operator+(const Complex& rhs) const { return Complex(r+rhs.r,i+rhs.i); }
+				double sqrLength() const { return r*r+i*i; } 
+				double length2() const { return fabs(r)>fabs(i) ? fabs(r) : fabs(i); } 
+				Complex raisedTo(Complex power) const {
+					double a = r; double b = i;
+					double c = power.r; double d = power.i;
+					double p = sqrt(a*a + b*b);
+					double t = atan2(b,a); // is this correct quadrant?
+					double factor = pow(p,c)*exp(-d*t);
+					double r = factor*cos(c*t + d*log(p));
+					double i = factor*sin(c*t + d*log(p));
+					return Complex(r,i);
+				}
+				QString toString() { return QString("(%1,%2)").arg(r).arg(i); } 
+
+				double r;
+				double i;
+			};
+		}
+
+		namespace {
+			// Could we make a match("Syntax: %1, %2, %3").arg(double*).arg(int*).arg();
+			int match(QString s, QString m, double* a, double* b = 0, double* c = 0, double* d = 0) {
+				m.replace("(", "\\(");
+				m.replace(")", "\\)");
+				m.replace("^", "\\^");
+				m.replace("*", "\\*");
+				m.replace("@", "([-+]?[0-9]*\\.?[0-9]+)"); // 
+				QRegExp rx(m);
+				int i = rx.indexIn(s);
+				if (i >= 0) {
+					QStringList list = rx.capturedTexts();
+					if (list.count()>1 && a) (*a) = list[1].toDouble();
+					if (list.count()>2 && b) (*b) = list[2].toDouble();
+					if (list.count()>3 && c) (*c) = list[3].toDouble();
+					if (list.count()>4 && d) (*d) = list[4].toDouble();
+					INFO(QString("Captured %1 on %2, %3").arg(list.count()).arg(m).arg(s));
+					return list.count()-1;
+				} 
+				return -1;
+			}
+
+			struct Term {
+				Term() {};
+				Term(Complex f, Complex e) : factor(f), exponent(e) {};
+				Complex factor;
+				Complex exponent;
+			};
+		}
+
+		void MainWindow::parseEaster(QString text) {
+			QStringList l = text.split("\n");
+
+			// Formula: z <- z0 * z^z + C
+			// Size: 800x800
+			// View: (-2,-2) -> (2,2)
+			// C: (-0.375,0)
+			// Z0: 
+			
+			double dw = 100;
+			double dh = 100;
+			double dMax = 10;
+			double x0 = -1;
+			double y0 = -1;
+			double x1 = 1;
+			double y1 = 1;
+			double cR = -0.375;
+			double cI = 0;
+			double a0 = 0;
+			double a1 = 0;
+			double a2 = 0;
+			double a3 = 0;
+			QList<Term> terms;
+			foreach (QString s, l) {
+				if (match(s,"Size: @x@", &dw, &dh) >=0) {
+				} else if (match(s,"View: (@,@) -> (@,@)", &x0, &y0, &x1, &y1) >= 0) {
+				} else if (match(s,"Term: (@,@)", &cR , &cI) >= 0) {
+				} else if (match(s,"Term: (@,@)*Z^(@,@)", &a0,&a1,&a2,&a3) >= 0) {
+					INFO("1) Added term:" + s);
+					Complex c1(a0,a1); 
+					Complex c2(a2,a3);
+					terms.append(Term(c1,c2));
+				} else if (match(s,"Term: Z^(@,@)", &a2,&a3) >= 0) {
+					INFO("2) Added term:" + s);
+					Complex c1(1,0); 
+					Complex c2(a2,a3);
+					terms.append(Term(c1,c2));
+				} else if (match(s,"Term: Z^@", &a3) >= 0) {
+					INFO("3) Added term:" + s);
+					Complex c1(1,0); 
+					Complex c2(a3,0);
+					terms.append(Term(c1,c2));
+				} else if (match(s,"Term: @*Z^@", &a0, &a3) >= 0) {
+					INFO("3) Added term:" + s);
+					Complex c1(a0,0); 
+					Complex c2(a3,0);
+					terms.append(Term(c1,c2));
+				} else if (match(s,"Term: @*Z^Z", &a0) >= 0) {
+					INFO("4) Added term:" + s);
+					Complex c2(0,0); 
+					Complex c1(a0,0);
+					terms.append(Term(c1,c2));
+				} else if (match(s,"MaxIter: @", &dMax) >= 0) {
+				} else {
+					WARNING("Could not match: "+s);
+				}
+				
+			};
+			int w = (int)dw;
+			int h = (int)dh;
+			int maxGen = (int)dMax;
+
+			Complex c(cR,cI);
+					
+			QDialog* d = new QDialog(this);
+			d->resize(w,h);
+			
+			QImage im(w,h, QImage::Format_RGB32);
+
+			QString termS = "Term: ";
+			for (int i = 0; i < terms.count(); i++) {
+				termS += QString("%1*Z^%2").arg(terms[i].factor.toString()).arg(terms[i].exponent.toString());
+			}
+			termS += " " + c.toString();
+			INFO(termS);
+
+			RandomNumberGenerator rg;
+
+			for ( int i = 0; i < w; i++) {
+				for ( int j = 0; j < h; j++) {
+					double x = (i)/(double)w;
+					double y = (j)/(double)h;
+					x = x*(x1-x0)+x0;
+					y = y*(y1-y0)+y0;
+					//Complex z;
+					//Complex c(x,y);
+					
+					Complex z(x,y);
+					//Complex c(-0.62772,0.42193);
+					
+					
+					int gen = 0;
+					//z=c;
+
+
+					
+
+					Complex z0 = z;
+					while (gen++ < maxGen) {
+						//z=z.raisedTo(Complex(1.75,0))+c;
+						//z=z.raisedTo(z)+ z*z*z*z*z +c;
+						
+						z = c;
+						for (int i = 0; i < terms.count(); i++) {
+							if( terms[i].exponent.r == 0 && terms[i].exponent.i == 0) {
+								z = z + terms[i].factor * z0.raisedTo(z0);
+							} else {
+								z = z + terms[i].factor * z0.raisedTo(terms[i].exponent);
+							}
+						}
+						z0 = z;
+						
+						
+						if (z.sqrLength() > 16.0) break;
+					}
+
+					if (z.sqrLength() > 16.0) {
+						im.setPixel(i,j, qRgb((gen % 2)*250 ,(gen % 20)*15,(gen*255)/maxGen));
+					} else {
+						im.setPixel(i,j, qRgb(0,0,0));
+					}
+					
+					
+				}
+			}
+			QPixmap p = QPixmap::fromImage(im);
+			QLabel* lb = new QLabel(d);
+			lb->setPixmap(p);
+			//d->layout()->addWidget(l);
+			d->show();
+			//d->setSize(w,h);
+
 		}
 
 	}

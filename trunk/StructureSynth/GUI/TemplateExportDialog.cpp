@@ -258,6 +258,11 @@ namespace StructureSynth {
 			templateComboBox->setSizePolicy(sizePolicy);
 			connect(templateComboBox, SIGNAL(currentIndexChanged(const QString &)), 
 				this, SLOT(templateChanged(const QString &)));
+
+			if (!Persistence::Contains(templateComboBox->objectName())) {
+				Persistence::Put(templateComboBox->objectName(), "Sunflow-Colored");
+			}
+			
 			
 
 			horizontalLayout->addWidget(templateComboBox);
@@ -461,7 +466,7 @@ namespace StructureSynth {
 			afterCommandLineEdit->setObjectName(QString::fromUtf8("afterCommandLineEdit"));
 				connect(runAfterCheckBox, SIGNAL(toggled(bool)), afterCommandLineEdit, SLOT(setEnabled(bool)));
 			
-				afterCommandLineEdit->setEnabled(false);
+			if (!runAfterCheckBox->isChecked())	afterCommandLineEdit->setEnabled(false);
 
 			horizontalLayout_4->addWidget(afterCommandLineEdit);
 
@@ -546,18 +551,27 @@ namespace StructureSynth {
 
 			uniqueToggled(true);
 
+	//		connect(runAfterLineEdit, SIGNAL(textChanged(const QString &)),this, SLOT(updateUniqueFileName(const QString &)));
+
 			//QMetaObject::connectSlotsByName(this);
 		} // setupUi
 
 		void TemplateExportDialog::setTemplatePath(QString templatePath) {
+
+			if (Persistence::Contains("TemplateExportDialog::TemplatePath")) {
+				INFO("Custom template path chosen: " + templatePath);
+				templatePath = Persistence::Get("TemplateExportDialog::TemplatePath").toString();
+			}
 
 			// Scan render templates...
 			QDir dir(templatePath);
 			QStringList filters;
 			filters << "*.rendertemplate";
 			dir.setNameFilters(filters);
+			bool failed = false;
 			if (!dir.exists()) {
 				WARNING("Unable to locate: "+dir.absolutePath());
+				failed = true;
 			} else {
 				QStringList sl = dir.entryList();
 				templateComboBox->clear();
@@ -565,6 +579,16 @@ namespace StructureSynth {
 					templateComboBox->insertItem(10000, sl[i].remove(".rendertemplate", Qt::CaseInsensitive), 
 						dir.absoluteFilePath(sl[i]));
 				}
+
+				if (sl.size() == 0) {
+					failed = true;
+				}
+			}
+			if (failed) {
+				templateTextEdit->setText("");
+				modifiedTemplate = "";
+				descriptionTextBrowser->setText("Unable to read templates from: " + templatePath);
+				primitivesTableWidget->clear();
 			}
 
 			Persistence::Restore(templateComboBox);
@@ -585,15 +609,14 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::templateChanged(const QString& s) {
-			INFO("Template Changed");
 			int id = templateComboBox->currentIndex();
+
 			if (id<0) return;
 
-			if (s.isEmpty()) {
-				WARNING("Forced call...");
-			}
+			
 
 			if (!s.isEmpty() && saveModificationsButton->isEnabled()) {
+				// TODO:
 				WARNING("You have lost your changes...");
 				modifiedTemplate = "";
 			}
@@ -614,7 +637,6 @@ namespace StructureSynth {
 					Template t(file);
 					currentTemplate = t;
 				} else {
-					INFO("Using modified template");
 					Template t(modifiedTemplate);
 					modifiedTemplate = "";
 					currentTemplate = t;
@@ -670,7 +692,6 @@ namespace StructureSynth {
 				primitivesTableWidget->setRowCount(0);
 				
 				WARNING(e.getMessage());
-				INFO(QString("Setting text to modTem: %1").arg(modifiedTemplate.count()));
 				templateTextEdit->setText(modifiedTemplate);	
 				descriptionTextBrowser->setText(e.getMessage());
 		
@@ -681,9 +702,7 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::tabChanged(int i) {
-			INFO(QString::number(i));
 			if ((i == 0) && saveModificationsButton->isEnabled()) {
-				INFO("Must recalc");
 				modifiedTemplate = templateTextEdit->toPlainText();
 				templateChanged("");
 			}
@@ -801,8 +820,7 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::undo() {
-			INFO("UNDO");
-
+			
 			templateTextEdit->setText(
 			currentTemplate.getFullText());
 
@@ -811,7 +829,6 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::saveModifications() {
-			INFO("SAVE");
 			int id = templateComboBox->currentIndex();
 			if (id<0) return;
 			QVariant q = templateComboBox->itemData(id);
@@ -849,23 +866,25 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::textChanged() {
-			//INFO("Text Changed");
 			undoButton->setEnabled(true);
 			saveModificationsButton->setEnabled(true);
 
 		}
 
 		void TemplateExportDialog::changeTemplatePath() {
-			INFO("Change path");
+			QString fileName = QFileDialog::getExistingDirectory(
+				this, tr("Choose Template folder"),
+                 "",
+                 QFileDialog::ShowDirsOnly      | QFileDialog::DontResolveSymlinks);
+			if (fileName.isEmpty()) {
+				return;
+			}
+			Persistence::Put("TemplateExportDialog::TemplatePath", fileName);
+			setTemplatePath("");
 		}
 
 		void TemplateExportDialog::accept() {
-			INFO("Accept");
-			// to clipboard...
-
-
-
-
+			
 			QString fileName = "";
 			if (fileRadioButton->isChecked()) {
 				
@@ -894,7 +913,7 @@ namespace StructureSynth {
 
 			if (runAfterCheckBox->isChecked()) {
 				QString cmd = afterCommandLineEdit->text();
-				cmd = cmd.replace("$FILE", "\""+ QFileInfo(fileName).absoluteFilePath() + "\"");
+				cmd = cmd.replace("$FILE", QFileInfo(fileName).absoluteFilePath());
 
 
 				bool inQuote = false;
@@ -909,7 +928,7 @@ namespace StructureSynth {
 					 }
 					 
 					 if (cmd.at(i) == ' ' && !inQuote) {
-						 if (counter == 0) {
+						 if (counter++ == 0) {
 							 command = buffer;
 						 } else {
 							 args.append(buffer);
@@ -949,7 +968,6 @@ namespace StructureSynth {
 		};
 
 		void TemplateExportDialog::reject() {
-			INFO("reject");
 			QDialog::reject();
 		};
 			
