@@ -124,7 +124,7 @@ namespace StructureSynth {
 			QSpacerItem *horizontalSpacer_3;
 			QPushButton *saveModificationsButton;
 			QPushButton *undoButton;
-			QCheckBox *modifyOutputCheckBox;
+			QCheckBox *	modifyOutputCheckBox;
 			QDialogButtonBox *buttonBox;
 			QString modifiedTemplate;
 			MainWindow* mainWindow;

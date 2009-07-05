@@ -236,7 +236,7 @@ namespace StructureSynth {
 		void TemplateExportDialog::setupUi()
 		{
 			if (objectName().isEmpty())
-				setObjectName(QString::fromUtf8("Dialog"));
+				setObjectName(QString::fromUtf8("TemplateExportDialog"));
 			resize(544, 600);
 			setSizeGripEnabled(true);
 			setModal(true);
@@ -250,7 +250,7 @@ namespace StructureSynth {
 			horizontalLayout->addWidget(label);
 
 			templateComboBox = new QComboBox(this);
-			templateComboBox->setObjectName(QString::fromUtf8("templateComboBox"));
+			templateComboBox->setObjectName(QString::fromUtf8("TemplateExportDialog.templateComboBox"));
 			QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 			sizePolicy.setHorizontalStretch(0);
 			sizePolicy.setVerticalStretch(0);
@@ -367,7 +367,7 @@ namespace StructureSynth {
 			horizontalLayout_3->addItem(horizontalSpacer);
 
 			uniqueCheckBox = new QCheckBox(templateOutputGroupBox);
-			uniqueCheckBox->setObjectName(QString::fromUtf8("uniqueCheckBox"));
+			uniqueCheckBox->setObjectName(QString::fromUtf8("TemplateExportDialog.uniqueCheckBox"));
 			connect(uniqueCheckBox, SIGNAL(toggled(bool)), this, SLOT(uniqueToggled(bool)));
 			Persistence::Restore(uniqueCheckBox);
 
@@ -377,7 +377,7 @@ namespace StructureSynth {
 			verticalLayout_2->addLayout(horizontalLayout_3);
 
 			clipboardRadioButton = new QRadioButton(templateOutputGroupBox);
-			clipboardRadioButton->setObjectName(QString::fromUtf8("clipboardRadioButton"));
+			clipboardRadioButton->setObjectName(QString::fromUtf8("TemplateExportDialog.clipboardRadioButton"));
 			Persistence::Restore(clipboardRadioButton);
 
 			connect(clipboardRadioButton, SIGNAL(toggled(bool)), this, SLOT(fileRadioButtonToggled(bool)));
@@ -398,7 +398,7 @@ namespace StructureSynth {
 
 			widthSpinBox = new QSpinBox(templateOutputGroupBox);
 			widthSpinBox->setRange(0,20000);
-			widthSpinBox->setObjectName(QString::fromUtf8("widthSpinBox"));
+			widthSpinBox->setObjectName(QString::fromUtf8("TemplateExportDialog.widthSpinBox"));
 
 			horizontalLayout_5->addWidget(widthSpinBox);
 
@@ -408,8 +408,9 @@ namespace StructureSynth {
 			horizontalLayout_5->addWidget(label_5);
 
 			heightSpinBox = new QSpinBox(templateOutputGroupBox);
-			heightSpinBox->setObjectName(QString::fromUtf8("heightSpinBox"));
+			heightSpinBox->setObjectName(QString::fromUtf8("TemplateExportDialog.heightSpinBox"));
 			heightSpinBox->setRange(0,20000);
+			Persistence::Restore(heightSpinBox); 
 			Persistence::Restore(widthSpinBox); 
 			connect(heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightChanged(int)));
 			connect(widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthChanged(int)));
@@ -426,7 +427,7 @@ namespace StructureSynth {
 			horizontalLayout_5->addWidget(line);
 
 			lockAspectRatioCheckBox = new QCheckBox(templateOutputGroupBox);
-			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("lockAspectRatioCheckBox"));
+			lockAspectRatioCheckBox->setObjectName(QString::fromUtf8("TemplateExportDialog.lockAspectRatioCheckBox"));
 			Persistence::Restore(lockAspectRatioCheckBox);
 			//connect(lockAspectRatioCheckBox, SIGNAL(valueChanged()), this, SLOT(lockAspectChanged()));
 
@@ -451,7 +452,7 @@ namespace StructureSynth {
 			verticalLayout_4 = new QVBoxLayout(postProcessingGroupBox);
 			verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
 			runAfterCheckBox = new QCheckBox(postProcessingGroupBox);
-			runAfterCheckBox->setObjectName(QString::fromUtf8("runAfterCheckBox"));
+			runAfterCheckBox->setObjectName(QString::fromUtf8("TemplateExportDialog.runAfterCheckBox"));
 			Persistence::Restore(runAfterCheckBox);
 			
 			verticalLayout_4->addWidget(runAfterCheckBox);
@@ -525,7 +526,9 @@ namespace StructureSynth {
 			verticalLayout_5->addLayout(horizontalLayout_6);
 
 			modifyOutputCheckBox = new QCheckBox(advancedTab);
-			modifyOutputCheckBox->setObjectName(QString::fromUtf8("modifyOutputCheckBox"));
+			modifyOutputCheckBox->setObjectName(QString::fromUtf8("TemplateExportDialog.modifyOutputCheckBox"));
+
+			Persistence::Restore(modifyOutputCheckBox);
 
 			verticalLayout_5->addWidget(modifyOutputCheckBox);
 
@@ -903,12 +906,12 @@ namespace StructureSynth {
 					}
 				}
 
-				mainWindow->templateRender(fileName, &currentTemplate, widthSpinBox->value(), heightSpinBox->value());
+				mainWindow->templateRender(fileName, &currentTemplate, widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
 
 			} else {
 				// Save to clipboard.
 				INFO("Rendering to clipboard...");
-				mainWindow->templateRender("", &currentTemplate, widthSpinBox->value(), heightSpinBox->value());
+				mainWindow->templateRender("", &currentTemplate, widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
 			}
 
 			if (runAfterCheckBox->isChecked()) {
@@ -962,6 +965,7 @@ namespace StructureSynth {
 			Persistence::Store(clipboardRadioButton);
 			Persistence::Store(templateComboBox);
 			Persistence::Store(runAfterCheckBox);
+			Persistence::Store(modifyOutputCheckBox);
 			
 
 			QDialog::accept();
