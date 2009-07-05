@@ -20,8 +20,11 @@ namespace SyntopiaCore {
 		public:
 			static void Store(QWidget* widget, QString storageName = QString());
 			static void Restore(QWidget* widget, QString storageName = QString());
+			static bool Contains(QString storageName);
+			static QVariant Get(QString storageName);
+			static void Put(QString storageName, QVariant value);
 		private:
-			static void Manage(QWidget* widget, QString storageName, bool store);
+			static QMap<QString, QVariant>& GetStore();
 		};
 
 
