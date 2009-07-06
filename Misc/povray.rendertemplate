@@ -2,6 +2,8 @@
  <description>
 A rough POV-Ray export template.
 Notice that the camera position is not handled correctly in all cases yet.
+
+Template by Syntopia.
 </description>
  <primitive name="begin" ><![CDATA[
 // Structure Synth Pov Ray Export. 

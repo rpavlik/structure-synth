@@ -25,7 +25,7 @@ Version 0.5: 'Graf Zeppelin' [DONE]
 + Add 'Reset button' (for OpenGL view)
 + Create a build (resolve dependencies)
 
-Version 0.7: 'Nostromo'
+Version 0.7: 'Nostromo' [DONE]
 -----------------------
 + Full Screen
 + Tabbed interface
@@ -36,7 +36,7 @@ Version 0.7: 'Nostromo'
 + Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', 'Full screen'.
 + Linux testing (should compile with minimum of error on Linux)
 
-Version 0.8: 'Exonautica'
+Version 0.8: 'Exonautica' [DONE]
 -----------------------------------
 Main Focus: Template rendering
 + reproducibility -> control of random seed, 
@@ -44,11 +44,11 @@ Main Focus: Template rendering
 + Add Template Renderer (user customizable text templats)
 + Splash screen.
 
-Version 0.8.5: 'Exonautica Reloaded'
+Version 0.8.5: 'Exonautica Reloaded' [DONE]
 ------------------------------------
 + Bug Fixes 
  
-Version 0.9: 'Kolberger Heide' (or 'Glasnost')
+Version 0.9: 'Glasnost' [DONE]
 ----------------------------------------------
 + '#define varname value' (preprocessor constant definitions)
 + save view as eisenscript code.
@@ -57,17 +57,26 @@ Version 0.9: 'Kolberger Heide' (or 'Glasnost')
 + Export view settings to Template Renderers 
 
 
-Version 1.0: 'Potemkin'
+Version 0.9.5: 'Haiku' [DONE]
 -------------------------------
 + Drag'n'Drop of EisenScript files.
 + Fix PovRay template system (Almost!)
 + Template bg color. 
 ? GUI for '#define consts' for exploring variations. (In progress)
-+ Preferences (saving with QProperties) [For what?]
+
+Version 1.0.0: 'Totem' or 'Potemkin'
+-------------------------------
++ Template Export Dialog
++ Template Cleanup
++ Depth-First Recursion
 - Packaging: Icons, Eula, file associations.
 
 Version 1.1
 -----------
+- Option to include EisenScript in TemplateOutput: {EisenScript}
+- Installers (for Windows at least - using InnoSetup)
+- Ellipsoid object. (as of now spheres are always isotropic]
+
 
 Version 1.5: '?'
 ----------------
@@ -75,7 +84,6 @@ Version 1.5: '?'
 - VRML/OBJ Template (many requests)
 ? 'Zoom to fit'
 - Mesh?
-Installers (for Windows at least - using InnoSetup)
 Instead of EisenScript it should be possible to script the object generation using JavaScript.
 (Qt has a builtin JavaScript interpreter which should make this somewhat easy).
 
@@ -96,16 +104,13 @@ spam or other sources of entropy).
 
 Possible Version 1.x extensions:
 _-------------------------------
-? 'set minvolume'
+- More complex primitives (tube, mesh, ...)
 ? Tagging (e.g. [sphereresolution 3 25])
        - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
-? Ellipsoid object. (as of now spheres are always isotropic]
 ? Real transperancy (req. sorting) [Easier now we have defined bounding boxes]
-? More complex primitives (tube, ...)
 ? Preprocessor '#include' statement
 ? Check for infinite retirement substitution cycles.
 ? Better Progress Bar (include updates for transformations loop, pause button?)
-? Rule retirement: ? (2) with subst. and revive: [ RULE r1 maxdepth 400 >> r2 weigth 100 { ... } ]
 
 
 Possible version 2.x extensions:

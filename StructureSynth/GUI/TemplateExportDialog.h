@@ -49,6 +49,10 @@ namespace StructureSynth {
 		
 
 		public slots:
+			void multiplySize(double d);
+			void halfSize();
+			void doubleSize();	
+			void defaultSize();	
 			void accept();
 			void reject();
 			void templateChanged(const QString &);
@@ -75,6 +79,7 @@ namespace StructureSynth {
 			void setupUi();
 
 		private:
+			void setAspectLabel(double ratio) ;
 			Model::Rendering::Template currentTemplate;
 
 			QStringList primitives;

@@ -1,15 +1,18 @@
 
 Changelog for Structure Synth:
 -------------------------
-Pending:
-Template Dialog
-- '*2' / '/2' / 'D'
-- Fix A.R. warning error.
+Before release:
+- Check Persistence of RunAfter
+- Add application icon.
 
-- Option to include EisenScript in TemplateOutput: {EisenScript}
-
+06 Jul 09 [MHC] Added double/half/default size. 
+[2½h]            Fixed AR problems.
+                
 05 Jul 09 [MHC] Change template path button.
 [2h]            Created Post Modifications Dialog.
+
+02-04 Jul 09 [MHC] Created easter egg.
+[5h]
 
 30 Jun 09 [MHC] The 'runAfter' command works now. Minor changes.
 [2h]

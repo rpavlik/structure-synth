@@ -5,6 +5,8 @@
 <description>
 This is a simple monochrome export template for Sunflow.
 All objects colors will be white, except the background color, which may be changed.
+
+Template by Syntopia.
 </description>
 	<primitive name="begin">
 	    <![CDATA[
