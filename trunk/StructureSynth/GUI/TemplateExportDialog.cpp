@@ -179,36 +179,92 @@ namespace StructureSynth {
 		}
 
 		void TemplateExportDialog::setDefaultSize(int width, int height) {
+			
 			screenWidth = width;
 			screenHeight = height;
-			double screenAspect = width/(double)height;
-			
-			lockAspectRatioCheckBox->setChecked(false);
-			heightSpinBox->setValue(height);
-			Persistence::Restore(heightSpinBox);
-			widthSpinBox->setValue(width);
-			Persistence::Restore(widthSpinBox);
-			aspectRatio = widthSpinBox->value()/(double)heightSpinBox->value();
-			lockAspectRatioCheckBox->setChecked(true);
-			Persistence::Restore(lockAspectRatioCheckBox);
 
-			if (lockAspectRatioCheckBox->isChecked()) {
-				if ((int)(widthSpinBox->value() / screenAspect) != heightSpinBox->value()) {
-					WARNING("Aspect ratio has changed. Keeping width fixed, changing height.");
-					height = (int)(widthSpinBox->value() / screenAspect);
-					heightSpinBox->blockSignals(true);
-					heightSpinBox->setValue(height);
-					heightSpinBox->blockSignals(false);
-					aspectRatio = width/(double)height;
-			
+			// We will check if the window size has been changed since last 
+			// invocation if this dialog.
+			// If it has changed, we will overwrite the settings (to keep Aspect Ratio).
+			bool sizeChanged = false;
+			if (Persistence::Contains("TemplateExportDialog.screenWidth")) {
+				int sw = Persistence::Get("TemplateExportDialog.screenWidth").toInt();
+				int sh = Persistence::Get("TemplateExportDialog.screenHeight").toInt();
+
+				if (sw != screenWidth || sh != screenHeight) {
+					sizeChanged = true;
 				}
 			}
+			Persistence::Put("TemplateExportDialog.screenWidth", width);
+			Persistence::Put("TemplateExportDialog.screenHeight", height);
 
-			lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
 
+			heightSpinBox->blockSignals(true);
+			widthSpinBox->blockSignals(true);
+			lockAspectRatioCheckBox->blockSignals(true);
+			if (sizeChanged) {
+				INFO("OpenGL window size has been changed. Setting output width/height to window size.");
+				heightSpinBox->setValue(height);
+				widthSpinBox->setValue(width);
+				lockAspectRatioCheckBox->setChecked(true);
+			} else {
+				heightSpinBox->setValue(height);
+				Persistence::Restore(heightSpinBox);
+				widthSpinBox->setValue(width);
+				Persistence::Restore(widthSpinBox);
+				lockAspectRatioCheckBox->setChecked(true);
+				Persistence::Restore(lockAspectRatioCheckBox);
+			}
+			heightSpinBox->blockSignals(false);
+			widthSpinBox->blockSignals(false);
+			lockAspectRatioCheckBox->blockSignals(false);
+			
+			
+			aspectRatio = widthSpinBox->value()/(double)heightSpinBox->value();
+			setAspectLabel(aspectRatio);
+		}
+
+		void TemplateExportDialog::setAspectLabel(double ratio) {
+			lockAspectRatioCheckBox->setText(QString("Lock ratio (AR = %1)").arg(ratio, 0, 'f', 3));
 		}
 
 		void TemplateExportDialog::lockAspectChanged() {
+		}
+
+		void TemplateExportDialog::multiplySize(double d) {	
+			if (lockAspectRatioCheckBox->isChecked()) {
+				heightSpinBox->setValue((int)(d*heightSpinBox->value()));
+			} else {
+				heightSpinBox->setValue((int)(d*heightSpinBox->value()));
+				widthSpinBox->setValue((int)(d*widthSpinBox->value()));		
+			}
+			heightChanged(0);
+		}
+		
+		
+
+		void TemplateExportDialog::halfSize() {	
+			multiplySize(0.5);
+		}
+
+		void TemplateExportDialog::doubleSize() {	
+			multiplySize(2.0);
+		}
+
+		void TemplateExportDialog::defaultSize() {	
+			heightSpinBox->blockSignals(true);
+			widthSpinBox->blockSignals(true);
+			lockAspectRatioCheckBox->blockSignals(true);
+			heightSpinBox->setValue(screenHeight);
+			widthSpinBox->setValue(screenWidth);
+			lockAspectRatioCheckBox->setChecked(true);
+			heightSpinBox->blockSignals(false);
+			widthSpinBox->blockSignals(false);
+			lockAspectRatioCheckBox->blockSignals(false);
+			aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
+			
+			setAspectLabel(aspectRatio);
+		
 		}
 
 		void TemplateExportDialog::heightChanged(int) {			
@@ -218,7 +274,7 @@ namespace StructureSynth {
 				widthSpinBox->blockSignals(false);
 			} else {
 				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
-				lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));
+				setAspectLabel(aspectRatio);
 			}
 		}
 
@@ -229,7 +285,7 @@ namespace StructureSynth {
 				heightSpinBox->blockSignals(false);			
 			} else {
 				aspectRatio = widthSpinBox->value() / (double)heightSpinBox->value();
-				lockAspectRatioCheckBox->setText(QString("Lock aspect ratio (Current = %1)").arg(aspectRatio));	
+				setAspectLabel(aspectRatio);
 			}
 		}
 
@@ -433,6 +489,38 @@ namespace StructureSynth {
 
 
 			horizontalLayout_5->addWidget(lockAspectRatioCheckBox);
+
+			int bw = 40;
+			int bh = 20;
+
+			QPushButton* b3 = new QPushButton("/2",templateOutputGroupBox);
+			horizontalLayout_5->addWidget(b3);
+			b3->setToolTip("Half size.");
+			b3->setMinimumSize(QSize(bw, bh));
+			b3->setFixedSize(QSize(bw, bh));
+			
+			QPushButton* b2 = new QPushButton("D",templateOutputGroupBox);
+			horizontalLayout_5->addWidget(b2);
+			b2->setToolTip("Reset size to OpenGL window size.");
+			b2->setMinimumSize(QSize(bw, bh));
+			b2->setFixedSize(QSize(bw, bh));
+			
+
+			QPushButton* b1 = new QPushButton("*2",templateOutputGroupBox);
+			horizontalLayout_5->addWidget(b1);
+			b1->setToolTip("Double size.");
+			b1->setMinimumSize(QSize(bw, bh));
+			b1->setFixedSize(QSize(bw, bh));
+			
+			
+
+			connect(b3, SIGNAL(clicked()), this, SLOT(halfSize()));
+			connect(b2, SIGNAL(clicked()), this, SLOT(defaultSize()));
+			connect(b1, SIGNAL(clicked()), this, SLOT(doubleSize()));
+
+
+			
+			
 
 			horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 

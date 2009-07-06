@@ -146,8 +146,6 @@ namespace StructureSynth {
 
 			QRegExp expression;
 			QRegExp primitives;
-
-
 		};
 
 
@@ -156,7 +154,6 @@ namespace StructureSynth {
 			init();
 			loadFile(QDir(getExamplesDir()).absoluteFilePath("Default.es"));
 			tabChanged(0); // to update title.
-
 		}
 
 		MainWindow::MainWindow(const QString &fileName)
@@ -164,7 +161,6 @@ namespace StructureSynth {
 			init();
 			loadFile(fileName);
 			tabChanged(0); // to update title.
-
 		}
 
 		void MainWindow::closeEvent(QCloseEvent *ev)
@@ -174,6 +170,7 @@ namespace StructureSynth {
 			for (int i = 0; i < tabInfo.size(); i++) {
 				if (tabInfo[i].unsaved) modification = true;
 			}
+
 			if (modification) {
 				int i = QMessageBox::warning(this, "Unsaved changed", "There are tabs with unsaved changes.\r\nContinue and loose changes?", QMessageBox::Ok, QMessageBox::Cancel);
 				if (i == QMessageBox::Ok) {
@@ -216,7 +213,6 @@ namespace StructureSynth {
 				ev->ignore();
 			}
 		};
-
 
 
 		bool MainWindow::save()
@@ -281,12 +277,13 @@ namespace StructureSynth {
 		{
 			setAcceptDrops(true);
 
+			hasBeenResized = true;
+
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
 			version = SyntopiaCore::Misc::Version(0, 9, 5, -1, " (\"Haiku\")");
 			setAttribute(Qt::WA_DeleteOnClose);
-
 
 			QSplitter*	splitter = new QSplitter(this);
 			splitter->setObjectName(QString::fromUtf8("splitter"));
@@ -314,7 +311,6 @@ namespace StructureSynth {
 
 			QList<int> l; l.append(100); l.append(400);
 			splitter->setSizes(l);
-
 
 			createActions();
 			createMenus();
@@ -359,7 +355,6 @@ namespace StructureSynth {
 
 			editorDockWidget->setHidden(true);
 
-
 			INFO(QString("Welcome to Structure Synth version %1. A Syntopia Project.").arg(version.toLongString()));
 			INFO("");
 			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button. Hold 'ALT' for fast rotate (quick draw mode).");
@@ -374,7 +369,6 @@ namespace StructureSynth {
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 			readSettings();
-
 		}
 
 		void MainWindow::createOpenGLContextMenu() {
@@ -402,7 +396,6 @@ namespace StructureSynth {
 				renderToolBar->show();
 				tabBar->show();
 				randomToolBar->show();
-
 			} else {
 				frameMainWindow->setMargin(0);
 				fullScreenAction->setChecked(true);
@@ -418,10 +411,8 @@ namespace StructureSynth {
 				renderToolBar->hide();
 				randomToolBar->hide();
 				showFullScreen();
-
 			}
 		}
-
 
 
 		void MainWindow::createActions()
@@ -433,8 +424,6 @@ namespace StructureSynth {
 
 			insertCameraSettingsAction  = new QAction(tr("&Copy Camera settings to EisenScript Window"), this);
 			connect(insertCameraSettingsAction, SIGNAL(triggered()), this, SLOT(insertCameraSettings()));
-
-
 
 			screenshotAction = new QAction(tr("&Save as Bitmap..."), this);
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
@@ -496,18 +485,9 @@ namespace StructureSynth {
 			exportAction->setStatusTip(tr("Export the structure using a template."));
 			connect(exportAction, SIGNAL(triggered()), this, SLOT(templateExport()));
 
-
-			/*
-			povRenderAction = new QAction(QIcon(":/images/render.png"), tr("&Export as POV-Ray script"), this);
-			povRenderAction->setShortcut(tr("F6"));
-			povRenderAction->setStatusTip(tr("Export as POV-Ray script"));
-			connect(povRenderAction, SIGNAL(triggered()), this, SLOT(povRender()));
-			*/
-
 			panicAction = new QAction("Reset View", this);
 			panicAction->setStatusTip(tr("Resets the viewport"));
 			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
-
 
 			aboutAction = new QAction(QIcon(":/images/documentinfo.png"), tr("&About"), this);
 			aboutAction->setStatusTip(tr("Show the About box"));
@@ -554,48 +534,16 @@ namespace StructureSynth {
 			editMenu->addAction(copyAction);
 			editMenu->addAction(pasteAction);
 
-
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
 			renderMenu->addAction(exportAction);
-			//renderMenu->addAction(povRenderAction);
-
+			
 			// Scan render templates...
 			QStringList filters;
-			/*
-			QDir miscDir(getTemplateDir());
-			filters << "*.rendertemplate";
-			miscDir.setNameFilters(filters);
-			if (!miscDir.exists()) {
-				QAction* a = new QAction("Unable to locate: "+miscDir.absolutePath(), this);
-				a->setEnabled(false);
-				renderMenu->addAction(a);
-			} else {
-				
-				QStringList sl = miscDir.entryList();
-				QMenu* templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to Clipboard");
-				for (int i = 0; i < sl.size(); i++) {
-					QAction* a = new QAction(sl[i], this);
-					a->setData(sl[i]);
-					connect(a, SIGNAL(triggered()), this, SLOT(templateRender()));
-					templateMenu->addAction(a);
-				}
-
-				templateMenu = renderMenu->addMenu(QIcon(":/images/render.png"), "Template Render to File...");
-				for (int i = 0; i < sl.size(); i++) {
-					QAction* a = new QAction(sl[i], this);
-					a->setData(sl[i]);
-					connect(a, SIGNAL(triggered()), this, SLOT(templateRenderToFile()));
-					templateMenu->addAction(a);
-				}
-				
-			}
-			*/
-
+			
 			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
 			renderMenu->addAction(screenshotAction);
-
 			menuBar()->addSeparator();
 
 			// Examples...
@@ -663,7 +611,6 @@ namespace StructureSynth {
 
 		void MainWindow::createToolBars()
 		{
-
 			fileToolBar = addToolBar(tr("File"));
 			fileToolBar->addAction(newAction);
 			fileToolBar->addAction(openAction);
@@ -686,8 +633,6 @@ namespace StructureSynth {
 			randomToolBar->addWidget(autoIncrementCheckbox);
 			autoIncrementCheckbox->setChecked(true);
 
-
-
 			renderToolBar = addToolBar(tr("Render"));
 			renderToolBar->addAction(renderAction);
 			renderToolBar->addAction(panicAction);
@@ -696,14 +641,10 @@ namespace StructureSynth {
 			renderToolBar->addWidget(fastRotateCheckbox);
 			fastRotateCheckbox->setChecked(false);
 
-
-
-
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
 
 		void MainWindow::fastRotateChanged() {
-			INFO("Changed()");
 			engine->setFastRotate(fastRotateCheckbox->isChecked());
 		}
 
@@ -751,9 +692,6 @@ namespace StructureSynth {
 		bool MainWindow::saveFile(const QString &fileName)
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return false; } 
-
-
-			
 			
 			QFile file(fileName);
 			if (!file.open(QFile::WriteOnly | QFile::Text)) {
@@ -843,18 +781,15 @@ namespace StructureSynth {
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);
 
-
 				Tokenizer tokenizer(out);
 				EisenParser e(&tokenizer);
-				INFO("Parsing...");
+				INFO("Started Eisenstein engine...");
 				RuleSet* rs = e.parseRuleset();
 
-				INFO("Resolving named references...");
 				rs->resolveNames();
 
 				rs->dumpInfo();
 
-				INFO("Building....");
 				Builder b(&renderTarget, rs);
 				b.build();
 				renderTarget.end();
@@ -873,11 +808,8 @@ namespace StructureSynth {
 
 				rs = 0;
 				delete(rs);
-				//if (getTextEdit()->isWindowModified()) getTextEdit()->document()->markContentsDirty(0,getTextEdit()->toPlainText().count());
-
-
+				
 			} catch (ParseError& pe) {
-
 				WARNING(pe.getMessage());
 				int pos = pe.getPosition();
 				INFO(QString("Found at character %1.").arg(pos));	
@@ -908,6 +840,7 @@ namespace StructureSynth {
 				return "[not found]";
 			}
 		}
+
 		// Mac needs to step two directies up, when debugging in XCode...
 		QString MainWindow::getExamplesDir() {
 			QStringList examplesDir;
@@ -938,11 +871,9 @@ namespace StructureSynth {
 			int pos = this->getTextEdit()->textCursor().position();
 			int blockNumber = this->getTextEdit()->textCursor().blockNumber();
 			statusBar()->showMessage(QString("Position: %1, Line: %2").arg(pos).arg(blockNumber+1), 5000);
-
 		}
 
 		void MainWindow::insertTabPage(QString filename) {
-
 			QTextEdit* textEdit = new QTextEdit();
 			connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 
@@ -1006,7 +937,6 @@ namespace StructureSynth {
 			tabBar->setCurrentIndex(tabBar->addTab(strippedName(tabTitle)));
 
 			connect(textEdit->document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
-
 		}
 
 		void MainWindow::tabChanged(int index) {
@@ -1038,7 +968,6 @@ namespace StructureSynth {
 
 			stackedTextEdits->removeWidget(t.textEdit);
 			delete(t.textEdit); // ?
-
 		}
 
 		void MainWindow::launchSfHome() {
@@ -1107,7 +1036,6 @@ namespace StructureSynth {
 		void MainWindow::insertCameraSettings() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 
-			///xxx
 			Vector3f translation = engine->getTranslation();
 			Matrix4f rotation = engine->getRotation();
 			Vector3f pivot = engine->getPivot();
@@ -1119,7 +1047,6 @@ namespace StructureSynth {
 				<< QString("set rotation %1").arg(rotation.toStringAs3x3())
 				<< QString("set pivot %1").arg(pivot.toString())
 				<< QString("set scale %1").arg(scale);
-
 
 			getTextEdit()->insertPlainText(sl.join("\r\n"));
 			INFO("Camera settings are now pasted into the script window.");
@@ -1135,10 +1062,7 @@ namespace StructureSynth {
 				return;
 			}
 
-
 			templateRender(fileName);
-
-
 		}
 
 		void MainWindow::templateRender()
@@ -1171,11 +1095,9 @@ namespace StructureSynth {
 		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, 
 			int width, int height, bool postModify)
 		{
-			
 				RandomStreams::SetSeed(getSeed());
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
-					QString text = "// Structure Synth Export. \r\n\r\n";
 					if (width == 0) width = engine->width();
 					if (height == 0) height = engine->height();
 					TemplateRenderer rendering(*myTemplate);
@@ -1189,8 +1111,6 @@ namespace StructureSynth {
 						width, height, width/(double)height, engine->getFOV());
 
 					rendering.setBackgroundColor(engine->getBackgroundColor());
-
-					
 					rendering.begin(); 
 
 					Preprocessor pp;
@@ -1199,18 +1119,15 @@ namespace StructureSynth {
 					out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 					editorDockWidget->setHidden(!showGUI);
 
-
 					Tokenizer tokenizer(out);
 					EisenParser e(&tokenizer);
-					INFO("Parsing...");
+					INFO("Started Eisenstein engine...");
 					RuleSet* rs = e.parseRuleset();
 
-					INFO("Resolving named references...");
 					rs->resolveNames();
 
 					rs->dumpInfo();
 
-					INFO("Building....");
 					Builder b(&rendering, rs);
 					b.build();
 					rendering.end();
@@ -1231,18 +1148,14 @@ namespace StructureSynth {
 						QTextEdit* te = new QTextEdit(d);
 						vl->addWidget(te);
 						te->setText(output);
-
-						
 						
 						QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 							| QDialogButtonBox::Cancel);
-						vl->addWidget(buttonBox);
-						
+						vl->addWidget(buttonBox);						
 
 						connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
 						connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
 
-						
 						if (d->exec() == QDialog::Accepted) {
 							output = te->toPlainText();
 						} else {
@@ -1273,9 +1186,6 @@ namespace StructureSynth {
 						QApplication::restoreOverrideCursor();
 						INFO("File saved.");
 					}
-
-
-
 
 				} catch (Exception& er) {
 					WARNING(er.getMessage());
@@ -1342,10 +1252,8 @@ namespace StructureSynth {
 
 				Tokenizer tokenizer(out);
 				EisenParser e(&tokenizer);
-				INFO("Parsing...");
+				INFO("Checking EisenScript...");
 				rs = e.parseRuleset();
-
-				INFO("Resolving named references...");
 				primitives = rs->resolveNames();
 
 				rs->dumpInfo();
@@ -1359,72 +1267,6 @@ namespace StructureSynth {
 			dialog.setDefaultSize(engine->width(), engine->height());
 			dialog.setTemplatePath(getTemplateDir());
 			dialog.exec();
-
-			/*
-			RandomStreams::SetSeed(getSeed());
-			INFO(QString("Random seed: %1").arg(getSeed()));
-			try {
-				QString text = "// Structure Synth Export. \r\n\r\n";
-				TemplateRenderer rendering(templateFileName);
-				Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
-				cameraRight = cameraRight.normalize();
-				rendering.setCamera(
-					engine->getCameraPosition(), 
-					engine->getCameraUp().normalize(), 
-					cameraRight,
-					engine->getCameraTarget(),
-					engine->width(), engine->height(), engine->width()/(double)engine->height(), engine->getFOV());
-
-				rendering.setBackgroundColor(engine->getBackgroundColor());
-
-				INFO(QString("COlor:%1").arg(engine->getBackgroundColor().toString()));
-
-				rendering.begin(); 
-
-				
-				INFO("Building....");
-				Builder b(&rendering, rs);
-				b.build();
-				rendering.end();
-
-				if (b.seedChanged()) {
-					setSeed(b.getNewSeed());
-					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
-				} 
-
-				if (fileName.isEmpty()){
-					QClipboard *clipboard = QApplication::clipboard();
-					clipboard->setText(rendering.getOutput()); 
-					INFO("Done...");
-					INFO("Script is now copied to the clipboard");
-				} else {
-					QFile file(fileName);
-					INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
-					if (!file.open(QFile::WriteOnly | QFile::Text)) {
-						QMessageBox::warning(this, tr("Structure Synth"),
-							tr("Cannot write file %1:\n%2.")
-							.arg(fileName)
-							.arg(file.errorString()));
-						return;
-					}
-
-					QTextStream out(&file);
-					QApplication::setOverrideCursor(Qt::WaitCursor);
-					out << rendering.getOutput();
-					QApplication::restoreOverrideCursor();
-					INFO("File saved.");
-				}
-
-
-
-
-			} catch (Exception& er) {
-				WARNING(er.getMessage());
-			}
-
-			*/
-		
-
 		}
 
 		void MainWindow::setRecentFile(const QString &fileName)
@@ -1490,7 +1332,7 @@ namespace StructureSynth {
 				m.replace("^", "\\^");
 				m.replace("*", "\\*");
 				m.replace("@", "([-+]?[0-9]*\\.?[0-9]+)"); // 
-				QRegExp rx(m);
+				QRegExp rx("^" + m + "$");
 				int i = rx.indexIn(s);
 				if (i >= 0) {
 					QStringList list = rx.capturedTexts();
@@ -1536,9 +1378,11 @@ namespace StructureSynth {
 			double a3 = 0;
 			QList<Term> terms;
 			foreach (QString s, l) {
+				INFO("--- TRYING: " + s);
 				if (match(s,"Size: @x@", &dw, &dh) >=0) {
 				} else if (match(s,"View: (@,@) -> (@,@)", &x0, &y0, &x1, &y1) >= 0) {
 				} else if (match(s,"Term: (@,@)", &cR , &cI) >= 0) {
+					INFO("Found constant");
 				} else if (match(s,"Term: (@,@)*Z^(@,@)", &a0,&a1,&a2,&a3) >= 0) {
 					INFO("1) Added term:" + s);
 					Complex c1(a0,a1); 
@@ -1555,12 +1399,12 @@ namespace StructureSynth {
 					Complex c2(a3,0);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: @*Z^@", &a0, &a3) >= 0) {
-					INFO("3) Added term:" + s);
+					INFO("4) Added term:" + s);
 					Complex c1(a0,0); 
 					Complex c2(a3,0);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: @*Z^Z", &a0) >= 0) {
-					INFO("4) Added term:" + s);
+					INFO("5) Added term:" + s);
 					Complex c2(0,0); 
 					Complex c1(a0,0);
 					terms.append(Term(c1,c2));
@@ -1583,9 +1427,9 @@ namespace StructureSynth {
 
 			QString termS = "Term: ";
 			for (int i = 0; i < terms.count(); i++) {
-				termS += QString("%1*Z^%2").arg(terms[i].factor.toString()).arg(terms[i].exponent.toString());
+				termS += " + " + QString("%1*Z^%2").arg(terms[i].factor.toString()).arg(terms[i].exponent.toString());
 			}
-			termS += " " + c.toString();
+			termS += " + " + c.toString();
 			INFO(termS);
 
 			RandomNumberGenerator rg;

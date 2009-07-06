@@ -107,6 +107,7 @@ namespace StructureSynth {
 			QString strippedName(const QString &fullFileName);
 			void createOpenGLContextMenu();
 
+			bool hasBeenResized;
 			QSpinBox* seedSpinBox;
 			QCheckBox* autoIncrementCheckbox;
 

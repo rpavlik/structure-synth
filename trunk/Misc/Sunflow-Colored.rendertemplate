@@ -5,8 +5,9 @@ The template uses ambient occlusion lightning, which means there is no need to w
 
 This template is a good choice for trying out Sunflow. 
    
-Based on a template by Tom Beddard ('subblue')
-	</description>
+Original template by Syntopia.   
+The Sunflow coloring was added by Tom Beddard ('subblue')
+</description>
  <primitive name="begin" ><![CDATA[
 %photons {
 %  caustics 10000000 kd 64 0.5

@@ -3,7 +3,9 @@
 -->
 <template name="SunFlow Ward" defaultExtension="Sunflow scene file (*.sc)">
 <description>
-This is an example of a render template, using one Ward shader for each object.  
+This is an example of a render template, using one Ward shader for each object. 
+
+Template by Syntopia. 
 </description>
 	<primitive name="begin">
 	    <![CDATA[

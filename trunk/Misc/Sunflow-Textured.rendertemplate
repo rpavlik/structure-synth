@@ -7,6 +7,8 @@ This is an example of a render template, defining three textured types:
 box::texture1 -> uses texture "texture1.png"
 box::texture2 -> uses texture "texture2.png"
 box::texture3 -> uses texture "texture3.png"
+
+Template by Syntopia.
 	</description>
 	<primitive name="begin">
 	    <![CDATA[
