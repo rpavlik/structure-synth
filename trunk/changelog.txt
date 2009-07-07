@@ -1,10 +1,10 @@
 
 Changelog for Structure Synth:
 -------------------------
-Before release:
-- Check Persistence of RunAfter
-- Add application icon.
 
+07 Jul 09 [MHC] Added icon+ Persistence of RunAfter
+[1h]           
+  
 06 Jul 09 [MHC] Added double/half/default size. 
 [2½h]            Fixed AR problems.
                 

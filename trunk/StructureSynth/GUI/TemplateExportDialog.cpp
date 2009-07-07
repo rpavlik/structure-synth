@@ -740,6 +740,11 @@ namespace StructureSynth {
 				if (!currentTemplate.getRunAfter().isEmpty()) {
 				afterCommandLineEdit->setText(currentTemplate.getRunAfter());
 				}
+
+				QString runAfterText = Persistence::Get("TemplateExportDialog.runAfter." + templateComboBox->currentText()).toString();
+				if (!runAfterText.isEmpty()) {
+					afterCommandLineEdit->setText(runAfterText);
+				}
 					
 				undoButton->setEnabled(false);
 				saveModificationsButton->setEnabled(false);
@@ -1054,6 +1059,10 @@ namespace StructureSynth {
 			Persistence::Store(templateComboBox);
 			Persistence::Store(runAfterCheckBox);
 			Persistence::Store(modifyOutputCheckBox);
+
+			Persistence::Put("TemplateExportDialog.runAfter." + templateComboBox->currentText()
+				,afterCommandLineEdit->text());
+			
 			
 
 			QDialog::accept();

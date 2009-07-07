@@ -1,5 +1,35 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+Structure Synth 1.0.0 ("Totem") Released
+----------------------------------------
+Binaries for Windows (XP and Vista).
+Mac binaries available soon.
+Linux is still source only.
+
+New features:
+- Added a 'Recent files' menu entry.
+- Optional depth-first recursion (using 'set recursion depth')
+- Added application icon.
+- Support for a new generic 'template' primitive 
+
+A new Template Export Browser:
+- Shows the defined primitives in the template (highlighting used and missing).
+- Integrated XML editor with syntax highlighting for quickly modifying the template.
+- Automatic unique filename generation.
+- Define output width and height.
+- A post modification window allows you to modify the output before saving.
+
+The template XML syntax has been updated:
+- A new <description> element. 
+- The 'substitution' element is now called 'primitive'
+- Added 'defaultExtension' tag.
+- Added 'runAfter' tag.
+
+
+04 May 09 [MHC] 
+[4h]
+
+
 Structure Synth 0.9.5 ("Haiku") Released
 -------------------------------------------
 Binaries for XP and Vista. 
