@@ -84,10 +84,11 @@ Version 1.5: '?'
 - VRML/OBJ Template (many requests)
 ? 'Zoom to fit'
 - Mesh?
-Instead of EisenScript it should be possible to script the object generation using JavaScript.
+- 9-Up interface.
+Instead of EisenScript it should be possible to script the object generation using JavaScript - for creating animations.
 (Qt has a builtin JavaScript interpreter which should make this somewhat easy).
 
-Version 2.0: '?'
+Version 2.0: '?' (These are tentative ideas)
 ----------------
 Polygon Grammars (a la CGA Shape Grammar)
 
@@ -115,6 +116,7 @@ _-------------------------------
 
 Possible version 2.x extensions:
 --------------------------------
+- Realtime Screen Space Ambient Occlusion.
 - Textures w. alpha
 - 2D Mode
 - Parameterized rendering (movies)

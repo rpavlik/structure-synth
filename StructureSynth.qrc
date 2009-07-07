@@ -14,5 +14,6 @@
   <file>images/exit.png</file>
   <file>images/fileclose.png</file>
   <file>images/documentinfo.png</file>
+  <file>images/structuresynth.png</file>
 </qresource>
 </RCC>

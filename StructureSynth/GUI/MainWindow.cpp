@@ -511,6 +511,8 @@ namespace StructureSynth {
 				connect(a, SIGNAL(triggered()),	this, SLOT(openFile()));
 				recentFileActions.append(a);				
 			}
+
+			qApp->setWindowIcon(QIcon(":/images/structuresynth.png"));
 		}
 
 		void MainWindow::createMenus()
@@ -1308,7 +1310,7 @@ namespace StructureSynth {
 				double sqrLength() const { return r*r+i*i; } 
 				double length2() const { return fabs(r)>fabs(i) ? fabs(r) : fabs(i); } 
 				Complex raisedTo(Complex power) const {
-					double a = r; double b = i;
+					double a = r; double b = -i;
 					double c = power.r; double d = power.i;
 					double p = sqrt(a*a + b*b);
 					double t = atan2(b,a); // is this correct quadrant?

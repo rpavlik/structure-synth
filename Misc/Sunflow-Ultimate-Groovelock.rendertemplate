@@ -1,14 +1,13 @@
-<template name="SunFlow Ultimate Groovelock" defaultExtension="Sunflow scene file (*.sc)">
-<description>
+<template defaultExtension="Sunflow scene file (*.sc)" name="SunFlow Ultimate Groovelock" >
+ <description>
 This is an example of a render template, using one shader for each object.	 
 Based on a template by Tom Beddard ('subblue')
 	
 2009-02-21
-- Support for 'Distored' spheres courtesy of Neon23
+- Support for 'Distorted' spheres courtesy of Neon23
 - Extended to support multiple shaders by Erik Wrenholt ('groovelock')
 </description>
-	<primitive name="begin">
-		<![CDATA[
+ <primitive name="begin" ><![CDATA[
 %photons {
 %	caustics 10000000 kd 64 0.5
 %}
@@ -119,22 +118,15 @@ object {
 	normals none
 	uvs none
 }
-		]]>
-	</primitive>
-	
-	<primitive name="end">
-		<![CDATA[
+		]]></primitive>
+ <primitive name="end" ><![CDATA[
 
-		]]>
-	</primitive>
-
-<!-- ===========================================================================
+		]]></primitive>
+ <!-- ===========================================================================
 Normal 'box'.  Use diffuse shader
 -->
-
-<!-- box::shiny -->
-	<primitive name="box" type="shiny">
-		<![CDATA[
+ <!-- box::shiny -->
+ <primitive type="shiny" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type shiny
@@ -148,12 +140,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::diffuse -->
-	<primitive name="box" type="diffuse">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::diffuse -->
+ <primitive type="diffuse" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -166,12 +155,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::AO -->
-	<primitive name="box" type="ao">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::AO -->
+ <primitive type="ao" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type amb-occ
@@ -187,12 +173,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::mirror -->
-	<primitive name="box" type="mirror">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::mirror -->
+ <primitive type="mirror" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type mirror
@@ -205,12 +188,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::constant -->
-	<primitive name="box" type="constant">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::constant -->
+ <primitive type="constant" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type constant
@@ -223,12 +203,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::ward -->
-	<primitive name="box" type="ward">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::ward -->
+ <primitive type="ward" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type ward
@@ -244,12 +221,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::glass -->
-	<primitive name="box" type="glass">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::glass -->
+ <primitive type="glass" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type glass
@@ -265,12 +239,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::phong -->
-	<primitive name="box" type="phong">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::phong -->
+ <primitive type="phong" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type phong
@@ -285,11 +256,8 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-	<primitive name="box">
-		<![CDATA[
+		]]></primitive>
+ <primitive name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -302,18 +270,12 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-
-
-<!-- ===========================================================================
+		]]></primitive>
+ <!-- ===========================================================================
 Normal 'box::sphere'.  Use diffuse shader
 -->
-	
-<!-- box::sphereShiny -->
-	<primitive name="box" type="sphereshiny">
-		<![CDATA[
+ <!-- box::sphereShiny -->
+ <primitive type="sphereshiny" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type shiny
@@ -327,12 +289,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereDiffuse -->
-	<primitive name="box" type="spherediffuse">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereDiffuse -->
+ <primitive type="spherediffuse" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -345,12 +304,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereAO -->
-	<primitive name="box" type="sphereao">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereAO -->
+ <primitive type="sphereao" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type amb-occ
@@ -366,12 +322,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereMirror -->
-	<primitive name="box" type="spheremirror">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereMirror -->
+ <primitive type="spheremirror" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type mirror
@@ -384,12 +337,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereConstant -->
-	<primitive name="box" type="sphereconstant">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereConstant -->
+ <primitive type="sphereconstant" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type constant
@@ -402,12 +352,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereWard -->
-	<primitive name="box" type="sphereward">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereWard -->
+ <primitive type="sphereward" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type ward
@@ -423,12 +370,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::sphereGlass -->
-	<primitive name="box" type="sphereglass">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::sphereGlass -->
+ <primitive type="sphereglass" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type glass
@@ -444,12 +388,9 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- box::spherePhong -->
-	<primitive name="box" type="spherephong">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::spherePhong -->
+ <primitive type="spherephong" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type phong
@@ -464,12 +405,8 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-
-	<primitive name="box" type="sphere">
-		<![CDATA[
+		]]></primitive>
+ <primitive type="sphere" name="box" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -482,16 +419,12 @@ instance {
 	transform col {matrix}
 	shader "shader{uid}"
 }
-		]]>
-	</primitive>
-
-<!-- ===========================================================================
+		]]></primitive>
+ <!-- ===========================================================================
 Normal 'sphere'.  Use diffuse shader
 -->
-
-<!-- box::shiny -->
-	<primitive name="sphere" type="shiny">
-		<![CDATA[
+ <!-- box::shiny -->
+ <primitive type="shiny" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type shiny
@@ -505,12 +438,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::diffuse -->
-	<primitive name="sphere" type="diffuse">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::diffuse -->
+ <primitive type="diffuse" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -523,12 +453,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::AO -->
-	<primitive name="sphere" type="ao">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::AO -->
+ <primitive type="ao" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type amb-occ
@@ -544,12 +471,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::mirror -->
-	<primitive name="sphere" type="mirror">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::mirror -->
+ <primitive type="mirror" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type mirror
@@ -562,12 +486,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::constant -->
-	<primitive name="sphere" type="constant">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::constant -->
+ <primitive type="constant" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type constant
@@ -580,12 +501,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::ward -->
-	<primitive name="sphere" type="ward">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::ward -->
+ <primitive type="ward" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type ward
@@ -601,12 +519,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::glass -->
-	<primitive name="sphere" type="glass">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::glass -->
+ <primitive type="glass" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type glass
@@ -622,12 +537,9 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-<!-- box::phong -->
-	<primitive name="sphere" type="phong">
-		<![CDATA[
+		]]></primitive>
+ <!-- box::phong -->
+ <primitive type="phong" name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type phong
@@ -642,11 +554,8 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
-
-	<primitive name="sphere" type="light">
-		<![CDATA[
+		]]></primitive>
+ <primitive type="light" name="sphere" ><![CDATA[
 light {
 	type spherical
 	color { "sRGB nonlinear" {r} {g} {b} }
@@ -655,12 +564,8 @@ light {
 	radius {rad}
 	samples 16
 }
-		]]>
-	</primitive>
-
-
-	<primitive name="sphere">
-		<![CDATA[
+		]]></primitive>
+ <primitive name="sphere" ><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse
@@ -673,6 +578,5 @@ object {
 	c {cx} {cy} {cz}
 	r {rad}
 }
-		]]>
-	</primitive>
+		]]></primitive>
 </template>
