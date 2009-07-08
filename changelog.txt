@@ -2,6 +2,9 @@
 Changelog for Structure Synth:
 -------------------------
 
+08 Jul 09 [MHC] Added support for environment variables when spawning process. Created Splash.
+[1½h] 
+
 07 Jul 09 [MHC] Added icon+ Persistence of RunAfter
 [1h]           
   
