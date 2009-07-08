@@ -1011,6 +1011,14 @@ namespace StructureSynth {
 				QString cmd = afterCommandLineEdit->text();
 				cmd = cmd.replace("$FILE", QFileInfo(fileName).absoluteFilePath());
 
+				QStringList env = QProcess::systemEnvironment();
+				foreach (QString es, env) {
+					QStringList l = es.split("=");
+					if (l.count() == 2) {
+						cmd = cmd.replace("%"+l[0]+"%", l[1]);
+					}
+				}
+
 
 				bool inQuote = false;
 				QStringList args;
