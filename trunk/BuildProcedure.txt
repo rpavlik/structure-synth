@@ -1,5 +1,8 @@
 Build Procedure:
 
+- Update Version object in MainWindow.cpp
+- 
+
 Windows:
 - Change to 'Release'. Build in VS 2008.
 - Check dependencies in Process Explorer - update Build\Packaging\copyWin32Files.bat to reflect this.

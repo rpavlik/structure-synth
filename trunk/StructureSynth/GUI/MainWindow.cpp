@@ -282,7 +282,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(0, 9, 5, -1, " (\"Haiku\")");
+			version = SyntopiaCore::Misc::Version(1, 0, 0, -1, " (\"Potemkin\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			QSplitter*	splitter = new QSplitter(this);
@@ -361,7 +361,7 @@ namespace StructureSynth {
 			INFO("Press 'Reset View' if the view disappears...");
 			INFO("");
 			INFO("Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
-			WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
+			//WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
@@ -1310,7 +1310,7 @@ namespace StructureSynth {
 				double sqrLength() const { return r*r+i*i; } 
 				double length2() const { return fabs(r)>fabs(i) ? fabs(r) : fabs(i); } 
 				Complex raisedTo(Complex power) const {
-					double a = r; double b = -i;
+					double a = r; double b = i;
 					double c = power.r; double d = power.i;
 					double p = sqrt(a*a + b*b);
 					double t = atan2(b,a); // is this correct quadrant?
@@ -1342,7 +1342,7 @@ namespace StructureSynth {
 					if (list.count()>2 && b) (*b) = list[2].toDouble();
 					if (list.count()>3 && c) (*c) = list[3].toDouble();
 					if (list.count()>4 && d) (*d) = list[4].toDouble();
-					INFO(QString("Captured %1 on %2, %3").arg(list.count()).arg(m).arg(s));
+					//INFO(QString("Captured %1 on %2, %3").arg(list.count()).arg(m).arg(s));
 					return list.count()-1;
 				} 
 				return -1;
@@ -1378,44 +1378,40 @@ namespace StructureSynth {
 			double a1 = 0;
 			double a2 = 0;
 			double a3 = 0;
+			double breakOut = 2;
 			QList<Term> terms;
 			foreach (QString s, l) {
-				INFO("--- TRYING: " + s);
 				if (match(s,"Size: @x@", &dw, &dh) >=0) {
 				} else if (match(s,"View: (@,@) -> (@,@)", &x0, &y0, &x1, &y1) >= 0) {
 				} else if (match(s,"Term: (@,@)", &cR , &cI) >= 0) {
-					INFO("Found constant");
 				} else if (match(s,"Term: (@,@)*Z^(@,@)", &a0,&a1,&a2,&a3) >= 0) {
-					INFO("1) Added term:" + s);
 					Complex c1(a0,a1); 
 					Complex c2(a2,a3);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: Z^(@,@)", &a2,&a3) >= 0) {
-					INFO("2) Added term:" + s);
 					Complex c1(1,0); 
 					Complex c2(a2,a3);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: Z^@", &a3) >= 0) {
-					INFO("3) Added term:" + s);
 					Complex c1(1,0); 
 					Complex c2(a3,0);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: @*Z^@", &a0, &a3) >= 0) {
-					INFO("4) Added term:" + s);
 					Complex c1(a0,0); 
 					Complex c2(a3,0);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"Term: @*Z^Z", &a0) >= 0) {
-					INFO("5) Added term:" + s);
 					Complex c2(0,0); 
 					Complex c1(a0,0);
 					terms.append(Term(c1,c2));
 				} else if (match(s,"MaxIter: @", &dMax) >= 0) {
+				} else if (match(s,"BreakOut: @", &breakOut) >= 0) {
 				} else {
 					WARNING("Could not match: "+s);
 				}
 				
 			};
+			breakOut = breakOut*breakOut;
 			int w = (int)dw;
 			int h = (int)dh;
 			int maxGen = (int)dMax;
@@ -1438,28 +1434,16 @@ namespace StructureSynth {
 
 			for ( int i = 0; i < w; i++) {
 				for ( int j = 0; j < h; j++) {
-					double x = (i)/(double)w;
-					double y = (j)/(double)h;
+					double x = (x1-x0)*(i/(double)w)+x0;
+					double y = (y1-y0)*(j/(double)h)+y0;
 					x = x*(x1-x0)+x0;
 					y = y*(y1-y0)+y0;
-					//Complex z;
-					//Complex c(x,y);
-					
 					Complex z(x,y);
-					//Complex c(-0.62772,0.42193);
-					
 					
 					int gen = 0;
 					//z=c;
-
-
-					
-
 					Complex z0 = z;
 					while (gen++ < maxGen) {
-						//z=z.raisedTo(Complex(1.75,0))+c;
-						//z=z.raisedTo(z)+ z*z*z*z*z +c;
-						
 						z = c;
 						for (int i = 0; i < terms.count(); i++) {
 							if( terms[i].exponent.r == 0 && terms[i].exponent.i == 0) {
@@ -1469,12 +1453,10 @@ namespace StructureSynth {
 							}
 						}
 						z0 = z;
-						
-						
-						if (z.sqrLength() > 16.0) break;
+						if (z.sqrLength() > breakOut) break;
 					}
 
-					if (z.sqrLength() > 16.0) {
+					if (z.sqrLength() > breakOut) {
 						im.setPixel(i,j, qRgb((gen % 2)*250 ,(gen % 20)*15,(gen*255)/maxGen));
 					} else {
 						im.setPixel(i,j, qRgb(0,0,0));
@@ -1487,7 +1469,9 @@ namespace StructureSynth {
 			QLabel* lb = new QLabel(d);
 			lb->setPixmap(p);
 			//d->layout()->addWidget(l);
-			d->show();
+			d->exec();
+			delete(lb);
+			delete(d);
 			//d->setSize(w,h);
 
 		}
