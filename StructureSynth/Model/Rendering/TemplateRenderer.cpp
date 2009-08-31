@@ -350,7 +350,7 @@ namespace StructureSynth {
 				t.substitute("{CamUpY}", QString::number(cameraUp.y()));
 				t.substitute("{CamUpZ}", QString::number(cameraUp.z()));
 				Vector3f cameraDir = cameraTarget-cameraPosition;
-				cameraDir = cameraDir.normalize();
+				cameraDir.normalize();
 				t.substitute("{CamDirX}", QString::number(cameraDir.x()));
 				t.substitute("{CamDirY}", QString::number(cameraDir.y()));
 				t.substitute("{CamDirZ}", QString::number(cameraDir.z()));

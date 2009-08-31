@@ -7,9 +7,20 @@
 namespace SyntopiaCore {
 	namespace GLEngine {	
 
+		/// Used by the raytracer, when tracing rays.
+		struct RayInfo {
+			SyntopiaCore::Math::Vector3f startPoint;
+			SyntopiaCore::Math::Vector3f lineDirection;
+
+			// 'Return' variables - if a hit is found these will be overwritten.
+			float intersection;
+			SyntopiaCore::Math::Vector3f normal;
+			GLfloat color[4];
+		};
+
 		class Object3D {
 		public:
-			Object3D() {};
+			Object3D() : lastRayID(-1) {};
 			virtual ~Object3D() {};
 
 			virtual void draw() const = 0;
@@ -19,6 +30,13 @@ namespace SyntopiaCore {
 
 			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
 			void expandBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
+
+			/// These must be implemented for an Object3D to support raytracing.
+			virtual bool intersectsRay(RayInfo* /*rayInfo*/) { return false; };
+			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/) { return false; };
+			
+			int getLastRayID() { return lastRayID; }
+			void setLastRayID(int id) { lastRayID = id; }
 
 		protected:
 
@@ -34,8 +52,12 @@ namespace SyntopiaCore {
 
 			GLfloat primaryColor[4];
 
+			// Bounding box
 			SyntopiaCore::Math::Vector3f from;
 			SyntopiaCore::Math::Vector3f to;
+			
+			// Used by Voxel Stepper when raytracing.
+			int lastRayID;
 
 		};
 

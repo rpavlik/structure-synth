@@ -46,7 +46,8 @@ namespace SyntopiaCore {
 			scalar sqrLength() const { return s[0]*s[0]+s[1]*s[1]+s[2]*s[2]; }
 			scalar length() const { return sqrt(s[0]*s[0]+s[1]*s[1]+s[2]*s[2]); }
 
-			Vector3<scalar> normalize() const { scalar l = length(); return Vector3<scalar>(s[0]/l,s[1]/l,s[2]/l); }
+			Vector3<scalar> normalized() const { scalar l = length(); return Vector3<scalar>(s[0]/l,s[1]/l,s[2]/l); }
+			void normalize() { scalar l = length(); s[0]/=l; s[1]/=l; s[2]/=l; }
 			Vector3<scalar> operator- (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]-rhs.s[0], s[1]-rhs.s[1], s[2]-rhs.s[2]); }
 			Vector3<scalar> operator+ (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]+rhs.s[0], s[1]+rhs.s[1], s[2]+rhs.s[2]); }
 			Vector3<scalar> operator- () const { return Vector3<scalar>(-s[0], -s[1], -s[2]); }
@@ -63,6 +64,10 @@ namespace SyntopiaCore {
 					s[1]*b.s[2] - s[2]*b.s[1] ,
 					s[2]*b.s[0] - s[0]*b.s[2] ,
 					s[0]*b.s[1] - s[1]*b.s[0]);
+			}
+
+			static scalar dot(const Vector3<scalar> a, const Vector3<scalar> b) { 
+				return a.s[0]*b.s[0] + a.s[1]*b.s[1] + a.s[2]*b.s[2] ;
 			}
 
 		private:

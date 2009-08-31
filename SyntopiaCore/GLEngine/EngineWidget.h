@@ -48,6 +48,8 @@ namespace SyntopiaCore {
 			void clearWorld();
 			void reset();
 			void addObject(Object3D* object);
+			QList<Object3D*> getObjects() { return objects; };
+			
 			int objectCount() const { return objects.size(); }
 
 			SyntopiaCore::Math::Vector3f getPivot() { return pivot; }
@@ -81,6 +83,10 @@ namespace SyntopiaCore {
 			void setDisabled(bool disabled) { this->disabled = disabled; }
 			void setFastRotate(bool enabled);
 
+			GLdouble* getModelViewCache() { return modelViewCache; };
+			GLdouble* getProjectionCache() { return projectionCache; };
+			GLint* getViewPortCache() { return viewPortCache; };
+			
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );
@@ -98,7 +104,7 @@ namespace SyntopiaCore {
 			void rotateWorldZ(double z);
 			void translateWorld(double x, double y, double z);
 
-			
+		
 		private:
 			// Creates the appropriate GL_PROJECTION matrix
 			void updatePerspective();	
@@ -129,6 +135,10 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f cameraPosition;
 			SyntopiaCore::Math::Vector3f cameraUp;
 			SyntopiaCore::Math::Vector3f cameraTarget;
+
+			GLdouble modelViewCache[16];
+			GLdouble projectionCache[16];
+			GLint viewPortCache[16];
 
 			QTime textTimer;
 			bool disabled;

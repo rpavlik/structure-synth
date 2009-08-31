@@ -2,7 +2,7 @@
 	A simple demonstration of Structure Synth.
 */
 
-set maxdepth 400
+set maxdepth 20
 R1
 R2
 

@@ -2,6 +2,9 @@
 Changelog for Structure Synth:
 -------------------------
 
+31 Aug 09 [MHC] Fixed a bug for the Visual Studio project: the 'Release' target had to built before the 'Debug' target could be built.
+[4h]			Created RayTracer skeleton. Basic, but very slow sphere rendering working.
+
 ----- Release of v1.0.0 (Potemkin) [10 July 2009 ] ----------------------------------------------------------
 This release: 43 hours of work (40½ hours coding + 2½ hours non-coding). 20 log entries.
 Stats total: 235 hours of work (184½ hours coding + 50½ hours non-coding). 118 log entries.

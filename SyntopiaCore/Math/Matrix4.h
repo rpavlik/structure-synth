@@ -87,7 +87,7 @@ namespace SyntopiaCore {
 				// One minus c (short name for legibility of formulai)
 				scalar omc = (1 - c);
 
-				if (axis.length() != 1) axis = axis.normalize();
+				if (axis.length() != 1) axis.normalize();
 
 				scalar x = axis[0];
 				scalar y = axis[1];

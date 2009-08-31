@@ -25,6 +25,9 @@ namespace SyntopiaCore {
 			} else if ( priority == CriticalLevel ) {
 				parent->show();
 				i->setBackgroundColor(QColor(255,2,0));
+			} else if ( priority == TimingLevel ) {
+				parent->show();
+				i->setBackgroundColor(QColor(25,255,0));
 			} else {
 				i->setBackgroundColor(QColor(220,220,220));
 			}
