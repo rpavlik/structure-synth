@@ -16,7 +16,7 @@ namespace SyntopiaCore {
 
 		void Object3D::vertex4n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { 
 			Vector3f n = (v2-v1).cross(v4-v1);
-			n = n.normalize();
+			n.normalize();
 			normal(n);
 			vertex(v1); 
 			vertex(v2); 
@@ -26,7 +26,7 @@ namespace SyntopiaCore {
 
 		void Object3D::vertex3n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3) const { 
 			Vector3f n = (v2-v1).cross(v3-v1);
-			n = n.normalize();
+			n.normalize();
 			normal(n);
 			vertex(v1); 
 			vertex(v2); 
@@ -35,7 +35,7 @@ namespace SyntopiaCore {
 		
 		void Object3D::vertex4rn(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { 			
 			Vector3f n = (v1-v2).cross(v4-v1);
-			n = n.normalize();
+			n.normalize();
 			normal(n);
 			vertex(v4); 
 			vertex(v3); 
@@ -44,24 +44,24 @@ namespace SyntopiaCore {
 		}
 
 		void Object3D::vertex4nc(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4,SyntopiaCore::Math::Vector3f center) const { 
-			normal((v1-center).normalize());
+			normal((v1-center).normalized());
 			vertex(v1); 
-			normal((v2-center).normalize());
+			normal((v2-center).normalized());
 			vertex(v2); 
-			normal((v3-center).normalize());
+			normal((v3-center).normalized());
 			vertex(v3); 
-			normal((v4-center).normalize());
+			normal((v4-center).normalized());
 			vertex(v4); 
 		}
 
 		void Object3D::vertex4rnc(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4,SyntopiaCore::Math::Vector3f center) const { 			
-			normal((v4-center).normalize());
+			normal((v4-center).normalized());
 			vertex(v4); 
-			normal((v3-center).normalize());
+			normal((v3-center).normalized());
 			vertex(v3); 
-			normal((v2-center).normalize());
+			normal((v2-center).normalized());
 			vertex(v2); 
-			normal((v1-center).normalize());
+			normal((v1-center).normalized());
 			vertex(v1); 
 		}
 

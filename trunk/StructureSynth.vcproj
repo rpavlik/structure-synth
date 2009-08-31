@@ -290,6 +290,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\GLEngine\RayTracer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\GLEngine\RayTracer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\GLEngine\Sphere.cpp"
 					>
 				</File>

@@ -2,6 +2,8 @@
 
 #include <QString>
 #include <QVector>
+#include <QTime>
+#include <QStack>
 
 namespace SyntopiaCore {
 	namespace Logging {	
@@ -25,9 +27,13 @@ namespace SyntopiaCore {
 
 			/// This method all loggers must implement
 			virtual void log(QString message, LogLevel priority) = 0;
-
+			
 			/// Log messages are sent to this list of loggers.
 			static QVector<Logger*> loggers;
+			static QStack<QTime> timeStack;
+			static QStack<QString> timeStringStack;
+		private:
+			
 		};
 
 
@@ -36,6 +42,8 @@ namespace SyntopiaCore {
 		/// Useful aliases
 		void Debug(QString text);
 		void INFO(QString text);
+		void TIME(QString text);
+		void TIME(int repetitions = 0); // End time...
 		void WARNING(QString text);
 		void CRITICAL(QString text);
 		

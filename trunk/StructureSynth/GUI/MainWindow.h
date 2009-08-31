@@ -77,6 +77,7 @@ namespace StructureSynth {
 			void templateRender(const QString& fileName);
 			
 			void openFile();
+			void raytrace();
 			void newFile();
 			void open();
 			bool save();
@@ -127,6 +128,7 @@ namespace StructureSynth {
 			QToolBar *editToolBar;
 			QToolBar *randomToolBar;
 			QAction *newAction;
+			QAction *rayTraceAction;
 			QAction *openAction;
 			QAction *saveAction;
 			QAction *saveAsAction;

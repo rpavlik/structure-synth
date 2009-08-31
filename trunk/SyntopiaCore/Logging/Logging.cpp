@@ -14,6 +14,8 @@
 namespace SyntopiaCore {
 	namespace Logging {	
 		QVector<Logger*> Logger::loggers;
+		QStack<QTime> Logger::timeStack;
+		QStack<QString> Logger::timeStringStack;
 
 		void LOG(QString message, LogLevel priority) {
 			
@@ -32,6 +34,23 @@ namespace SyntopiaCore {
 		void INFO(QString text) { LOG(text, InfoLevel); }
 		void WARNING(QString text) { LOG(text, WarningLevel); }
 		void CRITICAL(QString text) { LOG(text, CriticalLevel); }
+		
+		void TIME(QString text) {
+			LOG(text, TimingLevel);
+
+			Logger::timeStack.push(QTime::currentTime());
+			Logger::timeStringStack.push(text);
+		} ;
+		
+		void TIME(int repetitions) {
+			QTime t = Logger::timeStack.pop();
+			QString s = Logger::timeStringStack.pop();
+			int secs = t.secsTo(QTime::currentTime());
+			LOG(QString("Time: %1 for ").arg(secs) + s, TimingLevel);
+		}; // End time...
+		
+
+	
 	}
 }
 

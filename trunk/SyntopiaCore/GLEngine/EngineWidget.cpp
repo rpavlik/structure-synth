@@ -111,8 +111,28 @@ namespace SyntopiaCore {
 			glMultMatrixf(rotation.getArray());
 			glTranslatef( -pivot.x(), -pivot.y(), -pivot.z() );
 		
+			glGetDoublev(GL_MODELVIEW_MATRIX, modelViewCache );
+			glGetDoublev(GL_PROJECTION_MATRIX, projectionCache );
+			glGetIntegerv(GL_VIEWPORT, viewPortCache);
+
+
 			cameraPosition = screenTo3D(width()/2, height()/2, 0);
 			cameraTarget = screenTo3D(width()/2, height()/2, 1);
+
+
+			/*
+			RayInfo ri;
+			ri.startPoint = cameraPosition;
+			ri.lineDirection = cameraTarget - cameraPosition;
+			
+			static float f = 0;
+			f = f + 0.1;
+			if (f>1) f = 0;
+			for (int i = 0; i < objects.count(); i++) {
+				if (objects[i]->intersectsRay(&ri)) objects[i]->setColor(Vector3f(f,1-f,f/2),1);;
+
+			}*/
+
 			cameraUp = screenTo3D(width()/2, height()/2-height()/4, 0)-cameraPosition;
 			cameraUp.normalize();
 
@@ -349,6 +369,7 @@ namespace SyntopiaCore {
 
 		Vector3f EngineWidget::screenTo3D(int sx, int sy, int sz) {
 			// 2D -> 3D conversion
+			/*
 			GLdouble modelView[16];
 			GLdouble projection[16];
 			GLint viewPort[16];
@@ -356,10 +377,11 @@ namespace SyntopiaCore {
 			glGetDoublev( GL_MODELVIEW_MATRIX, modelView );
 			glGetDoublev( GL_PROJECTION_MATRIX, projection );
 			glGetIntegerv( GL_VIEWPORT, viewPort);
+			*/
 
 			GLdouble x, y, z;
 			float h = (float)height(); 
-			gluUnProject(sx, h-sy, sz, modelView, projection, viewPort, &x, &y ,&z);
+			gluUnProject(sx, h-sy, sz, modelViewCache, projectionCache, viewPortCache, &x, &y ,&z);
 			return Vector3f(x,y,z);
 		}
 
@@ -367,8 +389,8 @@ namespace SyntopiaCore {
 			double rotateSpeed = 5.0;
 
 			Vector3f startPoint = screenTo3D(oldPos.x(), oldPos.y(),1);
-			Vector3f xDir =       (screenTo3D(oldPos.x()+10, oldPos.y(),1) - startPoint).normalize() ;
-			Vector3f yDir =       (screenTo3D(oldPos.x(), oldPos.y()+10,1) - startPoint).normalize() ;
+			Vector3f xDir =       (screenTo3D(oldPos.x()+10, oldPos.y(),1) - startPoint).normalized() ;
+			Vector3f yDir =       (screenTo3D(oldPos.x(), oldPos.y()+10,1) - startPoint).normalized() ;
 
 			Matrix4f mx = Matrix4f::Rotation(xDir, y*rotateSpeed);
 			Matrix4f my = Matrix4f::Rotation(yDir, -x*rotateSpeed);

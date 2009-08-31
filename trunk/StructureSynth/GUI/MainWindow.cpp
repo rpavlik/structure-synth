@@ -23,7 +23,7 @@
 #include "../../StructureSynth/Model/RuleSet.h"
 #include "../../StructureSynth/Model/Builder.h"
 #include "../../StructureSynth/JavaScriptSupport/JavaScriptParser.h"
-
+#include "../../SyntopiaCore/GLEngine/RayTracer.h"
 #include "../../SyntopiaCore/Math/Vector3.h"
 #include "../../SyntopiaCore/Math/Random.h"
 #include "../../SyntopiaCore/Math/Matrix4.h"
@@ -35,6 +35,7 @@ using namespace SyntopiaCore::Exceptions;
 using namespace StructureSynth::Parser;
 using namespace StructureSynth::Model;
 using namespace StructureSynth::JavaScriptSupport;
+using namespace SyntopiaCore::GLEngine;
 
 namespace StructureSynth {
 	namespace GUI {
@@ -361,7 +362,7 @@ namespace StructureSynth {
 			INFO("Press 'Reset View' if the view disappears...");
 			INFO("");
 			INFO("Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
-			//WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
+			WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
@@ -427,6 +428,9 @@ namespace StructureSynth {
 
 			screenshotAction = new QAction(tr("&Save as Bitmap..."), this);
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
+
+			rayTraceAction = new QAction(tr("&Raytrace..."), this);
+			connect(rayTraceAction, SIGNAL(triggered()), this, SLOT(raytrace()));
 
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
 			newAction->setShortcut(tr("Ctrl+N"));
@@ -545,6 +549,7 @@ namespace StructureSynth {
 			
 			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
+			renderMenu->addAction(rayTraceAction);
 			renderMenu->addAction(screenshotAction);
 			menuBar()->addSeparator();
 
@@ -1104,10 +1109,10 @@ namespace StructureSynth {
 					if (height == 0) height = engine->height();
 					TemplateRenderer rendering(*myTemplate);
 					Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
-					cameraRight = cameraRight.normalize();
+					cameraRight.normalize();
 					rendering.setCamera(
 						engine->getCameraPosition(), 
-						engine->getCameraUp().normalize(), 
+						engine->getCameraUp().normalized(), 
 						cameraRight,
 						engine->getCameraTarget(),
 						width, height, width/(double)height, engine->getFOV());
@@ -1354,6 +1359,11 @@ namespace StructureSynth {
 				Complex factor;
 				Complex exponent;
 			};
+		}
+
+		void MainWindow::raytrace() {
+			RayTracer rt(engine);
+			rt.calculateImage(engine->width(), engine->height());
 		}
 
 		void MainWindow::parseEaster(QString text) {
