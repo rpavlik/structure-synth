@@ -86,6 +86,9 @@ namespace SyntopiaCore {
 			GLdouble* getModelViewCache() { return modelViewCache; };
 			GLdouble* getProjectionCache() { return projectionCache; };
 			GLint* getViewPortCache() { return viewPortCache; };
+
+			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
+			
 			
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );

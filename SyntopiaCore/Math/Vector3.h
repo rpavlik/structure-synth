@@ -66,6 +66,13 @@ namespace SyntopiaCore {
 					s[0]*b.s[1] - s[1]*b.s[0]);
 			}
 
+			static Vector3<scalar> cross(const Vector3<scalar> a, const Vector3<scalar> b) {
+				return Vector3<scalar>(
+					a.s[1]*b.s[2] - a.s[2]*b.s[1] ,
+					a.s[2]*b.s[0] - a.s[0]*b.s[2] ,
+					a.s[0]*b.s[1] - a.s[1]*b.s[0]);
+			}
+
 			static scalar dot(const Vector3<scalar> a, const Vector3<scalar> b) { 
 				return a.s[0]*b.s[0] + a.s[1]*b.s[1] + a.s[2]*b.s[2] ;
 			}
