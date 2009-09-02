@@ -446,6 +446,16 @@ namespace SyntopiaCore {
 			int b = backgroundColor.blue() < 127 ? 255 : 0;
 			return QColor(r,g,b);
 		}
+
+		void EngineWidget::getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const {
+			from = Vector3f(0,0,0);
+			to = Vector3f(0,0,0);
+			for (int i = 0; i < objects.count(); i++) {
+				if (i == 0) { objects[i]->getBoundingBox(from,to); }
+				else { objects[i]->expandBoundingBox(from,to);  }
+			}
+		}
+			
 	}
 }
 

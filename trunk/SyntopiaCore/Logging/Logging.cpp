@@ -45,8 +45,8 @@ namespace SyntopiaCore {
 		void TIME(int repetitions) {
 			QTime t = Logger::timeStack.pop();
 			QString s = Logger::timeStringStack.pop();
-			int secs = t.secsTo(QTime::currentTime());
-			LOG(QString("Time: %1 for ").arg(secs) + s, TimingLevel);
+			int secs = t.msecsTo(QTime::currentTime());
+			LOG(QString("Time: %1 for ").arg(secs/1000) + s, TimingLevel);
 		}; // End time...
 		
 

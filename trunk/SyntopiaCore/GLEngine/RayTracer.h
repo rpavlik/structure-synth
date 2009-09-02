@@ -12,22 +12,8 @@ namespace SyntopiaCore {
 	namespace GLEngine {
 
 		using namespace SyntopiaCore::Math;
-
-
-		/// See here for details about this approach:
-		/// http://www.devmaster.net/articles/raytracing_series/part4.php
-		/// THIS IS A DUMMY IMPLEMENTATION!
-		class VoxelStepper {
-		public:
-			VoxelStepper(Vector3f /*minPos*/, Vector3f /*maxPos*/, unsigned int /*steps*/) {};
-			void registerObject(Object3D* obj) { list.append(obj); }
-			QList<Object3D*>* setupRay(Vector3f /*pos*/, Vector3f /*dir*/, double& /*maxT*/) { return &list; }
-			QList<Object3D*>* advance(double& /*maxT*/) { return 0; }
-
-		private:
-			QList<Object3D*> list;
-		};
-
+	
+		class VoxelStepper; // Forward decl.
 
 		class RayTracer {
 		public:

@@ -1,6 +1,11 @@
 
 Changelog for Structure Synth:
 -------------------------
+2  Sep 09 [MHC] Raytracer now supports Boxes (bounding box error?)
+[1h]
+
+1  Sep 09 [MHC] Added VoxelStepper raytracer accelerator.
+[2h]
 
 31 Aug 09 [MHC] Fixed a bug for the Visual Studio project: the 'Release' target had to built before the 'Debug' target could be built.
 [4h]			Created RayTracer skeleton. Basic, but very slow sphere rendering working.
