@@ -12,23 +12,23 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 
-	  /// See here for details about this approach:
+		/// See here for details about this approach:
 		/// http://www.devmaster.net/articles/raytracing_series/part4.php
 		/// THIS IS A DUMMY IMPLEMENTATION!
 		/*
 		class VoxelStepper {
 		public:
-			VoxelStepper(Vector3f minPos, Vector3f maxPos, unsigned int steps) {};
-			void registerObject(Object3D* obj) { list.append(obj); }
-			QList<Object3D*>* setupRay(Vector3f pos, Vector3f dir, double& maxT) { return &list; }
-			QList<Object3D*>* advance(double& maxT) { return 0; }
+		VoxelStepper(Vector3f minPos, Vector3f maxPos, unsigned int steps) {};
+		void registerObject(Object3D* obj) { list.append(obj); }
+		QList<Object3D*>* setupRay(Vector3f pos, Vector3f dir, double& maxT) { return &list; }
+		QList<Object3D*>* advance(double& maxT) { return 0; }
 
 		private:
-			QList<Object3D*> list;
+		QList<Object3D*> list;
 		};
 		*/
 
-		
+
 		/// See here for details about this approach:
 		/// http://www.devmaster.net/articles/raytracing_series/part4.php
 		class VoxelStepper {
@@ -151,36 +151,36 @@ namespace SyntopiaCore {
 
 						// We do not intersect grid.
 						if (!found) return false;
-					}
+				}
 
-					stepX = (dir.x() > 0) ? 1 : -1;
-					stepY = (dir.y() > 0) ? 1 : -1;
-					stepZ = (dir.z() > 0) ? 1 : -1;
+				stepX = (dir.x() > 0) ? 1 : -1;
+				stepY = (dir.y() > 0) ? 1 : -1;
+				stepZ = (dir.z() > 0) ? 1 : -1;
 
-					// TODO: Get rid of the fabs...
-					tDeltaX = size.x() / fabs(dir.x());
-					tDeltaY = size.y() / fabs(dir.y());
-					tDeltaZ = size.z() / fabs(dir.z());
+				// TODO: Get rid of the fabs...
+				tDeltaX = size.x() / fabs(dir.x());
+				tDeltaY = size.y() / fabs(dir.y());
+				tDeltaZ = size.z() / fabs(dir.z());
 
-					Vector3f orv = pos- (minPos + Vector3f(size.x()*cx, size.y()*cy, size.z()*cz));
-					tMaxX = fabs(orv.x()/dir.x());
-					if (stepX>0) tMaxX = tDeltaX - tMaxX;
-					tMaxY = fabs(orv.y()/dir.y());
-					if (stepY>0) tMaxY = tDeltaY - tMaxY;
-					tMaxZ = fabs(orv.z()/dir.z());
-					if (stepZ>0) tMaxZ = tDeltaZ - tMaxZ;
+				Vector3f orv = pos- (minPos + Vector3f(size.x()*cx, size.y()*cy, size.z()*cz));
+				tMaxX = fabs(orv.x()/dir.x());
+				if (stepX>0) tMaxX = tDeltaX - tMaxX;
+				tMaxY = fabs(orv.y()/dir.y());
+				if (stepY>0) tMaxY = tDeltaY - tMaxY;
+				tMaxZ = fabs(orv.z()/dir.z());
+				if (stepZ>0) tMaxZ = tDeltaZ - tMaxZ;
 
-					// Now pos is advanced properly.
-					// cx,cy,cz contains current cell.
-					QList<Object3D*>* list = &grid[cx+cy*steps+cz*steps*steps];
+				// Now pos is advanced properly.
+				// cx,cy,cz contains current cell.
+				QList<Object3D*>* list = &grid[cx+cy*steps+cz*steps*steps];
 
-					if (list && (list->count() == 0)) {
-						list = advance(maxT);
-					} else {
-						maxT = currentT + minn(tMaxX, tMaxY, tMaxZ);					
-					}
+				if (list && (list->count() == 0)) {
+					list = advance(maxT);
+				} else {
+					maxT = currentT + minn(tMaxX, tMaxY, tMaxZ);					
+				}
 
-					return list;
+				return list;
 			}
 
 			double minn(double a, double b, double c) {
@@ -263,38 +263,34 @@ namespace SyntopiaCore {
 			objects = widget->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
+			aaSamples = 2;
 		}
 
 		Vector3f RayTracer::rayCastPixel(float x, float y) {
+			
+			Vector3f startPoint = frontStart + frontX*x + frontY*y;
+			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
+			Vector3f direction = endPoint - startPoint;
+				
+			return rayCast(startPoint, direction);
+		}
+
+		Vector3f RayTracer::rayCast(Vector3f startPoint, Vector3f direction) {
 			static int rayID = 1;
 			rayID++;
 			pixels++;
-			GLdouble ox1, oy1, oz1;
-			GLdouble ox2, oy2, oz2;
-
-			gluUnProject(x, y, 0.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
-			gluUnProject(x, y, 1.0f, modelView, projection, viewPort, &ox2, &oy2 ,&oz2);
-
-			// Now we have the direction of the light-ray going into the screen (2D viewport)
-			Vector3f startPoint = Vector3f((GLfloat)ox1, (GLfloat)oy1, (GLfloat)oz1);
-			Vector3f direction = Vector3f((GLfloat)(ox2 - ox1), (GLfloat)(oy2 - oy1), (GLfloat)(oz2 - oz1));
-
-
-
-
+			
 			double lengthToClosest = -1;
 			Vector3f foundNormal;
 			GLfloat foundColor[4];
 
 			Object3D* bestObj = 0;
-
 			double maxT = 0;
 			RayInfo ri;
 			QList<Object3D*>* list = accelerator->setupRay(startPoint, direction, maxT);
 			ri.startPoint = startPoint;
 			ri.lineDirection = direction;			
 
-					
 			while (list != 0) { 
 				// check objects
 				for (int i = 0; i < list->count(); i++) {
@@ -302,13 +298,11 @@ namespace SyntopiaCore {
 
 					// Check if we already tested this...
 					if (list->at(i)->getLastRayID() == rayID) continue;
-		
+
 					bool found = list->at(i)->intersectsRay(&ri);
 					list->at(i)->setLastRayID(rayID);
 					if (!found) continue;
-					//return Vector3f(1,0,0);
-				
-
+					
 					if ((ri.intersection>0) && ((ri.intersection <= lengthToClosest) || (lengthToClosest == -1))) {
 						// We hit something and it was closer to us than the object before...
 						foundNormal = ri.normal;
@@ -320,10 +314,7 @@ namespace SyntopiaCore {
 
 				if (bestObj != 0 && lengthToClosest < maxT) break;
 				list = accelerator->advance(maxT); 
-				//list = 0;
 			}
-			
-			//Object3D* hitObject = bestObj; // We remember the object we hit.
 
 			// Now we can calculate the lightning.
 			if (lengthToClosest>0) {	
@@ -334,7 +325,6 @@ namespace SyntopiaCore {
 				double light = 0;
 
 				// This is a Phong lightning model, see e.g. (http://ai.autonomy.net.au/wiki/Graphics/Illumination)
-
 				// -- Diffuse light 
 				double diffuse = light1Diffuse*(Vector3f::dot(foundNormal, (lightDirection).normalized()));				
 				if (diffuse<0) diffuse = 0;
@@ -365,16 +355,13 @@ namespace SyntopiaCore {
 				bool inShadow = false;
 				bool calcShadow = true;
 				if (calcShadow) {
-
-					
 					double maxT = 0;
 					QList<Object3D*>* list = accelerator->setupRay(iPoint,(lightPos-iPoint), maxT);
 					ri.startPoint = iPoint;
 					ri.lineDirection = lightPos-iPoint;
-			
+
 					while (list != 0 && !inShadow) { 
 						// check objects
-
 						for (int i = 0; i < list->size(); i++) {
 							if (list->at(i) == bestObj) continue; // self-shadow? (probably not neccesary, since the specular light will be negative)							
 							inShadow = list->at(i)->intersectsRay(&ri);
@@ -390,8 +377,8 @@ namespace SyntopiaCore {
 				if (calcShadow && inShadow) light=ambient; // drop-shadow strength (only ambient light...)
 				if (light > 1) light = 1;
 				if (light < 0) light = 0;
-				
-				
+
+
 				return Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);;
 			} else {
 				return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
@@ -399,6 +386,13 @@ namespace SyntopiaCore {
 		}
 
 
+		namespace {
+			int sqr(int a) { return a*a; } 
+
+			int cdist(QRgb c1, QRgb c2) {
+				return sqr(qGreen(c1)-qGreen(c2))+sqr(qRed(c1)-qRed(c2))+sqr(qBlue(c1)-qBlue(c2));
+			}
+		}
 
 		QImage RayTracer::calculateImage(int w, int h) {
 
@@ -406,7 +400,25 @@ namespace SyntopiaCore {
 			float ow = (float)w; 
 			float vh = (float)h; // windowHeight; 
 			float vw = (float)w; // windowWidth; 
+			windowHeight = h;
+			windowWidth = w;
 
+			GLdouble ox1, oy1, oz1;				
+
+
+			gluUnProject(0, windowHeight, 0.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			frontStart = Vector3f(ox1,oy1,oz1);
+			gluUnProject(windowWidth, windowHeight, 0.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			frontX = Vector3f(ox1,oy1,oz1)-frontStart;
+			gluUnProject(0, 0, 0.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			frontY = Vector3f(ox1,oy1,oz1)-frontStart;
+
+			gluUnProject(0, windowHeight, 1.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			backStart = Vector3f(ox1,oy1,oz1);
+			gluUnProject(windowWidth, windowHeight, 1.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			backX = Vector3f(ox1,oy1,oz1)-backStart;
+			gluUnProject(0, 0, 1.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
+			backY = Vector3f(ox1,oy1,oz1)-backStart;
 
 			// Setup progress dialog.
 			QProgressDialog progress("progress", "Cancel", 0, 100);
@@ -428,27 +440,71 @@ namespace SyntopiaCore {
 			checks = 0;
 			aaPixels = 0;
 			for (int x = 0; x < w; x++) {
-				float tx = (x*vw)/ow;
+				float fx = x/(float)w;
 				if (x % 7 == 0) {
 					progress.setValue((x*100)/w);
 					qApp->processEvents();
 					if	(progress.wasCanceled()) break;
 				}
-
 				for (int y = 0; y < h; y++) {	
-					float ty = (y*vh)/oh;
-					//Object3D* hitObject = 0;
-					//bool inShadow = false;
-					//if (pixels % 100 == 0) Debug(QString("x,y:%1,%2").arg(tx).arg(vh-ty));
-					
-					
-					Vector3f color = rayCastPixel(tx,vh-ty);
-					im.setPixel(x,y,qRgb(color.x()*255,color.y()*255,color.z()*255));	
-						
-
+					float fy = y/(float)h;
+					Vector3f color = rayCastPixel(fx,fy);
+					im.setPixel(x,y,qRgb(color.x()*255,color.y()*255,color.z()*255));
 				}
 			}
 			TIME();
+
+
+			progress.setLabelText("Ray-tracing Anti-Alias (Step 2/2)...");
+
+			long aaPixels = 0;
+
+			if (aaSamples>0) {
+				TIME("Anti-Alias");
+				float xs = (1.0/ow);
+				float ys = (1.0/oh);
+				for (int x = 1; x+1 < w; x++) {
+					float fx = x/(float)w;
+				
+					if (x % 7 == 0) {
+						progress.setValue((x*100)/w);
+						qApp->processEvents();
+						if (progress.wasCanceled()) break;
+					}
+
+					for (int y = 1; y+1 < h; y++) {
+						float fy = y/(float)h;
+
+						QRgb c1 = im.pixel(x,y);
+						int tres = 3*50*50;
+
+						if ( cdist(c1,im.pixel(x+1,y)) > tres ||
+							cdist(c1,im.pixel(x,y+1)) > tres ||
+							cdist(c1,im.pixel(x-1,y)) > tres ||
+							cdist(c1,im.pixel(x,y-1)) > tres)
+
+						{
+							aaPixels++;
+							Vector3f color(0,0,0);
+
+							unsigned int steps = aaSamples;
+							double xstepsize = xs/steps;
+							double ystepsize = ys/steps;
+							for (unsigned int xo = 0; xo < steps; xo++) {
+								for (unsigned int yo = 0; yo < steps; yo++) {	
+									color = color + rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
+										(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
+								}
+							}
+							color = color / (steps*steps);
+							im.setPixel(x,y,qRgb(color.x()*255,color.y()*255,color.z()*255));
+						}
+
+					}
+				}
+				TIME();
+			}
+
 
 			INFO(QString("Enabled objects: %1, inside viewport: %2").arg(objects.size()).arg("n.a."));
 			INFO(QString("Pixels: %1, Object checks: %2, Objects checked per pixel: %3").
@@ -475,70 +531,7 @@ namespace SyntopiaCore {
 
 
 		/*
-		progress.setCaption("Ray-tracing Anti-Alias (Step 2/2)...");
 
-		long aaPixels = 0;
-
-		if (aaSamples>0) {
-		TIME("Anti-Alias");
-		float xs = (vw/ow);
-		float ys = (vh/oh);
-		for (unsigned int x = 1; x+1 < iw; x++) {
-
-		float tx = (x*vw)/ow;
-
-
-		progress.setProgress((x*100)/iw);
-		qApp->processEvents();
-		if (progress.wasCancelled()) break;
-
-		for (unsigned int y = 1; y+1 < ih; y++) {
-
-
-		float ty = (y*vh)/oh;
-
-
-		if (
-		(objMap[x+y*iw] != objMap[(x+1)+y*iw]) ||
-		(objMap[x+y*iw] != objMap[(x-1)+y*iw]) ||
-		(objMap[x+y*iw] != objMap[(x)+(y-1)*iw]) ||
-		(objMap[x+y*iw] != objMap[(x)+(y+1)*iw]))
-		{
-		aaPixels++;
-
-		Object3D* hitObject = 0;
-		Object3D* hitObject2 = 0;
-		bool inShadow = false;
-
-		rayCastPixel(tx,
-		vh-(ty), lightPos, hitObject2, &inShadow);
-
-
-		Vector3 color;
-		// TRICKY
-		unsigned int steps = aaSamples;
-		double xstepsize = xs/steps;
-		double ystepsize = ys/steps;
-		for (unsigned int xo = 0; xo < steps; xo++) {
-		for (unsigned int yo = 0; yo < steps; yo++) {	
-		Vector3 c = rayCastPixel(tx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
-		vh-(ty-ys/2.0 +yo*ystepsize+ystepsize/2.0), lightPos, hitObject, &inShadow);
-
-		if (hitObject == hitObject2) {
-
-		} else {
-		color = color + c;
-		}
-		}
-		}
-		color = color / (steps*steps);
-		im.setPixel(x,y,qRgb(color.x()*255,color.y()*255,color.z()*255));
-
-		}
-
-		}
-		}
-		TIME();
 		*/
 
 
