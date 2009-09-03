@@ -46,7 +46,7 @@ namespace SyntopiaCore {
 			QTime t = Logger::timeStack.pop();
 			QString s = Logger::timeStringStack.pop();
 			int secs = t.msecsTo(QTime::currentTime());
-			LOG(QString("Time: %1 for ").arg(secs/1000) + s, TimingLevel);
+			LOG(QString("Time: %1s for ").arg(secs/1000.0f) + s, TimingLevel);
 		}; // End time...
 		
 

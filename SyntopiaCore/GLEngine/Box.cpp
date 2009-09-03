@@ -91,13 +91,14 @@ namespace SyntopiaCore {
 */
 			if (Vector3f::dot(n21, ri->lineDirection) < 0) {
 				double is  = Vector3f::dot(n21, base-ri->startPoint)/Vector3f::dot(n21, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0  && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-base, v1);
 					if (t1 > 0 && t1 < v1.sqrLength()) {
 						float t2 = Vector3f::dot(ip-base, v2);
 						if ( t2 > 0 && t2 < v2.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[0] = 0;
 							ri->intersection = is;
 							ri->normal = n21;
 							return true;
@@ -106,13 +107,15 @@ namespace SyntopiaCore {
 				}
 			} else {
 				double is  = Vector3f::dot(n21, (base+v3)-ri->startPoint)/Vector3f::dot(n21, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0  && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-(base+v3), v1);
 					if (t1 > 0 && t1 < v1.sqrLength()) {
 						float t2 = Vector3f::dot(ip-(base+v3), v2);
 						if ( t2 > 0 && t2 < v2.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[0] = 1;
+							
 							ri->intersection = is;
 							ri->normal = -n21;
 							return true;
@@ -123,13 +126,15 @@ namespace SyntopiaCore {
 
 			if (Vector3f::dot(n32, ri->lineDirection) < 0) {
 				double is  = Vector3f::dot(n32, base-ri->startPoint)/Vector3f::dot(n32, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0 && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-base, v2);
 					if (t1 > 0 && t1 < v2.sqrLength()) {
 						float t2 = Vector3f::dot(ip-base, v3);
 						if ( t2 > 0 && t2 < v3.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[1] = 0;
+							
 							ri->intersection = is;
 							ri->normal = n32;
 							return true;
@@ -138,13 +143,15 @@ namespace SyntopiaCore {
 				}
 			} else {
 				double is  = Vector3f::dot(n32, (base+v1)-ri->startPoint)/Vector3f::dot(n32, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0  && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-(base+v1), v2);
 					if (t1 > 0 && t1 < v2.sqrLength()) {
 						float t2 = Vector3f::dot(ip-(base+v1), v3);
 						if ( t2 > 0 && t2 < v3.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[1] = 1;
+							
 							ri->intersection = is;
 							ri->normal = -n32;
 							return true;
@@ -156,13 +163,15 @@ namespace SyntopiaCore {
 
 			if (Vector3f::dot(n13, ri->lineDirection) < 0) {
 				double is  = Vector3f::dot(n13, base-ri->startPoint)/Vector3f::dot(n13, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0  && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-base, v3);
 					if (t1 > 0 && t1 < v3.sqrLength()) {
 						float t2 = Vector3f::dot(ip-base, v1);
 						if ( t2 > 0 && t2 < v1.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[2] = 0;
+							
 							ri->intersection = is;
 							ri->normal = n13;
 							return true;
@@ -171,13 +180,15 @@ namespace SyntopiaCore {
 				}
 			} else {
 				double is  = Vector3f::dot(n13, (base+v2)-ri->startPoint)/Vector3f::dot(n13, ri->lineDirection);
-				if (is > 0) {
+				if (is > 0  && is < 1) {
 					Vector3f ip = ri->startPoint + ri->lineDirection * is;
 					float t1 = Vector3f::dot(ip-(base+v2), v3);
 					if (t1 > 0 && t1 < v3.sqrLength()) {
 						float t2 = Vector3f::dot(ip-(base+v2), v1);
 						if ( t2 > 0 && t2 < v1.sqrLength()) {
 							for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+							//ri->color[2] = 1;
+							
 							ri->intersection = is;
 							ri->normal = -n13;
 							return true;
@@ -192,6 +203,7 @@ namespace SyntopiaCore {
 		}
 
 		bool Box::intersectsAABB(SyntopiaCore::Math::Vector3f from2, SyntopiaCore::Math::Vector3f to2) {
+			return true;
 			return
 					    (from.x() < to2.x()) && (to.x() > from2.x()) &&
 						(from.y() < to2.y()) && (to.y() > from2.y()) &&

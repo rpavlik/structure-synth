@@ -1,7 +1,10 @@
 
 Changelog for Structure Synth:
 -------------------------
-2  Sep 09 [MHC] Raytracer now supports Boxes (bounding box error?)
+3  Sep 09 [MHC] Raytracer: added adaptive anti-alias. Speeded up viewport transforms.
+[3h]
+
+2  Sep 09 [MHC] Raytracer now supports Boxes (ray intersection error!)
 [1h]
 
 1  Sep 09 [MHC] Added VoxelStepper raytracer accelerator.

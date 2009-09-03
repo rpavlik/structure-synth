@@ -24,6 +24,14 @@ namespace SyntopiaCore {
 		private:
 
 			Vector3f rayCastPixel(float x, float y);
+			Vector3f rayCast(Vector3f startPoint, Vector3f direction);
+
+			Vector3f frontStart;
+			Vector3f frontX;
+			Vector3f frontY;
+			Vector3f backStart;
+			Vector3f backX;
+			Vector3f backY;
 
 			QList<Object3D*> objects;
 			int aaSamples;
