@@ -66,6 +66,15 @@ namespace SyntopiaCore {
 				if (yEnd > (int)steps) yEnd = steps;
 				if (zEnd > (int)steps) zEnd = steps;
 
+				/*
+				xStart = 0; 
+				yStart = 0; 
+				zStart = 0; 
+				xEnd = steps;
+				yEnd = steps;
+				zEnd = steps;
+				*/
+
 				for (unsigned int x = xStart; x < (unsigned int)xEnd; x++) {
 					for (unsigned int y = yStart; y < (unsigned int)yEnd; y++) {
 						for (unsigned int z = zStart; z < (unsigned int)zEnd; z++) {
@@ -256,7 +265,7 @@ namespace SyntopiaCore {
 			widget->getBoundingBox(from,to);
 
 
-			accelerator = new VoxelStepper(from,to, 10);
+			accelerator = new VoxelStepper(from,to, 35);
 			backgroundColor = Vector3f(0,0,0);
 			windowHeight = widget->width();
 			windowWidth = widget->height();
@@ -430,11 +439,11 @@ namespace SyntopiaCore {
 
 			// Find a suitable light position. TODO: CHANGE!
 			GLdouble sx1, sy1, sz1;				
-			gluUnProject((float)0, vh/2.0, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
+			gluUnProject((float)0, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
 			lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
-			light1Ambient = 0.4;
-			light1Diffuse = 0.6;
-			light1Specular = 0.7;
+			light1Ambient = 0.1;
+			light1Diffuse = 0.8;
+			light1Specular = 0.4;
 
 			pixels = 0;
 			checks = 0;

@@ -30,6 +30,9 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f n21 ;
 			SyntopiaCore::Math::Vector3f n32;
 			SyntopiaCore::Math::Vector3f n13;
+			SyntopiaCore::Math::Vector3f ac; 
+			SyntopiaCore::Math::Vector3f a[3];
+			float h[3];
   
 		};
 
