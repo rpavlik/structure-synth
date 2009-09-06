@@ -8,6 +8,16 @@ namespace SyntopiaCore {
 	namespace GLEngine {
 
 
+		namespace {
+			void Expand(Vector3f& from, Vector3f& to, Vector3f test) {
+				if (test.x()<from.x()) from.x() = test.x();
+				if (test.y()<from.y()) from.y() = test.y();
+				if (test.z()<from.z()) from.z() = test.z();
+				if (test.x()>to.x()) to.x() = test.x();
+				if (test.y()>to.y()) to.y() = test.y();
+				if (test.z()>to.z()) to.z() = test.z();
+			}
+		}
 		Box::Box(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				 SyntopiaCore::Math::Vector3f dir2, 
@@ -17,36 +27,38 @@ namespace SyntopiaCore {
 			from = base;
 			to = base;
 
-			if (dir1.x()+base.x() < from.x()) from.x() = (base.x()+dir1.x());
-			if (dir2.x()+base.x() < from.x()) from.x() = (base.x()+dir2.x());
-			if (dir3.x()+base.x() < from.x()) from.x() = (base.x()+dir3.x());
+			Expand(from,to, base+v1);
+			Expand(from,to, base+v2);
+			Expand(from,to, base+v3);
 			
-			if (dir1.y()+base.y() < from.y()) from.y() = (base.y()+dir1.y());
-			if (dir2.y()+base.y() < from.y()) from.y() = (base.y()+dir2.y());
-			if (dir3.y()+base.y() < from.y()) from.y() = (base.y()+dir3.y());
+			Expand(from,to, base+v1+v2);
+			Expand(from,to, base+v2+v3);
+			Expand(from,to, base+v1+v3);
+			Expand(from,to, base+v1+v2+v3);
 			
-			if (dir1.z()+base.z() < from.z()) from.z() = (base.z()+dir1.z());
-			if (dir2.z()+base.z() < from.z()) from.z() = (base.z()+dir2.z());
-			if (dir3.z()+base.z() < from.z()) from.z() = (base.z()+dir3.z());
+			/*
+			Vector3f c = (from+to)/2.0;
+			Vector3f c2 = (to-from)/2.0;
+			from = c - c2*1.5;
+			to = c + c2*1.5;
+			*/
 
-			if (dir1.x()+base.x() > to.x()) to.x() = (base.x()+dir1.x());
-			if (dir2.x()+base.x() > to.x()) to.x() = (base.x()+dir2.x());
-			if (dir3.x()+base.x() > to.x()) to.x() = (base.x()+dir3.x());
-			
-			if (dir1.y()+base.y() > to.y()) to.y() = (base.y()+dir1.y());
-			if (dir2.y()+base.y() > to.y()) to.y() = (base.y()+dir2.y());
-			if (dir3.y()+base.y() > to.y()) to.y() = (base.y()+dir3.y());
-			
-			if (dir1.z()+base.z() > to.z()) to.z() = (base.z()+dir1.z());
-			if (dir2.z()+base.z() > to.z()) to.z() = (base.z()+dir2.z());
-			if (dir3.z()+base.z() > to.z()) to.z() = (base.z()+dir3.z());
-			
-			
 			n21 = Vector3f::cross(v2,v1).normalized();
 			n32 = Vector3f::cross(v3,v2).normalized();
 			n13 = Vector3f::cross(v1,v3).normalized();
 
 			
+			
+			
+			
+			ac = base + v1*0.5 + v2*0.5 + v3*0.5;
+			a[3];
+			a[0] = v1.normalized();
+			a[1] = v2.normalized();
+			a[2] = v3.normalized();
+			h[0] = v1.length()/2;
+			h[1] = v2.length()/2;
+			h[2] = v3.length()/2;
 		};
 
 		Box::~Box() { };
@@ -83,12 +95,60 @@ namespace SyntopiaCore {
 			glPopMatrix();			
 		};
 
+		
 		bool Box::intersectsRay(RayInfo* ri) {
+			// Following the Real-Time Rendering book p. 574
+			
+			float tmin = -1E37;
+			float tmax = 1E37;
+			float temp = 0;
+			Vector3f p = ac - ri->startPoint;
+			int minhit = 0;
+			int maxhit = 0;
+			for (int i = 0; i < 3; i++) {
+				float e = Vector3f::dot(a[i], p);
+				float f = Vector3f::dot(a[i], ri->lineDirection);
+				if (fabs(f)>1E-17) {
+					float t1 = (e+h[i])/f;
+					float t2 = (e-h[i])/f;
+					if (t1 > t2) { temp = t1; t1 = t2; t2 = temp; }
+					if (t1 > tmin) { 
+						tmin = t1;
+						minhit = i;
+					}
+					if (t2 < tmax) { 
+						tmax = t2;
+						maxhit = i;
+					}
+					if (tmin > tmax) return false;
+					if (tmax < 0) return false;
+				} else {
+					if ( (-e-h[i] > 0) || (-e+h[i]<0)) return false;
+				}
+			}
+			if (tmin>0) {
+				ri->intersection = tmin;
+				for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+				if (minhit == 0) ri->normal = -n32;
+				else if (minhit == 1) ri->normal = -n13;
+				else ri->normal = -n21;
+				
+				return true;
+			} else {
+				ri->intersection = tmax;
+				for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
+				if (maxhit == 0) ri->normal = n32;
+				else if (maxhit == 1) ri->normal = n13;
+				else ri->normal = n21;
+				return true;
+			}
+
+		}
+
+		
 /*
-			Vector3f n21 = Vector3f::cross(v2,v1).normalized();
-			Vector3f n32 = Vector3f::cross(v3,v2).normalized();
-			Vector3f n13 = Vector3f::cross(v1,v3).normalized();
-*/
+		bool Box::intersectsRay(RayInfo* ri) {
+
 			if (Vector3f::dot(n21, ri->lineDirection) < 0) {
 				double is  = Vector3f::dot(n21, base-ri->startPoint)/Vector3f::dot(n21, ri->lineDirection);
 				if (is > 0  && is < 1) {
@@ -201,9 +261,10 @@ namespace SyntopiaCore {
 			return false;
 			
 		}
+		
+*/
 
 		bool Box::intersectsAABB(SyntopiaCore::Math::Vector3f from2, SyntopiaCore::Math::Vector3f to2) {
-			return true;
 			return
 					    (from.x() < to2.x()) && (to.x() > from2.x()) &&
 						(from.y() < to2.y()) && (to.y() > from2.y()) &&

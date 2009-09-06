@@ -55,6 +55,7 @@ namespace SyntopiaCore {
 			Vector3<scalar> operator* (scalar rhs) const { return Vector3<scalar>(s[0]*rhs, s[1]*rhs, s[2]*rhs); }
 			Vector3<scalar> operator/ (scalar rhs) const { return Vector3<scalar>(s[0]/rhs, s[1]/rhs, s[2]/rhs); }
 
+			
 			QString toString() const {
 				return QString("[%1 %2 %3]").arg(s[0]).arg(s[1]).arg(s[2]);
 			}

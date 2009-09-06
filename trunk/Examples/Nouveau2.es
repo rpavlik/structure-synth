@@ -56,4 +56,5 @@ dbox
 
 rule dbox {
 { s 0.2 1 1 } box
+{ rx 10 s 0.2 1 1 color black } box
 }
