@@ -281,10 +281,11 @@ namespace SyntopiaCore {
 			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
 			Vector3f direction = endPoint - startPoint;
 				
-			return rayCast(startPoint, direction);
+			return rayCast(startPoint, direction, 0);
 		}
 
-		Vector3f RayTracer::rayCast(Vector3f startPoint, Vector3f direction) {
+		Vector3f RayTracer::rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level) {
+			if (level>5) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
 			static int rayID = 1;
 			rayID++;
 			pixels++;
@@ -305,12 +306,14 @@ namespace SyntopiaCore {
 				for (int i = 0; i < list->count(); i++) {
 					checks++;
 
+					if (list->at(i) == excludeThis) continue;
 					// Check if we already tested this...
 					if (list->at(i)->getLastRayID() == rayID) continue;
 
 					bool found = list->at(i)->intersectsRay(&ri);
 					list->at(i)->setLastRayID(rayID);
 					if (!found) continue;
+					if ((ri.intersection<1E-7)) continue;
 					
 					if ((ri.intersection>0) && ((ri.intersection <= lengthToClosest) || (lengthToClosest == -1))) {
 						// We hit something and it was closer to us than the object before...
@@ -361,6 +364,7 @@ namespace SyntopiaCore {
 				light += ambient; 
 
 				// -- calculate shadow...
+				// TODO: Calculate shadow in transperant media
 				bool inShadow = false;
 				bool calcShadow = true;
 				if (calcShadow) {
@@ -375,17 +379,82 @@ namespace SyntopiaCore {
 							if (list->at(i) == bestObj) continue; // self-shadow? (probably not neccesary, since the specular light will be negative)							
 							inShadow = list->at(i)->intersectsRay(&ri);
 							if (ri.intersection < 0 || ri.intersection > 1) inShadow = false;
+							if (ri.color[3]<1) inShadow=false;
 							if (inShadow) break;								
 						}
 
-						list = accelerator->advance(maxT); 
+						if (!inShadow) list = accelerator->advance(maxT); 
 					}
 				}
 
 				// Clamp light values.
 				if (calcShadow && inShadow) light=ambient; // drop-shadow strength (only ambient light...)
 				if (light > 1) light = 1;
+				
 				if (light < 0) light = 0;
+
+				light = 1; // TODO: Remove
+				
+				if (foundColor[3] < 1) {
+					Vector3f color = rayCast(iPoint, direction, bestObj, level+1);
+
+					foundColor[0] = light*foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
+					foundColor[1] = light*foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
+					foundColor[2] = light*foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
+					
+				}
+
+				
+				float reflect = 0.4;
+				if (reflect > 0) {
+					Vector3f nDir = foundNormal*(-2)*Vector3f::dot(foundNormal, direction)/foundNormal.sqrLength() + direction;
+							
+
+					Vector3f color = rayCast(iPoint, nDir, bestObj, level+1);
+					Vector3f thisColor = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]) // *(1-reflect)
+					+ color*(reflect);
+					foundColor[0] = light*foundColor[0]*(1-reflect) + color.x()*reflect;
+					foundColor[1] = light*foundColor[1]*(1-reflect) + color.y()*reflect;
+					foundColor[2] = light*foundColor[2]*(1-reflect) + color.z()*reflect;
+					if (foundColor[0]>1) foundColor[0] = 1;
+					if (foundColor[1]>1) foundColor[1] = 1;
+					if (foundColor[2]>1) foundColor[2] = 1;
+					
+				}
+
+				int ambOcc = 32;
+				if (level>1) ambOcc = 10;
+				int hits = 0;
+				for (int ix = 0; ix < ambOcc; ix++) {
+					// Use monte carlo sampling to obtain random vector.
+					Vector3f random ;
+					do {
+						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
+					} while (random.sqrLength() > 1);
+					random.normalize();
+					if (Vector3f::dot(random, foundNormal)<0) random = random*-1.0; // Only check away from surface.
+
+					double maxT = 0;
+					QList<Object3D*>* list = accelerator->setupRay(iPoint,random, maxT);
+					ri.startPoint = iPoint;
+					ri.lineDirection = random;
+					bool occluded = false;
+					while (list != 0 && !occluded) { 
+						// check objects
+						for (int i = 0; i < list->size(); i++) {
+							if (list->at(i) == bestObj) continue; // self-shadow? 							
+							occluded = list->at(i)->intersectsRay(&ri);
+							if (ri.intersection < 0) occluded = false;
+							if (occluded) break;								
+						}
+
+						if (!occluded) list = accelerator->advance(maxT); 
+					}
+					if (occluded) hits++;
+				}
+				if (ambOcc>0) {
+					light = light*(1-hits/(double)ambOcc);
+				}
 
 
 				return Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);;
@@ -439,11 +508,11 @@ namespace SyntopiaCore {
 
 			// Find a suitable light position. TODO: CHANGE!
 			GLdouble sx1, sy1, sz1;				
-			gluUnProject((float)0, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
+			gluUnProject((float)-200, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
 			lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
-			light1Ambient = 0.1;
-			light1Diffuse = 0.8;
-			light1Specular = 0.4;
+			light1Ambient = 0.2;
+			light1Diffuse = 0.6;
+			light1Specular = 0.6;
 
 			pixels = 0;
 			checks = 0;

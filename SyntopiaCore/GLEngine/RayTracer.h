@@ -5,6 +5,7 @@
 #include <QImage>
 #include "SyntopiaCore/Math/Vector3.h"
 #include "SyntopiaCore/Math/Matrix4.h"
+#include "SyntopiaCore/Math/Random.h"
 
 
 
@@ -24,7 +25,7 @@ namespace SyntopiaCore {
 		private:
 
 			Vector3f rayCastPixel(float x, float y);
-			Vector3f rayCast(Vector3f startPoint, Vector3f direction);
+			Vector3f rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level = 0);
 
 			Vector3f frontStart;
 			Vector3f frontX;
@@ -64,6 +65,7 @@ namespace SyntopiaCore {
 			float light1Diffuse;
 			float light1Specular;
 
+			Math::RandomNumberGenerator rg;
 		};
 
 	}

@@ -1,6 +1,9 @@
 
 Changelog for Structure Synth:
 -------------------------
+9  Sep 09 [MHC] Added Ambient Occlusion. Fixed Slab normals (box test).
+[3h]
+
 6  Sep 09 [MHC] Better OBB-Ray intersection. Fixed Bounding Box error for OBB's. (But no support for skewed boxes!)
 [3h] 
 
