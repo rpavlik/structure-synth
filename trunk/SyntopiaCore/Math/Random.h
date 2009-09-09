@@ -42,6 +42,11 @@ namespace SyntopiaCore {
 					*/
 				}
 			};    
+
+			double getDouble(double min, double max) {
+				return getDouble()*(max-min)+min;
+			}
+			
 			
 			// Returns an integer between 0 and max (both inclusive).
 			int getInt(int max) { 

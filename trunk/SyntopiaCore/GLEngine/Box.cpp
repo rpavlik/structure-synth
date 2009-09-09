@@ -106,22 +106,25 @@ namespace SyntopiaCore {
 			int minhit = 0;
 			int maxhit = 0;
 			for (int i = 0; i < 3; i++) {
+				bool reverse = false;
+			
 				float e = Vector3f::dot(a[i], p);
 				float f = Vector3f::dot(a[i], ri->lineDirection);
 				if (fabs(f)>1E-17) {
 					float t1 = (e+h[i])/f;
 					float t2 = (e-h[i])/f;
-					if (t1 > t2) { temp = t1; t1 = t2; t2 = temp; }
+					if (t1 > t2) { temp = t1; t1 = t2; t2 = temp; reverse = true; }
 					if (t1 > tmin) { 
 						tmin = t1;
-						minhit = i;
+						minhit = reverse ? (i+1) : -i;
 					}
 					if (t2 < tmax) { 
 						tmax = t2;
-						maxhit = i;
+						maxhit = reverse ? (i+1) : -i;
 					}
 					if (tmin > tmax) return false;
 					if (tmax < 0) return false;
+					
 				} else {
 					if ( (-e-h[i] > 0) || (-e+h[i]<0)) return false;
 				}
@@ -129,17 +132,22 @@ namespace SyntopiaCore {
 			if (tmin>0) {
 				ri->intersection = tmin;
 				for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
-				if (minhit == 0) ri->normal = -n32;
-				else if (minhit == 1) ri->normal = -n13;
-				else ri->normal = -n21;
+				// TODO: Find a better solution or at least make a switch...
+				if (minhit == 1) { ri->normal = n32;   }
+				else if (minhit == 2)  { ri->normal = n13;  }
+				else if (minhit == 3) { ri->normal = n21;  }
+				else if (minhit == 0) { ri->normal = -n32;   }
+				else if (minhit == -1)  { ri->normal = -n13; }
+				else if (minhit == -2) { ri->normal = -n21;  }
 				
 				return true;
 			} else {
 				ri->intersection = tmax;
 				for (int i = 0; i < 4; i++) ri->color[i] = primaryColor[i];
-				if (maxhit == 0) ri->normal = n32;
-				else if (maxhit == 1) ri->normal = n13;
-				else ri->normal = n21;
+				if (maxhit == 0) {ri->normal = n32; ri->color[2] = 1; }
+				else if (maxhit == 1){ ri->normal = n13; ri->color[2] = 1; }
+				else { ri->normal = n21; ri->color[2] = 1; }
+				 ri->color[0] = 0; ri->color[1] = 1; ri->color[2] = 1;
 				return true;
 			}
 
