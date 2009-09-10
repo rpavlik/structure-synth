@@ -21,6 +21,8 @@ namespace SyntopiaCore {
 			RayTracer(EngineWidget* widget);
 
 			QImage calculateImage(int width, int height);
+			void setParameter(QString param, QString value);
+			void setBackgroundColor(Vector3f b) { backgroundColor = b; }
 
 		private:
 
@@ -35,15 +37,11 @@ namespace SyntopiaCore {
 			Vector3f backY;
 
 			QList<Object3D*> objects;
-			int aaSamples;
-			int width;
-			int height;
 			float xmin;
 			float ymin;
 			float xmax;
 			float ymax;
-			bool useShadows;
-
+			
 			int windowWidth;
 			int windowHeight;
 
@@ -66,6 +64,20 @@ namespace SyntopiaCore {
 			float light1Specular;
 
 			Math::RandomNumberGenerator rg;
+
+			int ambMinRays;
+			int ambMaxRays;
+			float ambPrecision;
+			int aaSamples;
+			int width;
+			int height;
+			bool useShadows;
+			double globalAmbient;
+			double globalDiffuse;
+			double globalSpecular;
+			double reflection;
+			double precision;
+
 		};
 
 	}
