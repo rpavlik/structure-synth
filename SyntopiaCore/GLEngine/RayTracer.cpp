@@ -272,7 +272,16 @@ namespace SyntopiaCore {
 			objects = widget->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
+			ambMinRays = 10;
+			ambMaxRays = 100;
+			ambPrecision = 0.9;
 			aaSamples = 2;
+			useShadows = true;
+			globalAmbient = 0.3;
+			globalDiffuse = 0.5;
+			globalSpecular = 0.8;
+			reflection = 0.1;
+			precision = 0.95;
 		}
 
 		Vector3f RayTracer::rayCastPixel(float x, float y) {
@@ -338,7 +347,7 @@ namespace SyntopiaCore {
 
 				// This is a Phong lightning model, see e.g. (http://ai.autonomy.net.au/wiki/Graphics/Illumination)
 				// -- Diffuse light 
-				double diffuse = light1Diffuse*(Vector3f::dot(foundNormal, (lightDirection).normalized()));				
+				double diffuse = globalDiffuse*(Vector3f::dot(foundNormal, (lightDirection).normalized()));				
 				if (diffuse<0) diffuse = 0;
 				light += diffuse;
 
@@ -353,21 +362,20 @@ namespace SyntopiaCore {
 					if (spec< 0.1) {
 						spec = 0;
 					} else {
-						spec = light1Specular*pow(spec,50);
+						spec = globalSpecular*pow(spec,50);
 						if (spec<0) spec = 0;
 					}
 				}
 				light += spec;
 
 				// -- Ambient light
-				double ambient = light1Ambient;
+				double ambient = globalAmbient;
 				light += ambient; 
 
 				// -- calculate shadow...
 				// TODO: Calculate shadow in transperant media
 				bool inShadow = false;
-				bool calcShadow = true;
-				if (calcShadow) {
+				if (useShadows) {
 					double maxT = 0;
 					QList<Object3D*>* list = accelerator->setupRay(iPoint,(lightPos-iPoint), maxT);
 					ri.startPoint = iPoint;
@@ -388,74 +396,75 @@ namespace SyntopiaCore {
 				}
 
 				// Clamp light values.
-				if (calcShadow && inShadow) light=ambient; // drop-shadow strength (only ambient light...)
+				if (useShadows && inShadow) light=ambient; // drop-shadow strength (only ambient light...)
 				if (light > 1) light = 1;
-				
 				if (light < 0) light = 0;
-
-				light = 1; // TODO: Remove
 				
 				if (foundColor[3] < 1) {
 					Vector3f color = rayCast(iPoint, direction, bestObj, level+1);
-
 					foundColor[0] = light*foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
 					foundColor[1] = light*foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
 					foundColor[2] = light*foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
-					
 				}
 
 				
-				float reflect = 0.4;
-				if (reflect > 0) {
+				if (reflection > 0) {
 					Vector3f nDir = foundNormal*(-2)*Vector3f::dot(foundNormal, direction)/foundNormal.sqrLength() + direction;
 							
 
 					Vector3f color = rayCast(iPoint, nDir, bestObj, level+1);
 					Vector3f thisColor = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]) // *(1-reflect)
-					+ color*(reflect);
-					foundColor[0] = light*foundColor[0]*(1-reflect) + color.x()*reflect;
-					foundColor[1] = light*foundColor[1]*(1-reflect) + color.y()*reflect;
-					foundColor[2] = light*foundColor[2]*(1-reflect) + color.z()*reflect;
+					+ color*(reflection);
+					foundColor[0] = light*foundColor[0]*(1-reflection) + color.x()*reflection;
+					foundColor[1] = light*foundColor[1]*(1-reflection) + color.y()*reflection;
+					foundColor[2] = light*foundColor[2]*(1-reflection) + color.z()*reflection;
 					if (foundColor[0]>1) foundColor[0] = 1;
 					if (foundColor[1]>1) foundColor[1] = 1;
 					if (foundColor[2]>1) foundColor[2] = 1;
 					
 				}
 
-				int ambOcc = 32;
-				if (level>1) ambOcc = 10;
-				int hits = 0;
-				for (int ix = 0; ix < ambOcc; ix++) {
-					// Use monte carlo sampling to obtain random vector.
-					Vector3f random ;
-					do {
-						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
-					} while (random.sqrLength() > 1);
-					random.normalize();
-					if (Vector3f::dot(random, foundNormal)<0) random = random*-1.0; // Only check away from surface.
+				if (level==0 && ambMaxRays>0) {
+					int hits = 0;
+					int tests = 0;
+					for (int ix = 0; ix < ambMaxRays; ix++) {
+						tests++;
+						// Use monte carlo sampling to obtain random vector.
+						Vector3f random ;
+						do {
+							random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
+						} while (random.sqrLength() > 1);
+						random.normalize();
+						if (Vector3f::dot(random, foundNormal)<0) random = random*-1.0; // Only check away from surface.
 
-					double maxT = 0;
-					QList<Object3D*>* list = accelerator->setupRay(iPoint,random, maxT);
-					ri.startPoint = iPoint;
-					ri.lineDirection = random;
-					bool occluded = false;
-					while (list != 0 && !occluded) { 
-						// check objects
-						for (int i = 0; i < list->size(); i++) {
-							if (list->at(i) == bestObj) continue; // self-shadow? 							
-							occluded = list->at(i)->intersectsRay(&ri);
-							if (ri.intersection < 0) occluded = false;
-							if (occluded) break;								
+						double maxT = 0;
+						QList<Object3D*>* list = accelerator->setupRay(iPoint,random, maxT);
+						ri.startPoint = iPoint;
+						ri.lineDirection = random;
+						bool occluded = false;
+						while (list != 0 && !occluded) { 
+							// check objects
+							for (int i = 0; i < list->size(); i++) {
+								if (list->at(i) == bestObj) continue; // self-shadow? 							
+								occluded = list->at(i)->intersectsRay(&ri);
+								if (ri.intersection < 0) occluded = false;
+								if (occluded) break;								
+							}
+
+							if (!occluded) list = accelerator->advance(maxT); 
 						}
-
-						if (!occluded) list = accelerator->advance(maxT); 
+						if (occluded) hits++;
 					}
-					if (occluded) hits++;
-				}
-				if (ambOcc>0) {
-					light = light*(1-hits/(double)ambOcc);
-				}
+					double occ = (1-hits/(double)tests);
+					/*
+					if (occ < 0.4) occ = 0;
+					else if (occ > 1) occ = 1;
+					else occ = (occ-0.4)/(1-0.4);
+					occ = occ*occ;
 
+					*/
+					light = light*occ;
+				}
 
 				return Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);;
 			} else {
@@ -605,6 +614,121 @@ namespace SyntopiaCore {
 			return im;
 		}
 
+
+		namespace {
+			class MiniParser {
+			public:
+				MiniParser(QString param, QString value, QChar separator = ',') : separator(separator), original(value), param(param), value(value), paramCount(0) {
+				}
+
+				MiniParser& getInt(int& val) {
+					paramCount++;
+					QString first = value.section(separator, 0,0);
+					value = value.section(separator, 1);
+
+					//INFO(QString("getInt: %1, %2").arg(first).arg(value));
+
+					if (first.isEmpty()) {
+						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
+					}
+
+					bool succes = false;
+					int i = first.toInt(&succes);
+					if (!succes) {
+						WARNING(QString("Expected argument number %1 to be an integer. Found: %2").arg(paramCount).arg(first));
+					}
+					val = i;
+
+					return *this;
+				}
+
+
+				
+				MiniParser& getBool(bool& val) {
+					paramCount++;
+					QString first = value.section(separator, 0,0);
+					value = value.section(separator, 1);
+				
+					if (first.isEmpty()) {
+						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
+					}
+
+					if (first.toLower() == "true") {
+						val = true;
+					} else if (first.toLower() == "false") {
+						val = false;
+					} else {
+						WARNING(QString("Expected argument number %1 to be either true or false. Found: %2").arg(paramCount).arg(first));
+					}
+					
+					return *this;
+				}
+
+				MiniParser& getDouble(double& val) {
+					paramCount++;
+					QString first = value.section(separator, 0,0);
+					value = value.section(separator, 1);
+
+					if (first.isEmpty()) {
+						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
+					}
+
+					bool succes = false;
+					double d = first.toDouble(&succes);
+					if (!succes) {
+						WARNING(QString("Expected argument number %1 to be an double. Found: %2").arg(paramCount).arg(first));
+					}
+					val = d;
+
+					return *this;
+				}
+
+				QChar separator;
+				QString original;
+				QString param;
+				QString value;
+				int paramCount ;
+			};
+		}
+
+		void RayTracer::setParameter(QString param, QString value) {
+			param=param.toLower();
+
+			/*
+			int ambMinRays;
+			int ambMaxRays;
+			float ambPrecision;
+			int aaSamples;
+			int width;
+			int height;
+			bool useShadows;
+			float globalAmbient;
+			float globalDiffuse;
+			float globalSpecular;
+			float reflections;
+			*/
+			INFO("Here!");
+
+			if (param == "ambient-occlusion") {
+				// Min rays, Max rays, Precision...		
+				MiniParser(param,value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(precision);
+				INFO(QString("Min: %1, Max: %2, Prec: %3").arg(ambMinRays).arg(ambMaxRays).arg(precision));
+		
+			} else if (param == "phong") {
+				MiniParser(param,value, ',').getDouble(globalAmbient).getDouble(globalDiffuse).getDouble(globalSpecular);
+				INFO(QString("Ambient: %1, Diffuse: %2, Specular: %3").arg(globalAmbient).arg(globalDiffuse).arg(globalSpecular));
+			} else if (param == "shadows") {
+				MiniParser(param,value, ',').getBool(useShadows);
+				INFO(QString("Shadows: %3").arg(useShadows ? "true" : "false"));
+		
+			} else if (param == "reflection") {
+				MiniParser(param,value, ',').getDouble(reflection);
+				INFO(QString("Reflection: %3").arg(reflection));
+		
+			} else {
+				WARNING("Unknown parameter: " + param);
+			}
+		}
 
 
 

@@ -10,6 +10,7 @@
 #include "VariableEditor.h"
 #include "TemplateExportDialog.h"
 #include "../Model/Rendering/TemplateRenderer.h"
+#include "../Model/Builder.h"
 
 
 
@@ -162,6 +163,7 @@ namespace StructureSynth {
 
 			QVector<QAction*> recentFileActions;
 			QAction* recentFileSeparator;
+			QVector<Model::Command> raytracerCommands;
 
 		};
 

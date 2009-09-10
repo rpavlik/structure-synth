@@ -813,6 +813,9 @@ namespace StructureSynth {
 					oldDirtyPosition = -1;
 				}
 
+				raytracerCommands = b.getRaytracerCommands();
+				INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
+
 				rs = 0;
 				delete(rs);
 				
@@ -1363,7 +1366,14 @@ namespace StructureSynth {
 
 		void MainWindow::raytrace() {
 			RayTracer rt(engine);
+			foreach (Command c, raytracerCommands) {
+				QString arg = c.arg;
+				arg = arg.remove("[");
+				arg = arg.remove("]");
+				rt.setParameter(c.command, arg);
+			}
 			rt.calculateImage(engine->width(), engine->height());
+			
 		}
 
 		void MainWindow::parseEaster(QString text) {

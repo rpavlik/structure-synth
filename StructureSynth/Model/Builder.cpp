@@ -228,7 +228,10 @@ namespace StructureSynth {
 		}
 
 		void Builder::setCommand(QString command, QString param) {
-			if (command == "maxdepth") {
+			if (command.toLower().startsWith("raytracer::")) {
+				QString c = command.toLower().remove("raytracer::");
+				raytracerCommands.append(Command(c,param));
+			} else if (command == "maxdepth") {
 				bool succes;
 				int i = param.toInt(&succes);
 				if (!succes) throw Exception(QString("Command 'maxdepth' expected integer parameter. Found: %1").arg(param));

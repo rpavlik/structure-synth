@@ -13,7 +13,12 @@
 namespace StructureSynth {
 	namespace Model {	
 
-		
+		struct Command {
+			Command() {};
+			Command(QString command, QString arg) : command(command), arg(arg) {};
+			QString command;
+			QString arg;
+		};
 
 		/// A Builder executes the rule set on a Renderer object
 		class Builder {
@@ -32,6 +37,7 @@ namespace StructureSynth {
 			bool seedChanged() { return hasSeedChanged; }
 			int getNewSeed() { return newSeed; }
 			ColorPool* getColorPool() { return colorPool; }
+			QVector<Command> getRaytracerCommands() { return raytracerCommands; };
 
 		private:
 			void recurseBreadthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
@@ -54,6 +60,7 @@ namespace StructureSynth {
 			int initialSeed;
 			State* currentState;
 			ColorPool* colorPool;
+			QVector<Command> raytracerCommands;
 		};
 
 	}
