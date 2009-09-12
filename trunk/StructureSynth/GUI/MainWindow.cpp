@@ -1372,6 +1372,7 @@ namespace StructureSynth {
 				arg = arg.remove("]");
 				rt.setParameter(c.command, arg);
 			}
+			rt.setBackgroundColor(engine->getBackgroundColor());
 			rt.calculateImage(engine->width(), engine->height());
 			
 		}
