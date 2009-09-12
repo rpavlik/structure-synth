@@ -294,7 +294,7 @@ namespace SyntopiaCore {
 		}
 
 		Vector3f RayTracer::rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level) {
-			if (level>5) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
+			if (level>15) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
 			static int rayID = 1;
 			rayID++;
 			pixels++;
@@ -401,7 +401,7 @@ namespace SyntopiaCore {
 				if (light < 0) light = 0;
 				
 				if (foundColor[3] < 1) {
-					Vector3f color = rayCast(iPoint, direction, bestObj, level+1);
+					Vector3f color = rayCast(iPoint, direction, bestObj, level+5); 
 					foundColor[0] = light*foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
 					foundColor[1] = light*foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
 					foundColor[2] = light*foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
@@ -707,7 +707,6 @@ namespace SyntopiaCore {
 			float globalSpecular;
 			float reflections;
 			*/
-			INFO("Here!");
 
 			if (param == "ambient-occlusion") {
 				// Min rays, Max rays, Precision...		
