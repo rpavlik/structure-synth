@@ -67,7 +67,7 @@ namespace SyntopiaCore {
 
 			int ambMinRays;
 			int ambMaxRays;
-			float ambPrecision;
+			double ambPrecision;
 			int aaSamples;
 			int width;
 			int height;
@@ -76,8 +76,7 @@ namespace SyntopiaCore {
 			double globalDiffuse;
 			double globalSpecular;
 			double reflection;
-			double precision;
-
+			
 		};
 
 	}

@@ -281,7 +281,7 @@ namespace SyntopiaCore {
 			globalDiffuse = 0.5;
 			globalSpecular = 0.8;
 			reflection = 0.1;
-			precision = 0.95;
+		
 		}
 
 		Vector3f RayTracer::rayCastPixel(float x, float y) {
@@ -453,7 +453,17 @@ namespace SyntopiaCore {
 
 							if (!occluded) list = accelerator->advance(maxT); 
 						}
-						if (occluded) hits++;
+						
+						if (ix>=ambMinRays) {
+							double oldPercentage = hits/(double)(tests-1);
+							if (occluded) hits++;
+							double newPercentage = hits/(double)tests;
+							if (fabs(oldPercentage-newPercentage)/oldPercentage < (1-ambPrecision)) {
+								break;
+							}
+						} else {
+							if (occluded) hits++;
+						}
 					}
 					double occ = (1-hits/(double)tests);
 					/*
@@ -710,8 +720,8 @@ namespace SyntopiaCore {
 
 			if (param == "ambient-occlusion") {
 				// Min rays, Max rays, Precision...		
-				MiniParser(param,value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(precision);
-				INFO(QString("Min: %1, Max: %2, Prec: %3").arg(ambMinRays).arg(ambMaxRays).arg(precision));
+				MiniParser(param,value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(ambPrecision);
+				INFO(QString("Min: %1, Max: %2, Prec: %3").arg(ambMinRays).arg(ambMaxRays).arg(ambPrecision));
 		
 			} else if (param == "phong") {
 				MiniParser(param,value, ',').getDouble(globalAmbient).getDouble(globalDiffuse).getDouble(globalSpecular);
