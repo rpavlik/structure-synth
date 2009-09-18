@@ -46,6 +46,7 @@ namespace StructureSynth {
 			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, int width = 0, int height = 0, bool postModify = false);
 		
 
+			SyntopiaCore::GLEngine::EngineWidget* getEngine() { return engine; };
 			static QString getExamplesDir();
 			static QString getMiscDir();
 			static QString getTemplateDir();

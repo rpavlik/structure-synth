@@ -116,6 +116,11 @@ namespace StructureSynth {
 			Debug debugObject;
 			engine.globalObject().setProperty("Debug", engine.newQObject(&debugObject)); 
 
+			Builder builder(engine3D);
+			engine.globalObject().setProperty("Builder", engine.newQObject(&builder)); 
+
+
+
 			World world(engine3D);
 			QScriptValue w = engine.newQObject(&world);
 			w.setProperty("addSphere", engine.newFunction(addSphereStatic));

@@ -816,8 +816,8 @@ namespace StructureSynth {
 				raytracerCommands = b.getRaytracerCommands();
 				INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
 
-				rs = 0;
 				delete(rs);
+				rs = 0;
 				
 			} catch (ParseError& pe) {
 				WARNING(pe.getMessage());

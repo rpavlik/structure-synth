@@ -1,6 +1,6 @@
 #if defined(_MSC_VER) 
-    // disable warning "'QtConcurrent::BlockSizeManager' : assignment operator could not be generated"
-    #pragma warning( disable : 4512 )
+// disable warning "'QtConcurrent::BlockSizeManager' : assignment operator could not be generated"
+#pragma warning( disable : 4512 )
 #endif
 
 #include "Debug.h"
@@ -8,13 +8,24 @@
 #include <QScriptEngine>
 #include <QMessageBox>
 #include <QApplication>
+#include <QFile>
+#include <QTextStream>
 #include <QThread>
 #include "SyntopiaCore/Logging/Logging.h"
 #include "../../SyntopiaCore/GLEngine/Sphere.h"
-
+#include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
+#include "../../StructureSynth/Parser/Tokenizer.h"
+#include "../../StructureSynth/Parser/Preprocessor.h"
+#include "../../StructureSynth/Model/RuleSet.h"
+#include "../../StructureSynth/Model/Builder.h"
+#include "../../StructureSynth/Parser/EisenParser.h"
+#include "../../SyntopiaCore/Exceptions/Exception.h"
 
 using namespace SyntopiaCore::Logging;
-
+using namespace StructureSynth::Model;
+using namespace StructureSynth::Parser;
+using namespace SyntopiaCore::Exceptions;
+using namespace StructureSynth::Model::Rendering;
 
 
 namespace StructureSynth {
@@ -90,5 +101,67 @@ namespace StructureSynth {
 			//INFO(QString("Vector3 CopyConstructor(%1,%2,%3)").arg(v.x()).arg(v.y()).arg(v.z()));
 
 		}
+
+		void Builder::render() {
+
+			engine3D->setDisabled(true);
+		
+			try {
+				Rendering::OpenGLRenderer renderTarget(engine3D);
+				renderTarget.begin(); // we clear before parsing...
+
+				Preprocessor pp;
+				QString out = pp.Process(loadedSystem);
+				Tokenizer tokenizer(out);
+				EisenParser e(&tokenizer);
+				INFO("Started Eisenstein engine...");
+				RuleSet* rs = e.parseRuleset();
+				rs->resolveNames();
+				Model::Builder b(&renderTarget, rs);
+				b.build();
+				renderTarget.end();
+				INFO("Done...");
+				//raytracerCommands = b.getRaytracerCommands();
+				//INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
+				delete(rs);
+				rs = 0;
+
+			} catch (ParseError& pe) {
+				WARNING(pe.getMessage());
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+			} 
+			engine3D->setDisabled(false);
+			engine3D->requireRedraw();
+
+		}
+
+		void Builder::load(QString fileName) {	
+			fileName = QDir("").absoluteFilePath(fileName);
+			QFile file(fileName);
+			if (!file.open(QFile::ReadOnly | QFile::Text)) {
+				WARNING(QString("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+			} else {
+				QTextStream in(&file);
+				loadedSystem = in.readAll();
+				originalSystem = loadedSystem;
+			}
+		};
+		void Builder::define(QString input, QString value) {
+			QStringList s = loadedSystem.split("\n");
+			for (int i = 0; i < s.count(); i++) {
+
+				if (!s[i].contains("#define", Qt::CaseInsensitive)) {
+					//INFO("N: " + s[i]);
+					s[i] = s[i].replace(input, value);
+				} else {
+					//INFO("X: " + s[i]);
+				}
+			}
+			loadedSystem = s.join("\n");
+			
+		};
+		void Builder::buildToFile(QString fileName) {};
+		void Builder::reset() { loadedSystem = originalSystem; };
 	}
 }

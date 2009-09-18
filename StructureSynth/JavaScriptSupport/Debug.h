@@ -6,6 +6,7 @@
 #include <QScriptable>
 #include "../../SyntopiaCore/Math/Vector3.h"
 #include "../../SyntopiaCore/GLEngine/EngineWidget.h"
+#include "../GUI/MainWindow.h"
 
 namespace StructureSynth {
 	namespace JavaScriptSupport {	
@@ -30,7 +31,26 @@ namespace StructureSynth {
 			QProgressDialog* progress;
 		};
 
-		
+		class Builder : public QObject {
+			Q_OBJECT
+
+		public:
+			Builder(SyntopiaCore::GLEngine::EngineWidget* engine3D) : engine3D(engine3D) {};
+			~Builder() {};
+			
+		public slots:
+			void load(QString fileName);
+			void define(QString input, QString value);
+			void render();
+			void buildToFile(QString fileName);
+			void reset();
+			
+		private:
+			SyntopiaCore::GLEngine::EngineWidget* engine3D;
+			QString loadedSystem;
+			QString originalSystem;
+		};
+
 
 		
 		
