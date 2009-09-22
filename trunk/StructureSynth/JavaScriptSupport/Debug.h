@@ -16,7 +16,7 @@ namespace StructureSynth {
 			Q_OBJECT
 
 		public:
-			Debug();
+			Debug(QStatusBar* statusBar);
 			~Debug();
 			
 		public slots:
@@ -26,9 +26,11 @@ namespace StructureSynth {
 			void SetProgress(double percentage); // between 0 and 1
 			void HideProgress();
 			void Sleep(int ms);
+			void waitForMouseButton();
 
 		private:
 			QProgressDialog* progress;
+			QStatusBar* statusBar;
 		};
 
 		class Builder : public QObject {
@@ -39,12 +41,29 @@ namespace StructureSynth {
 			~Builder() {};
 			
 		public slots:
+			/// ----- These can be called from JavaScript -------
+
+			/// Load an EisenScript system.
 			void load(QString fileName);
+
+			/// Simply does text substitutions (but ignores preprocessor lines!)
 			void define(QString input, QString value);
+
+			/// Render (OpenGL to viewport).
 			void render();
-			void buildToFile(QString fileName);
-			void reset();
 			
+			/// Render (OpenGL to file).
+			void renderToFile(QString fileName, bool overwrite);
+			
+			/// Raytrace image with given dimensions to file. (w=0, h=0 will use viewport size).
+			void raytraceToFile(QString fileName, int w, int h, bool overwrite);
+
+			/// Raytrace image with same dimensions as viewport to file.
+			void raytraceToFile(QString fileName, bool overwrite);
+
+			/// Restores the original content (useful if substitutions have been made.)
+			void reset();
+						
 		private:
 			SyntopiaCore::GLEngine::EngineWidget* engine3D;
 			QString loadedSystem;

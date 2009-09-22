@@ -14,7 +14,7 @@ namespace StructureSynth {
 		}
 
 		CustomRule::~CustomRule() {
-			delete (retirementRule);
+			//delete (retirementRule);
 		}
 
 		void CustomRule::apply(Builder* b) const {

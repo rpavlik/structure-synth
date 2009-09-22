@@ -13,6 +13,13 @@
 namespace SyntopiaCore {
 	namespace GLEngine {	
 
+		struct Command {
+			Command() {};
+			Command(QString command, QString arg) : command(command), arg(arg) {};
+			QString command;
+			QString arg;
+		};
+
 		
 		/// Settings for the GLEngine
 		class Settings {
@@ -71,7 +78,7 @@ namespace SyntopiaCore {
 			};
 
 			SyntopiaCore::Math::Vector3f getBackgroundColor() {
-				return SyntopiaCore::Math::Vector3f(backgroundColor.red()/255,backgroundColor.green()/255,backgroundColor.blue()/255);
+				return SyntopiaCore::Math::Vector3f(backgroundColor.red()/255.0f,backgroundColor.green()/255.0f,backgroundColor.blue()/255.0f);
 			}
 		
 			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
@@ -89,6 +96,8 @@ namespace SyntopiaCore {
 
 			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
 			
+			void setRaytracerCommands(QVector<GLEngine::Command> raytracerCommands) { this->raytracerCommands = raytracerCommands; }
+			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; }
 			
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
@@ -109,6 +118,8 @@ namespace SyntopiaCore {
 
 		
 		private:
+			QVector<GLEngine::Command> raytracerCommands;
+
 			// Creates the appropriate GL_PROJECTION matrix
 			void updatePerspective();	
 			SyntopiaCore::Math::Vector3f screenTo3D(int sx, int sy, int sz);

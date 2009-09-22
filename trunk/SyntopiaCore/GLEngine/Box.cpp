@@ -99,8 +99,8 @@ namespace SyntopiaCore {
 		bool Box::intersectsRay(RayInfo* ri) {
 			// Following the Real-Time Rendering book p. 574
 			
-			float tmin = -1E37;
-			float tmax = 1E37;
+			float tmin = -1.0E37f;
+			float tmax = 1.0E37f;
 			float temp = 0;
 			Vector3f p = ac - ri->startPoint;
 			int minhit = 0;
