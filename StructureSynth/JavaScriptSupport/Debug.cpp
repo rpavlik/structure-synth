@@ -13,6 +13,7 @@
 #include <QThread>
 #include "SyntopiaCore/Logging/Logging.h"
 #include "../../SyntopiaCore/GLEngine/Sphere.h"
+#include "../../SyntopiaCore/GLEngine/RayTracer.h"
 #include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "../../StructureSynth/Parser/Tokenizer.h"
 #include "../../StructureSynth/Parser/Preprocessor.h"
@@ -22,6 +23,7 @@
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 
 using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::GLEngine;
 using namespace StructureSynth::Model;
 using namespace StructureSynth::Parser;
 using namespace SyntopiaCore::Exceptions;
@@ -41,7 +43,7 @@ namespace StructureSynth {
 
 		};
 
-		Debug::Debug(){
+		Debug::Debug(QStatusBar* statusBar) : statusBar(statusBar) {
 			progress = 0;
 		}
 
@@ -114,18 +116,15 @@ namespace StructureSynth {
 				QString out = pp.Process(loadedSystem);
 				Tokenizer tokenizer(out);
 				EisenParser e(&tokenizer);
-				INFO("Started Eisenstein engine...");
 				RuleSet* rs = e.parseRuleset();
 				rs->resolveNames();
-				Model::Builder b(&renderTarget, rs);
+				Model::Builder b(&renderTarget, rs, false);
 				b.build();
 				renderTarget.end();
-				INFO("Done...");
-				//raytracerCommands = b.getRaytracerCommands();
+				engine3D->setRaytracerCommands(b.getRaytracerCommands());
 				//INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
 				delete(rs);
 				rs = 0;
-
 			} catch (ParseError& pe) {
 				WARNING(pe.getMessage());
 			} catch (Exception& er) {
@@ -161,7 +160,89 @@ namespace StructureSynth {
 			loadedSystem = s.join("\n");
 			
 		};
-		void Builder::buildToFile(QString fileName) {};
+		
+		void Builder::renderToFile(QString fileName, bool overwrite) {
+			render();
+			engine3D->requireRedraw();
+			engine3D->update();
+			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+			engine3D->update();
+			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+			//engine3D->updateGL();
+
+			QImage image = engine3D->grabFrameBuffer();
+
+			QFileInfo fi(fileName);
+			if (fi.exists()) {
+				if (!overwrite) {
+					if (QMessageBox::question(0, "File Error", "Overwrite file: " + fi.absoluteFilePath() + "?", 
+						QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel) {
+							WARNING("Cancelled save.");
+							return;
+							
+					}
+				}
+				INFO("Overwriting: " + fi.absoluteFilePath());		
+			}
+			bool succes = image.save(fileName);
+			if (succes) {
+				INFO("Saved: " + fi.absoluteFilePath());		
+			} else {
+				WARNING("Failed to save: " + fi.absoluteFilePath());
+			}
+		};
+		
 		void Builder::reset() { loadedSystem = originalSystem; };
+		
+		void Builder::raytraceToFile(QString fileName, bool overwrite) {
+			raytraceToFile(fileName, 0,0, overwrite);
+		}
+
+		void Builder::raytraceToFile(QString fileName, int w, int h, bool overwrite) {
+			RayTracer rt(engine3D);
+			if (w == 0) w = engine3D->width();
+			if (h == 0) h = engine3D->height();
+			INFO(QString("Raytracing %1x%2 image...").arg(w).arg(h));
+			QImage im = rt.calculateImage(w,h);
+			QFileInfo fi(fileName);
+			if (fi.exists()) {
+				if (!overwrite) {
+					if (QMessageBox::question(0, "File Error", "Overwrite file: " + fi.absoluteFilePath() + "?", 
+						QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel) {
+						
+						WARNING("Cancelled save.");
+							return;
+					}
+				}
+				INFO("Overwriting: " + fi.absoluteFilePath());		
+			}
+			bool succes = im.save(fileName);
+			if (succes) {
+				INFO("Saved: " + fi.absoluteFilePath());		
+			} else {
+				WARNING("Failed to save: " + fi.absoluteFilePath());
+			}
+
+		}
+			
+
+		void Debug::waitForMouseButton() {
+			while (true) {
+
+				statusBar->showMessage("Left Mousebutton to continue, right to quit.", 4000);
+				if (QApplication::mouseButtons() == Qt::LeftButton) {
+					//statusBar->showMessage("");
+				
+					break;
+				} else if (QApplication::mouseButtons() == Qt::RightButton) {
+					//statusBar->showMessage("");
+					throw Exception("");
+					break;
+				}
+				qApp->processEvents();
+				//QThread::msleep(100);
+
+			}
+		}
 	}
 }

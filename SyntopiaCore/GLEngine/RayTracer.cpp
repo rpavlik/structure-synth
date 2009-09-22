@@ -255,21 +255,21 @@ namespace SyntopiaCore {
 		};
 
 
-		RayTracer::RayTracer(EngineWidget* widget) {
-			for (int i = 0; i < 16; i++) modelView[i] = widget->getModelViewCache()[i];
-			for (int i = 0; i < 16; i++) projection[i] = widget->getProjectionCache()[i];
-			for (int i = 0; i < 16; i++) viewPort[i] = widget->getViewPortCache()[i];
+		RayTracer::RayTracer(EngineWidget* engine) {
+			for (int i = 0; i < 16; i++) modelView[i] = engine->getModelViewCache()[i];
+			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
+			for (int i = 0; i < 16; i++) viewPort[i] = engine->getViewPortCache()[i];
 
 			Vector3f from;
 			Vector3f to;
-			widget->getBoundingBox(from,to);
+			engine->getBoundingBox(from,to);
 
 
 			accelerator = new VoxelStepper(from,to, 35);
 			backgroundColor = Vector3f(0,0,0);
-			windowHeight = widget->width();
-			windowWidth = widget->height();
-			objects = widget->getObjects();
+			windowHeight = engine->width();
+			windowWidth = engine->height();
+			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
 			ambMinRays = 10;
@@ -281,6 +281,15 @@ namespace SyntopiaCore {
 			globalDiffuse = 0.5;
 			globalSpecular = 0.8;
 			reflection = 0.1;
+
+			foreach (Command c, engine->getRaytracerCommands()) {
+				QString arg = c.arg;
+				arg = arg.remove("[");
+				arg = arg.remove("]");
+				setParameter(c.command, arg);
+			}
+			setBackgroundColor(engine->getBackgroundColor());
+			
 		
 		}
 
@@ -496,7 +505,7 @@ namespace SyntopiaCore {
 			float oh = (float)h; 
 			float ow = (float)w; 
 			float vh = (float)h; // windowHeight; 
-			float vw = (float)w; // windowWidth; 
+			//float vw = (float)w; // windowWidth; 
 			windowHeight = h;
 			windowWidth = w;
 
@@ -529,9 +538,9 @@ namespace SyntopiaCore {
 			GLdouble sx1, sy1, sz1;				
 			gluUnProject((float)-200, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
 			lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
-			light1Ambient = 0.2;
-			light1Diffuse = 0.6;
-			light1Specular = 0.6;
+			light1Ambient = 0.2f;
+			light1Diffuse = 0.6f;
+			light1Specular = 0.6f;
 
 			pixels = 0;
 			checks = 0;
@@ -611,16 +620,7 @@ namespace SyntopiaCore {
 
 			progress.close();
 
-			/// Here we show the result...
-			QDialog* d = new QDialog();
-			d->resize(w,h);
-			QPixmap p = QPixmap::fromImage(im);
-			QLabel* lb = new QLabel(d);
-			lb->setPixmap(p);
-			d->exec();
-			delete(lb);
-			delete(d);
-
+			
 			return im;
 		}
 

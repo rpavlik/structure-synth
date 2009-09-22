@@ -8,11 +8,13 @@
 #include <QScriptEngine>
 #include <QMetaType>
 #include "SyntopiaCore/Logging/Logging.h"
+#include "SyntopiaCore/Exceptions/Exception.h"
 #include "SyntopiaCore/GLEngine/Sphere.h"
 
 #include "Debug.h"
 
 using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::Exceptions;
 
 //Q_DECLARE_METATYPE(StructureSynth::JavaScriptSupport::Vector3)
 
@@ -101,7 +103,7 @@ namespace StructureSynth {
 
 		}
 
-		JavaScriptParser::JavaScriptParser(SyntopiaCore::GLEngine::EngineWidget* engine3D) : engine3D(engine3D) {
+		JavaScriptParser::JavaScriptParser(SyntopiaCore::GLEngine::EngineWidget* engine3D, QStatusBar* statusBar) : engine3D(engine3D), statusBar(statusBar) {
 		}
 
 		JavaScriptParser::~JavaScriptParser() {
@@ -113,7 +115,7 @@ namespace StructureSynth {
 			QScriptEngine engine;
 
 			// Setup the global objects...
-			Debug debugObject;
+			Debug debugObject(statusBar);
 			engine.globalObject().setProperty("Debug", engine.newQObject(&debugObject)); 
 
 			Builder builder(engine3D);
@@ -139,14 +141,19 @@ namespace StructureSynth {
 			//qScriptRegisterMetaType(&engine, vector3ToScriptValue, vector3FromScriptValue); 
 
 			// Execute and catch exceptions.
-			QScriptValue result = engine.evaluate(input);
-			if (engine.hasUncaughtException()) {
-				int line = engine.uncaughtExceptionLineNumber();
-				QString error =  QString("Uncaught exception at line %1:%2").arg(line).arg(result.toString());
-				WARNING(error);
-			} else {
-				INFO(result.toString());
+			try {
+				QScriptValue result = engine.evaluate(input);
+				if (engine.hasUncaughtException()) {
+					int line = engine.uncaughtExceptionLineNumber();
+					QString error =  QString("Uncaught exception at line %1:%2").arg(line).arg(result.toString());
+					WARNING(error);
+				} else {
+					INFO(result.toString());
+				}
+			} catch (Exception& e) {
+				WARNING(e.getMessage());
 			}
+			
 
 		}
 		

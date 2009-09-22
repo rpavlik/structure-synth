@@ -1,8 +1,17 @@
 
 Changelog for Structure Synth:
--------------------------
+------------
+22 Sep 09 [MHC] Worked on JavaScript image export.
+[3h]
+
+18 Sep 09 [MHC] JavaScript work.
+[1h]
+
+12 Sep 09 [MHC] Raytracer opts.
+[1h]
 
 10 Sep 09 [MHC] Parsing for ray tracer parameters.
+[1h]
 
 9  Sep 09 [MHC] Added Ambient Occlusion. Fixed Slab normals (box test).
 [3h]

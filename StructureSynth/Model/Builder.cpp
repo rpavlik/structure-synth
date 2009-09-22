@@ -16,7 +16,7 @@ using namespace SyntopiaCore::Exceptions;
 namespace StructureSynth {
 	namespace Model {
 
-		Builder::Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet) : renderTarget(renderTarget), ruleSet(ruleSet) {
+		Builder::Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet, bool verbose) : renderTarget(renderTarget), ruleSet(ruleSet), verbose(verbose)  {
 			maxGenerations = 1000;
 			maxObjects = 100000;
 			objects = 0;
@@ -174,7 +174,7 @@ namespace StructureSynth {
 
 		void Builder::build() {
 			objects = 0;
-			INFO("Starting builder...");
+			if (verbose) INFO("Starting builder...");
 
 			/// Push first generation state
 			stack.append(RuleState(ruleSet->getStartRule(), State()));
@@ -182,8 +182,13 @@ namespace StructureSynth {
 
 			QProgressDialog progressDialog("Building objects...", "Cancel", 0, 100, 0);
 			progressDialog.setWindowModality(Qt::WindowModal);
-			progressDialog.setMinimumDuration(0);
-			progressDialog.show();
+			if (verbose) {
+				progressDialog.setMinimumDuration(0);
+				progressDialog.show();
+				
+			} else {
+				progressDialog.setMinimumDuration(4000);
+			}
 			progressDialog.setValue(0);
 
 			int maxTerminated = 0;
@@ -198,39 +203,43 @@ namespace StructureSynth {
 			progressDialog.setValue(100); 
 			progressDialog.hide();
 
-			if (progressDialog.wasCanceled()) {
-				INFO("User terminated.");
-			}
 
-			if (objects >= maxObjects) {
-				INFO(QString("Terminated because maximum number of objects reached (%1).").arg(maxObjects));
-				INFO(QString("Use 'Set MaxObjects' command to increase this number."));
-			}
+			if (verbose) {
+				if (progressDialog.wasCanceled()) {
+					INFO("User terminated.");
+				}
 
-			if (stack.size() >= objects) {
-				INFO(QString("Terminated because the number of pending rules reached (%1).").arg(maxObjects));
-				INFO(QString("Use 'Set MaxObjects' command to run for longer time."));
-			}
+				if (objects >= maxObjects) {
+					INFO(QString("Terminated because maximum number of objects reached (%1).").arg(maxObjects));
+					INFO(QString("Use 'Set MaxObjects' command to increase this number."));
+				}
 
-			if (generationCounter == maxGenerations) {
-				INFO(QString("Terminated because maximum number of generations reached (%1).").arg(maxGenerations));
-				INFO(QString("Use 'Set Maxdepth' command to increase this number."));
-			}
+				if (stack.size() >= objects) {
+					INFO(QString("Terminated because the number of pending rules reached (%1).").arg(maxObjects));
+					INFO(QString("Use 'Set MaxObjects' command to run for longer time."));
+				}
 
-			if (maxTerminated != 0) {
-				INFO(QString("Terminated %1 branches, because the dimension was greater than max size (%2)").arg(maxTerminated).arg(maxDim));
-			}
-			if (minTerminated != 0) {
-				INFO(QString("Terminated %1 branches, because the dimension was less than min size (%2)").arg(minTerminated).arg(minDim));
-			}
+				if (generationCounter == maxGenerations) {
+					INFO(QString("Terminated because maximum number of generations reached (%1).").arg(maxGenerations));
+					INFO(QString("Use 'Set Maxdepth' command to increase this number."));
+				}
 
-			INFO("Done building...");
+				if (maxTerminated != 0) {
+					INFO(QString("Terminated %1 branches, because the dimension was greater than max size (%2)").arg(maxTerminated).arg(maxDim));
+				}
+				if (minTerminated != 0) {
+					INFO(QString("Terminated %1 branches, because the dimension was less than min size (%2)").arg(minTerminated).arg(minDim));
+				}
+
+				INFO("Done building...");
+			}
+			
 		}
 
 		void Builder::setCommand(QString command, QString param) {
 			if (command.toLower().startsWith("raytracer::")) {
 				QString c = command.toLower().remove("raytracer::");
-				raytracerCommands.append(Command(c,param));
+				raytracerCommands.append(GLEngine::Command(c,param));
 			} else if (command == "maxdepth") {
 				bool succes;
 				int i = param.toInt(&succes);
@@ -339,7 +348,7 @@ namespace StructureSynth {
 		}
 
 		Builder::~Builder() {
-			delete(ruleSet);
+			//delete(ruleSet);
 			//delete(currentState);
 			delete(colorPool);
 		}

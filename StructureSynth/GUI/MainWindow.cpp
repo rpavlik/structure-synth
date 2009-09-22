@@ -797,7 +797,7 @@ namespace StructureSynth {
 
 				rs->dumpInfo();
 
-				Builder b(&renderTarget, rs);
+				Builder b(&renderTarget, rs, true);
 				b.build();
 				renderTarget.end();
 
@@ -813,10 +813,10 @@ namespace StructureSynth {
 					oldDirtyPosition = -1;
 				}
 
-				raytracerCommands = b.getRaytracerCommands();
-				INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
+				engine->setRaytracerCommands(b.getRaytracerCommands());
+				INFO(QString("Setting %1 raytracer commands.").arg(b.getRaytracerCommands().count()));
 
-				delete(rs);
+				delete(rs); 
 				rs = 0;
 				
 			} catch (ParseError& pe) {
@@ -1138,7 +1138,7 @@ namespace StructureSynth {
 
 					rs->dumpInfo();
 
-					Builder b(&rendering, rs);
+					Builder b(&rendering, rs, true);
 					b.build();
 					rendering.end();
 
@@ -1197,6 +1197,10 @@ namespace StructureSynth {
 						INFO("File saved.");
 					}
 
+					delete(rs);
+					rs = 0;
+
+
 				} catch (Exception& er) {
 					WARNING(er.getMessage());
 				}
@@ -1205,7 +1209,7 @@ namespace StructureSynth {
 
 
 		void MainWindow::parseJavaScript(QString scripture) {
-			JavaScriptParser jsp(engine);
+			JavaScriptParser jsp(engine, statusBar());
 			jsp.parse(scripture);
 
 		}
@@ -1366,15 +1370,17 @@ namespace StructureSynth {
 
 		void MainWindow::raytrace() {
 			RayTracer rt(engine);
-			foreach (Command c, raytracerCommands) {
-				QString arg = c.arg;
-				arg = arg.remove("[");
-				arg = arg.remove("]");
-				rt.setParameter(c.command, arg);
-			}
-			rt.setBackgroundColor(engine->getBackgroundColor());
-			rt.calculateImage(engine->width(), engine->height());
-			
+			QImage im = rt.calculateImage(engine->width(), engine->height());
+			/// Here we show the result...
+			QDialog* d = new QDialog();
+			d->resize(engine->width(),engine->height());
+			QPixmap p = QPixmap::fromImage(im);
+			QLabel* lb = new QLabel(d);
+			lb->setPixmap(p);
+			d->exec();
+			delete(lb);
+			delete(d);
+
 		}
 
 		void MainWindow::parseEaster(QString text) {

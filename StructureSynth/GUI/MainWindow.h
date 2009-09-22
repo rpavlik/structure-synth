@@ -164,8 +164,7 @@ namespace StructureSynth {
 
 			QVector<QAction*> recentFileActions;
 			QAction* recentFileSeparator;
-			QVector<Model::Command> raytracerCommands;
-
+			
 		};
 
 	}

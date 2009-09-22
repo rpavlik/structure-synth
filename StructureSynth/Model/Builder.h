@@ -9,21 +9,19 @@
 #include "ExecutionStack.h"
 
 #include "../../../SyntopiaCore/Math/Matrix4.h"
+#include "../../../SyntopiaCore/GLEngine/EngineWidget.h"
+
 
 namespace StructureSynth {
 	namespace Model {	
 
-		struct Command {
-			Command() {};
-			Command(QString command, QString arg) : command(command), arg(arg) {};
-			QString command;
-			QString arg;
-		};
+
+		using namespace SyntopiaCore;
 
 		/// A Builder executes the rule set on a Renderer object
 		class Builder {
 		public:
-			Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet);
+			Builder(Rendering::Renderer* renderTarget, RuleSet* ruleSet, bool verbose);
 			~Builder();
 			void build();
 
@@ -37,7 +35,7 @@ namespace StructureSynth {
 			bool seedChanged() { return hasSeedChanged; }
 			int getNewSeed() { return newSeed; }
 			ColorPool* getColorPool() { return colorPool; }
-			QVector<Command> getRaytracerCommands() { return raytracerCommands; };
+			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; };
 
 		private:
 			void recurseBreadthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
@@ -49,6 +47,7 @@ namespace StructureSynth {
 			ExecutionStack nextStack;
 			Rendering::Renderer* renderTarget;
 			RuleSet* ruleSet;
+			bool verbose;
 			int maxGenerations;
 			int maxObjects;
 			int objects;
@@ -60,8 +59,11 @@ namespace StructureSynth {
 			int initialSeed;
 			State* currentState;
 			ColorPool* colorPool;
-			QVector<Command> raytracerCommands;
+			QVector<GLEngine::Command> raytracerCommands;
 		};
+
+		
+
 
 	}
 }
