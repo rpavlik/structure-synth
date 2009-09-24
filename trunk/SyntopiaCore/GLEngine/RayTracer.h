@@ -23,6 +23,7 @@ namespace SyntopiaCore {
 			QImage calculateImage(int width, int height);
 			void setParameter(QString param, QString value);
 			void setBackgroundColor(Vector3f b) { backgroundColor = b; }
+			bool wasCancelled() { return userCancelled; }
 
 		private:
 
@@ -76,6 +77,7 @@ namespace SyntopiaCore {
 			double globalDiffuse;
 			double globalSpecular;
 			double reflection;
+			bool userCancelled;
 			
 		};
 

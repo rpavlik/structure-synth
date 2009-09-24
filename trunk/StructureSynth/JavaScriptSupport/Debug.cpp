@@ -120,6 +120,8 @@ namespace StructureSynth {
 				rs->resolveNames();
 				Model::Builder b(&renderTarget, rs, false);
 				b.build();
+				if (b.wasCancelled()) throw Exception("User cancelled");
+			
 				renderTarget.end();
 				engine3D->setRaytracerCommands(b.getRaytracerCommands());
 				//INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
@@ -204,6 +206,7 @@ namespace StructureSynth {
 			if (h == 0) h = engine3D->height();
 			INFO(QString("Raytracing %1x%2 image...").arg(w).arg(h));
 			QImage im = rt.calculateImage(w,h);
+			if (rt.wasCancelled()) throw Exception("User cancelled");
 			QFileInfo fi(fileName);
 			if (fi.exists()) {
 				if (!overwrite) {

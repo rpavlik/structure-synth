@@ -36,12 +36,15 @@ namespace StructureSynth {
 			int getNewSeed() { return newSeed; }
 			ColorPool* getColorPool() { return colorPool; }
 			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; };
+			bool wasCancelled() { return userCancelled; }
 
 		private:
 			void recurseBreadthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
 			void recurseDepthFirst(QProgressDialog& progressDialog, int& maxTerminated, int& minTerminated, int& generationCounter);
 		
 			State state;
+
+			bool userCancelled;
 			
 			ExecutionStack stack;
 			ExecutionStack nextStack;
