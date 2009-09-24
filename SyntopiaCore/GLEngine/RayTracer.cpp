@@ -260,6 +260,7 @@ namespace SyntopiaCore {
 			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
 			for (int i = 0; i < 16; i++) viewPort[i] = engine->getViewPortCache()[i];
 
+			userCancelled = false;
 			Vector3f from;
 			Vector3f to;
 			engine->getBoundingBox(from,to);
@@ -395,7 +396,7 @@ namespace SyntopiaCore {
 						for (int i = 0; i < list->size(); i++) {
 							if (list->at(i) == bestObj) continue; // self-shadow? (probably not neccesary, since the specular light will be negative)							
 							inShadow = list->at(i)->intersectsRay(&ri);
-							if (ri.intersection < 0 || ri.intersection > 1) inShadow = false;
+							if (ri.intersection < 1E-5 || ri.intersection > 1) inShadow = false;
 							if (ri.color[3]<1) inShadow=false;
 							if (inShadow) break;								
 						}
@@ -456,7 +457,7 @@ namespace SyntopiaCore {
 							for (int i = 0; i < list->size(); i++) {
 								if (list->at(i) == bestObj) continue; // self-shadow? 							
 								occluded = list->at(i)->intersectsRay(&ri);
-								if (ri.intersection < 0) occluded = false;
+								if (ri.intersection < 1E-5) occluded = false;
 								if (occluded) break;								
 							}
 
@@ -530,6 +531,7 @@ namespace SyntopiaCore {
 			QProgressDialog progress("progress", "Cancel", 0, 100);
 			progress.setLabelText("Ray tracing");
 			progress.setMinimumDuration(1000);
+			progress.setWindowModality(Qt::WindowModal);
 
 			TIME("Rendering...");
 			QImage im(w,h, QImage::Format_RGB32);
@@ -549,8 +551,11 @@ namespace SyntopiaCore {
 				float fx = x/(float)w;
 				if (x % 7 == 0) {
 					progress.setValue((x*100)/w);
-					qApp->processEvents();
-					if	(progress.wasCanceled()) break;
+					//qApp->processEvents();
+					if	(progress.wasCanceled()) {
+						userCancelled = true;
+						break;
+					}
 				}
 				for (int y = 0; y < h; y++) {	
 					float fy = y/(float)h;
@@ -574,8 +579,11 @@ namespace SyntopiaCore {
 				
 					if (x % 7 == 0) {
 						progress.setValue((x*100)/w);
-						qApp->processEvents();
-						if (progress.wasCanceled()) break;
+						//qApp->processEvents();
+						if (progress.wasCanceled()) {
+							userCancelled = true;
+							break;
+						}
 					}
 
 					for (int y = 1; y+1 < h; y++) {

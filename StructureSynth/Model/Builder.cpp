@@ -27,6 +27,7 @@ namespace StructureSynth {
 			syncRandom = false;
 			initialSeed = 0;
 			colorPool = new ColorPool("RandomHue");
+			userCancelled = false;
 		};
 
 
@@ -64,8 +65,8 @@ namespace StructureSynth {
 					progressDialog.setLabelText(
 						QString("Building objects...\r\n\r\nGeneration: %1\r\nObjects: %2\r\nPending rules: %3")
 						.arg(generationCounter).arg(objects).arg(stack.size()));
-					qApp->processEvents();
-					if (progressDialog.wasCanceled()) { break; }
+					//qApp->processEvents();
+					if (progressDialog.wasCanceled()) { userCancelled = true; break; }
 				}
 				lastValue = (int)(progress*100.0);
 
@@ -130,12 +131,13 @@ namespace StructureSynth {
 					progressDialog.setLabelText(
 						QString("Building objects...\r\n\r\nGeneration: %1\r\nObjects: %2\r\nPending rules: %3")
 						.arg(generationCounter).arg(objects).arg(stack.size()));
-					qApp->processEvents();
+					//qApp->processEvents();
 				}
 
 				lastValue = (int)(progress*100.0);
 
 				if (progressDialog.wasCanceled()) {
+					userCancelled = true;
 					break;
 				}
 				
@@ -206,6 +208,7 @@ namespace StructureSynth {
 
 			if (verbose) {
 				if (progressDialog.wasCanceled()) {
+					userCancelled = true;
 					INFO("User terminated.");
 				}
 
