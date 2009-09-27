@@ -7,7 +7,8 @@ namespace SyntopiaCore {
 	namespace GLEngine {
 
 
-		//GLUquadric* Sphere::myQuad = 0;    
+		//GLUquadric* Sphere::myQuad = 0; 
+		int Sphere::displayListIndex = 0;
 
 		Sphere::Sphere(SyntopiaCore::Math::Vector3f center, float radius) : center(center), radius(radius) {
 			myQuad = gluNewQuadric();    
@@ -17,6 +18,15 @@ namespace SyntopiaCore {
 			Vector3f v = Vector3f(radius,radius,radius);
 			from = center-v;
 			to = center+v;
+
+			if (displayListIndex == 0) {
+				displayListIndex = glGenLists(1);
+				glNewList(displayListIndex, GL_COMPILE);
+				gluSphere(myQuad, 1, 7,7);	
+				glEndList();
+			}
+			
+
 		};
 
 		Sphere::~Sphere() {
@@ -31,7 +41,12 @@ namespace SyntopiaCore {
 
 			glPushMatrix();
 			glTranslatef( center.x(), center.y(), center.z() );
-			gluSphere(myQuad, radius, 7, 7);	
+			if (displayListIndex!=0) {
+				glScalef(radius,radius,radius);
+				glCallList(displayListIndex);
+			} else {
+				gluSphere(myQuad, radius, 7, 7);	
+			}
 			glPopMatrix();			
 		};
 

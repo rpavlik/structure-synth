@@ -16,7 +16,6 @@
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../StructureSynth/Parser/EisenParser.h"
 #include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
-#include "../../StructureSynth/Model/Rendering/POVRenderer.h"
 #include "../../StructureSynth/Model/Rendering/TemplateRenderer.h"
 #include "../../StructureSynth/Parser/Tokenizer.h"
 #include "../../StructureSynth/Parser/Preprocessor.h"

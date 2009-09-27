@@ -121,6 +121,7 @@ namespace SyntopiaCore {
 
 
 			/*
+			
 			RayInfo ri;
 			ri.startPoint = cameraPosition;
 			ri.lineDirection = cameraTarget - cameraPosition;
@@ -129,9 +130,12 @@ namespace SyntopiaCore {
 			f = f + 0.1;
 			if (f>1) f = 0;
 			for (int i = 0; i < objects.count(); i++) {
-				if (objects[i]->intersectsRay(&ri)) objects[i]->setColor(Vector3f(f,1-f,f/2),1);;
+				if (objects[i]->intersectsRay(&ri)) {
+					INFO(QString("Index: %0, Pos: %1, reflection: %2").arg(i).arg( objects[i]->name() ).arg(objects[i]->getPrimitiveClass()->reflection));;
+				}
 
-			}*/
+			}
+			*/
 
 			cameraUp = screenTo3D(width()/2, height()/2-height()/4, 0)-cameraPosition;
 			cameraUp.normalize();
@@ -149,10 +153,12 @@ namespace SyntopiaCore {
 				if (step < 1) step = 1;
 				if (count >= step) count = 0;
 
-				glDisable (GL_LIGHTING);
-				glLineWidth( 1.0 );
+				//glDisable (GL_LIGHTING);
+				//glLineWidth( 1.0 );
 				qglColor(getVisibleForegroundColor());
 				for (int i = count; i < objects.size(); i+=step) {
+						objects[i]->draw();
+					/*
 					glColor3f(
 						objects[i]->getColor()[0],
 						objects[i]->getColor()[1],
@@ -192,6 +198,7 @@ namespace SyntopiaCore {
 
 					glPopMatrix();			
 
+					*/
 				}
 
 				glEnable (GL_LIGHTING);
@@ -200,6 +207,20 @@ namespace SyntopiaCore {
 				requireRedraw();
 
 			} else {
+
+
+				glPolygonMode(GL_FRONT, GL_FILL);
+				glPolygonMode(GL_BACK, GL_FILL);
+
+				glEnable (GL_LIGHTING);
+				glEnable(GL_CULL_FACE); // TODO: do we need this?
+
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glMateriali( GL_FRONT, GL_SPECULAR, 30 );
+				glMateriali(GL_FRONT, GL_SHININESS, 127);
+
+
 				for (int i = 0; i < objects.size(); i++) {
 					objects[i]->draw();
 				}

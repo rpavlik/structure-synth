@@ -1,6 +1,10 @@
 
 Changelog for Structure Synth:
 ------------
+27 Sep 09 [MHC] Changed the class atribute from a simple string to a class (for setting raytracer properties on per object basis)
+[3h]            Changed to displaylists for spheres (modest speedup).
+                Some code cleanup.
+
 22 Sep 09 [MHC] Worked on JavaScript image export.
 [3h]
 

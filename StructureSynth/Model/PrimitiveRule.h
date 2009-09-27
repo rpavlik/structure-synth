@@ -1,9 +1,13 @@
 #pragma once
 
 #include "Rule.h"
+#include "PrimitiveClass.h"
+#include "../../SyntopiaCore/GLEngine/Object3D.h"
 
 namespace StructureSynth {
 	namespace Model {	
+
+		using namespace SyntopiaCore::GLEngine;
 
 		/// These are the built-in primitives,
 		/// for drawing boxes, spheres and other simple geometric shapes.
@@ -11,7 +15,7 @@ namespace StructureSynth {
 			public:
 				enum PrimitiveType { Box, Sphere, Dot, Grid, Cylinder, Line, Mesh, Template, Other } ;
 				
-				PrimitiveRule(PrimitiveType type);
+				PrimitiveRule(PrimitiveType type, PrimitiveClass* primitiveClass);
 				virtual void apply(Builder* builder) const;
 	
 				/// Returns a list over rules that this rule references.
@@ -23,12 +27,15 @@ namespace StructureSynth {
 				/// This is used together with Template Renderers.
 				///
 				/// For instance 'box::metal' will be parsed in to a 'box' primitive with a 'metal' class identifier.
-				void setClass(QString classID) { this->classID = classID; }
-				QString getClass() { return classID; }
+				void setClass(PrimitiveClass* primitiveClass) { this->primitiveClass = primitiveClass; }
+				PrimitiveClass* getClass() { return primitiveClass; }
+
+				
 		    protected:
-			    QString classID;
+			    PrimitiveClass* primitiveClass;
 			private:
 				PrimitiveType type;
+				
 				
 		};
 
@@ -38,7 +45,8 @@ namespace StructureSynth {
 				
 				TriangleRule(SyntopiaCore::Math::Vector3f p1,
 					          SyntopiaCore::Math::Vector3f p2,
-							   SyntopiaCore::Math::Vector3f p3);
+							   SyntopiaCore::Math::Vector3f p3,
+							     PrimitiveClass* primitiveClass);
 
 				virtual void apply(Builder* builder) const;
 	

@@ -12,6 +12,8 @@ namespace SyntopiaCore {
 
 			virtual ~Line();
 
+			virtual QString name() { return "Line"; }
+			
 			virtual void draw() const;
 
 		private:

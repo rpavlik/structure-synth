@@ -76,7 +76,6 @@ namespace SyntopiaCore {
 			double globalAmbient;
 			double globalDiffuse;
 			double globalSpecular;
-			double reflection;
 			bool userCancelled;
 			
 		};

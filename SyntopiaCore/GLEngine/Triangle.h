@@ -14,6 +14,9 @@ namespace SyntopiaCore {
 
 			virtual ~Triangle();
 
+			virtual QString name() { return "Triangle"; }
+			
+
 			virtual void draw() const;
 
 		private:

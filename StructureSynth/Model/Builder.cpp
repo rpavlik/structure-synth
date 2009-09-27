@@ -242,7 +242,18 @@ namespace StructureSynth {
 		void Builder::setCommand(QString command, QString param) {
 			if (command.toLower().startsWith("raytracer::")) {
 				QString c = command.toLower().remove("raytracer::");
-				raytracerCommands.append(GLEngine::Command(c,param));
+				if (c.contains("::")) {
+					QStringList l = c.split("::");
+					QString classID = l[0];
+					QString prop = l[1];
+					if (!ruleSet->existsPrimitiveClass(classID)) {
+						WARNING("Trying to set property for unused class: " + classID);
+					}
+					PrimitiveClass* pc = ruleSet->getPrimitiveClass(classID);
+					
+				} else {
+					raytracerCommands.append(GLEngine::Command(c,param));
+				}
 			} else if (command == "maxdepth") {
 				bool succes;
 				int i = param.toInt(&succes);

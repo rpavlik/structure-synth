@@ -11,6 +11,8 @@ namespace SyntopiaCore {
 			Sphere(SyntopiaCore::Math::Vector3f center, float radius);
 			virtual ~Sphere();
 
+			virtual QString name() { return "Sphere"; }
+			
 			virtual void draw() const;
 			void setCenter(SyntopiaCore::Math::Vector3f center) { this->center = center; }
 
@@ -21,6 +23,7 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f center;
 			float radius;
 			GLUquadric* myQuad;    
+			static int displayListIndex;
 		};
 
 	}

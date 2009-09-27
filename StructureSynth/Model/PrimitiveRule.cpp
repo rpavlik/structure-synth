@@ -14,7 +14,7 @@ using namespace SyntopiaCore::Math;
 
 namespace StructureSynth {
 	namespace Model {	
-		PrimitiveRule::PrimitiveRule(PrimitiveType type) : type(type) {
+		PrimitiveRule::PrimitiveRule(PrimitiveType type, PrimitiveClass* primitiveClass) : type(type), primitiveClass(primitiveClass) {
 
 			// enum PrimitiveType { Box, Sphere, Point, Cylinder, Line } ;			
 			if (type == Box) {
@@ -43,7 +43,7 @@ namespace StructureSynth {
 
 		void PrimitiveRule::apply(Builder* b) const {
 			if (type == Template) {
-				b->getRenderer()->callGeneric(classID);
+				b->getRenderer()->callGeneric(primitiveClass);
 				return;
 			}
 
@@ -61,7 +61,7 @@ namespace StructureSynth {
 				Vector3f c2 = (b->getState().matrix * Vector3f(0.5,0.5,0.0));
 				double r =  (c-  c2).length();
 
-				b->getRenderer()->drawSphere(c,r,classID);
+				b->getRenderer()->drawSphere(c,r,primitiveClass);
 			} else if (type == Mesh) {
 				if (b->getState().prevMatrix) {
 					
@@ -74,7 +74,7 @@ namespace StructureSynth {
 					Vector3f u2 = b->getState().matrix * Vector3f(1,0,0);
 					Vector3f u3 = b->getState().matrix * Vector3f(0,1,0);
 
-					b->getRenderer()->drawMesh(v1,v2-v1,v3-v1,u1,u2-u1,u3-u1,classID);
+					b->getRenderer()->drawMesh(v1,v2-v1,v3-v1,u1,u2-u1,u3-u1,primitiveClass);
 				} else {
 					INFO("No prev");
 				}
@@ -86,7 +86,7 @@ namespace StructureSynth {
 				Vector3f v3 = b->getState().matrix * Vector3f(0,1,0);
 				Vector3f v4 = b->getState().matrix * Vector3f(0,0,1);
 
-				b->getRenderer()->drawBox(v1,v2-v1,v3-v1,v4-v1,classID);
+				b->getRenderer()->drawBox(v1,v2-v1,v3-v1,v4-v1,primitiveClass);
 				
 			} else if (type == Grid) {
 				Vector3f v(0,0,0);
@@ -96,16 +96,16 @@ namespace StructureSynth {
 				Vector3f v3 = b->getState().matrix * Vector3f(0,1,0);
 				Vector3f v4 = b->getState().matrix * Vector3f(0,0,1);
 
-				b->getRenderer()->drawGrid(v1,v2-v1,v3-v1,v4-v1,classID);
+				b->getRenderer()->drawGrid(v1,v2-v1,v3-v1,v4-v1,primitiveClass);
 			} else if (type == Dot) {
 				Vector3f v = b->getState().matrix * Vector3f(0.5,0.5,0.5);
 				
-				b->getRenderer()->drawDot(v,classID);
+				b->getRenderer()->drawDot(v,primitiveClass);
 			} else if (type == Line) {
 				Vector3f v = b->getState().matrix * Vector3f(0,0.5,0.5);
 				Vector3f v2 = b->getState().matrix * Vector3f(1,0.5,0.5);
 				
-				b->getRenderer()->drawLine(v,v2,classID);
+				b->getRenderer()->drawLine(v,v2,primitiveClass);
 			}
 
 		};
@@ -114,7 +114,8 @@ namespace StructureSynth {
 			
 		TriangleRule::TriangleRule(SyntopiaCore::Math::Vector3f p1,
 					          SyntopiaCore::Math::Vector3f p2,
-							  SyntopiaCore::Math::Vector3f p3) : PrimitiveRule(Other), p1(p1), p2(p2), p3(p3) {
+							  SyntopiaCore::Math::Vector3f p3, PrimitiveClass* primitiveClass) 
+							    : PrimitiveRule(Other, primitiveClass), p1(p1), p2(p2), p3(p3) {
 			name = "Triangle";
 		}
 
@@ -131,7 +132,7 @@ namespace StructureSynth {
 			Vector3f v2 = b->getState().matrix * p2;
 			Vector3f v3 = b->getState().matrix * p3;
 			
-			b->getRenderer()->drawTriangle(v1,v2,v3,classID);
+			b->getRenderer()->drawTriangle(v1,v2,v3,primitiveClass);
 		}
 	
 	}

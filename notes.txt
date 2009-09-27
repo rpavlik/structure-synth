@@ -1,5 +1,12 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
+- Triangles may not support ClassID
+- ClassID raytracer commands must be settable.
+- Size of raytracer output.
+- CollageImage in JavaScript.
+- Paralleloid (Skewed boxes) must be supported.
+
+
 Structure Synth 1.0.0 ("Potemkin") Released
 ------------------------------------------
 Structure Synth is a tool for generating 3D structures from recursive rules. The structures are often complex and surprising.

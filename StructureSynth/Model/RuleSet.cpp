@@ -23,17 +23,20 @@ namespace StructureSynth {
 		RuleSet::RuleSet() {
 			topLevelRule = new CustomRule("TopLevelRule");
 			recurseDepth = false;
+			defaultClass = new PrimitiveClass();
 
 			/// Add instances of predefined built-in types.
-			rules.append(new PrimitiveRule(PrimitiveRule::Box));
-			rules.append(new PrimitiveRule(PrimitiveRule::Sphere));
-			rules.append(new PrimitiveRule(PrimitiveRule::Cylinder));
-			rules.append(new PrimitiveRule(PrimitiveRule::Mesh));
-			rules.append(new PrimitiveRule(PrimitiveRule::Line));
-			rules.append(new PrimitiveRule(PrimitiveRule::Dot));
-			rules.append(new PrimitiveRule(PrimitiveRule::Grid));
-			rules.append(new PrimitiveRule(PrimitiveRule::Template));
+			rules.append(new PrimitiveRule(PrimitiveRule::Box,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Sphere,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Cylinder,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Mesh,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Line,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Dot,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Grid,defaultClass));
+			rules.append(new PrimitiveRule(PrimitiveRule::Template,defaultClass));
 			rules.append(topLevelRule);
+
+			
 		};
 
 		void RuleSet::setRulesMaxDepth(int maxDepth) {
@@ -48,6 +51,8 @@ namespace StructureSynth {
 		/// Deletes rules
 		RuleSet::~RuleSet() {
 			for (int i = 0; i < rules.size(); i++) delete(rules[i]);
+			//for (int i = 0; i < primitiveClasses.size(); i++) delete(primitiveClasses[i]);
+			
 		}
 
 		void RuleSet::addRule(Rule* rule) { 
@@ -136,7 +141,8 @@ namespace StructureSynth {
 
 							PrimitiveRule* pr = (PrimitiveRule*)r;
 							PrimitiveRule* newRule = new PrimitiveRule(*pr);
-							newRule->setClass(classID);
+							newRule->setClass(getPrimitiveClass(classID));
+							
 							map[name] = newRule;
 							
 							INFO("Created new class for rule: " + name);
@@ -171,7 +177,7 @@ namespace StructureSynth {
 									.arg(v[0].toString())
 									.arg(v[1].toString())
 									.arg(v[2].toString()));
-								map[name] = new TriangleRule(v[0], v[1], v[2]);
+								map[name] = new TriangleRule(v[0], v[1], v[2], defaultClass);
 							
 							} else {
 								throw Exception(QString("Unable to resolve rule: %1").arg(name));
@@ -227,6 +233,26 @@ namespace StructureSynth {
 				.arg(rulesCount-primitive).arg(custom).arg(ambi));
 			Debug(QString("Loaded %1 built-in rules.").arg(primitive));
 		}
+
+		bool RuleSet::existsPrimitiveClass(QString classLabel) {
+			for (int i = 0; i < primitiveClasses.count(); i++) {
+				if (primitiveClasses[i]->name == classLabel) return true;
+			}
+			return false;
+		}
+
+
+		PrimitiveClass* RuleSet::getPrimitiveClass(QString classLabel) {
+			for (int i = 0; i < primitiveClasses.count(); i++) {
+				if (primitiveClasses[i]->name == classLabel) return primitiveClasses[i];
+			}
+			PrimitiveClass* p = new PrimitiveClass(*defaultClass);
+			p->name = classLabel;
+			INFO("Created new primitiveClass: " + classLabel);
+			primitiveClasses.append(p);
+			return p;
+		}
+
 
 	}
 }
