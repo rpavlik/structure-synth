@@ -9,7 +9,9 @@ namespace SyntopiaCore {
 		class Dot : public Object3D {
 		public:
 			Dot(SyntopiaCore::Math::Vector3f pos);
-
+			
+			virtual QString name() { return "Dot"; }
+			
 			virtual ~Dot();
 
 			virtual void draw() const;

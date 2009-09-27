@@ -7,6 +7,23 @@
 namespace SyntopiaCore {
 	namespace GLEngine {	
 
+		/// Every Primitive can be assigned a class.
+		struct PrimitiveClass {
+			PrimitiveClass() : reflection(0), hasShadows(true), castShadows(true), 
+				ambientOcclusionMin(0), ambientOcclusionMax(0), ambientOcclusionPrecision(0.95), ambientOcclusionMaxLength(0) {};
+			QString name;
+			double reflection;
+			bool hasShadows;
+			bool castShadows;
+			int ambientOcclusionMin;
+			int ambientOcclusionMax;
+			double ambientOcclusionPrecision;
+			double ambientOcclusionMaxLength;
+			double ambient;
+			double specular;
+			double diffuse;
+		};
+
 		/// Used by the raytracer, when tracing rays.
 		struct RayInfo {
 			SyntopiaCore::Math::Vector3f startPoint;
@@ -23,6 +40,7 @@ namespace SyntopiaCore {
 			Object3D() : lastRayID(-1) {};
 			virtual ~Object3D() {};
 
+			virtual QString name() { return "Object3D base"; }
 			virtual void draw() const = 0;
 
 			void setColor(SyntopiaCore::Math::Vector3f rgb, float alpha);
@@ -38,6 +56,9 @@ namespace SyntopiaCore {
 			int getLastRayID() { return lastRayID; }
 			void setLastRayID(int id) { lastRayID = id; }
 
+			PrimitiveClass* getPrimitiveClass() { return primitiveClass; }
+			void setPrimitiveClass(PrimitiveClass* value) { primitiveClass = value; }
+			
 		protected:
 
 			void vertex(SyntopiaCore::Math::Vector3f v) const { glVertex3f(v.x(), v.y(), v.z()); }
@@ -58,6 +79,8 @@ namespace SyntopiaCore {
 			
 			// Used by Voxel Stepper when raytracing.
 			int lastRayID;
+
+			PrimitiveClass* primitiveClass;
 
 		};
 

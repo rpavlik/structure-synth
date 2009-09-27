@@ -18,6 +18,8 @@ namespace SyntopiaCore {
 
 			virtual ~Mesh();
 
+			virtual QString name() { return "Mesh"; }
+			
 			virtual void draw() const;
 
 		private:

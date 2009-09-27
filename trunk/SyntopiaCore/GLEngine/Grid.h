@@ -15,6 +15,8 @@ namespace SyntopiaCore {
 
 			virtual ~Grid();
 
+			virtual QString name() { return "Grid"; }
+			
 			virtual void draw() const;
 
 		private:

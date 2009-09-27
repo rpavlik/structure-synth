@@ -364,6 +364,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\Misc\MiniParser.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\Misc\MiniParser.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\Misc\Persistence.cpp"
 					>
 				</File>
@@ -686,6 +694,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\StructureSynth\Model\PrimitiveClass.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StructureSynth\Model\PrimitiveClass.h"
+					>
+				</File>
+				<File
 					RelativePath=".\StructureSynth\Model\PrimitiveRule.cpp"
 					>
 				</File>
@@ -758,14 +774,6 @@
 					</File>
 					<File
 						RelativePath=".\StructureSynth\Model\Rendering\OpenGLRenderer.h"
-						>
-					</File>
-					<File
-						RelativePath=".\StructureSynth\Model\Rendering\POVRenderer.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\StructureSynth\Model\Rendering\POVRenderer.h"
 						>
 					</File>
 					<File

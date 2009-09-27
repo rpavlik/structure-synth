@@ -15,14 +15,16 @@ namespace SyntopiaCore {
 
 			virtual ~Box();
 
+			virtual QString name() { return "Box"; }
+		
 			virtual void draw() const;
 
 			virtual bool intersectsRay(RayInfo* /*rayInfo*/);
 			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/);
 			
-
 		private:
 			SyntopiaCore::Math::Vector3f base;
+			
 			SyntopiaCore::Math::Vector3f v1;
 			SyntopiaCore::Math::Vector3f v2;
 			SyntopiaCore::Math::Vector3f v3;

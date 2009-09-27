@@ -22,8 +22,9 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawBox(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3, const QString &) {
+				SyntopiaCore::Math::Vector3f dir3, PrimitiveClass* classID) {
 					Object3D* o =new Box( base, dir1, dir2, dir3);
+					o->setPrimitiveClass(classID);
 					o->setColor(rgb, alpha);
 				
 					engine->addObject(o);
@@ -36,8 +37,9 @@ namespace StructureSynth {
 										SyntopiaCore::Math::Vector3f endBase, 
 										SyntopiaCore::Math::Vector3f endDir1, 
 										SyntopiaCore::Math::Vector3f endDir2, 
-										const QString& /*classID*/) {
+										PrimitiveClass* classID) {
 					Object3D* o =new Mesh( startBase, startDir1, startDir2, endBase, endDir1, endDir2);
+					o->setPrimitiveClass(classID);
 					o->setColor(rgb, alpha);
 				
 					engine->addObject(o);
@@ -46,14 +48,17 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawGrid(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
-				SyntopiaCore::Math::Vector3f dir3, const QString &) {
+				SyntopiaCore::Math::Vector3f dir3,
+				PrimitiveClass* classID) {
 					Object3D* o = new Grid( base, dir1, dir2, dir3);
+					o->setPrimitiveClass(classID);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);
 			};
 
-			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to, const QString &) {
+			void OpenGLRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to, PrimitiveClass* classID) {
 					Object3D* o = new Line( from, to);
+					o->setPrimitiveClass(classID);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);
 			};
@@ -61,20 +66,23 @@ namespace StructureSynth {
 			void OpenGLRenderer::drawTriangle(SyntopiaCore::Math::Vector3f p1,
 										 SyntopiaCore::Math::Vector3f p2,
 									     SyntopiaCore::Math::Vector3f p3,
-										 const QString& /*classID*/) {
+										PrimitiveClass* classID) {
 				   Object3D* o = new Triangle(p1, p2,p3);
+				   o->setPrimitiveClass(classID);
 				   o->setColor(rgb, alpha);
 				   engine->addObject(o);
 			}
 
-			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v, const QString &) {
+			void OpenGLRenderer::drawDot(SyntopiaCore::Math::Vector3f v, PrimitiveClass* classID) {
 					Object3D* o = new Dot(v);
+					o->setPrimitiveClass(classID);
 					o->setColor(rgb, alpha);
 					engine->addObject(o);	
 			};
 
-			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius, const QString &) {
+			void OpenGLRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius, PrimitiveClass* classID) {
 				Object3D* o = new Sphere( center, radius);
+				o->setPrimitiveClass(classID);
 				o->setColor(rgb, alpha);
 				engine->addObject(o);
 			};

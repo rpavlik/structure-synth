@@ -2,6 +2,7 @@
 #include "../../../SyntopiaCore/Math/Vector3.h"
 #include "../../../SyntopiaCore/Logging/Logging.h"
 #include "../../../SyntopiaCore/Exceptions/Exception.h"
+#include "../PrimitiveClass.h"
 
 #include <QDomDocument>
 #include <QIODevice>
@@ -202,9 +203,9 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3,
-				const QString& classID) 
+				PrimitiveClass* classID) 
 			{
-				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 				if (!assertPrimitiveExists("box"+alternateID)) return;
 				TemplatePrimitive t(workingTemplate.get("box"+alternateID)); 
 
@@ -220,9 +221,9 @@ namespace StructureSynth {
 			void TemplateRenderer::drawTriangle(SyntopiaCore::Math::Vector3f p1,
 				SyntopiaCore::Math::Vector3f p2,
 				SyntopiaCore::Math::Vector3f p3,
-				const QString& classID) {
+				PrimitiveClass* classID) {
 
-					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+					QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 					if (!assertPrimitiveExists("triangle"+alternateID)) return;
 					TemplatePrimitive t(workingTemplate.get("triangle"+alternateID)); 
 
@@ -253,9 +254,9 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f dir1, 
 				SyntopiaCore::Math::Vector3f dir2, 
 				SyntopiaCore::Math::Vector3f dir3,
-				const QString& classID) {
+				PrimitiveClass* classID) {
 
-					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+					QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 					if (!assertPrimitiveExists("grid"+alternateID)) return;
 					TemplatePrimitive t(workingTemplate.get("grid"+alternateID)); 
 
@@ -271,8 +272,8 @@ namespace StructureSynth {
 					output.append(t.getText());
 			};
 
-			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,const QString& classID) {
-				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+			void TemplateRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to,PrimitiveClass* classID) {
+				QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 				if (!assertPrimitiveExists("line"+alternateID)) return;
 				TemplatePrimitive t(workingTemplate.get("line"+alternateID)); 
 				t.substitute("{x1}", QString::number(from.x()));
@@ -293,8 +294,8 @@ namespace StructureSynth {
 				output.append(t.getText());
 			};
 
-			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f v,const QString& classID) {
-				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+			void TemplateRenderer::drawDot(SyntopiaCore::Math::Vector3f v,PrimitiveClass* classID) {
+				QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 				if (!assertPrimitiveExists("dot"+alternateID)) return;
 				TemplatePrimitive t(workingTemplate.get("dot"+alternateID)); 
 				t.substitute("{x}", QString::number(v.x()));
@@ -315,8 +316,8 @@ namespace StructureSynth {
 				output.append(t.getText());
 			};
 
-			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,const QString& classID) {
-				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+			void TemplateRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius,PrimitiveClass* classID) {
+				QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 				if (!assertPrimitiveExists("sphere"+alternateID)) return;
 				TemplatePrimitive t(workingTemplate.get("sphere"+alternateID)); 
 				t.substitute("{cx}", QString::number(center.x()));
@@ -385,8 +386,8 @@ namespace StructureSynth {
 				output.append(t.getText());
 			};
 
-			void TemplateRenderer::callGeneric(const QString& classID) {
-				QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+			void TemplateRenderer::callGeneric(PrimitiveClass* classID) {
+				QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 				if (!assertPrimitiveExists("template"+alternateID)) return;
 				TemplatePrimitive t(workingTemplate.get("template"+alternateID)); 
 				output.append(t.getText());
@@ -403,8 +404,8 @@ namespace StructureSynth {
 				SyntopiaCore::Math::Vector3f endBase, 
 				SyntopiaCore::Math::Vector3f endDir1, 
 				SyntopiaCore::Math::Vector3f endDir2, 
-				const QString& classID) {
-					QString alternateID = (classID.isEmpty() ? "" : "::" + classID);
+				PrimitiveClass* classID) {
+					QString alternateID = ((classID->name).isEmpty() ? "" : "::" + (classID->name));
 					if (!assertPrimitiveExists("mesh"+alternateID)) return;
 					TemplatePrimitive t(workingTemplate.get("mesh"));
 					if (t.contains("{uid}")) {

@@ -2,8 +2,10 @@
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "SyntopiaCore/Logging/Logging.h"
+#include "SyntopiaCore/Misc/Miniparser.h"
 
 using namespace SyntopiaCore::Math;
+using namespace SyntopiaCore::Misc;
 
 namespace SyntopiaCore {
 	namespace GLEngine {
@@ -12,21 +14,7 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 
-		/// See here for details about this approach:
-		/// http://www.devmaster.net/articles/raytracing_series/part4.php
-		/// THIS IS A DUMMY IMPLEMENTATION!
-		/*
-		class VoxelStepper {
-		public:
-		VoxelStepper(Vector3f minPos, Vector3f maxPos, unsigned int steps) {};
-		void registerObject(Object3D* obj) { list.append(obj); }
-		QList<Object3D*>* setupRay(Vector3f pos, Vector3f dir, double& maxT) { return &list; }
-		QList<Object3D*>* advance(double& maxT) { return 0; }
-
-		private:
-		QList<Object3D*> list;
-		};
-		*/
+		
 
 
 		/// See here for details about this approach:
@@ -281,8 +269,7 @@ namespace SyntopiaCore {
 			globalAmbient = 0.3;
 			globalDiffuse = 0.5;
 			globalSpecular = 0.8;
-			reflection = 0.1;
-
+			
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
 				arg = arg.remove("[");
@@ -418,12 +405,14 @@ namespace SyntopiaCore {
 				}
 
 				
+				double reflection = bestObj->getPrimitiveClass()->reflection;
+					
 				if (reflection > 0) {
 					Vector3f nDir = foundNormal*(-2)*Vector3f::dot(foundNormal, direction)/foundNormal.sqrLength() + direction;
 							
 
 					Vector3f color = rayCast(iPoint, nDir, bestObj, level+1);
-					Vector3f thisColor = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]) // *(1-reflect)
+					Vector3f thisColor = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]) *(1-reflection)
 					+ color*(reflection);
 					foundColor[0] = light*foundColor[0]*(1-reflection) + color.x()*reflection;
 					foundColor[1] = light*foundColor[1]*(1-reflection) + color.y()*reflection;
@@ -633,82 +622,7 @@ namespace SyntopiaCore {
 		}
 
 
-		namespace {
-			class MiniParser {
-			public:
-				MiniParser(QString param, QString value, QChar separator = ',') : separator(separator), original(value), param(param), value(value), paramCount(0) {
-				}
-
-				MiniParser& getInt(int& val) {
-					paramCount++;
-					QString first = value.section(separator, 0,0);
-					value = value.section(separator, 1);
-
-					//INFO(QString("getInt: %1, %2").arg(first).arg(value));
-
-					if (first.isEmpty()) {
-						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
-					}
-
-					bool succes = false;
-					int i = first.toInt(&succes);
-					if (!succes) {
-						WARNING(QString("Expected argument number %1 to be an integer. Found: %2").arg(paramCount).arg(first));
-					}
-					val = i;
-
-					return *this;
-				}
-
-
-				
-				MiniParser& getBool(bool& val) {
-					paramCount++;
-					QString first = value.section(separator, 0,0);
-					value = value.section(separator, 1);
-				
-					if (first.isEmpty()) {
-						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
-					}
-
-					if (first.toLower() == "true") {
-						val = true;
-					} else if (first.toLower() == "false") {
-						val = false;
-					} else {
-						WARNING(QString("Expected argument number %1 to be either true or false. Found: %2").arg(paramCount).arg(first));
-					}
-					
-					return *this;
-				}
-
-				MiniParser& getDouble(double& val) {
-					paramCount++;
-					QString first = value.section(separator, 0,0);
-					value = value.section(separator, 1);
-
-					if (first.isEmpty()) {
-						WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
-					}
-
-					bool succes = false;
-					double d = first.toDouble(&succes);
-					if (!succes) {
-						WARNING(QString("Expected argument number %1 to be an double. Found: %2").arg(paramCount).arg(first));
-					}
-					val = d;
-
-					return *this;
-				}
-
-				QChar separator;
-				QString original;
-				QString param;
-				QString value;
-				int paramCount ;
-			};
-		}
-
+	
 		void RayTracer::setParameter(QString param, QString value) {
 			param=param.toLower();
 
@@ -728,19 +642,19 @@ namespace SyntopiaCore {
 
 			if (param == "ambient-occlusion") {
 				// Min rays, Max rays, Precision...		
-				MiniParser(param,value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(ambPrecision);
+				MiniParser(value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(ambPrecision);
 				INFO(QString("Min: %1, Max: %2, Prec: %3").arg(ambMinRays).arg(ambMaxRays).arg(ambPrecision));
 		
 			} else if (param == "phong") {
-				MiniParser(param,value, ',').getDouble(globalAmbient).getDouble(globalDiffuse).getDouble(globalSpecular);
+				MiniParser(value, ',').getDouble(globalAmbient).getDouble(globalDiffuse).getDouble(globalSpecular);
 				INFO(QString("Ambient: %1, Diffuse: %2, Specular: %3").arg(globalAmbient).arg(globalDiffuse).arg(globalSpecular));
 			} else if (param == "shadows") {
-				MiniParser(param,value, ',').getBool(useShadows);
+				MiniParser(value, ',').getBool(useShadows);
 				INFO(QString("Shadows: %3").arg(useShadows ? "true" : "false"));
 		
 			} else if (param == "reflection") {
-				MiniParser(param,value, ',').getDouble(reflection);
-				INFO(QString("Reflection: %3").arg(reflection));
+			//	MiniParser(param,value, ',').getDouble(reflection);
+			//	INFO(QString("Reflection: %3").arg(reflection));
 		
 			} else {
 				WARNING("Unknown parameter: " + param);

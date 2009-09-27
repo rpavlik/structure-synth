@@ -70,17 +70,6 @@ namespace SyntopiaCore {
 			glTranslatef( base.x(), base.y(), base.z() );
 			
 			glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, primaryColor );
-			glPolygonMode(GL_FRONT, GL_FILL);
-			glPolygonMode(GL_BACK, GL_FILL);
-			
-			glEnable (GL_LIGHTING);
-			glEnable(GL_CULL_FACE); // TODO: do we need this?
-			
-			glEnable (GL_BLEND);
-			glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glMateriali( GL_FRONT, GL_SPECULAR, 30 );
-		
-			glMateriali(GL_FRONT, GL_SHININESS, 127);
 			
 			glBegin( GL_QUADS );
 			Vector3f O(0,0,0);
