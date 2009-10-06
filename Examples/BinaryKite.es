@@ -1,6 +1,12 @@
+set raytracer::ambient-occlusion [2,60,49.95,20,1] 
+set raytracer::shadows false
+set raytracer::anti-alias 2
+set raytracer::phong [1,0.8,1]
+
+
 set maxobjects 16000
 10 * { y 1 } 10 * { z 1 }  1 * { a 0.8  sat 0.9  } r1 
-set background #aaa
+set background #fff
 
 
 rule r1   {
@@ -32,10 +38,10 @@ xbox
 
 rule xbox {
   { s 1.1   color #000   } grid
-  { b 0.7  color #000   a 0.9  }  box
+  { b 0.7  color #000    }  box
 }
 
 rule xbox {
  { s 1.1   color #000     } grid
- { b 0.7  color #ddd  a 0.9    } box
+ { b 0.7  color #fff      } box
 }

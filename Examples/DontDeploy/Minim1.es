@@ -1,4 +1,9 @@
 
+set raytracer::ambient-occlusion [3,64,100,30]
+set raytracer::shadows true
+set raytracer::light::reflection 0.4
+set raytracer::black::reflection 0.4
+set raytracer::phong [0.3,0.8,1]
 
 
 { s 100 100 1 color white } box

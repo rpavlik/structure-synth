@@ -25,6 +25,7 @@ namespace SyntopiaCore {
 			void setBackgroundColor(Vector3f b) { backgroundColor = b; }
 			bool wasCancelled() { return userCancelled; }
 
+
 		private:
 
 			Vector3f rayCastPixel(float x, float y);
@@ -51,6 +52,11 @@ namespace SyntopiaCore {
 			GLdouble projection[16];
 			GLint viewPort[16];
 
+			
+			Vector3f normal;
+			double depth;
+			Vector3f color;
+			Vector3f intersection;
 
 			VoxelStepper* accelerator;
 
@@ -68,6 +74,9 @@ namespace SyntopiaCore {
 
 			int ambMinRays;
 			int ambMaxRays;
+			int ambSmooth;
+			double ambExponent;
+			int totalAOCasts;
 			double ambPrecision;
 			int aaSamples;
 			int width;
@@ -77,6 +86,7 @@ namespace SyntopiaCore {
 			double globalDiffuse;
 			double globalSpecular;
 			bool userCancelled;
+			Object3D* hitObject;
 			
 		};
 

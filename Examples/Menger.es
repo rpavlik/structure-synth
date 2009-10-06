@@ -1,3 +1,8 @@
+set raytracer::ambient-occlusion [7,60,49.95,00,0.5]
+set raytracer::shadows false
+set raytracer::anti-alias 2
+set raytracer::phong [1,0.8,1]
+
 R1
 
 rule R1 maxdepth 3 > c2 {
