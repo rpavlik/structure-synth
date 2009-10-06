@@ -64,9 +64,9 @@ namespace SyntopiaCore {
 			glColor4fv(primaryColor);
 			//vertex4n(O, startDir1,startDir2+startDir1,startDir2);
 			vertex4n(O, startDir1,end+endDir1,end);
-			vertex4n(O, startDir2,end+endDir2,end);
+			vertex4rn(O, startDir2,end+endDir2,end);
 			vertex4n(startDir1, startDir1+startDir2, end+endDir1+endDir2, end+endDir1);
-			vertex4n(startDir2, startDir1+startDir2, end+endDir1+endDir2, end+endDir2);
+			vertex4rn(startDir2, startDir1+startDir2, end+endDir1+endDir2, end+endDir2);
 			//vertex4n(O+end, endDir1+end,endDir2+endDir1+end,endDir2+end);
 			glEnd();
 			
@@ -75,6 +75,43 @@ namespace SyntopiaCore {
 
 			glPopMatrix();			
 		};
+
+	
+
+		bool Mesh::intersectsRay(RayInfo* ri) {
+			//if (!isVisible()) return false;
+			if (triangles.count()==0) initTriangles();	
+
+			for (int i = 0; i < triangles.count(); i++) {
+				if (triangles[i].intersectsRay(ri)) return true;
+			}
+			return false;
+		};
+
+		void Mesh::initTriangles() {
+			triangles.clear();
+			RaytraceTriangle::Vertex4(startBase, startBase+startDir1,endBase+endDir1,endBase, false,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase, startBase+startDir2,endBase+endDir2,endBase, true,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase+startDir1, startBase+startDir1+startDir2, endBase+endDir1+endDir2, endBase+endDir1, false,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase+startDir2, startBase+startDir1+startDir2, endBase+endDir1+endDir2, endBase+endDir2, true,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);			
+			from = startBase;
+			to = startBase;
+			for (int i = 0; i < triangles.count(); i++) {
+				triangles[i].expandBoundingBox(from,to);
+			}
+		}
+
+		
+
+		bool Mesh::intersectsAABB(Vector3f from2, Vector3f to2) {
+			if (triangles.count()==0) initTriangles();
+			return
+					    (from.x() < to2.x()) && (to.x() > from2.x()) &&
+						(from.y() < to2.y()) && (to.y() > from2.y()) &&
+						(from.z() < to2.z()) && (to.z() > from2.z());
+		};
+
+
 
 	}
 }

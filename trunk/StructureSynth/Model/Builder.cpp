@@ -2,6 +2,7 @@
 #include "../../SyntopiaCore/Logging/Logging.h"
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../SyntopiaCore/Misc/ColorUtils.h"
+#include "../../SyntopiaCore/Misc/MiniParser.h"
 #include "../../SyntopiaCore/Math/Vector3.h"
 #include "RandomStreams.h"
 
@@ -12,6 +13,7 @@
 using namespace SyntopiaCore::Logging;
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Exceptions;
+using namespace SyntopiaCore::Misc;
 
 namespace StructureSynth {
 	namespace Model {
@@ -250,6 +252,10 @@ namespace StructureSynth {
 						WARNING("Trying to set property for unused class: " + classID);
 					}
 					PrimitiveClass* pc = ruleSet->getPrimitiveClass(classID);
+
+					if (prop == "reflection") {
+						MiniParser(param, ',').getDouble(pc->reflection);
+					}
 					
 				} else {
 					raytracerCommands.append(GLEngine::Command(c,param));

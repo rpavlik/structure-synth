@@ -53,13 +53,14 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
+				FloatingPointModel="2"
 				RuntimeTypeInfo="true"
 				AssemblerListingLocation="tmp\obj\debug_shared\"
 				ObjectFile="tmp\obj\debug_shared\"
 				ProgramDataBaseFileName=".\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -300,6 +301,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SyntopiaCore\GLEngine\RaytraceTriangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SyntopiaCore\GLEngine\RaytraceTriangle.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SyntopiaCore\GLEngine\Sphere.cpp"
 					>
 				</File>
@@ -402,18 +411,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath=".\tmp\moc\release_shared\moc_Debug.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
 				>
 				<FileConfiguration
@@ -426,10 +423,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
+				RelativePath=".\tmp\moc\release_shared\moc_Debug.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -450,8 +447,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="tmp\moc\debug_shared\moc_MainWindow.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\tmp\moc\moc_TemplateExportDialog.cpp"
 				>
+			</File>
+			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
@@ -473,18 +494,6 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
