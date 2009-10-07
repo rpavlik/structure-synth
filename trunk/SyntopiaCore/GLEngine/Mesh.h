@@ -26,6 +26,7 @@ namespace SyntopiaCore {
 
 			virtual bool intersectsRay(RayInfo* /*rayInfo*/);
 			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/);
+			virtual void prepareForRaytracing() {initTriangles(); };
 			
 
 		private:

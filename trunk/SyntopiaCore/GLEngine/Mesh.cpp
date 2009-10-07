@@ -79,7 +79,6 @@ namespace SyntopiaCore {
 	
 
 		bool Mesh::intersectsRay(RayInfo* ri) {
-			//if (!isVisible()) return false;
 			if (triangles.count()==0) initTriangles();	
 
 			for (int i = 0; i < triangles.count(); i++) {
@@ -90,10 +89,12 @@ namespace SyntopiaCore {
 
 		void Mesh::initTriangles() {
 			triangles.clear();
-			RaytraceTriangle::Vertex4(startBase, startBase+startDir1,endBase+endDir1,endBase, false,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
-			RaytraceTriangle::Vertex4(startBase, startBase+startDir2,endBase+endDir2,endBase, true,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
-			RaytraceTriangle::Vertex4(startBase+startDir1, startBase+startDir1+startDir2, endBase+endDir1+endDir2, endBase+endDir1, false,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
-			RaytraceTriangle::Vertex4(startBase+startDir2, startBase+startDir1+startDir2, endBase+endDir1+endDir2, endBase+endDir2, true,triangles,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);			
+			
+			
+			RaytraceTriangle::Vertex4(startBase, startBase+startDir1,endBase+endDir1,endBase, true,triangles,1,0,0,1); //,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase, endBase,endBase+endDir2,startBase+startDir2, true,triangles,0,1,0,1);//,primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase+startDir1, startBase+startDir1+startDir2, endBase+endDir1+endDir2, endBase+endDir1, true,triangles,0,0,1,1);//primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);
+			RaytraceTriangle::Vertex4(startBase+startDir2, endBase+endDir2, endBase+endDir1+endDir2, startBase+startDir1+startDir2, true,triangles,0,1,1,1);//primaryColor[0],primaryColor[1],primaryColor[2],primaryColor[3]);			
 			from = startBase;
 			to = startBase;
 			for (int i = 0; i < triangles.count(); i++) {

@@ -25,7 +25,6 @@ namespace SyntopiaCore {
 			static void Vertex4(Vector3f p1,Vector3f p2,Vector3f p3,Vector3f p4,bool reverse, QVector<RaytraceTriangle>& list, float r, float b, float g, float a);
 		
 
-		protected:
 			Vector3f p1;
 			Vector3f p2;
 			Vector3f p3;
