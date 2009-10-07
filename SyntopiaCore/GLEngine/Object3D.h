@@ -50,8 +50,9 @@ namespace SyntopiaCore {
 			void expandBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
 
 			/// These must be implemented for an Object3D to support raytracing.
-				virtual bool intersectsRay(RayInfo* /*rayInfo*/) { return false; };
-				virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/) { return false; };
+			virtual bool intersectsRay(RayInfo* /*rayInfo*/) { return false; };
+			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/) { return false; };
+			virtual void prepareForRaytracing() { }; // Implement for additional preprocessing
 			
 			int getLastRayID() { return lastRayID; }
 			void setLastRayID(int id) { lastRayID = id; }

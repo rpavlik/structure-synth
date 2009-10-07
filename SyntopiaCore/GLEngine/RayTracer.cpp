@@ -33,6 +33,7 @@ namespace SyntopiaCore {
 			void VoxelStepper::registerObject(Object3D* obj) {
 				// Simple method - check all cells intersecting the objects bounding boxes.
 
+				obj->prepareForRaytracing();
 				Vector3f from;
 				Vector3f to;
 				obj->getBoundingBox(from,to);

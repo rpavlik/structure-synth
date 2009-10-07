@@ -103,10 +103,12 @@ namespace SyntopiaCore {
 			if (reverse) n=-n;
 			n.normalize();
 			RaytraceTriangle r1(p1,p2,p4,n,n,n);
+			r1.n = n;
 			r1.setColor(r,g,b,a);
 			list.append(r1);
 			RaytraceTriangle r2(p3,p4,p2,n,n,n);
 			r2.setColor(r,g,b,a);
+			r2.n = n;
 			list.append(r2);
 		}
 	}
