@@ -66,6 +66,7 @@ namespace SyntopiaCore {
 			//bool RayTraceTriangle::getIntersectionAndNormal(const Vector3f& startPoint, const Vector3f& lineDirection, double& intersection, Vector3f& normal, Vector3f& color, float& alpha ) {
 
 			bool RaytraceTriangle::intersectsRay(RayInfo* ri) {
+				if (bad) return false;
 
 				if (Vector3f::dot(n,ri->lineDirection)>0) return false;
 		
@@ -98,7 +99,7 @@ namespace SyntopiaCore {
 
 			RaytraceTriangle::~RaytraceTriangle(void) {  }
 
-			void RaytraceTriangle::Vertex4(Vector3f p1,Vector3f p2,Vector3f p3,Vector3f p4,bool reverse, QVector<RaytraceTriangle>& list, float r, float b, float g, float a) {
+			void RaytraceTriangle::Vertex4(Vector3f p1,Vector3f p2,Vector3f p3,Vector3f p4,bool reverse, QVector<RaytraceTriangle>& list, float r, float g, float b, float a) {
 			Vector3f n = -Vector3f::cross(p2-p1, p4-p1);
 			if (reverse) n=-n;
 			n.normalize();
