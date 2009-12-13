@@ -63,16 +63,19 @@ namespace StructureSynth {
 
 				b->getRenderer()->drawSphere(c,r,primitiveClass);
 			} else if (type == Mesh) {
-				if (b->getState().prevMatrix) {
+				if (b->getState().previous) {
 					
-					Vector3f v1 = *(b->getState().prevMatrix) * Vector3f(0,0,0);
-					Vector3f v2 = *(b->getState().prevMatrix) * Vector3f(1,0,0);
-					Vector3f v3 = *(b->getState().prevMatrix) * Vector3f(0,1,0);
+					Vector3f v1 = (b->getState().previous->matrix) * Vector3f(0,0,0);
+					Vector3f v2 = (b->getState().previous->matrix) * Vector3f(1,0,0);
+					Vector3f v3 = (b->getState().previous->matrix) * Vector3f(0,1,0);
 
 
 					Vector3f u1 = b->getState().matrix * Vector3f(0,0,0);
 					Vector3f u2 = b->getState().matrix * Vector3f(1,0,0);
 					Vector3f u3 = b->getState().matrix * Vector3f(0,1,0);
+					b->getRenderer()->setPreviousColor(
+						SyntopiaCore::Misc::ColorUtils::HSVtoRGB( b->getState().previous->hsv));
+					b->getRenderer()->setPreviousAlpha(b->getState().previous->alpha);
 
 					b->getRenderer()->drawMesh(v1,v2-v1,v3-v1,u1,u2-u1,u3-u1,primitiveClass);
 				} else {

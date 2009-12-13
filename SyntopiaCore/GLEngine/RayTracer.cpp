@@ -589,6 +589,17 @@ namespace SyntopiaCore {
 			if ( ambMaxRays>0) {
 				double tr = 0.99;
 
+				QVector<Vector3f> dirs;
+				for (int i = 0; i < ambMaxRays; i++) {
+					Vector3f random ;
+					do {
+						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
+					} while (random.sqrLength() > 1);
+					random.normalize();
+					dirs.append(random);
+				}
+							
+
 				for (int x = 0; x < w; x=x+1) {
 					
 					float fx = x/(float)w;
@@ -632,12 +643,19 @@ namespace SyntopiaCore {
 						for (int ix = 0; ix < ambMaxRays; ix++) {
 							tests++;
 							// Use monte carlo sampling to obtain random vector.
+							
 							Vector3f random ;
 							do {
 								random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
 							} while (random.sqrLength() > 1);
 							random.normalize();
 							if (Vector3f::dot(random, normals[x+y*w])<0) random = random*-1.0; // Only check away from surface.
+							
+							/*
+							Vector3f random = dirs[ix];
+							if (Vector3f::dot(random, normals[x+y*w])<0) random = random*-1.0; // Only check away from surface.
+							*/
+							
 
 							double maxT = 0;
 							QList<Object3D*>* list = accelerator->setupRay(intersections[x+y*w],random, maxT);

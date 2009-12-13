@@ -98,7 +98,7 @@ object {
 shader {
 	name "shader{uid}"
 	type amb-occ
-	bright   {r} {g} {b}
+	bright  { "sRGB nonlinear"   {r} {g} {b} }
 	dark     0 0 0
 	samples  16
 	dist     6

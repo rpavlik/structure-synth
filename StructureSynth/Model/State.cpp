@@ -7,7 +7,7 @@ namespace StructureSynth {
 		State::State() : 
 			matrix(SyntopiaCore::Math::Matrix4f::Identity()), 
 			hsv(SyntopiaCore::Math::Vector3f(0,1.0f,1.0f)), 
-			alpha(1.0f), prevMatrix(0), seed(0)  { 
+			alpha(1.0f), previous(0), seed(0)  { 
 			
 		}
 
@@ -17,43 +17,45 @@ namespace StructureSynth {
 			this->alpha = rhs.alpha;
 			this->maxDepths = rhs.maxDepths;
 			this->seed = rhs.seed;
-			if (rhs.prevMatrix) {
-				delete(this->prevMatrix);
-				this->prevMatrix = new SyntopiaCore::Math::Matrix4f();
-				*(this->prevMatrix) = *rhs.prevMatrix;
+			if (rhs.previous) {
+				delete(this->previous);
+				this->previous = new PreviousState();
+				*(this->previous) = *rhs.previous;
 			} else {
-				delete(this->prevMatrix);
-				this->prevMatrix = 0;
+				delete(this->previous);
+				this->previous = 0;
 			}
 			return *this;
 		}
 
-		void State::setPrevMatrix(SyntopiaCore::Math::Matrix4f matrix) {
-			if (prevMatrix) {delete (prevMatrix); }
+		void State::setPreviousState(SyntopiaCore::Math::Matrix4f matrix,SyntopiaCore::Math::Vector3f hsv, float alpha) {
+			if (previous) {delete (previous); }
 
-			this->prevMatrix = new SyntopiaCore::Math::Matrix4f();
-			*(this->prevMatrix) = matrix;
+			this->previous = new PreviousState();
+			this->previous->matrix = matrix;
+			this->previous->hsv = hsv;
+			this->previous->alpha = alpha;
 		}
 
 		
 		State::State(const State& rhs) : matrix(rhs.matrix), 
 			hsv(rhs.hsv), 
-			alpha(rhs.alpha), maxDepths(rhs.maxDepths), prevMatrix(0), seed(rhs.seed) {
+			alpha(rhs.alpha), maxDepths(rhs.maxDepths), previous(0), seed(rhs.seed) {
 
-			if (rhs.prevMatrix) {
-				delete(this->prevMatrix);
-				this->prevMatrix = new SyntopiaCore::Math::Matrix4f();
-				*(this->prevMatrix) = *rhs.prevMatrix;
+			if (rhs.previous) {
+				delete(this->previous);
+				this->previous = new PreviousState();
+				*(this->previous) = *rhs.previous;
 			} else {
-				delete(this->prevMatrix);
-				this->prevMatrix = 0;
+				delete(this->previous);
+				this->previous = 0;
 			}
 		}
 		
 
 
 		State::~State() { 
-			delete(prevMatrix);
+			delete(previous);
 		}
 	}
 }

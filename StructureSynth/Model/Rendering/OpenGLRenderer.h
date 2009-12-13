@@ -64,6 +64,10 @@ namespace StructureSynth {
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 
+				virtual void setPreviousColor(SyntopiaCore::Math::Vector3f rgb) { this->oldRgb = rgb; }
+				virtual void setPreviousAlpha(double alpha) { this->oldAlpha = alpha; }
+
+
 				virtual void setTranslation(SyntopiaCore::Math::Vector3f /*translation*/);
 				virtual void setScale(double /*scale*/);
 				virtual void setRotation(SyntopiaCore::Math::Matrix4f /*rotation*/);
@@ -75,6 +79,8 @@ namespace StructureSynth {
 				SyntopiaCore::GLEngine::EngineWidget* engine;
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
+				SyntopiaCore::Math::Vector3f oldRgb;
+				double oldAlpha;
 			};
 
 		}

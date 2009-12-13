@@ -69,6 +69,10 @@ namespace StructureSynth {
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb) = 0;
 				virtual void setAlpha(double alpha) = 0;
 
+				virtual void setPreviousColor(SyntopiaCore::Math::Vector3f rgb) = 0;
+				virtual void setPreviousAlpha(double alpha) = 0;
+
+
 				// Camera settings
 				virtual void setTranslation(SyntopiaCore::Math::Vector3f /*translation*/) {};
 				virtual void setScale(double /*scale*/) {};
