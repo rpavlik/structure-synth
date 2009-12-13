@@ -27,6 +27,8 @@ namespace SyntopiaCore {
 			virtual bool intersectsRay(RayInfo* /*rayInfo*/);
 			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/);
 			virtual void prepareForRaytracing() {initTriangles(); };
+			void setPreviousColor(SyntopiaCore::Math::Vector3f oldRgb, float oldAlpha) { this->oldRgb = oldRgb; this->oldAlpha = oldAlpha; }
+			
 			
 
 		private:
@@ -37,6 +39,8 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f endDir1;
 			SyntopiaCore::Math::Vector3f endDir2;  
 			QVector<RaytraceTriangle> triangles;
+			SyntopiaCore::Math::Vector3f oldRgb;
+			float oldAlpha;
 		};
 
 	}

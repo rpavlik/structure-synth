@@ -38,9 +38,10 @@ namespace StructureSynth {
 										SyntopiaCore::Math::Vector3f endDir1, 
 										SyntopiaCore::Math::Vector3f endDir2, 
 										PrimitiveClass* classID) {
-					Object3D* o =new Mesh( startBase, startDir1, startDir2, endBase, endDir1, endDir2);
+					Mesh* o =new Mesh( startBase, startDir1, startDir2, endBase, endDir1, endDir2);
 					o->setPrimitiveClass(classID);
-					o->setColor(rgb, alpha);
+					o->setPreviousColor(rgb, alpha);
+					o->setColor(oldRgb, oldAlpha);
 				
 					engine->addObject(o);
 			};

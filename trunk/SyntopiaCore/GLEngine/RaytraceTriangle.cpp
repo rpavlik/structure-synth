@@ -30,7 +30,8 @@ namespace SyntopiaCore {
 				Vector3f pn2 = p12-p213;
 				npn2 = pn2/pn2.sqrLength();
 
-				if (npn1.sqrLength() * 0 != 0 || npn2.sqrLength() * 0 != 0 || npn3.sqrLength() * 0 != 0) {
+				if (npn1.sqrLength() * 0 != 0 || npn2.sqrLength() * 0 != 0 || npn3.sqrLength() * 0 != 0 ||
+					p13.sqrLength() < 1E-8 || p12.sqrLength() < 1E-8 || p32.sqrLength() < 1E-8) {
 					//INFO(QString("Bad Triangle (%0): %1, %2, %3").arg((p3-p2).sqrLength()).arg(p1.toString()).arg(p2.toString()).arg(p3.toString()));
 					bad = true;
 				} else {
@@ -74,11 +75,11 @@ namespace SyntopiaCore {
 				Vector3f ip = ri->startPoint +  ri->lineDirection * is;
 
 				float k312 = Vector3f::dot((ip-p1),npn3);
-				if (k312 > 1 || k312 < 0) return false;
+				if (k312 > 1 || k312 <= 0) return false;
 				float k132 = Vector3f::dot((ip-p3),npn1);
-				if (k132 > 1 || k132 < 0) return false;
+				if (k132 > 1 || k132 <= 0) return false;
 				float k213 = Vector3f::dot((ip-p1),npn2);
-				if (k213 > 1 || k213 < 0) return false;
+				if (k213 > 1 || k213 <= 0) return false;
 
 				ri->intersection = is;
 				ri->normal = n3*k312+ n1*k132+n2*k213;

@@ -37,7 +37,7 @@ namespace StructureSynth {
 				State s0 = s;
 				if (rememberPreviousMatrix) {
 					// Copy the old matrix...
-					s0.setPrevMatrix(s.matrix);
+					s0.setPreviousState(s.matrix, s.hsv, s.alpha);
 				}
 				for (int i = 0; i < counters.size(); i++) {
 					for (int j = 0; j < counters[i]; j++) {

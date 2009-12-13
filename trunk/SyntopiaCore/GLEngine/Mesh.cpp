@@ -62,11 +62,15 @@ namespace SyntopiaCore {
 					
 			glBegin( GL_QUADS );
 			glColor4fv(primaryColor);
+			GLfloat secondaryColor[4] = {oldRgb[0], oldRgb[1], oldRgb[2], oldAlpha};
+			
 			//vertex4n(O, startDir1,startDir2+startDir1,startDir2);
-			vertex4n(O, startDir1,end+endDir1,end);
-			vertex4rn(O, startDir2,end+endDir2,end);
-			vertex4n(startDir1, startDir1+startDir2, end+endDir1+endDir2, end+endDir1);
-			vertex4rn(startDir2, startDir1+startDir2, end+endDir1+endDir2, end+endDir2);
+			Vector3f c1(startDir1*0.5f+startDir2*0.5f);
+			Vector3f c2(end+endDir1*0.5f+endDir2*0.5f);
+			vertex4(primaryColor, c1, O, startDir1, secondaryColor,c2,  end+endDir1,end,false);
+			vertex4(primaryColor,c1,  O, startDir2, secondaryColor,c2,  end+endDir2,end,false);
+			vertex4(primaryColor,c1,  startDir1, startDir1+startDir2,secondaryColor,c2,   end+endDir1+endDir2, end+endDir1,false);
+			vertex4(primaryColor,c1,  startDir2, startDir1+startDir2,secondaryColor,c2,  end+endDir1+endDir2, end+endDir2,false);
 			//vertex4n(O+end, endDir1+end,endDir2+endDir1+end,endDir2+end);
 			glEnd();
 			

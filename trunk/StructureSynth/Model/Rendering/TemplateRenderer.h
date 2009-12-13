@@ -128,6 +128,10 @@ namespace StructureSynth {
 				virtual void setBackgroundColor(SyntopiaCore::Math::Vector3f rgb);
 				virtual void setAlpha(double alpha) { this->alpha = alpha; }
 
+				virtual void setPreviousColor(SyntopiaCore::Math::Vector3f rgb) { this->oldRgb = rgb; }
+				virtual void setPreviousAlpha(double alpha) { this->oldAlpha = alpha; }
+
+
 				QString getOutput() ;
 				
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
@@ -172,6 +176,8 @@ namespace StructureSynth {
 				double aspect;
 				double fov;
 				QSet<QString> missingTypes;
+				SyntopiaCore::Math::Vector3f oldRgb;
+				double oldAlpha;
 			};
 
 		}

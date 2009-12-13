@@ -24,6 +24,44 @@ namespace SyntopiaCore {
 			vertex(v4); 
 		}
 
+		void Object3D::vertex4(const GLfloat* col1, SyntopiaCore::Math::Vector3f c1, SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2, const GLfloat* col2, SyntopiaCore::Math::Vector3f c2, SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4, bool reverse) const { 
+			/*
+			Vector3f n = (v2-v1).cross(v4-v1);
+			n.normalize();
+			if (reverse) n =-n;
+			
+			normal(n);
+			*/
+			
+			
+			glColor4fv(col1);
+			if (reverse) {
+				normal((c1-v1).normalized());
+			} else {
+				normal((v1-c1).normalized());
+			}
+			vertex(v1);
+			if (reverse) {
+				normal((c1-v2).normalized());
+			} else {
+				normal((v2-c1).normalized());
+			}
+			vertex(v2); 
+			glColor4fv(col2);
+			if (reverse) {
+				normal((c2-v3).normalized());
+			} else {
+				normal((v3-c2).normalized());
+			}
+			vertex(v3);
+			if (reverse) {
+				normal((c2-v4).normalized());
+			} else {
+				normal((v4-c2).normalized());
+			}
+			vertex(v4); 
+		}
+
 		void Object3D::vertex3n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3) const { 
 			Vector3f n = (v2-v1).cross(v3-v1);
 			n.normalize();
