@@ -2,7 +2,7 @@
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "SyntopiaCore/Logging/Logging.h"
-#include "SyntopiaCore/Misc/Miniparser.h"
+#include "SyntopiaCore/Misc/MiniParser.h"
 
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Misc;
@@ -14,23 +14,21 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 
-		
-
 
 		/// See here for details about this approach:
 		/// http://www.devmaster.net/articles/raytracing_series/part4.php
 		class VoxelStepper {
 		public:
-			VoxelStepper::VoxelStepper(Vector3f minPos, Vector3f maxPos, int steps) 
+			VoxelStepper(Vector3f minPos, Vector3f maxPos, int steps) 
 				:  steps(steps), minPos(minPos), maxPos(maxPos), size(( maxPos - minPos)/(double)steps) {
 				currentT = 0;
 				grid = new QList<Object3D*>[steps*steps*steps];
-				for (unsigned int i = 0; i < steps*steps*steps; i++) grid[i] = QList<Object3D*>();
+				for (int i = 0; i < steps*steps*steps; i++) grid[i] = QList<Object3D*>();
 			};
 
-			VoxelStepper::~VoxelStepper() { delete[] grid; };
+			~VoxelStepper() { delete[] grid; };
 
-			void VoxelStepper::registerObject(Object3D* obj) {
+			void registerObject(Object3D* obj) {
 				// Simple method - check all cells intersecting the objects bounding boxes.
 
 				obj->prepareForRaytracing();
@@ -74,7 +72,7 @@ namespace SyntopiaCore {
 
 			}
 
-			QList<Object3D*>* VoxelStepper::setupRay(Vector3f pos, Vector3f dir, double& maxT) {
+			QList<Object3D*>* setupRay(Vector3f pos, Vector3f dir, double& maxT) {
 				this->pos = pos; 
 				this->dir = dir;
 
@@ -183,7 +181,7 @@ namespace SyntopiaCore {
 				return (b<c ? b : c);
 			}
 
-			QList<Object3D*>* VoxelStepper::advance(double& maxT) {
+			QList<Object3D*>* advance(double& maxT) {
 				QList<Object3D*>* list = 0;
 				do {
 					if(tMaxX < tMaxY) {
@@ -536,13 +534,13 @@ namespace SyntopiaCore {
 
 			
 			double* depths = new double[w*h];
-			for (unsigned int i = 0; i<w*h; i++) depths[i] = -1;
+			for (int i = 0; i<w*h; i++) depths[i] = -1;
 			Vector3f* normals = new Vector3f[w*h];
 			Vector3f* colors = new Vector3f[w*h];
 			Vector3f* intersections = new Vector3f[w*h];
 			double* aoMap = new double[w*h];
 			Object3D** objs = new Object3D*[w*h];
-			for (unsigned int i = 0; i<w*h; i++) aoMap[i] = -1;
+			for (int i = 0; i<w*h; i++) aoMap[i] = -1;
 			
 
 			// Find a suitable light position. TODO: CHANGE!
@@ -602,7 +600,7 @@ namespace SyntopiaCore {
 
 				for (int x = 0; x < w; x=x+1) {
 					
-					float fx = x/(float)w;
+					//float fx = x/(float)w;
 					if (x % 7 == 0) {
 						progress.setValue((x*100)/w);
 						//qApp->processEvents();
@@ -632,7 +630,7 @@ namespace SyntopiaCore {
 						c.y() =1;
 						colors[x+y*w] = Vector3f(0,1,0);*/
 
-						float fy = y/(float)h;
+						//float fy = y/(float)h;
 						if (depths[x+y*w] > 1) {
 							aoMap[x+y*w] = 1;
 							continue;
@@ -695,10 +693,10 @@ namespace SyntopiaCore {
 				}
 
 
-				for (unsigned int i = 0; i<w*h; i++) if (depths[i]>1) aoMap[i] = 1;
+				for (int i = 0; i<w*h; i++) if (depths[i]>1) aoMap[i] = 1;
 
 				double* aoMap2 = new double[w*h];
-				for (unsigned int i = 0; i<w*h; i++) aoMap2[i] = aoMap[i];
+				for (int i = 0; i<w*h; i++) aoMap2[i] = aoMap[i];
 
 				// Fill with simple
 				for (int y = 0; y < h; y=y+step) {
@@ -737,7 +735,7 @@ namespace SyntopiaCore {
 				//iterations = 10;
 				tr = 0.9;
 				const int f = 10;
-				for (unsigned int i = 0; i< ambSmooth; i++) {
+				for (int i = 0; i< ambSmooth; i++) {
 					for (int y = 1 ; y < h-1; y++) {
 						for (int x = 1 ; x < w-1; x++) {
 							int c = aoMap[x+y*w+1]<0 ? 1 : f;
@@ -755,11 +753,11 @@ namespace SyntopiaCore {
 				}
 				
 
-				for (unsigned int i = 0; i<w*h; i++) aoMap[i] = aoMap2[i];
+				for (int i = 0; i<w*h; i++) aoMap[i] = aoMap2[i];
 				delete[] aoMap2;
 
 			} else {
-				for (unsigned int i = 0; i<w*h; i++) aoMap[i] = 1;
+				for (int i = 0; i<w*h; i++) aoMap[i] = 1;
 			
 			}
 
