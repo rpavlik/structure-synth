@@ -8,8 +8,8 @@
 #include "ColorPool.h"
 #include "ExecutionStack.h"
 
-#include "../../../SyntopiaCore/Math/Matrix4.h"
-#include "../../../SyntopiaCore/GLEngine/EngineWidget.h"
+#include "../../SyntopiaCore/Math/Matrix4.h"
+#include "../../SyntopiaCore/GLEngine/EngineWidget.h"
 
 
 namespace StructureSynth {
