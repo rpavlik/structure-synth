@@ -3,7 +3,7 @@
 #include "Builder.h"
 #include "RandomStreams.h"
 
-#include "../../../SyntopiaCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Logging/Logging.h"
 
 using namespace SyntopiaCore::Logging;
 
