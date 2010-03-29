@@ -51,6 +51,9 @@ namespace StructureSynth {
 			static QString getMiscDir();
 			static QString getTemplateDir();
 			
+			QString getCameraSettings();
+			QString getScriptWithSettings(QString filename);
+			
 		protected:
 			void dragEnterEvent(QDragEnterEvent *ev);
 			void dropEvent(QDropEvent *ev);

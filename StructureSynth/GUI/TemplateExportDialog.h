@@ -105,6 +105,7 @@ namespace StructureSynth {
 			QHBoxLayout *horizontalLayout_3;
 			QSpacerItem *horizontalSpacer;
 			QCheckBox *uniqueCheckBox;
+			QCheckBox *autoSaveCheckBox;
 			QRadioButton *clipboardRadioButton;
 			QGroupBox *postProcessingGroupBox;
 			QVBoxLayout *verticalLayout_4;

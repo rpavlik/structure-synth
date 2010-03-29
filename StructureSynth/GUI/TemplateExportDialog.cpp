@@ -291,6 +291,7 @@ namespace StructureSynth {
 
 		void TemplateExportDialog::setupUi()
 		{
+			autoSaveCheckBox = 0;
 			if (objectName().isEmpty())
 				setObjectName(QString::fromUtf8("TemplateExportDialog"));
 			resize(544, 600);
@@ -416,6 +417,8 @@ namespace StructureSynth {
 
 			verticalLayout_2->addLayout(horizontalLayout_2);
 
+			// UniqueCheckBox
+
 			horizontalLayout_3 = new QHBoxLayout();
 			horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
 			horizontalSpacer = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
@@ -431,6 +434,25 @@ namespace StructureSynth {
 
 
 			verticalLayout_2->addLayout(horizontalLayout_3);
+
+			// AutosaveCheckBox
+
+			QHBoxLayout* horizontalLayout_3a = new QHBoxLayout();
+			horizontalLayout_3a->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+			QSpacerItem* horizontalSpacera = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+			horizontalLayout_3a->addItem(horizontalSpacera);
+
+			autoSaveCheckBox = new QCheckBox(templateOutputGroupBox);
+			autoSaveCheckBox->setObjectName(QString::fromUtf8("TemplateExportDialog.autoSaveCheckBox"));
+			//connect(uniqueCheckBox, SIGNAL(toggled(bool)), this, SLOT(uniqueToggled(bool)));
+			Persistence::Restore(autoSaveCheckBox);
+
+			horizontalLayout_3a->addWidget(autoSaveCheckBox);
+
+
+			verticalLayout_2->addLayout(horizontalLayout_3a);
+
 
 			clipboardRadioButton = new QRadioButton(templateOutputGroupBox);
 			clipboardRadioButton->setObjectName(QString::fromUtf8("TemplateExportDialog.clipboardRadioButton"));
@@ -865,9 +887,13 @@ namespace StructureSynth {
 				}
 				
 				uniqueCheckBox->setText(QString("Add unique ID to filename (%1)").arg(uname));
+				if (autoSaveCheckBox) autoSaveCheckBox->setText(QString("Autosave Eisenscript (%1)").arg(uname.section(".",0,-2)+".es"));
 			} else {
 				
 				uniqueCheckBox->setText("Add unique ID to filename");
+				if (autoSaveCheckBox) autoSaveCheckBox->setText(QString("Autosave Eisenscript (%1)").arg(
+					 fileNameLineEdit->text().section(".",0,-2)+".es"
+					));
 			}
 		}
 
@@ -907,11 +933,13 @@ namespace StructureSynth {
 			if (fileRadioButton->isChecked()) {
 				fileNameLineEdit->setEnabled(true);
 				uniqueCheckBox->setEnabled(true);
+				autoSaveCheckBox->setEnabled(true);
 				filePushButton->setEnabled(true);
 			} else {
 				fileNameLineEdit->setEnabled(false);
 				uniqueCheckBox->setEnabled(false);
 				filePushButton->setEnabled(false);
+				autoSaveCheckBox->setEnabled(false);
 			}
 		}
 
@@ -999,6 +1027,37 @@ namespace StructureSynth {
 					}
 				}
 
+				if (autoSaveCheckBox->isChecked()) {
+
+					QString autoSaveName = fileName.section(".",0,-2) + ".es";
+					
+					if (QFileInfo(autoSaveName).exists()) {
+						if (QMessageBox::Ok != QMessageBox::warning (this, "File exists!", 
+							QString("Overwrite file:\r\n%1").arg(QFileInfo(autoSaveName).absoluteFilePath()), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel))
+						{
+							return;
+						}
+					}
+
+					INFO("Autosaving Eisenscript as: " + QFileInfo(autoSaveName).absoluteFilePath());
+					QString script = mainWindow->getScriptWithSettings(fileName);
+
+					QFile file(autoSaveName);
+					if (!file.open(QFile::WriteOnly | QFile::Text)) {
+						QMessageBox::warning(this, tr("Structure Synth"),
+							tr("Cannot write file %1:\n%2.")
+							.arg(autoSaveName)
+							.arg(file.errorString()));
+						return;
+					}
+
+					QTextStream out(&file);
+					QApplication::setOverrideCursor(Qt::WaitCursor);
+					out << script;
+					QApplication::restoreOverrideCursor();
+					INFO("Eisenscript saved.");
+				}
+
 				mainWindow->templateRender(fileName, &currentTemplate, widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
 
 			} else {
@@ -1063,6 +1122,7 @@ namespace StructureSynth {
 			Persistence::Store(widthSpinBox); // spin
 			Persistence::Store(heightSpinBox); // spin
 			Persistence::Store(uniqueCheckBox); // checkb
+			Persistence::Store(autoSaveCheckBox); 
 			Persistence::Store(clipboardRadioButton);
 			Persistence::Store(templateComboBox);
 			Persistence::Store(runAfterCheckBox);
