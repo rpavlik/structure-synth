@@ -1,6 +1,8 @@
 
 Changelog for Structure Synth:
 ------------
+29 Mar 10 [MHC] Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
+[1h]  
 
  5 Oct 09 [MHC] Triangles/Mesh
 [2h]
