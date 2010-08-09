@@ -152,6 +152,13 @@ namespace StructureSynth {
 			t.matrix(2,3) = offset;
 			return t;
 		}
+
+		Transformation Transformation::createPlaneReflection(SyntopiaCore::Math::Vector3f normal) {
+			Transformation t;
+			t.matrix = Matrix4f::PlaneReflection(normal);
+			return t;
+		}
+			
 			
 		// Rotations
 		Transformation Transformation::createRX(double angle) {

@@ -76,6 +76,16 @@ namespace SyntopiaCore {
 				return  m;
 			};
 
+			static Matrix4<scalar> PlaneReflection(Vector3<scalar> n) {
+				n.normalize();
+				Matrix4<scalar> m;
+				m(0,0) = 1.0 - 2.0*n.x()*n.x(); m(1,0) = -2.0*n.y()*n.x();       m(2,0) = -2.0*n.z()*n.x();
+				m(0,1) = -2.0*n.x()*n.y();      m(1,1) = 1.0 - 2.0*n.y()*n.y();  m(2,1) = -2.0*n.z()*n.y();
+				m(0,2) = -2.0*n.x()*n.z();      m(1,2) = -2.0*n.y()*n.z();       m(2,2) = 1.0 - 2.0*n.z()*n.z();
+				m(3,3) = 1;
+				return m;
+			};
+
 			/// Rotation about axis with angle
 			/// Taken from http://www.gamedev.net/reference/articles/605/math3d.h
 			static Matrix4<scalar> Rotation(Vector3<scalar> axis, scalar angle) {
