@@ -30,6 +30,8 @@ namespace StructureSynth {
 			static Transformation createRY(double angle);
 			static Transformation createRZ(double angle);
 
+			// Plane reflection
+			static Transformation createPlaneReflection(SyntopiaCore::Math::Vector3f normal);
 			
 			// Scaling 
 			static Transformation createScale(double x, double y, double z);

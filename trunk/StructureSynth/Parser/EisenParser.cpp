@@ -223,6 +223,16 @@ namespace StructureSynth {
 					return Transformation::createScale(param,param2,param3);
 				}
 				return Transformation::createScale(param,param,param);
+			} else if (type == "reflect") {
+				double param = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'reflect': Expected numerical parameter. Found: " + symbol.text, symbol.pos));
+				
+				double param2 = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'reflect': Expected second numerical parameter. Found: " + symbol.text, symbol.pos));
+				double param3 = symbol.getNumerical();
+				if (!accept(Symbol::Number)) throw (ParseError("Transformation 'reflect': Expected third numerical parameter. Found: " + symbol.text, symbol.pos));
+				return Transformation::createPlaneReflection(SyntopiaCore::Math::Vector3f(param,param2,param3));
+			
 			} else if (type == "fx") {
 				return Transformation::createScale(-1,1,1);
 			} else if (type == "fy") {
