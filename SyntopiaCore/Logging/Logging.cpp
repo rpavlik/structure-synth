@@ -46,7 +46,12 @@ namespace SyntopiaCore {
 			QTime t = Logger::timeStack.pop();
 			QString s = Logger::timeStringStack.pop();
 			int secs = t.msecsTo(QTime::currentTime());
-			LOG(QString("Time: %1s for ").arg(secs/1000.0f) + s, TimingLevel);
+			if (repetitions == 0) {
+				LOG(QString("Time: %1s for ").arg(secs/1000.0f) + s, TimingLevel);
+			} else {
+				LOG(QString("Time: %1s for %2. %3 repetitions, %4s per repetition.").arg(secs/1000.0f).arg(s)
+					.arg(repetitions).arg((secs/repetitions)/1000.0f), TimingLevel);			
+			}
 		}; // End time...
 		
 

@@ -1,6 +1,8 @@
  
 Changelog for Structure Synth:
 ------------
+16 Aug 10 [MHC] Added a patch by François Beaune to support Appleseed (http://appleseedhq.net/), including an Appleseed rendertemplate plus two obj-files. 
+
 29 Mar 10 [MHC] Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
 [1h]  
 

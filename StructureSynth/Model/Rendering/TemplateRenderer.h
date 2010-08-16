@@ -84,7 +84,7 @@ namespace StructureSynth {
 
 				/// The primitives
 				virtual void drawBox(SyntopiaCore::Math::Vector3f base, 
-					          SyntopiaCore::Math::Vector3f dir1 , 
+							  SyntopiaCore::Math::Vector3f dir1 , 
 							  SyntopiaCore::Math::Vector3f dir2, 
 							  SyntopiaCore::Math::Vector3f dir3,
 								PrimitiveClass* classID);
@@ -116,7 +116,7 @@ namespace StructureSynth {
 
 				virtual void drawTriangle(SyntopiaCore::Math::Vector3f p1,
 										 SyntopiaCore::Math::Vector3f p2,
-									     SyntopiaCore::Math::Vector3f p3,
+										 SyntopiaCore::Math::Vector3f p3,
 											PrimitiveClass* classID);
 
 				virtual void callGeneric(PrimitiveClass* classID);
@@ -150,12 +150,13 @@ namespace StructureSynth {
 					this->fov = fov;
 				}
 
+				void doBeginEndSubstitutions(TemplatePrimitive& t);
+
 				void doStandardSubstitutions(SyntopiaCore::Math::Vector3f base, 
 					SyntopiaCore::Math::Vector3f dir1,
 					SyntopiaCore::Math::Vector3f dir2, 
 					SyntopiaCore::Math::Vector3f dir3, 
 					TemplatePrimitive& t);
-			
 
 			private:
 				
