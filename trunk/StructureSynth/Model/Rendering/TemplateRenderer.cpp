@@ -165,6 +165,58 @@ namespace StructureSynth {
 
 			} 
 
+			void TemplateRenderer::doBeginEndSubstitutions(TemplatePrimitive& t)
+			{
+				t.substitute("{CamPosX}", QString::number(cameraPosition.x()));
+				t.substitute("{CamPosY}", QString::number(cameraPosition.y()));
+				t.substitute("{CamPosZ}", QString::number(cameraPosition.z()));
+
+				t.substitute("{CamUpX}", QString::number(cameraUp.x()));
+				t.substitute("{CamUpY}", QString::number(cameraUp.y()));
+				t.substitute("{CamUpZ}", QString::number(cameraUp.z()));
+
+				Vector3f cameraDir = cameraTarget-cameraPosition;
+				cameraDir.normalize();
+
+				t.substitute("{CamDirX}", QString::number(cameraDir.x()));
+				t.substitute("{CamDirY}", QString::number(cameraDir.y()));
+				t.substitute("{CamDirZ}", QString::number(cameraDir.z()));
+
+				t.substitute("{CamRightX}", QString::number(cameraRight.x()));
+				t.substitute("{CamRightY}", QString::number(cameraRight.y()));
+				t.substitute("{CamRightZ}", QString::number(cameraRight.z()));
+
+				t.substitute("{CamTargetX}", QString::number(cameraTarget.x()));
+				t.substitute("{CamTargetY}", QString::number(cameraTarget.y()));
+				t.substitute("{CamTargetZ}", QString::number(cameraTarget.z()));
+
+				if (t.contains("{CamColumnMatrix}")) {
+					const Vector3f u = -cameraRight;
+					const Vector3f v = cameraUp;
+					const Vector3f w = -cameraDir;
+
+					QString mat = QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 0.0 0.0 0.0 1.0")
+						.arg(u.x()).arg(v.x()).arg(w.x()).arg(cameraPosition.x())
+						.arg(u.y()).arg(v.y()).arg(w.y()).arg(cameraPosition.y())
+						.arg(u.z()).arg(v.z()).arg(w.z()).arg(cameraPosition.z());
+
+					t.substitute("{CamColumnMatrix}", mat);
+				}
+
+				t.substitute("{aspect}", QString::number(aspect));
+				t.substitute("{width}", QString::number(width));
+				t.substitute("{height}", QString::number(height));
+				t.substitute("{fov}", QString::number(fov));
+
+				t.substitute("{BR}", QString::number(backRgb.x()));
+				t.substitute("{BG}", QString::number(backRgb.y()));
+				t.substitute("{BB}", QString::number(backRgb.z()));
+
+				t.substitute("{BR256}", QString::number(backRgb.x()*255));
+				t.substitute("{BG256}", QString::number(backRgb.y()*255));
+				t.substitute("{BB256}", QString::number(backRgb.z()*255));
+			}
+
 			void TemplateRenderer::doStandardSubstitutions(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				SyntopiaCore::Math::Vector3f dir2, 
@@ -177,8 +229,15 @@ namespace StructureSynth {
 							.arg(base.x()).arg(base.y()).arg(base.z());
 
 						t.substitute("{matrix}", mat);
+					}
 
+					if (t.contains("{columnmatrix}")) {
+						QString mat = QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 0 0 0 1")
+							.arg(dir1.x()).arg(dir2.x()).arg(dir3.x()).arg(base.x())
+							.arg(dir1.y()).arg(dir2.y()).arg(dir3.y()).arg(base.y())
+							.arg(dir1.z()).arg(dir2.z()).arg(dir3.z()).arg(base.z());
 
+						t.substitute("{columnmatrix}", mat);
 					}
 
 					if (t.contains("{povmatrix}")) {
@@ -344,38 +403,7 @@ namespace StructureSynth {
 				if (!assertPrimitiveExists("begin")) return;
 				TemplatePrimitive t(workingTemplate.get("begin")); 
 
-				t.substitute("{CamPosX}", QString::number(cameraPosition.x()));
-				t.substitute("{CamPosY}", QString::number(cameraPosition.y()));
-				t.substitute("{CamPosZ}", QString::number(cameraPosition.z()));
-				t.substitute("{CamUpX}", QString::number(cameraUp.x()));
-				t.substitute("{CamUpY}", QString::number(cameraUp.y()));
-				t.substitute("{CamUpZ}", QString::number(cameraUp.z()));
-				Vector3f cameraDir = cameraTarget-cameraPosition;
-				cameraDir.normalize();
-				t.substitute("{CamDirX}", QString::number(cameraDir.x()));
-				t.substitute("{CamDirY}", QString::number(cameraDir.y()));
-				t.substitute("{CamDirZ}", QString::number(cameraDir.z()));
-				t.substitute("{CamRightX}", QString::number(cameraRight.x()));
-				t.substitute("{CamRightY}", QString::number(cameraRight.y()));
-				t.substitute("{CamRightZ}", QString::number(cameraRight.z()));
-				t.substitute("{CamTargetX}", QString::number(cameraTarget.x()));
-				t.substitute("{CamTargetY}", QString::number(cameraTarget.y()));
-				t.substitute("{CamTargetZ}", QString::number(cameraTarget.z()));
-
-				t.substitute("{aspect}", QString::number(aspect));	
-				t.substitute("{width}", QString::number(width));
-				t.substitute("{height}", QString::number(height));
-				t.substitute("{fov}", QString::number(fov));
-
-				t.substitute("{BR}", QString::number(backRgb.x()));
-				t.substitute("{BG}", QString::number(backRgb.y()));
-				t.substitute("{BB}", QString::number(backRgb.z()));
-
-				t.substitute("{BR256}", QString::number(backRgb.x()*255));
-				t.substitute("{BG256}", QString::number(backRgb.y()*255));
-				t.substitute("{BB256}", QString::number(backRgb.z()*255));
-
-
+				doBeginEndSubstitutions(t);
 
 				output.append(t.getText());
 			};
@@ -383,6 +411,9 @@ namespace StructureSynth {
 			void TemplateRenderer::end() {
 				if (!assertPrimitiveExists("end")) return;
 				TemplatePrimitive t(workingTemplate.get("end")); 
+
+				doBeginEndSubstitutions(t);
+
 				output.append(t.getText());
 			};
 
