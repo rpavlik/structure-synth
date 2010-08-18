@@ -12,7 +12,7 @@
 #include "SyntopiaCore/GLEngine/Sphere.h"
 
 #include "Debug.h"
-#include "Builder.h"
+#include "JavaScriptBuilder.h"
 
 using namespace SyntopiaCore::Logging;
 using namespace SyntopiaCore::Exceptions;
@@ -104,7 +104,8 @@ namespace StructureSynth {
 
 		}
 
-		JavaScriptParser::JavaScriptParser(SyntopiaCore::GLEngine::EngineWidget* engine3D, QStatusBar* statusBar) : engine3D(engine3D), statusBar(statusBar) {
+		JavaScriptParser::JavaScriptParser(StructureSynth::GUI::MainWindow* mainWindow, QStatusBar* statusBar) 
+			: mainWindow(mainWindow), statusBar(statusBar) {
 		}
 
 		JavaScriptParser::~JavaScriptParser() {
@@ -119,12 +120,10 @@ namespace StructureSynth {
 			Debug debugObject(statusBar);
 			engine.globalObject().setProperty("Debug", engine.newQObject(&debugObject)); 
 
-			Builder builder(engine3D);
+			Builder builder(mainWindow, mainWindow->getEngine());
 			engine.globalObject().setProperty("Builder", engine.newQObject(&builder)); 
 
-			builder.load("");
-
-			World world(engine3D);
+			World world(mainWindow->getEngine());
 			QScriptValue w = engine.newQObject(&world);
 			w.setProperty("addSphere", engine.newFunction(addSphereStatic));
 			w.setProperty("setColor", engine.newFunction(setColorStatic));

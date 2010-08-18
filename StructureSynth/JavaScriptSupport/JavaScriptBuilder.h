@@ -15,7 +15,7 @@ namespace StructureSynth {
 			Q_OBJECT
 
 		public:
-			Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D) : mainWindow(mainWindow), engine3D(engine3D) {};
+			Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D);
 			~Builder() {};
 			
 		public slots:

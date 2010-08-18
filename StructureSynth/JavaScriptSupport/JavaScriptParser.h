@@ -2,7 +2,7 @@
 
 #include <QString>
 #include <QStatusBar>
-#include "../../SyntopiaCore/GLEngine/EngineWidget.h"
+#include "../GUI/MainWindow.h"
 
 
 namespace StructureSynth {
@@ -11,12 +11,12 @@ namespace StructureSynth {
 		/// Responsible for setting up the JavaScript environment and parsing
 		class JavaScriptParser {
 		public:
-			JavaScriptParser(SyntopiaCore::GLEngine::EngineWidget* engine3D, QStatusBar* statusBar);
+			JavaScriptParser(StructureSynth::GUI::MainWindow* mainWindow, QStatusBar* statusBar);
 			~JavaScriptParser();
 			
 			void parse(QString input);
 		private:
-			SyntopiaCore::GLEngine::EngineWidget* engine3D;
+			StructureSynth::GUI::MainWindow* mainWindow;
 			QStatusBar* statusBar;
 		};
 
