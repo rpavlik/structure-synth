@@ -99,6 +99,7 @@ namespace SyntopiaCore {
 			void setRaytracerCommands(QVector<GLEngine::Command> raytracerCommands) { this->raytracerCommands = raytracerCommands; }
 			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; }
 			
+			void setupFragmentShader(); // For experimenting with shader effects.
 		protected:
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );
@@ -118,6 +119,8 @@ namespace SyntopiaCore {
 
 		
 		private:
+			bool fragmentShader;
+			QGLShaderProgram* shaderProgram;
 			QVector<GLEngine::Command> raytracerCommands;
 
 			// Creates the appropriate GL_PROJECTION matrix

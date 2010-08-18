@@ -41,6 +41,8 @@ namespace SyntopiaCore {
 
 			fastRotate = false;
 			doingRotate = false;
+			shaderProgram = 0;
+			//setupFragmentShader();
 		}
 
 		void EngineWidget::setFastRotate(bool enabled) {
@@ -75,6 +77,11 @@ namespace SyntopiaCore {
 			scale = 0.4f;
 			//backgroundColor = QColor(0,0,0);
 			requireRedraw();
+
+			if (shaderProgram) {
+				shaderProgram->release();
+				setupFragmentShader();
+			}
 		}
 
 		void EngineWidget::requireRedraw() {
@@ -83,6 +90,36 @@ namespace SyntopiaCore {
 
 		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
 			
+		void EngineWidget::setupFragmentShader() {
+			
+			shaderProgram = new QGLShaderProgram(this);
+			bool s = shaderProgram->addShaderFromSourceCode(QGLShader::Vertex,
+				"varying vec2 coord;\n"
+				"void main(void)\n"
+				"{\n"
+				"   gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;;\n"
+				"   coord = vec2(gl_Position.x,gl_Position.y);\n "
+				"}");
+			if (!s) WARNING("Could not create vertex shader: " + shaderProgram->log());
+			s = shaderProgram->addShaderFromSourceCode(QGLShader::Fragment,
+				"uniform mediump vec4 color;\n"
+				"varying vec2 coord;\n"
+				"void main(void)\n"
+				"{\n"
+				"   gl_FragColor =  vec4(1.0,coord.x,coord.y, 1.0);\n"
+				"    if (coord.y<0.5)  gl_FragColor = vec4(1.0,1.0,1.0, 1.0); "
+				"}");
+			if (!s) WARNING("Could not create vertex shader: " + shaderProgram->log());
+			
+			s = shaderProgram->link();
+			if (!s) WARNING("Could not link shaders: " + shaderProgram->log());
+			
+			s = shaderProgram->bind();
+			if (!s) WARNING("Could not bind shaders: " + shaderProgram->log());
+			
+			INFO("Shader setup complete!");
+		}
+
 		void EngineWidget::paintGL() {
 			
 			
@@ -94,6 +131,33 @@ namespace SyntopiaCore {
 			if (disabled) {
 				qglClearColor(backgroundColor);
 				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+				return;
+			}
+			
+			if (shaderProgram) {
+
+				glDisable( GL_CULL_FACE );
+				glDisable( GL_LIGHTING );
+				glDisable( GL_DEPTH_TEST );
+
+				glViewport(0,0,width(),height());
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				gluOrtho2D(0,100,0,100);
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+
+
+				int colorLocation = shaderProgram->uniformLocation("color");
+
+				QColor color(0, 255, 0, 255);
+				shaderProgram->setUniformValue(colorLocation, color);
+
+				 glColor3d(1.0,1.0,0.0);
+ 
+				 glRectf(2,2,98,98);
+				 
+				INFO("Drawing...");
 				return;
 			}
 			

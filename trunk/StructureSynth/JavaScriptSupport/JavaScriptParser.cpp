@@ -12,6 +12,7 @@
 #include "SyntopiaCore/GLEngine/Sphere.h"
 
 #include "Debug.h"
+#include "Builder.h"
 
 using namespace SyntopiaCore::Logging;
 using namespace SyntopiaCore::Exceptions;
@@ -121,7 +122,7 @@ namespace StructureSynth {
 			Builder builder(engine3D);
 			engine.globalObject().setProperty("Builder", engine.newQObject(&builder)); 
 
-
+			builder.load("");
 
 			World world(engine3D);
 			QScriptValue w = engine.newQObject(&world);
@@ -138,8 +139,7 @@ namespace StructureSynth {
 			engine.globalObject().setProperty("Vector3", vectorCtor); 
 
 			qScriptRegisterMetaType(&engine, vector3ToScriptValue, vector3FromScriptValue, vProto); 
-			//qScriptRegisterMetaType(&engine, vector3ToScriptValue, vector3FromScriptValue); 
-
+			
 			// Execute and catch exceptions.
 			try {
 				QScriptValue result = engine.evaluate(input);
@@ -153,9 +153,6 @@ namespace StructureSynth {
 			} catch (Exception& e) {
 				WARNING(e.getMessage());
 			}
-			
-
 		}
-		
 	}
 }
