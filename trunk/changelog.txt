@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+18 Aug 10 [MHC] Javascript work
+[2h]
+
 16 Aug 10 [MHC] Added a patch by François Beaune to support Appleseed (http://appleseedhq.net/), including an Appleseed rendertemplate plus two obj-files. 
 
 29 Mar 10 [MHC] Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
@@ -13,7 +16,7 @@ Changelog for Structure Synth:
 30 Sep 09 [MHC] 
 [5h]
 
-27 Sep 09 [MHC] Changed the class atribute from a simple string to a class (for setting raytracer properties on per object basis)
+27 Sep 09 [MHC] Changed the class attribute from a simple string to a class (for setting raytracer properties on per object basis)
 [3h]            Changed to displaylists for spheres (modest speedup).
                 Some code cleanup.
 

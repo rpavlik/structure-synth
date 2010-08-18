@@ -1229,7 +1229,7 @@ namespace StructureSynth {
 
 
 		void MainWindow::parseJavaScript(QString scripture) {
-			JavaScriptParser jsp(engine, statusBar());
+			JavaScriptParser jsp(this, statusBar());
 			jsp.parse(scripture);
 
 		}

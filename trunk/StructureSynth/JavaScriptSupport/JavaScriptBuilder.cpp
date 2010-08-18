@@ -41,7 +41,7 @@ namespace StructureSynth {
 			};
 		};
 
-	
+
 
 		void World::setColor2(Vector3 rgb, float alpha) {
 			this->rgb = rgb.getObj();
@@ -69,34 +69,35 @@ namespace StructureSynth {
 
 		}
 
+		Builder::Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D) : mainWindow(mainWindow), engine3D(engine3D) {
+				width = engine3D->width();
+				height = engine3D->height();
+			};
+
 		void Builder::render() {
 
 			engine3D->setDisabled(true);
-		
-			try {
-				Rendering::OpenGLRenderer renderTarget(engine3D);
-				renderTarget.begin(); // we clear before parsing...
 
-				Preprocessor pp;
-				QString out = pp.Process(loadedSystem);
-				Tokenizer tokenizer(out);
-				EisenParser e(&tokenizer);
-				RuleSet* rs = e.parseRuleset();
-				rs->resolveNames();
-				Model::Builder b(&renderTarget, rs, false);
-				b.build();
-				if (b.wasCancelled()) throw Exception("User cancelled");
-			
-				renderTarget.end();
-				engine3D->setRaytracerCommands(b.getRaytracerCommands());
-				//INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
-				delete(rs);
-				rs = 0;
-			} catch (ParseError& pe) {
-				WARNING(pe.getMessage());
-			} catch (Exception& er) {
-				WARNING(er.getMessage());
-			} 
+
+			Rendering::OpenGLRenderer renderTarget(engine3D);
+			renderTarget.begin(); // we clear before parsing...
+
+			Preprocessor pp;
+			QString out = pp.Process(loadedSystem);
+			Tokenizer tokenizer(out);
+			EisenParser e(&tokenizer);
+			RuleSet* rs = e.parseRuleset();
+			rs->resolveNames();
+			Model::Builder b(&renderTarget, rs, false);
+			b.build();
+			if (b.wasCancelled()) throw Exception("User cancelled");
+
+			renderTarget.end();
+			engine3D->setRaytracerCommands(b.getRaytracerCommands());
+			//INFO(QString("Setting %1 raytracer commands.").arg(raytracerCommands.count()));
+			delete(rs);
+			rs = 0;
+
 			engine3D->setDisabled(false);
 			engine3D->requireRedraw();
 
@@ -106,7 +107,7 @@ namespace StructureSynth {
 			fileName = QDir("").absoluteFilePath(fileName);
 			QFile file(fileName);
 			if (!file.open(QFile::ReadOnly | QFile::Text)) {
-				WARNING(QString("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+				throw Exception(QString("Cannot read file %1: %2.").arg(fileName).arg(file.errorString()));
 			} else {
 				QTextStream in(&file);
 				loadedSystem = in.readAll();
@@ -125,9 +126,9 @@ namespace StructureSynth {
 				}
 			}
 			loadedSystem = s.join("\n");
-			
+
 		};
-		
+
 		void Builder::renderToFile(QString fileName, bool overwrite) {
 			render();
 			engine3D->requireRedraw();
@@ -135,7 +136,7 @@ namespace StructureSynth {
 			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 			engine3D->update();
 			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-		
+
 			QImage image = engine3D->grabFrameBuffer();
 
 			QFileInfo fi(fileName);
@@ -145,7 +146,7 @@ namespace StructureSynth {
 						QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel) {
 							WARNING("Cancelled save.");
 							return;
-							
+
 					}
 				}
 				INFO("Overwriting: " + fi.absoluteFilePath());		
@@ -157,9 +158,9 @@ namespace StructureSynth {
 				WARNING("Failed to save: " + fi.absoluteFilePath());
 			}
 		};
-		
+
 		void Builder::reset() { loadedSystem = originalSystem; };
-		
+
 		/// Raytrace image with same dimensions as viewport to file.
 		void Builder::templateRenderToFile(QString templateName, QString fileName, bool overwrite) {
 			QDir d(mainWindow->getTemplateDir());
@@ -189,7 +190,7 @@ namespace StructureSynth {
 				}
 			}
 		}
-	
+
 
 		void Builder::setSize(int w, int h) {
 			if (w == 0 && h == 0) {
@@ -206,9 +207,9 @@ namespace StructureSynth {
 				height = h;
 			}	
 		}
-			
+
 		void Builder::raytraceToFile(QString fileName, bool overwrite) {
-		
+
 			RayTracer rt(engine3D);
 			INFO(QString("Raytracing %1x%2 image...").arg(width).arg(height));
 			QImage im = rt.calculateImage(width,height);
@@ -218,8 +219,8 @@ namespace StructureSynth {
 				if (!overwrite) {
 					if (QMessageBox::question(0, "File Error", "Overwrite file: " + fi.absoluteFilePath() + "?", 
 						QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel) {
-						
-						WARNING("Cancelled save.");
+
+							WARNING("Cancelled save.");
 							return;
 					}
 				}
@@ -233,6 +234,6 @@ namespace StructureSynth {
 			}
 
 		}
-		
+
 	}
 }

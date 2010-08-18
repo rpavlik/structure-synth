@@ -1,4 +1,4 @@
-set raytracer::ambient-occlusion [3,4,00,30,1]
+set raytracer::ambient-occlusion [2,14,10,50,1]
 set raytracer::shadows true
 set raytracer::light::reflection 0.4
 set raytracer::black::reflection 0.4
@@ -11,7 +11,7 @@ set pivot [0 0 0]
 set scale 0.408795
 
 set background #000
-#define _md 400
+#define _md 40
 #define _rz 0
 #define _zoom 1
 
