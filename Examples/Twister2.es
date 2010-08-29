@@ -10,7 +10,7 @@ set rotation [0.985717 0.144947 -0.0857551 -0.0263006 0.635428 0.771712 0.166349
 set pivot [0 0 0]
 set scale 0.293223
 
-set maxdepth 4200
+set maxdepth 420
 #define max1 130 
 #define rzstep 2 
 #define rxstep 1 

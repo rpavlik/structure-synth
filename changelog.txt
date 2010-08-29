@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+29 Aug 10 [MHC] Cleaned up raytracer interface a bit.
+[1h]
+
 18 Aug 10 [MHC] Javascript work
 [2h]
 

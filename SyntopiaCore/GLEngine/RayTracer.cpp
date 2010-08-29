@@ -257,16 +257,14 @@ namespace SyntopiaCore {
 			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
-			ambMinRays = 10;
-			ambMaxRays = 100;
-			ambExponent = 1;
-			ambPrecision = 0.9;
+			occlusionSampleStepSize = 2;
+			ambMaxRays = 30;
 			aaSamples = 2;
-			ambSmooth = 0;
+			ambSmooth = 50;
 			useShadows = true;
 			globalAmbient = 0.3;
-			globalDiffuse = 0.5;
-			globalSpecular = 0.8;
+			globalDiffuse = 0.8;
+			globalSpecular = 1.0;
 			
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
@@ -449,16 +447,8 @@ namespace SyntopiaCore {
 							if (!occluded) list = accelerator->advance(maxT); 
 						}
 						
-						if (ix>=ambMinRays) {
-							double oldPercentage = hits/(double)(tests-1);
-							if (occluded) hits++;
-							double newPercentage = hits/(double)tests;
-							if (fabs(oldPercentage-newPercentage)/oldPercentage < (1-ambPrecision)) {
-								break;
-							}
-						} else {
-							if (occluded) hits++;
-						}
+						if (occluded) hits++;
+						
 					}
 					double occ = (1-hits/(double)tests);
 					/*
@@ -583,7 +573,7 @@ namespace SyntopiaCore {
 
 
 
-			int step = ambMinRays;
+			int step = occlusionSampleStepSize;
 			if ( ambMaxRays>0) {
 				double tr = 0.99;
 
@@ -666,28 +656,16 @@ namespace SyntopiaCore {
 								for (int i = 0; i < list->size(); i++) {
 									if (list->at(i) == objs[x+y*w]) continue; // self-shadow? 							
 									occluded = list->at(i)->intersectsRay(&ri);
-									if (ri.intersection < 1E-5 || ri.intersection> ambPrecision) occluded = false;
+									if (ri.intersection < 1E-5) occluded = false;
 									if (occluded) break;								
 								}
 
-								if (maxT>ambPrecision) break;
 								if (!occluded) list = accelerator->advance(maxT); 
 
 							}
-
-							/*
-							if (ix>=ambMinRays) {
-							double oldPercentage = hits/(double)(tests-1);
-							if (occluded) hits++;
-							double newPercentage = hits/(double)tests;
-							if (fabs(oldPercentage-newPercentage)/oldPercentage < (1-ambPrecision)) {
-							break;
-							}
-							} else {
-							*/
 							if (occluded) hits++;
 						}
-						double occ = 1-pow(hits/(double)tests,ambExponent);
+						double occ = 1-hits/(double)tests;
 						aoMap[x+y*w] = occ;
 					}
 				}
@@ -860,24 +838,12 @@ namespace SyntopiaCore {
 		void RayTracer::setParameter(QString param, QString value) {
 			param=param.toLower();
 
-			/*
-			int ambMinRays;
-			int ambMaxRays;
-			float ambPrecision;
-			int aaSamples;
-			int width;
-			int height;
-			bool useShadows;
-			float globalAmbient;
-			float globalDiffuse;
-			float globalSpecular;
-			float reflections;
-			*/
 
 			if (param == "ambient-occlusion") {
 				// Min rays, Max rays, Precision...		
-				MiniParser(value, ',').getInt(ambMinRays).getInt(ambMaxRays).getDouble(ambPrecision).getInt(ambSmooth).getDouble(ambExponent);
-				INFO(QString("Min: %1, Max: %2, Prec: %3, ").arg(ambMinRays).arg(ambMaxRays).arg(ambPrecision));
+				MiniParser(value, ',').getInt(occlusionSampleStepSize).getInt(ambMaxRays).getInt(ambSmooth);
+				INFO(QString("Occlusion Sample Step Size: %1, Max Rays: %2, Smoothening Steps: %3 ")
+					.arg(occlusionSampleStepSize).arg(ambMaxRays).arg(ambSmooth));
 		
 			} else if (param == "anti-alias") {
 				// Min rays, Max rays, Precision...		

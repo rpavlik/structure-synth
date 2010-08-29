@@ -1058,12 +1058,12 @@ namespace StructureSynth {
 					INFO("Eisenscript saved.");
 				}
 
-				mainWindow->templateRender(fileName, &currentTemplate, widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
+				mainWindow->templateRender(fileName, &currentTemplate, "", widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
 
 			} else {
 				// Save to clipboard.
 				INFO("Rendering to clipboard...");
-				mainWindow->templateRender("", &currentTemplate, widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
+				mainWindow->templateRender("", &currentTemplate, "", widthSpinBox->value(), heightSpinBox->value(), modifyOutputCheckBox->isChecked());
 			}
 
 			if (runAfterCheckBox->isChecked()) {
@@ -1084,6 +1084,7 @@ namespace StructureSynth {
 				QString command;
 				int counter = 0;
 				QString buffer;
+				INFO("Post-processed text: " + cmd);
 				for (int i = 0; i < cmd.size(); ++i) {
 					 if (cmd.at(i) == QLatin1Char('"')) {
 						 inQuote = !inQuote;
