@@ -43,7 +43,7 @@ namespace StructureSynth {
 			MainWindow(const QString &fileName);
 			void setSeed(int randomSeed);
 			int getSeed();
-			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, int width = 0, int height = 0, bool postModify = false);
+			void templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, QString inputText, int width = 0, int height = 0, bool postModify = false);
 		
 
 			SyntopiaCore::GLEngine::EngineWidget* getEngine() { return engine; };

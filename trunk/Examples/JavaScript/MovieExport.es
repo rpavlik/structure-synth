@@ -17,8 +17,8 @@ for (i = 0; i <=  max; i+=1) {
 	Builder.define("rzstep",( 2.2*(i/max)));
 	Builder.define("rxstep",1);
 	Builder.render();
-      Builder.renderToFile("Out2/XPict" + pad(i) + ".png",true);
-	//Builder.raytraceToFile("XPict" + pad(i) + ".png",true);
+      // Builder.renderToFile("Out2/XPict" + pad(i) + ".png",true);
+	Builder.raytraceToFile("XPict" + pad(i) + ".png",true);
 	//Debug.waitForMouseButton();
 }
 

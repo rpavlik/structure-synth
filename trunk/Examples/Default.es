@@ -1,7 +1,7 @@
-set raytracer::ambient-occlusion [2,14,10,50,1]
+set raytracer::ambient-occlusion [2,30,50]
 set raytracer::shadows true
-set raytracer::light::reflection 0.4
-set raytracer::black::reflection 0.4
+set raytracer::anti-alias 2
+set raytracer::reflective::reflection 0.4
 set raytracer::phong [0.3,0.8,1]
 
 // Camera settings. Place these before first rule call.
@@ -11,7 +11,7 @@ set pivot [0 0 0]
 set scale 0.408795
 
 set background #000
-#define _md 40
+#define _md 400
 #define _rz 0
 #define _zoom 1
 
@@ -26,7 +26,7 @@ rule r0 {
 
 rule R1 {
 { x 1.3 rx 1.57 rz 6 ry 3 s 0.99 hue 1 sat 0.99 } R1
-{ s 4   } sphere
+{ s 4   } sphere::reflective
 }
 
 rule R2 {

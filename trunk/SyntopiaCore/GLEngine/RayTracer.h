@@ -72,12 +72,10 @@ namespace SyntopiaCore {
 
 			Math::RandomNumberGenerator rg;
 
-			int ambMinRays;
+			int occlusionSampleStepSize;
 			int ambMaxRays;
 			int ambSmooth;
-			double ambExponent;
 			int totalAOCasts;
-			double ambPrecision;
 			int aaSamples;
 			int width;
 			int height;

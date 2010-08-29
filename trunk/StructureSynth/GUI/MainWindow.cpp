@@ -1113,7 +1113,7 @@ namespace StructureSynth {
 				INFO("Starting Template Renderer: " + fileName);
 				try {
 					Template myTemplate(templateFileName);
-					templateRender(fileName, &myTemplate);
+					templateRender(fileName, &myTemplate, "");
 				} catch (Exception& er) {
 					WARNING(er.getMessage());
 				}
@@ -1122,10 +1122,11 @@ namespace StructureSynth {
 			}
 		}
 
-		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, 
+		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, QString inputText,
 			int width, int height, bool postModify)
 		{
 				RandomStreams::SetSeed(getSeed());
+				if (inputText.isEmpty()) inputText = getTextEdit()->toPlainText();
 				INFO(QString("Random seed: %1").arg(getSeed()));
 				try {
 					if (width == 0) width = engine->width();
@@ -1144,7 +1145,7 @@ namespace StructureSynth {
 					rendering.begin(); 
 
 					Preprocessor pp;
-					QString out = pp.Process(getTextEdit()->toPlainText());
+					QString out = pp.Process(inputText);
 					bool showGUI = false;
 					out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 					editorDockWidget->setHidden(!showGUI);
