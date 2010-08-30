@@ -1,11 +1,11 @@
+set raytracer::ambient-occlusion [1,50,00]
 
 #define shrink s 0.996
 
 set maxdepth 1000
-set background #888
+set background #fff
 
 16 * { rz 20 color white } hbox
-{ z -1 s 100 100 1 } box
 
 rule hbox { r}
 rule r { forward }

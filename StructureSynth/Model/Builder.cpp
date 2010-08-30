@@ -248,17 +248,35 @@ namespace StructureSynth {
 					QStringList l = c.split("::");
 					QString classID = l[0];
 					QString prop = l[1];
+					param.remove("["); param.remove("]");
 					if (!ruleSet->existsPrimitiveClass(classID)) {
 						WARNING("Trying to set property for unused class: " + classID);
-					}
-					PrimitiveClass* pc = ruleSet->getPrimitiveClass(classID);
+					} else {
+						PrimitiveClass* pc = ruleSet->getPrimitiveClass(classID);
 
+						if (prop == "reflection") {
+							MiniParser(param, ',').getDouble(pc->reflection);
+						} else if (prop == "phong") {
+							MiniParser(param, ',').getDouble(pc->ambient).getDouble(pc->diffuse).getDouble(pc->specular);
+							INFO(QString("Lightning for %1: ambient: %1, diffuse: %2, specular: %3")
+								.arg(classID).arg(pc->ambient).arg(pc->diffuse).arg(pc->specular));
+						} else {					
+							raytracerCommands.append(GLEngine::Command(c,param));
+						}
+					}
+
+				} else {
+					PrimitiveClass* pc = ruleSet->getDefaultClass();
+					QString prop = c;
+					param.remove("["); param.remove("]");
 					if (prop == "reflection") {
 						MiniParser(param, ',').getDouble(pc->reflection);
+					} else if (prop == "phong") {
+						MiniParser(param, ',').getDouble(pc->ambient).getDouble(pc->diffuse).getDouble(pc->specular);
+						INFO(QString("Default lightning: ambient: %1, diffuse: %2, specular: %3").arg(pc->ambient).arg(pc->diffuse).arg(pc->specular));
+					} else {					
+						raytracerCommands.append(GLEngine::Command(c,param));
 					}
-					
-				} else {
-					raytracerCommands.append(GLEngine::Command(c,param));
 				}
 			} else if (command == "maxdepth") {
 				bool succes;

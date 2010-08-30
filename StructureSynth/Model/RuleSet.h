@@ -44,6 +44,7 @@ namespace StructureSynth {
 			/// Returns the PrimitiveClass with this name. Constructs a new one if missing.
 			PrimitiveClass* getPrimitiveClass(QString classLabel);
 			bool existsPrimitiveClass(QString classLabel);
+			PrimitiveClass* getDefaultClass() { return defaultClass; }
 
 		private:
 			QList<Rule*> rules;

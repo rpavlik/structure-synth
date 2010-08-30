@@ -257,14 +257,11 @@ namespace SyntopiaCore {
 			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
-			occlusionSampleStepSize = 2;
+			occlusionSampleStepSize = 0;
 			ambMaxRays = 30;
 			aaSamples = 2;
 			ambSmooth = 50;
 			useShadows = true;
-			globalAmbient = 0.3;
-			globalDiffuse = 0.8;
-			globalSpecular = 1.0;
 			
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
@@ -340,7 +337,7 @@ namespace SyntopiaCore {
 
 				// This is a Phong lightning model, see e.g. (http://ai.autonomy.net.au/wiki/Graphics/Illumination)
 				// -- Diffuse light 
-				double diffuse = globalDiffuse*(Vector3f::dot(foundNormal, (lightDirection).normalized()));				
+				double diffuse = bestObj->getPrimitiveClass()->diffuse*(Vector3f::dot(foundNormal, (lightDirection).normalized()));				
 				if (diffuse<0) diffuse = 0;
 				light += diffuse;
 
@@ -355,14 +352,14 @@ namespace SyntopiaCore {
 					if (spec< 0.1) {
 						spec = 0;
 					} else {
-						spec = globalSpecular*pow(spec,50);
+						spec = bestObj->getPrimitiveClass()->specular*pow(spec,50);
 						if (spec<0) spec = 0;
 					}
 				}
 				light += spec;
 
 				// -- Ambient light
-				double ambient = globalAmbient;
+				double ambient = bestObj->getPrimitiveClass()->ambient;
 				light += ambient; 
 
 				// -- calculate shadow...
@@ -537,10 +534,7 @@ namespace SyntopiaCore {
 			GLdouble sx1, sy1, sz1;				
 			gluUnProject((float)-200, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
 			lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
-			light1Ambient = 0.2f;
-			light1Diffuse = 0.6f;
-			light1Specular = 0.6f;
-
+			
 			pixels = 0;
 			checks = 0;
 			aaPixels = 0;
@@ -574,7 +568,7 @@ namespace SyntopiaCore {
 
 
 			int step = occlusionSampleStepSize;
-			if ( ambMaxRays>0) {
+			if ( ambMaxRays>0 && step>0) {
 				double tr = 0.99;
 
 				QVector<Vector3f> dirs;
@@ -692,6 +686,7 @@ namespace SyntopiaCore {
 					}
 				}
 
+						
 
 				//for (unsigned int i = 0; i<w*h; i++) if (aoMap[i]>=0) if (aoMap2[i] != aoMap[i]) { WARNING("Lousy0"); break; }
 
@@ -734,9 +729,15 @@ namespace SyntopiaCore {
 				for (int i = 0; i<w*h; i++) aoMap[i] = aoMap2[i];
 				delete[] aoMap2;
 
+				
+				
 			} else {
 				for (int i = 0; i<w*h; i++) aoMap[i] = 1;
 			
+			}
+
+			if	(progress.wasCanceled()) {
+				for (int i = 0; i<w*h; i++) aoMap[i] = 1.0;
 			}
 
 
@@ -772,7 +773,7 @@ namespace SyntopiaCore {
 						}
 					}
 
-					for (int y = 1; y+1 < h; y++) {
+			 		for (int y = 1; y+1 < h; y++) {
 						float fy = y/(float)h;
 
 						QRgb c1 = im.pixel(x,y);
@@ -838,29 +839,19 @@ namespace SyntopiaCore {
 		void RayTracer::setParameter(QString param, QString value) {
 			param=param.toLower();
 
-
 			if (param == "ambient-occlusion") {
 				// Min rays, Max rays, Precision...		
 				MiniParser(value, ',').getInt(occlusionSampleStepSize).getInt(ambMaxRays).getInt(ambSmooth);
 				INFO(QString("Occlusion Sample Step Size: %1, Max Rays: %2, Smoothening Steps: %3 ")
 					.arg(occlusionSampleStepSize).arg(ambMaxRays).arg(ambSmooth));
-		
 			} else if (param == "anti-alias") {
 				// Min rays, Max rays, Precision...		
 				MiniParser(value, ',').getInt(aaSamples);
 				
-			} else if (param == "phong") {
-				MiniParser(value, ',').getDouble(globalAmbient).getDouble(globalDiffuse).getDouble(globalSpecular);
-				INFO(QString("Ambient: %1, Diffuse: %2, Specular: %3").arg(globalAmbient).arg(globalDiffuse).arg(globalSpecular));
 			} else if (param == "shadows") {
 				MiniParser(value, ',').getBool(useShadows);
 				INFO(QString("Shadows: %3").arg(useShadows ? "true" : "false"));
 		
-			} else if (param == "reflection") {
-				/*
-				MiniParser(param,value, ',').getDouble(reflection);
-				INFO(QString("Reflection: %3").arg(reflection));
-		*/
 			} else {
 				WARNING("Unknown parameter: " + param);
 			}

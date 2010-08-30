@@ -66,10 +66,7 @@ namespace SyntopiaCore {
 
 			Vector3f backgroundColor;
 			Vector3f lightPos;
-			float light1Ambient;
-			float light1Diffuse;
-			float light1Specular;
-
+			
 			Math::RandomNumberGenerator rg;
 
 			int occlusionSampleStepSize;
@@ -80,9 +77,6 @@ namespace SyntopiaCore {
 			int width;
 			int height;
 			bool useShadows;
-			double globalAmbient;
-			double globalDiffuse;
-			double globalSpecular;
 			bool userCancelled;
 			Object3D* hitObject;
 			
