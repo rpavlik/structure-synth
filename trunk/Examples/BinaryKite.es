@@ -1,7 +1,3 @@
-set raytracer::ambient-occlusion [2,60,49.95,20,1] 
-set raytracer::shadows false
-set raytracer::anti-alias 2
-set raytracer::phong [1,0.8,1]
 
 
 set maxobjects 16000

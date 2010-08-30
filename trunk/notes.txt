@@ -1,10 +1,14 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
-- Triangles may not support ClassID
-- ClassID raytracer commands must be settable.
 - Size of raytracer output.
+- How to save images?
+- Context menu with often used commands.
+
 - CollageImage in JavaScript.
+
+- Alpha-blending in raytracer
 - Paralleloid (Skewed boxes) must be supported.
+- Triangles may not support ClassID
 
 
 Structure Synth 1.0.0 ("Potemkin") Released
