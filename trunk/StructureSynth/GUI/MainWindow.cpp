@@ -43,6 +43,98 @@ namespace StructureSynth {
 			int MaxRecentFiles = 5;
 		}
 
+		void TextEdit::contextMenuEvent(QContextMenuEvent *event)
+		{	
+			QMenu *menu = createStandardContextMenu();
+			
+			QMenu *raytraceMenu = new QMenu("Typical Raytracer Commands", 0);
+			raytraceMenu->addAction("set raytracer::ambient-occlusion [2,40,150]", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::shadows true", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::reflection 0.5", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::phong [0.6,0.6,0.3]", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size 800x600", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size 0x800 // auto-calc proper width", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size 800x0 // auto-calc proper height", this , SLOT(insertText()));
+			
+			QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
+			modifierMenu->addAction("weight", this , SLOT(insertText()));
+			modifierMenu->addAction("maxdepth", this , SLOT(insertText()));
+			modifierMenu->addAction("maxdepth > newRule", this , SLOT(insertText()));
+			
+			QMenu *transformationMenu = new QMenu("Transformations", 0);
+			transformationMenu->addAction("x 1 // translations", this , SLOT(insertText()));
+			transformationMenu->addAction("y 1", this , SLOT(insertText()));
+			transformationMenu->addAction("z 1", this , SLOT(insertText()));
+			transformationMenu->addAction("rx 45 // rotate angle around x-axis", this , SLOT(insertText()));
+			transformationMenu->addAction("ry 45", this , SLOT(insertText()));
+			transformationMenu->addAction("rz 45", this , SLOT(insertText()));
+			transformationMenu->addAction("hue 0.9", this , SLOT(insertText()));
+			transformationMenu->addAction("sat 0.9", this , SLOT(insertText()));
+			transformationMenu->addAction("brightness 0.9", this , SLOT(insertText()));
+			transformationMenu->addAction("color white // static color", this , SLOT(insertText()));
+			transformationMenu->addAction("color random // use color pool", this , SLOT(insertText()));
+			transformationMenu->addAction("blend red 0.5 // blend color with strength 0.5", this , SLOT(insertText()));
+			transformationMenu->addAction("alpha 0.9 // make transparent", this , SLOT(insertText()));
+			transformationMenu->addAction("matrix ", this , SLOT(insertText()));
+			transformationMenu->addAction("size 2 // uniform scaling", this , SLOT(insertText()));
+			transformationMenu->addAction("size 1 1 1.2 // non-uniform scaling", this , SLOT(insertText()));
+			transformationMenu->addAction("reflect", this , SLOT(insertText()));
+			transformationMenu->addAction("fx // mirror in yz-plane", this , SLOT(insertText()));
+			transformationMenu->addAction("fy", this , SLOT(insertText()));
+			transformationMenu->addAction("fz", this , SLOT(insertText()));
+		
+			QMenu *setMenu = new QMenu("Set Commands", 0);
+			setMenu->addAction("set maxdepth 100", this , SLOT(insertText()));
+			setMenu->addAction("set maxsize 10 // maximum object size", this , SLOT(insertText()));
+			setMenu->addAction("set minsize 0.1 // minimum object size", this , SLOT(insertText()));
+			setMenu->addAction("set background #fff", this , SLOT(insertText()));
+			setMenu->addAction("set seed 45", this , SLOT(insertText()));
+			
+			QMenu *colorMenu = new QMenu("Set Colorpool Commands", 0);
+			colorMenu->addAction("set colorpool randomrgb", this , SLOT(insertText()));
+			colorMenu->addAction("set colorpool randomhue", this , SLOT(insertText()));
+			colorMenu->addAction("set colorpool list:orange,yellow,blue // sample from list", this , SLOT(insertText()));
+			colorMenu->addAction("set colorpool image:test.png // sample from image", this , SLOT(insertText()));
+			
+
+			QMenu *set2Menu = new QMenu("Exotic Set Commands", 0);
+			set2Menu->addAction("set seed initial // reset random seed", this , SLOT(insertText()));
+			set2Menu->addAction("set recursion depth // traverse depth-first", this , SLOT(insertText()));
+			set2Menu->addAction("set rng old // old random generator", this , SLOT(insertText()));
+			set2Menu->addAction("set syncrandom true", this , SLOT(insertText()));
+			
+			QMenu *setCMenu = new QMenu("Camera Commands", 0);
+			setCMenu->addAction("set scale 0.5", this , SLOT(insertText()));
+			setCMenu->addAction("set pivot [0 0 0]", this , SLOT(insertText()));
+			setCMenu->addAction("set translation [0 0 -20]", this , SLOT(insertText()));
+			setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", this , SLOT(insertText()));
+			
+			QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
+			pMenu->addAction("#define myAngle 45", this , SLOT(insertText()));
+			pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", this , SLOT(insertText()));
+			
+
+			menu->insertMenu(menu->actions()[0], modifierMenu);
+			menu->insertMenu(menu->actions()[1], transformationMenu);
+			menu->insertMenu(menu->actions()[2], setMenu);
+			menu->insertMenu(menu->actions()[3], set2Menu);
+			menu->insertMenu(menu->actions()[4], colorMenu);
+			menu->insertMenu(menu->actions()[5], raytraceMenu);
+			menu->insertMenu(menu->actions()[6], setCMenu);
+			menu->insertMenu(menu->actions()[7], pMenu);
+			
+			menu->insertSeparator(menu->actions()[8]);
+			menu->exec(event->globalPos());
+			delete menu;
+		}
+
+		void TextEdit::insertText() {
+			QString text = ((QAction*)sender())->text();
+
+			insertPlainText(text.section("//",0,0)); // strip comments
+		}
+
+
 		class EisenScriptHighlighter : public QSyntaxHighlighter {
 		public:
 
@@ -358,7 +450,8 @@ namespace StructureSynth {
 			INFO(QString("Welcome to Structure Synth version %1. A Syntopia Project.").arg(version.toLongString()));
 			INFO("");
 			INFO("Zoom by pressing both mouse buttons, holding SHIFT+left mouse button, or using scroll wheel. Translate using right mouse button. Hold 'ALT' for fast rotate (quick draw mode).");
-			INFO("Press 'Reset View' if the view disappears...");
+			INFO("Press 'Reset View' if you get lost in the 3D view.");
+			INFO("Use the context menu in the text edit area to get a list of common commands.");
 			INFO("");
 			INFO("Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
 			WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
@@ -883,7 +976,7 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::insertTabPage(QString filename) {
-			QTextEdit* textEdit = new QTextEdit();
+			QTextEdit* textEdit = new TextEdit();
 			connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 
 			textEdit->setLineWrapMode(QTextEdit::NoWrap);

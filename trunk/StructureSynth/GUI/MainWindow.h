@@ -31,9 +31,21 @@ namespace StructureSynth {
 			bool hasBeenSavedOnce;			
         };
 
+		// A modified QTextEdit with an extended context menu
+		class TextEdit : public QTextEdit {
+			Q_OBJECT
+			public:
+				TextEdit() : QTextEdit() {};
+				TextEdit(QWidget* parent) : QTextEdit(parent) {};
+
+				void contextMenuEvent(QContextMenuEvent *event);
+			public slots:
+				void insertText();
+		};
+		
+
 
 		/// The main window of the application.
-		/// As of now a SDI interface, but at some point tabs will be added.
 		class MainWindow : public QMainWindow
 		{
 			Q_OBJECT
