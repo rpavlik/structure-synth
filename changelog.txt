@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+31 Aug 10 [MHC] Context menu with command help in text edit area.
+[2h]
+
 30 Aug 10 [MHC] More raytracer stuff. 
 [2h]
 
