@@ -12,7 +12,7 @@ namespace SyntopiaCore {
 		class RaytraceTriangle {
 		public:
 			RaytraceTriangle(Vector3f p1, Vector3f p2, Vector3f p3, Vector3f n1, Vector3f n2, Vector3f n3);
-			RaytraceTriangle() {};
+			RaytraceTriangle() : cullBackFaces(false) {};
 			~RaytraceTriangle(void);
 			void expandBoundingBox(Vector3f& from,Vector3f& to);
 			void setColor(float r, float g, float b, float a) { 
@@ -24,8 +24,7 @@ namespace SyntopiaCore {
 				
 			static void Vertex4(Vector3f p1,Vector3f p2,Vector3f p3,Vector3f p4,bool reverse, QVector<RaytraceTriangle>& list, float r, float b, float g, float a);
 		
-
-			Vector3f p1;
+           	Vector3f p1;
 			Vector3f p2;
 			Vector3f p3;
 			Vector3f n1;
@@ -41,9 +40,9 @@ namespace SyntopiaCore {
 			Vector3f to;
 			Vector3f from;
 			Vector3f n;
-
 			bool bad;
-
+			bool cullBackFaces;
+		
 		};
 
 	}

@@ -10,7 +10,7 @@ namespace SyntopiaCore {
 
 
 		RaytraceTriangle::RaytraceTriangle(Vector3f p1, Vector3f p2, Vector3f p3, Vector3f n1, Vector3f n2, Vector3f n3) 
-			:  p1(p1),p2(p2),p3(p3),n1(n1),n2(n2),n3(n3) 
+			:  p1(p1),p2(p2),p3(p3),n1(n1),n2(n2),n3(n3) , cullBackFaces(true)
 		{
 
 				// We will use barycentric coordiantes.
@@ -69,7 +69,7 @@ namespace SyntopiaCore {
 			bool RaytraceTriangle::intersectsRay(RayInfo* ri) {
 				if (bad) return false;
 
-				if (Vector3f::dot(n,ri->lineDirection)>0) return false;
+				if (cullBackFaces && Vector3f::dot(n,ri->lineDirection)>0) return false;
 		
 				float is  = Vector3f::dot(n, p1-ri->startPoint)/Vector3f::dot(n, ri->lineDirection);
 				Vector3f ip = ri->startPoint +  ri->lineDirection * is;
@@ -83,6 +83,7 @@ namespace SyntopiaCore {
 
 				ri->intersection = is;
 				ri->normal = n3*k312+ n1*k132+n2*k213;
+				if (!cullBackFaces && Vector3f::dot( ri->normal , ri->lineDirection)>0) ri->normal=-ri->normal;
 				
 				float c0 = k312*color3[0]+k132*color1[0]+k213*color2[0];
 				float c1 = k312*color3[1]+k132*color1[1]+k213*color2[1];
