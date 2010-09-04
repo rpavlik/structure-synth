@@ -83,7 +83,7 @@ namespace StructureSynth {
 							break;
 						}
 						if ((*it).contains(it2.key())) {
-							INFO("Replacing: " + it2.key() + " with " + it2.value());
+							//INFO("Replacing: " + it2.key() + " with " + it2.value());
 							(*it).replace(it2.key(), it2.value());
 
 							it2 = substitutions.constBegin();

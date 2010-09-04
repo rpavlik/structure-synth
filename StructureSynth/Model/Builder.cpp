@@ -236,7 +236,7 @@ namespace StructureSynth {
 					INFO(QString("Terminated %1 branches, because the dimension was less than min size (%2)").arg(minTerminated).arg(minDim));
 				}
 
-				INFO("Done building...");
+				//INFO("Done building...");
 			}
 			
 		}
@@ -258,7 +258,7 @@ namespace StructureSynth {
 							MiniParser(param, ',').getDouble(pc->reflection);
 						} else if (prop == "phong") {
 							MiniParser(param, ',').getDouble(pc->ambient).getDouble(pc->diffuse).getDouble(pc->specular);
-							INFO(QString("Lightning for %1: ambient: %1, diffuse: %2, specular: %3")
+							INFO(QString("Lightning for %1 set to: ambient: %1, diffuse: %2, specular: %3")
 								.arg(classID).arg(pc->ambient).arg(pc->diffuse).arg(pc->specular));
 						} else {					
 							raytracerCommands.append(GLEngine::Command(c,param));
@@ -273,7 +273,7 @@ namespace StructureSynth {
 						MiniParser(param, ',').getDouble(pc->reflection);
 					} else if (prop == "phong") {
 						MiniParser(param, ',').getDouble(pc->ambient).getDouble(pc->diffuse).getDouble(pc->specular);
-						INFO(QString("Default lightning: ambient: %1, diffuse: %2, specular: %3").arg(pc->ambient).arg(pc->diffuse).arg(pc->specular));
+						INFO(QString("Default lightning set to: ambient: %1, diffuse: %2, specular: %3").arg(pc->ambient).arg(pc->diffuse).arg(pc->specular));
 					} else {					
 						raytracerCommands.append(GLEngine::Command(c,param));
 					}

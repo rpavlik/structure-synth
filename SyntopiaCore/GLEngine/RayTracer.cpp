@@ -10,10 +10,7 @@ using namespace SyntopiaCore::Misc;
 namespace SyntopiaCore {
 	namespace GLEngine {
 
-
 		using namespace SyntopiaCore::Logging;
-
-
 
 		/// See here for details about this approach:
 		/// http://www.devmaster.net/articles/raytracing_series/part4.php
@@ -30,7 +27,6 @@ namespace SyntopiaCore {
 
 			void registerObject(Object3D* obj) {
 				// Simple method - check all cells intersecting the objects bounding boxes.
-
 				obj->prepareForRaytracing();
 				Vector3f from;
 				Vector3f to;
@@ -50,15 +46,6 @@ namespace SyntopiaCore {
 				if (xEnd > (int)steps) xEnd = steps;
 				if (yEnd > (int)steps) yEnd = steps;
 				if (zEnd > (int)steps) zEnd = steps;
-
-				/*
-				xStart = 0; 
-				yStart = 0; 
-				zStart = 0; 
-				xEnd = steps;
-				yEnd = steps;
-				zEnd = steps;
-				*/
 
 				for (unsigned int x = xStart; x < (unsigned int)xEnd; x++) {
 					for (unsigned int y = yStart; y < (unsigned int)yEnd; y++) {
@@ -89,7 +76,6 @@ namespace SyntopiaCore {
 					(cz < 0 || cz >= steps)) {						
 						// we are outside grid.
 						// advance ray to inside grid.
-
 						bool found = false;
 						double p;
 						if (dir.x() > 0) {
@@ -244,16 +230,17 @@ namespace SyntopiaCore {
 			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
 			for (int i = 0; i < 16; i++) viewPort[i] = engine->getViewPortCache()[i];
 
+			sizeX = 0;
+			sizeY = 0;
 			userCancelled = false;
 			Vector3f from;
 			Vector3f to;
 			engine->getBoundingBox(from,to);
 
-
 			accelerator = new VoxelStepper(from,to, 35);
 			backgroundColor = Vector3f(0,0,0);
-			windowHeight = engine->width();
-			windowWidth = engine->height();
+			windowHeight = engine->height();
+			windowWidth = engine->width();
 			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) accelerator->registerObject(objects[i]);
 
@@ -486,15 +473,21 @@ namespace SyntopiaCore {
 
 		QImage RayTracer::calculateImage(int w, int h) {
 
-			float oh = (float)h; 
-			float ow = (float)w; 
-			float vh = (float)h; // windowHeight; 
-			//float vw = (float)w; // windowWidth; 
-			windowHeight = h;
-			windowWidth = w;
+			if (w == 0) w = sizeX;
+			if (h == 0) h = sizeY;
 
+			if (w==0 && h==0) {
+				w = windowWidth;
+				h = windowHeight;
+			} else if (w==0) {
+				w = h * (windowWidth / (float)windowHeight);
+			} else if (h==0) {
+				h = w * (windowHeight / (float)windowWidth);
+			}
+ 
+			INFO(QString("Rendering size: %3x%4").arg(w).arg(h));
+		
 			GLdouble ox1, oy1, oz1;				
-
 
 			gluUnProject(0, windowHeight, 0.0f, modelView, projection, viewPort, &ox1, &oy1 ,&oz1);
 			frontStart = Vector3f(ox1,oy1,oz1);
@@ -516,7 +509,7 @@ namespace SyntopiaCore {
 			progress.setMinimumDuration(1000);
 			progress.setWindowModality(Qt::WindowModal);
 
-			TIME("Rendering...");
+			QTime start = QTime::currentTime();
 			QImage im(w,h, QImage::Format_RGB32);
 
 			
@@ -532,14 +525,14 @@ namespace SyntopiaCore {
 
 			// Find a suitable light position. TODO: CHANGE!
 			GLdouble sx1, sy1, sz1;				
-			gluUnProject((float)-200, vh, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
+			gluUnProject((float)-200, windowHeight, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
 			lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
 			
 			pixels = 0;
 			checks = 0;
 			aaPixels = 0;
 			for (int x = 0; x < w; x++) {
-				float fx = x/(float)w;
+				float fx = x/(float)(w);
 				if (x % 7 == 0) {
 					progress.setValue((x*100)/w);
 					//qApp->processEvents();
@@ -549,7 +542,7 @@ namespace SyntopiaCore {
 					}
 				}
 				for (int y = 0; y < h; y++) {	
-					float fy = y/(float)h;
+					float fy = y/(float)(h);
 					Vector3f colorn = rayCastPixel(fx,fy);
 					im.setPixel(x,y,qRgb(colorn.x()*255,colorn.y()*255,colorn.z()*255));
 					colors[x+y*w] = colorn;
@@ -559,13 +552,10 @@ namespace SyntopiaCore {
 					objs[x+y*w] = hitObject;
 				}
 			}
-			TIME();
-
-
-			TIME("Ambient Occlusion");
+			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
+			start = QTime::currentTime();
+			
 			progress.setLabelText("Ambient Occlusion (Step 2/3)...");
-
-
 
 			int step = occlusionSampleStepSize;
 			if ( ambMaxRays>0 && step>0) {
@@ -750,7 +740,8 @@ namespace SyntopiaCore {
 			}
 				
 
-			TIME();
+			double aoTime = start.msecsTo(QTime::currentTime())/1000.0;
+			start = QTime::currentTime();
 
 			progress.setLabelText("Raytracing Anti-Alias (Step 3/3)...");
 
@@ -758,9 +749,8 @@ namespace SyntopiaCore {
 
 			
 			if (aaSamples>0) {
-				TIME("Anti-Alias");
-				float xs = (1.0/ow);
-				float ys = (1.0/oh);
+				float xs = (1.0/w);
+				float ys = (1.0/h);
 				for (int x = 1; x+1 < w; x++) {
 					float fx = x/(float)w;
 				
@@ -801,13 +791,11 @@ namespace SyntopiaCore {
 							im.setPixel(x,y,qRgb(color.x()*255,color.y()*255,color.z()*255));
 
 							Vector3f c = color*aoMap[x+y*w];
-							//c = Vector3f(1,1,1)*aoMap[x+y*w];
 							im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
 						}
 
 					}
 				}
-				TIME();
 			}
 
 			delete[] aoMap;
@@ -817,16 +805,15 @@ namespace SyntopiaCore {
 			delete[] objs;
 			delete[] intersections;
 
+			double aaTime = start.msecsTo(QTime::currentTime())/1000.0;
 			
-
-
-			INFO(QString("Enabled objects: %1, inside viewport: %2").arg(objects.size()).arg("n.a."));
+			INFO(QString("Time: %1s (rendering %2s, ambient occlusion %3s, anti-alias %4s)")
+				.arg(renderTime+aoTime+aaTime).arg(renderTime).arg(aoTime).arg(aaTime));
 			INFO(QString("Pixels: %1, Object checks: %2, Objects checked per pixel: %3").
 				arg(pixels).arg(checks).arg(checks/(float)pixels));
-			INFO(QString("Pixels: %1, Needing AA: %2, Percentage: %3").
-				arg(pixels).arg(aaPixels).arg(aaPixels/(float)pixels));
+			INFO(QString("Pixels: %1, Anti-aliased pixels: %2 (percentage: %3%)").
+				arg(pixels).arg(aaPixels).arg((100.0*aaPixels)/(float)pixels,0,'f',2));
 
-			INFO(QString("Total tests: %1M").arg(totalAOCasts/1000000));
 		
 			progress.close();
 
@@ -847,11 +834,12 @@ namespace SyntopiaCore {
 			} else if (param == "anti-alias") {
 				// Min rays, Max rays, Precision...		
 				MiniParser(value, ',').getInt(aaSamples);
-				
 			} else if (param == "shadows") {
 				MiniParser(value, ',').getBool(useShadows);
 				INFO(QString("Shadows: %3").arg(useShadows ? "true" : "false"));
-		
+			} else if (param == "size") {
+				MiniParser(value, 'x').getInt(sizeX).getInt(sizeY);
+				INFO(QString("size: %3, %4").arg(sizeX).arg(sizeY));
 			} else {
 				WARNING("Unknown parameter: " + param);
 			}

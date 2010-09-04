@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+1  Sep 10 [MHC] PreviewWindow for raytracer. Fixed raytracer sizing problems.
+[2h]
+
 31 Aug 10 [MHC] Context menu with command help in text edit area.
 [2h]
 

@@ -145,7 +145,7 @@ namespace StructureSynth {
 							
 							map[name] = newRule;
 							
-							INFO("Created new class for rule: " + name);
+							//INFO("Created new class for rule: " + name);
 						} else {
 							// The Polygons rules (i.e. Triangle[x,y,z]) are special rules, each created on the fly.
 							QRegExp r("triangle\\[(.*)\\]");
@@ -173,10 +173,7 @@ namespace StructureSynth {
 									v.append(Vector3f(f1,f2,f3));
 								}	
 
-								INFO(QString("Created new Triangle-rule: %1 ; %2 ; %3")
-									.arg(v[0].toString())
-									.arg(v[1].toString())
-									.arg(v[2].toString()));
+
 								map[name] = new TriangleRule(v[0], v[1], v[2], defaultClass);
 							
 							} else {
@@ -229,9 +226,11 @@ namespace StructureSynth {
 				if (pr) primitive++;
 			}
 
+			/*
 			Debug(QString("Loaded %1 user rules: %2 Custom Rules, %3 Ambiguous Rules")
 				.arg(rulesCount-primitive).arg(custom).arg(ambi));
 			Debug(QString("Loaded %1 built-in rules.").arg(primitive));
+			*/
 		}
 
 		bool RuleSet::existsPrimitiveClass(QString classLabel) {
@@ -248,7 +247,7 @@ namespace StructureSynth {
 			}
 			PrimitiveClass* p = new PrimitiveClass(*defaultClass);
 			p->name = classLabel;
-			INFO("Created new primitiveClass: " + classLabel);
+			//INFO("Created new primitiveClass: " + classLabel);
 			primitiveClasses.append(p);
 			return p;
 		}
