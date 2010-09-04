@@ -13,6 +13,14 @@ namespace SyntopiaCore {
 			primaryColor[3] = alpha; 
 		}
 
+		void Object3D::Expand(Vector3f& from, Vector3f& to, Vector3f test) {
+			if (test.x()<from.x()) from.x() = test.x();
+			if (test.y()<from.y()) from.y() = test.y();
+			if (test.z()<from.z()) from.z() = test.z();
+			if (test.x()>to.x()) to.x() = test.x();
+			if (test.y()>to.y()) to.y() = test.y();
+			if (test.z()>to.z()) to.z() = test.z();
+		}
 
 		void Object3D::vertex4n(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { 
 			Vector3f n = (v2-v1).cross(v4-v1);
@@ -29,11 +37,11 @@ namespace SyntopiaCore {
 			Vector3f n = (v2-v1).cross(v4-v1);
 			n.normalize();
 			if (reverse) n =-n;
-			
+
 			normal(n);
 			*/
-			
-			
+
+
 			glColor4fv(col1);
 			if (reverse) {
 				normal((c1-v1).normalized());
@@ -70,7 +78,7 @@ namespace SyntopiaCore {
 			vertex(v2); 
 			vertex(v3); 
 		}
-		
+
 		void Object3D::vertex4rn(SyntopiaCore::Math::Vector3f v1,SyntopiaCore::Math::Vector3f v2,SyntopiaCore::Math::Vector3f v3,SyntopiaCore::Math::Vector3f v4) const { 			
 			Vector3f n = (v1-v2).cross(v4-v1);
 			n.normalize();

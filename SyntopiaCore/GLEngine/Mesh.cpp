@@ -24,8 +24,16 @@ namespace SyntopiaCore {
 		{
 			/// Bounding Mesh (not really accurate)
 			from = startBase;
-			to = endBase;
+			to = startBase;
 
+			Expand(from,to, startBase+startDir1);
+			Expand(from,to, startBase+startDir2);
+			Expand(from,to, startBase+startDir2+startDir1);
+			Expand(from,to, endBase);
+			Expand(from,to, endBase+endDir1);
+			Expand(from,to, endBase+endDir2);
+			Expand(from,to, endBase+endDir1+endDir2);
+	
 		};
 
 		Mesh::~Mesh() { };

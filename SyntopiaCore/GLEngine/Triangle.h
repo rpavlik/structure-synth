@@ -2,6 +2,7 @@
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "Object3D.h"
+#include "RayTraceTriangle.h"
 
 namespace SyntopiaCore {
 	namespace GLEngine {	
@@ -15,11 +16,13 @@ namespace SyntopiaCore {
 			virtual ~Triangle();
 
 			virtual QString name() { return "Triangle"; }
-			
-
 			virtual void draw() const;
-
+			virtual void prepareForRaytracing();
+			virtual bool intersectsRay(RayInfo* /*rayInfo*/);
+			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/);
+		
 		private:
+			RaytraceTriangle rt;
 			SyntopiaCore::Math::Vector3f p1;
 			SyntopiaCore::Math::Vector3f p2;
 			SyntopiaCore::Math::Vector3f p3;

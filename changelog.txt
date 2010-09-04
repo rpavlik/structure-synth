@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+4  Sep 10 [MHC] Fixed Mesh bounding-box error. Added support for raytracing of triangle primitive.
+[1h]
+
 1  Sep 10 [MHC] PreviewWindow for raytracer. Fixed raytracer sizing problems.
 [2h]
 

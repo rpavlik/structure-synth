@@ -7,17 +7,6 @@ using namespace SyntopiaCore::Math;
 namespace SyntopiaCore {
 	namespace GLEngine {
 
-
-		namespace {
-			void Expand(Vector3f& from, Vector3f& to, Vector3f test) {
-				if (test.x()<from.x()) from.x() = test.x();
-				if (test.y()<from.y()) from.y() = test.y();
-				if (test.z()<from.z()) from.z() = test.z();
-				if (test.x()>to.x()) to.x() = test.x();
-				if (test.y()>to.y()) to.y() = test.y();
-				if (test.z()>to.z()) to.z() = test.z();
-			}
-		}
 		Box::Box(SyntopiaCore::Math::Vector3f base, 
 				SyntopiaCore::Math::Vector3f dir1 , 
 				 SyntopiaCore::Math::Vector3f dir2, 
@@ -26,11 +15,9 @@ namespace SyntopiaCore {
 			/// Bounding box
 			from = base;
 			to = base;
-
 			Expand(from,to, base+v1);
 			Expand(from,to, base+v2);
 			Expand(from,to, base+v3);
-			
 			Expand(from,to, base+v1+v2);
 			Expand(from,to, base+v2+v3);
 			Expand(from,to, base+v1+v3);

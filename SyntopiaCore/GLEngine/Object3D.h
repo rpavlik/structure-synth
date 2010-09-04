@@ -39,7 +39,7 @@ namespace SyntopiaCore {
 			virtual QString name() { return "Object3D base"; }
 			virtual void draw() const = 0;
 
-			void setColor(SyntopiaCore::Math::Vector3f rgb, float alpha);
+			virtual void setColor(SyntopiaCore::Math::Vector3f rgb, float alpha);
 			const GLfloat (&getColor() const)[4] { return primaryColor; }
 
 			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
@@ -55,6 +55,8 @@ namespace SyntopiaCore {
 
 			PrimitiveClass* getPrimitiveClass() { return primitiveClass; }
 			void setPrimitiveClass(PrimitiveClass* value) { primitiveClass = value; }
+			
+			static void Expand(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to, SyntopiaCore::Math::Vector3f test);
 			
 		protected:
 
