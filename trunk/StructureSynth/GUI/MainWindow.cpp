@@ -47,14 +47,14 @@ namespace StructureSynth {
 		{	
 			QMenu *menu = createStandardContextMenu();
 			
-			QMenu *raytraceMenu = new QMenu("Typical Raytracer Commands", 0);
+			QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
 			raytraceMenu->addAction("set raytracer::ambient-occlusion [2,40,150]", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::shadows true", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::reflection 0.5", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::phong [0.6,0.6,0.3]", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size 800x600", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size 0x800 // auto-calc proper width", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size 800x0 // auto-calc proper height", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size [800x600]", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", this , SLOT(insertText()));
 			
 			QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
 			modifierMenu->addAction("weight", this , SLOT(insertText()));
@@ -893,7 +893,7 @@ namespace StructureSynth {
 				b.build();
 				renderTarget.end();
 
-				INFO("Done...");
+				//INFO("Done...");
 
 				if (b.seedChanged()) {
 					setSeed(b.getNewSeed());
@@ -1090,8 +1090,7 @@ namespace StructureSynth {
 			if (!s) WARNING("Failed to open browser...");
 		}
 
-		void MainWindow::makeScreenshot() {
-
+		void MainWindow::saveImage(QImage image) {
 			QList<QByteArray> a = QImageWriter::supportedImageFormats();
 			QStringList allowedTypesFilter;
 			QStringList allowedTypes;
@@ -1100,15 +1099,12 @@ namespace StructureSynth {
 				allowedTypes.append(a[i]);
 			}
 			QString filter = "Image Files (" + allowedTypesFilter.join(" ")+")";
-
-			QImage image = engine->grabFrameBuffer();
-
+			
 			QString filename = QFileDialog::getSaveFileName(this, "Save Screenshot As...", QString(), filter);
 			if (filename.isEmpty()) {
 				INFO("User cancelled save...");
 				return;
 			}
-
 
 			QString ext = filename.section(".", -1).toLower();
 			if (!allowedTypes.contains(ext)) {
@@ -1123,8 +1119,11 @@ namespace StructureSynth {
 			} else {
 				WARNING("Save failed! Filename: " + filename);
 			}
+		}
 
-
+		void MainWindow::makeScreenshot() {
+			QImage image = engine->grabFrameBuffer();
+			saveImage(image);
 		}
 
 		void MainWindow::setSeed(int randomSeed) {
@@ -1484,17 +1483,9 @@ namespace StructureSynth {
 
 		void MainWindow::raytrace() {
 			RayTracer rt(engine);
-			QImage im = rt.calculateImage(engine->width(), engine->height());
-			/// Here we show the result...
-			QDialog* d = new QDialog();
-			d->resize(engine->width(),engine->height());
-			QPixmap p = QPixmap::fromImage(im);
-			QLabel* lb = new QLabel(d);
-			lb->setPixmap(p);
-			d->exec();
-			delete(lb);
-			delete(d);
-
+			QImage im = rt.calculateImage(0,0);
+			PreviewWindow pd(this, im);
+			pd.exec();
 		}
 
 		void MainWindow::parseEaster(QString text) {
@@ -1615,6 +1606,36 @@ namespace StructureSynth {
 			delete(d);
 			//d->setSize(w,h);
 
+		}
+
+		PreviewWindow::PreviewWindow(MainWindow* mainWindow, QImage im) : QDialog(mainWindow), mainWindow(mainWindow), image(im) {
+			QVBoxLayout *layout = new QVBoxLayout(this);
+			setLayout(layout);
+			
+			QHBoxLayout* hlayout = new QHBoxLayout();
+			
+			QPushButton* pb = new QPushButton(this);
+			pb->setText("Save as Bitmap...");
+			connect(pb, SIGNAL(clicked()), this, SLOT(saveImage()));
+			hlayout->addWidget(pb);
+
+			QPushButton* pb2 = new QPushButton(this);
+			pb2->setText("Close");
+			connect(pb2, SIGNAL(clicked()), this, SLOT(close()));
+			hlayout->addWidget(pb2);
+
+			hlayout->addStretch(10);
+			layout->addLayout(hlayout);
+
+			QLabel* lb = new QLabel(this);
+			lb->setPixmap(QPixmap::fromImage(image));
+			lb->resize(im.width(), im.height());
+			layout->addWidget(lb);
+			resize(lb->size());
+		};
+
+		void PreviewWindow::saveImage() {
+			mainWindow->saveImage(image);
 		}
 
 	}

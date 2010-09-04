@@ -1,8 +1,9 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
 - Size of raytracer output.
+- Set up lights.
 - How to save images?
-- Context menu with often used commands.
+- Context menu with often used commands. + hints?
 
 - CollageImage in JavaScript.
 

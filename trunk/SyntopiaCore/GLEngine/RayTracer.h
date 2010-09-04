@@ -80,6 +80,8 @@ namespace SyntopiaCore {
 			bool userCancelled;
 			Object3D* hitObject;
 			
+			int sizeX;
+			int sizeY;
 		};
 
 	}

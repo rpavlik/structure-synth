@@ -62,6 +62,7 @@ namespace StructureSynth {
 			static QString getExamplesDir();
 			static QString getMiscDir();
 			static QString getTemplateDir();
+			void saveImage(QImage im);
 			
 			QString getCameraSettings();
 			QString getScriptWithSettings(QString filename);
@@ -180,6 +181,17 @@ namespace StructureSynth {
 			QVector<QAction*> recentFileActions;
 			QAction* recentFileSeparator;
 			
+		};
+
+		class PreviewWindow : public QDialog {
+			Q_OBJECT
+		public:
+			PreviewWindow(MainWindow* parent, QImage im) ;
+		public slots:
+			void saveImage();
+		private: 
+			MainWindow* mainWindow;
+			QImage image;
 		};
 
 	}
