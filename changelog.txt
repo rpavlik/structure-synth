@@ -1,6 +1,8 @@
  
 Changelog for Structure Synth:
 ------------
+6  Sep 10 [MHC] Fixed skewed box ray-interception test.
+[1h]
 4  Sep 10 [MHC] Fixed Mesh bounding-box error. Added support for raytracing of triangle primitive.
 [1h]
 
