@@ -78,12 +78,13 @@ namespace SyntopiaCore {
 			// Determine whether the box is skewed. 
 			// if this is the case, we triangulate it.
 			// Using triangles for ray checks is much slower (x ~2.4 slower),
-			// and we could probably avoid it by transformoring both box and rayinfo 
+			// and we could probably avoid it by transforming both box and rayinfo 
 			// into a non-skewed coordinate system. 
 			const double treshold = 1E-4;
 			useTriangles = false;
 			if (fabs(Vector3f::dot(v1,v2)) > treshold) useTriangles = true;
 			if (fabs(Vector3f::dot(v2,v3)) > treshold) useTriangles = true;
+			if (fabs(Vector3f::dot(v1,v3)) > treshold) useTriangles = true;
 
 			if (useTriangles) {
 				triangles.clear();

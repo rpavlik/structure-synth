@@ -55,6 +55,7 @@ namespace StructureSynth {
 			raytraceMenu->addAction("set raytracer::size [800x600]", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::max-threads 2", this , SLOT(insertText()));
 			
 			QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
 			modifierMenu->addAction("weight", this , SLOT(insertText()));
