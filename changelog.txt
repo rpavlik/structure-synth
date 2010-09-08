@@ -1,8 +1,12 @@
  
 Changelog for Structure Synth:
 ------------
-6  Sep 10 [MHC] Fixed skewed box ray-interception test.
-[1h]
+8  Sep 10 [MHC] The raytracer multithreading scheduling is working. Missing anti-alias + AO. The RayID tagging is still not thread-safe.
+[2h]
+
+6  Sep 10 [MHC] Fixed skewed box ray-interception test. Begun multithreading code for raytracer.
+[3h]
+
 4  Sep 10 [MHC] Fixed Mesh bounding-box error. Added support for raytracing of triangle primitive.
 [1h]
 
