@@ -1,10 +1,11 @@
-set raytracer::ambient-occlusion [1,50,00]
+set raytracer::ambient-occlusion [0,50,100]
 
 #define shrink s 0.996
 
+set raytracer::dof [0.3,0.07]
+set raytracer::anti-alias 7
 set maxdepth 1000
 set background #fff
-
 16 * { rz 20 color white } hbox
 
 rule hbox { r}

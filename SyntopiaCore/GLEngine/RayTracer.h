@@ -23,6 +23,7 @@ namespace SyntopiaCore {
 			void setParameter(QString param, QString value);
 			bool wasCancelled() { return userCancelled; }
 		private:			
+			void startJobs(QProgressDialog& progress);
 			QList<Object3D*> objects;
 			float xmin;
 			float ymin;
@@ -44,6 +45,11 @@ namespace SyntopiaCore {
 			int sizeY;
 			int maxThreads;
 
+			QVector<RenderThread*> threads;
+			AtomicCounter nextUnit;
+			AtomicCounter completedUnits;
+			int maxUnits;
+			
 			RenderThread rt;
 		};
 

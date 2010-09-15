@@ -1,6 +1,6 @@
 set maxobjects 60000
-
-R1 { rz 180 } R2
+set raytracer::reflection 0.5
+R1 { rz 180 color white} R2
 
 set background white
 

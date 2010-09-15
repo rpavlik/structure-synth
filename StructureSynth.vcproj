@@ -439,18 +439,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath=".\tmp\moc\debug_shared\moc_Builder.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\tmp\moc\release_shared\moc_Builder.cpp"
 				>
 				<FileConfiguration
@@ -463,7 +451,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
+				RelativePath=".\tmp\moc\debug_shared\moc_Builder.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -479,6 +467,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -515,6 +515,18 @@
 				>
 			</File>
 			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
 				>
 				<FileConfiguration
@@ -534,18 +546,6 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
