@@ -95,11 +95,9 @@ namespace SyntopiaCore {
 			}
 		}
 
-		void RenderThread::ambientOcclusion(int newUnit) {
-			int x = newUnit-1;
-			for (int y = 0; y < h; y++) {	
-				if (aoMap[x+y*w] != -1) continue;
-					
+		double RenderThread::getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection) {
+			
+			if (ambMaxRays == 0 || object==0) return 1.0;
 				int tests = 0;
 				int hits = 0;
 				for (int ix = 0; ix < ambMaxRays; ix++) {
@@ -111,18 +109,18 @@ namespace SyntopiaCore {
 						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
 					} while (random.sqrLength() > 1);
 					random.normalize();
-					if (Vector3f::dot(random, normals[x+y*w])<0) random = random*-1.0; // Only check away from surface.
+					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
 
 					double maxT = 0;
-					QList<Object3D*>* list = accelerator->setupRay(intersections[x+y*w],random, maxT);
+					QList<Object3D*>* list = accelerator->setupRay(objectIntersection,random, maxT);
 					RayInfo ri;
-					ri.startPoint = intersections[x+y*w];
+					ri.startPoint = objectIntersection;
 					ri.lineDirection = random;
 					bool occluded = false;
 					while (list != 0 && !occluded) { 
 						// check objects
 						for (int i = 0; i < list->size(); i++) {
-							if (list->at(i) == objs[x+y*w]) continue; // self-shadow? 							
+							if (list->at(i) == object) continue; // self-shadow? 							
 							occluded = list->at(i)->intersectsRay(&ri);
 							if (ri.intersection < 1E-5) occluded = false;
 							if (occluded) break;								
@@ -131,11 +129,15 @@ namespace SyntopiaCore {
 					}
 					if (occluded) hits++;
 				}
-				double occ = 1-hits/(double)tests;
-				aoMap[x+y*w] = occ;
+				return 1-hits/(double)tests;
+		}
+
+		void RenderThread::ambientOcclusion(int newUnit) {
+			int x = newUnit-1;
+			for (int y = 0; y < h; y++) {	
+				if (aoMap[x+y*w] != -1) continue;
+				aoMap[x+y*w] =  getAOStrength(objs[x+y*w],normals[x+y*w],intersections[x+y*w]);
 			}
-
-
 		};
 
 		void RenderThread::antiAlias(int newUnit) {
@@ -146,8 +148,11 @@ namespace SyntopiaCore {
 				
 			for (int y = 0; y < h; y++) {	
 				float fy = y/(float)(h);
-				if (depths[x+y*w] != 0) continue;
-				
+				if (depths[x+y*w] != 0) {
+					colors[x+y*w] = colors[x+y*w]*aoMap[x+y*w];
+					continue;
+				}
+
 				Vector3f color(0,0,0);
 
 				unsigned int steps = aaSamples;
@@ -157,12 +162,13 @@ namespace SyntopiaCore {
 				for (unsigned int xo = 0; xo < steps; xo++) {
 					for (unsigned int yo = 0; yo < steps; yo++) {	
 						if (dofFalloff==0) {
-							color = color + rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
+							Vector3f c = rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 														(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
+							color = color + c * getAOStrength(hitObject, normal, intersection);
 						} else {
-							color = color + rayCastPixelWithDOF(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
+							Vector3f c =  rayCastPixelWithDOF(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 													(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
-						
+							color = color + c * getAOStrength(hitObject, normal, intersection);
 						}
 					}
 				}
