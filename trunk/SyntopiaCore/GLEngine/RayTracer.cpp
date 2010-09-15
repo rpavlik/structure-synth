@@ -266,13 +266,13 @@ namespace SyntopiaCore {
 				// if we need more fine-grained control.
 				for (int x = 1; x+1 < w; x++) {
 					for (int y = 1; y+1 < h; y++) {
-						Vector3f c1 = rt.colors[x+y*w]*rt.aoMap[x+y*w];
+						Vector3f c1 = rt.colors[x+y*w];
 						
 						if (rt.dofFalloff !=0 || 
-							cdist(c1,rt.colors[x+1+y*w]*rt.aoMap[x+1+y*w]) > threshold ||
-							cdist(c1,rt.colors[x-1+y*w]*rt.aoMap[x-1+y*w]) > threshold ||
-							cdist(c1,rt.colors[x+(y+1)*w]*rt.aoMap[x+(y+1)*w]) > threshold ||
-							cdist(c1,rt.colors[x+(y-1)*w]*rt.aoMap[x+(y-1)*w]) > threshold)
+							cdist(c1,rt.colors[x+1+y*w]) > threshold ||
+							cdist(c1,rt.colors[x-1+y*w]) > threshold ||
+							cdist(c1,rt.colors[x+(y+1)*w]) > threshold ||
+							cdist(c1,rt.colors[x+(y-1)*w]) > threshold)
 						{
 							rt.depths[x+y*w] = 0;
 							aaPixels++;
@@ -285,12 +285,19 @@ namespace SyntopiaCore {
 				/// Multithread the actual anti-aliasing
 				for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::AntiAlias);
 				if (!debugAA) startJobs(progress);
+			} else {
+				/// Just apply the ambient occlusion map.
+				for (int x = 0; x < w; x++) {
+					for (int y = 0; y < h; y++) {
+						rt.colors[x+y*w]=rt.colors[x+y*w]*rt.aoMap[x+y*w];
+					}
+				}
+			
 			}
 
 
 			for (int x = 0; x < w; x++) {
 				for (int y = 0; y < h; y++) {
-					rt.colors[x+y*w]=rt.colors[x+y*w]*rt.aoMap[x+y*w];
 					Vector3f c = rt.colors[x+y*w];
 					im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
 					if (debugAA && rt.depths[x+y*w]==0) {

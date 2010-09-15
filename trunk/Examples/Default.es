@@ -1,11 +1,11 @@
-set raytracer::ambient-occlusion [0,50,50]
+set raytracer::ambient-occlusion [1,50,0]
 set raytracer::shadows true
-set raytracer::anti-alias 4
+set raytracer::anti-alias 2
 set raytracer::reflection 0.0
 set raytracer::reflective::reflection 0.0
 set raytracer::phong [0.6,0.6,0.3]
 set raytracer::reflective::phong [0.6,0.6,0.0]
-set raytracer::dof [0.23,0.01]
+//set raytracer::dof [0.23,0.01]
 // Camera settings. Place these before first rule call.
 set translation [0 -0.367113 -20]
 set rotation [0.963994 0.0575931 -0.259613 0.0514549 0.917418 0.394584 0.260899 -0.393735 0.881422]
