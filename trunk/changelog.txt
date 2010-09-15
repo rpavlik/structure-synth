@@ -1,6 +1,14 @@
  
 Changelog for Structure Synth:
 ------------
+The RayID tagging is still not thread-safe.
+
+13 Sep 10 [MHC] Added multithreaded AA + AO support.
+[1h]
+
+13 Sep 10 [MHC] Trying out different post-processing Depth-of-field techniques, using the z-buffer. Too many artifacts.
+[2h]
+
 8  Sep 10 [MHC] The raytracer multithreading scheduling is working. Missing anti-alias + AO. The RayID tagging is still not thread-safe.
 [2h]
 
