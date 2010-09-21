@@ -48,8 +48,10 @@ namespace StructureSynth {
 			QMenu *menu = createStandardContextMenu();
 			
 			QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
-			raytraceMenu->addAction("set raytracer::ambient-occlusion [2,40,150]", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::shadows true", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", this , SLOT(insertText()));
+			raytraceMenu->addAction("set raytracer::shadows false", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::reflection 0.5", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::phong [0.6,0.6,0.3]", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::size [800x600]", this , SLOT(insertText()));
@@ -447,6 +449,8 @@ namespace StructureSynth {
 			addDockWidget(Qt::RightDockWidgetArea, editorDockWidget);
 
 			editorDockWidget->setHidden(true);
+			setMouseTracking(true);
+			probeDepth = false;
 
 			INFO(QString("Welcome to Structure Synth version %1. A Syntopia Project.").arg(version.toLongString()));
 			INFO("");
@@ -464,10 +468,18 @@ namespace StructureSynth {
 
 			readSettings();
 		}
+		
+		
 
 		void MainWindow::createOpenGLContextMenu() {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(insertCameraSettingsAction);
+				
+			QAction* probeDepth  = new QAction(tr("Togle Object Depth Output"), this);
+			connect(probeDepth, SIGNAL(triggered()), this, SLOT(toggleProbeDepth()));
+			openGLContextMenu->addAction(probeDepth);
+			
+
 			openGLContextMenu->addAction(fullScreenAction);
 			openGLContextMenu->addAction(screenshotAction);
 			openGLContextMenu->addAction(panicAction);
@@ -508,6 +520,10 @@ namespace StructureSynth {
 			}
 		}
 
+
+		void MainWindow::toggleProbeDepth() {
+			getEngine()->toggleShowDepth();
+		}
 
 		void MainWindow::createActions()
 		{

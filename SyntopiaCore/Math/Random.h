@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "../../ThirdPartyCode/MersenneTwister/MersenneTwister.h"
+#include "Vector3.h"
 
 namespace SyntopiaCore {
 	namespace Math {	
@@ -30,7 +31,7 @@ namespace SyntopiaCore {
 
 			bool isUsingStdLib() { return (rng == 0); }
 
-			 // Returns a double in the interval [0;1]
+			// Returns a double in the interval [0;1]
 			double getDouble() { 
 				if (rng) {
 					return rng->rand();
@@ -42,6 +43,12 @@ namespace SyntopiaCore {
 					*/
 				}
 			};    
+
+			// Normal distributed number with mean zero.
+			double getNormal(double variance) {
+				/// Note: requires MT RNG!
+				return rng->randNorm(0,variance); 
+			}
 
 			double getDouble(double min, double max) {
 				return getDouble()*(max-min)+min;
@@ -73,10 +80,25 @@ namespace SyntopiaCore {
 					srand(seed);
 				}
 			};
+			
+			// Return uniform samples on either unit disc (z=0) or unit sphere
+			// Uses Monto-carlo sampling which might be slow
+			Vector3f getUniform2D();
+			Vector3f getUniform3D();
 
+			// Uses precalculated tables.
+			// Initialized on first use (so init before using in multithreaded code)
+			Vector3f getUniform2DFromTable();
+			Vector3f getUniform3DFromTable();
+			void randomizeUniformCounter(); // use this to avoid coherence between different rg's
+			void setUniformCounter2D(int value) { uniformCounter2D = value; }
+			void setUniformCounter3D(int value) { uniformCounter3D = value; }
 		private:
 			int lastSeed;
 			MTRand* rng;
+			int uniformCounter2D;
+			int uniformCounter3D;
+			
 		};
 
 	}

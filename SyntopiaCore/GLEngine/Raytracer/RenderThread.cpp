@@ -9,9 +9,9 @@ namespace SyntopiaCore {
 		RenderThread::RenderThread() {
 			backgroundColor = Vector3f(0,0,0);
 			occlusionSampleStepSize = 0;
-			ambMaxRays = 30;
+			ambMaxRays = 0;
 			aaSamples = 2;
-			ambSmooth = 50;
+			ambSmooth = 0;
 			useShadows = true;
 			copy = false;
 
@@ -40,6 +40,8 @@ namespace SyntopiaCore {
 			intersections= other.intersections;
 			aoMap = other.aoMap;
 			objs = other.objs;
+
+			rayIDs = other.rayIDs;
 
 			frontStart = other.frontStart;
 			frontX = other.frontX;
@@ -77,6 +79,7 @@ namespace SyntopiaCore {
 			rayID = 0;
 			pixels = 0;
 			checks = 0;
+			rg.randomizeUniformCounter(); // to avoid coherence between threads
 		};
 
 		void RenderThread::render() {
@@ -104,10 +107,14 @@ namespace SyntopiaCore {
 					tests++;
 					// Use monte carlo sampling to obtain random vector.
 
+					/*
 					Vector3f random ;
 					do {
 						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
 					} while (random.sqrLength() > 1);
+					*/
+					//Vector3f random = rg.getUniform3DFromTable();
+					Vector3f random = rg.getUniform3D();
 					random.normalize();
 					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
 
@@ -160,7 +167,7 @@ namespace SyntopiaCore {
 				double ystepsize = ys/steps;
 
 				for (unsigned int xo = 0; xo < steps; xo++) {
-					for (unsigned int yo = 0; yo < steps; yo++) {	
+					for (unsigned int yo = 0; yo < steps; yo++) {
 						if (dofFalloff==0) {
 							Vector3f c = rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 														(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
@@ -235,19 +242,6 @@ namespace SyntopiaCore {
 			rayID = 0;
 			pixels = 0;
 			checks = 0;
-
-			/*
-			/// If using the same vectors at every point.
-			QVector<Vector3f> dirs;
-			for (int i = 0; i < ambMaxRays; i++) {
-			Vector3f random ;
-			do {
-			random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
-			} while (random.sqrLength() > 1);
-			random.normalize();
-			dirs.append(random);
-			}
-			*/
 		}
 
 
@@ -266,7 +260,13 @@ namespace SyntopiaCore {
 			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
 			Vector3f centerPoint =(endPoint-startPoint)* dofCenter+ startPoint;
 
+			
+			// --- Uniform Disc Sampling
+			//Vector3f displace = rg.getUniform2DFromTable()*dofFalloff;
+			//Vector3f newStartPoint = frontStart + frontX*(x+displace.x())+ frontY*(y+displace.y());
+			
 			double angle = rg.getDouble(0,2*3.1415);
+			//double radius = rg.getNormal(dofFalloff);
 			double radius = rg.getDouble(0,dofFalloff);
 			Vector3f newStartPoint = frontStart + frontX*(x+cos(angle)*radius) 
 												+ frontY*(y+sin(angle)*radius);
@@ -299,10 +299,10 @@ namespace SyntopiaCore {
 
 					if (list->at(i) == excludeThis) continue;
 					// Check if we already tested this...
-					if (list->at(i)->getLastRayID() == rayID) continue;
+					if (rayIDs[list->at(i)->getObjectID()] == rayID) continue;
 
 					bool found = list->at(i)->intersectsRay(&ri);
-					list->at(i)->setLastRayID(rayID);
+					rayIDs[list->at(i)->getObjectID()]= rayID;
 					if (!found) continue;
 					if ((ri.intersection<1E-7)) continue;
 
@@ -468,6 +468,10 @@ namespace SyntopiaCore {
 		}
 
 
+		void RenderThread::setObjects(int count) {
+			rayIDs = QVector<int>(count, -1);
+		}
+			
 
 	}
 }

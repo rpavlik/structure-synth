@@ -3,7 +3,17 @@ Changelog for Structure Synth:
 ------------
 The RayID tagging is still not thread-safe.
 
-13 Sep 10 [MHC] Added multithreaded AA + AO support.
+21 Sep 10 [MHC] Proper sorting of transparent OpenGL objects. 
+[2h]			Changed name to 'Raytracer::samples' and 'Raytracer::ambient-occlusion-samples'
+
+
+17 Sep 10 [MHC] Tried out different lens sampling techniques (uniform density disc, random angle+radius, gaussian radius). Random angle+radius turned out to look best
+[2h]			Fixed the RayID multi-threading issues.
+
+15 Sep 10 [MHC] Fixed applying AA after AO.
+[1h]
+
+14 Sep 10 [MHC] Added multithreaded AA + AO support.
 [1h]
 
 13 Sep 10 [MHC] Trying out different post-processing Depth-of-field techniques, using the z-buffer. Too many artifacts.

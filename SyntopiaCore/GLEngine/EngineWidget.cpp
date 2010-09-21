@@ -14,7 +14,7 @@ namespace SyntopiaCore {
 
 
 		EngineWidget::EngineWidget(QWidget* parent) : QGLWidget(parent) {
-
+			showDepth = false;
 			disabled = false;
 			updatePerspective();
 
@@ -120,9 +120,41 @@ namespace SyntopiaCore {
 			INFO("Shader setup complete!");
 		}
 
-		void EngineWidget::paintGL() {
+		double EngineWidget::getDepthAt(int x,int y) {
+			RayInfo ri;
+			Vector3f front = screenTo3D(x, y, 0);
+			Vector3f back = screenTo3D(x, y, 1);
+			ri.startPoint = front;
+			ri.lineDirection = back - front;
 			
-			
+			double dist = -1;
+			Object3D* obj = 0;
+			for (int i = 0; i < objects.count(); i++) {
+				if (objects[i]->intersectsRay(&ri)) {
+					if (ri.intersection<dist || dist ==-1) {
+						dist = ri.intersection;
+						obj = objects[i];
+						//INFO(QString("Object: %0, Pos: %1, reflection: %2").arg(i).arg( objects[i]->name() ).arg(objects[i]->getPrimitiveClass()->reflection));;
+					}
+				}
+			}
+			if (obj) {
+				INFO(QString("Object: %0. Depth: %1. Depth2: %2").arg(obj->name()).arg(dist).arg(obj->getDepth()));
+			} else {
+				INFO(QString("Object: n/a"));
+			}
+			return dist;
+		}
+
+		namespace {
+			bool depthSorter( const Object3D *a, const Object3D *b )
+			{
+				return a->getDepth() < b->getDepth();
+			}
+		}
+
+
+		void EngineWidget::paintGL() {			
 			static int count = 0;
 			count++;
 
@@ -134,29 +166,22 @@ namespace SyntopiaCore {
 				return;
 			}
 			
+			// Experimental shader stuff (not enabled)
 			if (shaderProgram) {
-
 				glDisable( GL_CULL_FACE );
 				glDisable( GL_LIGHTING );
 				glDisable( GL_DEPTH_TEST );
-
 				glViewport(0,0,width(),height());
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
 				gluOrtho2D(0,100,0,100);
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
-
-
 				int colorLocation = shaderProgram->uniformLocation("color");
-
 				QColor color(0, 255, 0, 255);
 				shaderProgram->setUniformValue(colorLocation, color);
-
-				 glColor3d(1.0,1.0,0.0);
- 
-				 glRectf(2,2,98,98);
-				 
+				glColor3d(1.0,1.0,0.0);
+				glRectf(2,2,98,98); 
 				INFO("Drawing...");
 				return;
 			}
@@ -164,7 +189,6 @@ namespace SyntopiaCore {
 
 			qglClearColor(backgroundColor);
 			glMatrixMode(GL_MODELVIEW);
-
 			glLoadIdentity();
 
 			// Calc camera position
@@ -179,28 +203,8 @@ namespace SyntopiaCore {
 			glGetDoublev(GL_PROJECTION_MATRIX, projectionCache );
 			glGetIntegerv(GL_VIEWPORT, viewPortCache);
 
-
 			cameraPosition = screenTo3D(width()/2, height()/2, 0);
 			cameraTarget = screenTo3D(width()/2, height()/2, 1);
-
-
-			/*
-			
-			RayInfo ri;
-			ri.startPoint = cameraPosition;
-			ri.lineDirection = cameraTarget - cameraPosition;
-			
-			static float f = 0;
-			f = f + 0.1;
-			if (f>1) f = 0;
-			for (int i = 0; i < objects.count(); i++) {
-				if (objects[i]->intersectsRay(&ri)) {
-					INFO(QString("Index: %0, Pos: %1, reflection: %2").arg(i).arg( objects[i]->name() ).arg(objects[i]->getPrimitiveClass()->reflection));;
-				}
-
-			}
-			*/
-
 			cameraUp = screenTo3D(width()/2, height()/2-height()/4, 0)-cameraPosition;
 			cameraUp.normalize();
 
@@ -208,85 +212,55 @@ namespace SyntopiaCore {
 			qglColor(getVisibleForegroundColor());
 
 			renderText(10, 20, infoText);
-			
+		
 			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
 				// Fast-draw
-
+				INFO("D");
 				int objs =  objects.size();
 				int step = objs/5000;
 				if (step < 1) step = 1;
 				if (count >= step) count = 0;
 
-				//glDisable (GL_LIGHTING);
-				//glLineWidth( 1.0 );
 				qglColor(getVisibleForegroundColor());
 				for (int i = count; i < objects.size(); i+=step) {
 						objects[i]->draw();
-					/*
-					glColor3f(
-						objects[i]->getColor()[0],
-						objects[i]->getColor()[1],
-						objects[i]->getColor()[2]
-					);
-					Vector3f pos1;
-					Vector3f pos2;
-					objects[i]->getBoundingBox(pos1,pos2);
-
-					glPushMatrix();
-					glTranslatef( pos1.x(), pos1.y(), pos1.z() );
-					Vector3f v1(0,(pos2-pos1).y(),0);
-					Vector3f v2((pos2-pos1).x(),0,0);
-					Vector3f v3(0,0,(pos2-pos1).z());
-
-					glBegin( GL_LINE_LOOP  );
-					Vector3f O(0,0,0);
-					vertexm(O);
-					vertexm(v2);
-					vertexm(v2+v1);
-					vertexm(v1);
-					glEnd();
-
-					glBegin( GL_LINE_LOOP  );
-					vertexm(v3);
-					vertexm(v2+v3);
-					vertexm(v2+v1+v3);
-					vertexm(v1+v3);
-					glEnd();
-
-					glBegin( GL_LINES  );
-					vertexm( v3 );   vertexm( O );
-					vertexm( v2 );   vertexm( v2+v3 );
-					vertexm( v1+v2 );   vertexm( v1+v2+v3 );
-					vertexm( v1 );   vertexm( v1+v3 );
-					glEnd();
-
-					glPopMatrix();			
-
-					*/
 				}
 
 				glEnable (GL_LIGHTING);
-
-				//if (doingRotate && fastRotate) doingRotate = false;
 				requireRedraw();
-
 			} else {
-
 
 				glPolygonMode(GL_FRONT, GL_FILL);
 				glPolygonMode(GL_BACK, GL_FILL);
-
 				glEnable (GL_LIGHTING);
-				glEnable(GL_CULL_FACE); // TODO: do we need this?
-
-				glEnable (GL_BLEND);
-				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glEnable(GL_CULL_FACE); 
+				
+				
 				glMateriali( GL_FRONT, GL_SPECULAR, 30 );
 				glMateriali(GL_FRONT, GL_SHININESS, 127);
 
-
+				glDisable (GL_BLEND);
+				
+				QVector<Object3D*> transparentObjects;
 				for (int i = 0; i < objects.size(); i++) {
-					objects[i]->draw();
+					if (objects[i]->getColor()[3]==1.0) {
+						objects[i]->draw();
+					} else {
+						transparentObjects.append(objects[i]);
+						float d = -Vector3f::dot(objects[i]->getCenter()-cameraPosition,
+										cameraTarget-cameraPosition);
+						objects[i]->setDepth(d);
+					}
+				}
+
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				
+				//glDisable(GL_DEPTH_TEST); 
+				//glEnable(GL_CULL_FACE); 
+				qSort(transparentObjects.begin(), transparentObjects.end(), depthSorter);
+				for (int i = 0; i < transparentObjects.size(); i++) {
+					transparentObjects[i]->draw();
 				}
 			}
 
@@ -382,6 +356,8 @@ namespace SyntopiaCore {
 
 		void EngineWidget::mouseMoveEvent( QMouseEvent *e ) {
 			e->accept();
+
+			if (showDepth) getDepthAt(e->pos().x(),e->pos().y());
 
 			// store old position
 

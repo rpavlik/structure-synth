@@ -52,6 +52,7 @@ namespace SyntopiaCore {
 			/// Calling this function multiple times will still only result in one redraw
 			void requireRedraw();
 
+			void toggleShowDepth() { showDepth = !showDepth; };
 			void clearWorld();
 			void reset();
 			void addObject(Object3D* object);
@@ -84,6 +85,7 @@ namespace SyntopiaCore {
 			void setContextMenu(QMenu* contextMenu) { this->contextMenu = contextMenu; }
 
 			double getFOV();
+			double getDepthAt(int x,int y);
 		
 			QColor getVisibleForegroundColor();
 
@@ -100,7 +102,10 @@ namespace SyntopiaCore {
 			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; }
 			
 			void setupFragmentShader(); // For experimenting with shader effects.
+
+
 		protected:
+			void mouseMoveEvent(QMouseEvent* ev) ; 
 			void contextMenuEvent (QContextMenuEvent* ev );
 			void mouseReleaseEvent ( QMouseEvent * event );
 			void initializeGL();
@@ -112,7 +117,6 @@ namespace SyntopiaCore {
 			/// Triggers a perspective update and a redraw
 			void resizeGL(int w, int h);
 			void wheelEvent(QWheelEvent* e);
-			void mouseMoveEvent(QMouseEvent* e);
 			void rotateWorldXY(double x, double y);
 			void rotateWorldZ(double z);
 			void translateWorld(double x, double y, double z);
@@ -161,6 +165,7 @@ namespace SyntopiaCore {
 			bool disabled;
 			bool fastRotate;
 			bool doingRotate;
+			bool showDepth;
 
 		};
 	};
