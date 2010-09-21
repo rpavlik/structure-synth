@@ -25,11 +25,12 @@ namespace SyntopiaCore {
 				wc.wakeAll(); 
 			}
 
-			void wait() { mutex.lock(); wc.wait(&mutex); mutex.unlock(); }
+			bool wait(unsigned long time = ULONG_MAX) { wcm.lock(); bool w = wc.wait(&wcm,time); wcm.unlock(); return w; }
 			int value() { mutex.lock(); int i = current; mutex.unlock(); return i; }
 		private:
 			int current;
 			QMutex mutex;
+			QMutex wcm;
 			QWaitCondition wc;
 		};
 

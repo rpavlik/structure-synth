@@ -67,6 +67,7 @@ namespace StructureSynth {
 			QString getCameraSettings();
 			QString getScriptWithSettings(QString filename);
 			
+			
 		protected:
 			void dragEnterEvent(QDragEnterEvent *ev);
 			void dropEvent(QDropEvent *ev);
@@ -75,6 +76,7 @@ namespace StructureSynth {
 
 		private slots:
 			void templateExport();
+			void toggleProbeDepth();
 			
 			void closeTab(int id);
 			void cut();
@@ -180,7 +182,7 @@ namespace StructureSynth {
 
 			QVector<QAction*> recentFileActions;
 			QAction* recentFileSeparator;
-			
+			bool probeDepth;
 		};
 
 		class PreviewWindow : public QDialog {

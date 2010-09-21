@@ -33,7 +33,7 @@ namespace SyntopiaCore {
 
 		class Object3D {
 		public:
-			Object3D() : lastRayID(-1) {};
+			Object3D() : objectID(-1) {};
 			virtual ~Object3D() {};
 
 			virtual QString name() { return "Object3D base"; }
@@ -44,20 +44,27 @@ namespace SyntopiaCore {
 
 			void getBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
 			void expandBoundingBox(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to) const;
+			SyntopiaCore::Math::Vector3f getCenter() { return (from+to)*0.5; } 
 
 			/// These must be implemented for an Object3D to support raytracing.
 			virtual bool intersectsRay(RayInfo* /*rayInfo*/) { return false; };
 			virtual bool intersectsAABB(SyntopiaCore::Math::Vector3f /*from*/, SyntopiaCore::Math::Vector3f /*to*/) { return false; };
 			virtual void prepareForRaytracing() { }; // Implement for additional preprocessing
 			
-			int getLastRayID() { return lastRayID; }
-			void setLastRayID(int id) { lastRayID = id; }
+			int getObjectID() { return objectID; }
+			void setObjectID(int id) { objectID = id; }
 
 			PrimitiveClass* getPrimitiveClass() { return primitiveClass; }
 			void setPrimitiveClass(PrimitiveClass* value) { primitiveClass = value; }
 			
 			static void Expand(SyntopiaCore::Math::Vector3f& from, SyntopiaCore::Math::Vector3f& to, SyntopiaCore::Math::Vector3f test);
 			
+			GLfloat getDepth() const { return depth; }
+			void setDepth(GLfloat d) { this->depth =d; }
+
+			bool operator<(Object3D& other) {
+				return (this->depth < other.depth);
+			}
 		protected:
 
 			void vertex(SyntopiaCore::Math::Vector3f v) const { glVertex3f(v.x(), v.y(), v.z()); }
@@ -81,9 +88,10 @@ namespace SyntopiaCore {
 			SyntopiaCore::Math::Vector3f to;
 			
 			// Used by Voxel Stepper when raytracing.
-			int lastRayID;
+			int objectID;
 
 			PrimitiveClass* primitiveClass;
+			GLfloat depth;
 
 		};
 

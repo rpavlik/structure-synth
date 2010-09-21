@@ -38,7 +38,9 @@ namespace SyntopiaCore {
 			windowWidth = engine->width();
 			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) rt.accelerator->registerObject(objects[i]);
-
+			rt.setObjects(objects.count());
+			for (int i = 0; i < objects.count(); i++) objects[i]->setObjectID(i);
+			
 			maxThreads = QThread::idealThreadCount();
 	
 			foreach (Command c, engine->getRaytracerCommands()) {
@@ -76,9 +78,9 @@ namespace SyntopiaCore {
 			
 			int c = completedUnits.value();
 			while (c<maxUnits) {
-				completedUnits.wait();
+				bool s = completedUnits.wait(1000);
 				progress.setValue((c*100)/maxUnits);
-				//qApp->processEvents();
+				if (!s) qApp->processEvents();
 
 				if	(progress.wasCanceled()) {
 					// in order to cancel, we will swallow
@@ -90,7 +92,7 @@ namespace SyntopiaCore {
 						newUnit = nextUnit.increase();
 					}
 				}
-				 c = completedUnits.value();
+				c = completedUnits.value();
 			};
 		}
 			
@@ -113,6 +115,13 @@ namespace SyntopiaCore {
 			INFO(QString("Rendering size: %3x%4").arg(w).arg(h));
 
 			rt.alloc(w,h);
+
+
+			// Initialize rng loopup tables 
+			RandomNumberGenerator rg;
+			rg.getUniform2DFromTable();
+			rg.getUniform3DFromTable();
+			
 			maxUnits = w;
 			
 			// Calculate viewport
@@ -140,8 +149,6 @@ namespace SyntopiaCore {
 			QTime start = QTime::currentTime();
 			QImage im(w,h, QImage::Format_RGB32);
 
-			// RD
-
 			// Find a suitable light position. TODO: CHANGE!
 			GLdouble sx1, sy1, sz1;				
 			gluUnProject((float)-200, windowHeight, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
@@ -150,15 +157,15 @@ namespace SyntopiaCore {
 			aaPixels = 0;
 			
 			bool debugAA = rt.aaSamples<0;
-			rt.aaSamples=abs(rt.aaSamples);
 			
+			rt.aaSamples=abs(rt.aaSamples);
 			rt.setCounters(&nextUnit, &completedUnits, maxUnits);
 			rt.setTask(RenderThread::RayTrace);
 			threads.append(&rt);
 			for (int i = 1; i < maxThreads; i++) {
 				threads.append( new RenderThread(rt));	
 			}
-
+			
 			startJobs(progress);
 			
 			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
@@ -336,11 +343,21 @@ namespace SyntopiaCore {
 				MiniParser(value, ',').getInt(rt.occlusionSampleStepSize).getInt(rt.ambMaxRays).getInt(rt.ambSmooth);
 				INFO(QString("Occlusion Sample Step Size: %1, Max Rays: %2, Smoothening Steps: %3 ")
 					.arg(rt.occlusionSampleStepSize).arg(rt.ambMaxRays).arg(rt.ambSmooth));
-			} else if (param == "anti-alias") {
+			} else if (param == "ambient-occlusion-samples") {
 				// Min rays, Max rays, Precision...		
+				MiniParser(value, ',').getInt(rt.ambMaxRays);
+				rt.ambSmooth = 0;
+				rt.occlusionSampleStepSize = 1;
+				INFO(QString("Ambient Occlusion samples: %3 ")
+					.arg(rt.ambMaxRays));
+			} else if (param == "samples") {
 				MiniParser(value, ',').getInt(rt.aaSamples);
+				INFO(QString("Samples per pixel (anti-alias or DOF): %3x%3 ")
+					.arg(rt.aaSamples).arg(rt.aaSamples));
 			} else if (param == "dof") {
 				MiniParser(value, ',').getDouble(rt.dofCenter).getDouble(rt.dofFalloff);
+				INFO(QString("Depth-of-field: center %1, falloff %2 ")
+					.arg(rt.dofCenter).arg(rt.dofFalloff));
 			} else if (param == "shadows") {
 				MiniParser(value, ',').getBool(rt.useShadows);
 				INFO(QString("Shadows: %3").arg(rt.useShadows ? "true" : "false"));

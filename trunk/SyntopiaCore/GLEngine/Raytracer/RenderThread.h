@@ -23,6 +23,7 @@ namespace SyntopiaCore {
 			void antiAlias(int newUnit);
 			void setCounters(AtomicCounter* nextUnit, AtomicCounter* completedUnits, int maxUnits);
 			void alloc(int w, int h);
+			void setObjects(int count);
 			static void msleep(int i) { QThread::msleep(i); }
 			void run();
 			Vector3f rayCastPixel(float x, float y);
@@ -56,6 +57,7 @@ namespace SyntopiaCore {
 			Vector3f lightPos;
 			Vector3f backgroundColor;
 			int rayID;
+			QVector<int> rayIDs;
 			int pixels;
 			int checks;
 			VoxelStepper* accelerator;
