@@ -2,6 +2,7 @@
 
 #include <QVector>
 #include <QGLWidget>
+#include <QMainWindow>
 #include <QPoint>
 #include <QList>
 
@@ -43,7 +44,7 @@ namespace SyntopiaCore {
 		class EngineWidget : public QGLWidget {
 		public:
 			/// Constructor
-			EngineWidget(QWidget* parent);
+			EngineWidget(QMainWindow* mainWindow, QWidget* parent);
 
 			/// Destructor
 			~EngineWidget();
@@ -102,7 +103,6 @@ namespace SyntopiaCore {
 			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; }
 			
 			void setupFragmentShader(); // For experimenting with shader effects.
-
 
 		protected:
 			void mouseMoveEvent(QMouseEvent* ev) ; 
@@ -167,6 +167,7 @@ namespace SyntopiaCore {
 			bool doingRotate;
 			bool showDepth;
 
+			QMainWindow* mainWindow;
 		};
 	};
 

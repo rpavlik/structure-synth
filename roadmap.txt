@@ -71,25 +71,23 @@ Version 1.0.0: 'Totem' or 'Potemkin'
 + Depth-First Recursion
 - Packaging: Icons, Eula, file associations.
 
-Version 1.1
------------
-- Option to include EisenScript in TemplateOutput: {EisenScript}
-- Installers (for Windows at least - using InnoSetup)
-- Ellipsoid object. (as of now spheres are always isotropic]
 
 
 Version 1.5: '?'
 ----------------
-? Version object with check for updates on internet.
++ Raytracer
+- Installers (for Windows at least - using InnoSetup)
 - VRML/OBJ Template (many requests)
 ? 'Zoom to fit'
 - Mesh?
-- 9-Up interface.
 Instead of EisenScript it should be possible to script the object generation using JavaScript - for creating animations.
 (Qt has a builtin JavaScript interpreter which should make this somewhat easy).
 
 Version 2.0: '?' (These are tentative ideas)
 ----------------
+- Ellipsoid object. (as of now spheres are always isotropic]
+? Version object with check for updates on internet.
+- 9-Up interface.
 Polygon Grammars (a la CGA Shape Grammar)
 
 Emphasizing the 'Synth' of 'Structure Synth (Live Coding / Drawing)

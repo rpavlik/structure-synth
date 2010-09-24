@@ -5,6 +5,7 @@ The RayID tagging is still not thread-safe.
 
 21 Sep 10 [MHC] Proper sorting of transparent OpenGL objects. 
 [2h]			Changed name to 'Raytracer::samples' and 'Raytracer::ambient-occlusion-samples'
+				Added the context menu 'Toggle Object Depth'
 
 
 17 Sep 10 [MHC] Tried out different lens sampling techniques (uniform density disc, random angle+radius, gaussian radius). Random angle+radius turned out to look best

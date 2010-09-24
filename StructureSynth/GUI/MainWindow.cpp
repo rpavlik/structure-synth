@@ -386,7 +386,7 @@ namespace StructureSynth {
 
 			stackedTextEdits = new QStackedWidget(splitter);
 
-			engine = new SyntopiaCore::GLEngine::EngineWidget(splitter);
+			engine = new SyntopiaCore::GLEngine::EngineWidget(this,splitter);
 
 			tabBar = new QTabBar(this);
 
@@ -475,10 +475,9 @@ namespace StructureSynth {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(insertCameraSettingsAction);
 				
-			QAction* probeDepth  = new QAction(tr("Togle Object Depth Output"), this);
+			QAction* probeDepth  = new QAction(tr("Toggle 3D Object Information"), this);
 			connect(probeDepth, SIGNAL(triggered()), this, SLOT(toggleProbeDepth()));
 			openGLContextMenu->addAction(probeDepth);
-			
 
 			openGLContextMenu->addAction(fullScreenAction);
 			openGLContextMenu->addAction(screenshotAction);
