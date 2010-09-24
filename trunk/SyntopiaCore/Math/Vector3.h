@@ -46,14 +46,14 @@ namespace SyntopiaCore {
 			scalar sqrLength() const { return s[0]*s[0]+s[1]*s[1]+s[2]*s[2]; }
 			scalar length() const { return sqrt(s[0]*s[0]+s[1]*s[1]+s[2]*s[2]); }
 
-			Vector3<scalar> normalized() const { scalar l = length(); return Vector3<scalar>(s[0]/l,s[1]/l,s[2]/l); }
-			void normalize() { scalar l = length(); s[0]/=l; s[1]/=l; s[2]/=l; }
+			Vector3<scalar> normalized() const { scalar l = 1.0/length(); return Vector3<scalar>(s[0]*l,s[1]*l,s[2]*l); }
+			void normalize() { scalar l = 1.0/length(); s[0]*=l; s[1]*=l; s[2]*=l; }
 			Vector3<scalar> operator- (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]-rhs.s[0], s[1]-rhs.s[1], s[2]-rhs.s[2]); }
 			Vector3<scalar> operator+ (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]+rhs.s[0], s[1]+rhs.s[1], s[2]+rhs.s[2]); }
 			Vector3<scalar> operator- () const { return Vector3<scalar>(-s[0], -s[1], -s[2]); }
 
 			Vector3<scalar> operator* (scalar rhs) const { return Vector3<scalar>(s[0]*rhs, s[1]*rhs, s[2]*rhs); }
-			Vector3<scalar> operator/ (scalar rhs) const { return Vector3<scalar>(s[0]/rhs, s[1]/rhs, s[2]/rhs); }
+			Vector3<scalar> operator/ (scalar rhs) const { scalar t = 1.0/rhs; return Vector3<scalar>(s[0]*t, s[1]*t, s[2]*t); }
 
 			
 			QString toString() const {
@@ -82,6 +82,9 @@ namespace SyntopiaCore {
 			scalar s[3];
 		};
 
+		template <typename T>
+		Vector3<T> operator*(T hs, Vector3<T> rs) { return Vector3<T>(rhs[0]*lhs, rhs[1]*lhs, rhs[2]*lhs); }
+			
 		typedef Vector3<float> Vector3f ;
 		typedef Vector3<double> Vector3d ;
 

@@ -13,7 +13,9 @@ namespace SyntopiaCore {
 	namespace GLEngine {
 
 
-		EngineWidget::EngineWidget(QWidget* parent) : QGLWidget(parent) {
+		EngineWidget::EngineWidget(QMainWindow* mainWindow, QWidget* parent) 
+			: QGLWidget(parent), mainWindow(mainWindow) 
+		{
 			showDepth = false;
 			disabled = false;
 			updatePerspective();
@@ -62,13 +64,13 @@ namespace SyntopiaCore {
 		}
 
 
-		
+
 		void EngineWidget::contextMenuEvent(QContextMenuEvent* /*ev*/ ) {
 			// Implementing this here gives trouble on Linux...
 			// if (rmbDragging) { return; }
 			// if (contextMenu) contextMenu->exec(ev->globalPos());	
 		}
-		
+
 
 		void EngineWidget::reset() {
 			translation = Vector3f(0,0,-20);
@@ -89,9 +91,9 @@ namespace SyntopiaCore {
 		}
 
 		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
-			
+
 		void EngineWidget::setupFragmentShader() {
-			
+
 			shaderProgram = new QGLShaderProgram(this);
 			bool s = shaderProgram->addShaderFromSourceCode(QGLShader::Vertex,
 				"varying vec2 coord;\n"
@@ -110,13 +112,13 @@ namespace SyntopiaCore {
 				"    if (coord.y<0.5)  gl_FragColor = vec4(1.0,1.0,1.0, 1.0); "
 				"}");
 			if (!s) WARNING("Could not create vertex shader: " + shaderProgram->log());
-			
+
 			s = shaderProgram->link();
 			if (!s) WARNING("Could not link shaders: " + shaderProgram->log());
-			
+
 			s = shaderProgram->bind();
 			if (!s) WARNING("Could not bind shaders: " + shaderProgram->log());
-			
+
 			INFO("Shader setup complete!");
 		}
 
@@ -126,7 +128,7 @@ namespace SyntopiaCore {
 			Vector3f back = screenTo3D(x, y, 1);
 			ri.startPoint = front;
 			ri.lineDirection = back - front;
-			
+
 			double dist = -1;
 			Object3D* obj = 0;
 			for (int i = 0; i < objects.count(); i++) {
@@ -134,14 +136,20 @@ namespace SyntopiaCore {
 					if (ri.intersection<dist || dist ==-1) {
 						dist = ri.intersection;
 						obj = objects[i];
-						//INFO(QString("Object: %0, Pos: %1, reflection: %2").arg(i).arg( objects[i]->name() ).arg(objects[i]->getPrimitiveClass()->reflection));;
 					}
 				}
 			}
 			if (obj) {
-				INFO(QString("Object: %0. Depth: %1. Depth2: %2").arg(obj->name()).arg(dist).arg(obj->getDepth()));
+				float d = -Vector3f::dot(obj->getCenter()-cameraPosition,
+					(cameraTarget-cameraPosition).normalized());
+
+
+				QString s = (QString("Object: %0 (%1,%2,%3). Viewport depth: %4. Camera plane depth: %5")
+					.arg(obj->name()).arg(obj->getCenter().x()).arg(obj->getCenter().y()).arg(obj->getCenter().z())
+					.arg(dist).arg(d));
+				mainWindow->statusBar()->showMessage(s);
 			} else {
-				INFO(QString("Object: n/a"));
+				mainWindow->statusBar()->showMessage("");
 			}
 			return dist;
 		}
@@ -165,7 +173,7 @@ namespace SyntopiaCore {
 				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 				return;
 			}
-			
+
 			// Experimental shader stuff (not enabled)
 			if (shaderProgram) {
 				glDisable( GL_CULL_FACE );
@@ -185,7 +193,7 @@ namespace SyntopiaCore {
 				INFO("Drawing...");
 				return;
 			}
-			
+
 
 			qglClearColor(backgroundColor);
 			glMatrixMode(GL_MODELVIEW);
@@ -198,7 +206,7 @@ namespace SyntopiaCore {
 			Vector3f v2 = rotation*v;
 			glMultMatrixf(rotation.getArray());
 			glTranslatef( -pivot.x(), -pivot.y(), -pivot.z() );
-		
+
 			glGetDoublev(GL_MODELVIEW_MATRIX, modelViewCache );
 			glGetDoublev(GL_PROJECTION_MATRIX, projectionCache );
 			glGetIntegerv(GL_VIEWPORT, viewPortCache);
@@ -212,7 +220,7 @@ namespace SyntopiaCore {
 			qglColor(getVisibleForegroundColor());
 
 			renderText(10, 20, infoText);
-		
+
 			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
 				// Fast-draw
 				INFO("D");
@@ -223,7 +231,7 @@ namespace SyntopiaCore {
 
 				qglColor(getVisibleForegroundColor());
 				for (int i = count; i < objects.size(); i+=step) {
-						objects[i]->draw();
+					objects[i]->draw();
 				}
 
 				glEnable (GL_LIGHTING);
@@ -234,13 +242,13 @@ namespace SyntopiaCore {
 				glPolygonMode(GL_BACK, GL_FILL);
 				glEnable (GL_LIGHTING);
 				glEnable(GL_CULL_FACE); 
-				
-				
+
+
 				glMateriali( GL_FRONT, GL_SPECULAR, 30 );
 				glMateriali(GL_FRONT, GL_SHININESS, 127);
 
 				glDisable (GL_BLEND);
-				
+
 				QVector<Object3D*> transparentObjects;
 				for (int i = 0; i < objects.size(); i++) {
 					if (objects[i]->getColor()[3]==1.0) {
@@ -248,14 +256,14 @@ namespace SyntopiaCore {
 					} else {
 						transparentObjects.append(objects[i]);
 						float d = -Vector3f::dot(objects[i]->getCenter()-cameraPosition,
-										cameraTarget-cameraPosition);
+							cameraTarget-cameraPosition);
 						objects[i]->setDepth(d);
 					}
 				}
 
 				glEnable (GL_BLEND);
 				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				
+
 				//glDisable(GL_DEPTH_TEST); 
 				//glEnable(GL_CULL_FACE); 
 				qSort(transparentObjects.begin(), transparentObjects.end(), depthSorter);
@@ -346,9 +354,9 @@ namespace SyntopiaCore {
 
 		void EngineWidget::wheelEvent(QWheelEvent* e) {
 			e->accept();
-			
+
 			double interval = (double)e->delta() / 800.0;
-			
+
 			if ( scale <= mouseSpeed*interval ) return;
 			scale -= mouseSpeed*interval;
 			requireRedraw();
@@ -500,7 +508,7 @@ namespace SyntopiaCore {
 			double ar = width()/(double)height();
 			return 29.0*ar; // Hack - this is not entirely accurate for large AR's.
 		}
-		
+
 		QColor EngineWidget::getVisibleForegroundColor() {
 			int r = backgroundColor.red() < 127 ? 255 : 0;
 			int g = backgroundColor.green() < 127 ? 255 : 0;
@@ -516,7 +524,7 @@ namespace SyntopiaCore {
 				else { objects[i]->expandBoundingBox(from,to);  }
 			}
 		}
-			
+
 	}
 }
 
