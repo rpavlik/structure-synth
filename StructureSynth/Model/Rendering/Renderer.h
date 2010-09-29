@@ -78,6 +78,7 @@ namespace StructureSynth {
 				virtual void setScale(double /*scale*/) {};
 				virtual void setRotation(SyntopiaCore::Math::Matrix4f /*rotation*/) {};
 				virtual void setPivot(SyntopiaCore::Math::Vector3f /*pivot*/) {};
+				virtual void setPerspectiveAngle(double /*angle*/) {};
 
 				// Issues a command for a specific renderclass such as 'template' or 'opengl'
 				virtual void callCommand(const QString& /*renderClass*/, const QString& /*command*/) {};

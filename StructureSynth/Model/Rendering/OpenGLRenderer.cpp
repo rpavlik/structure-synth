@@ -124,6 +124,11 @@ namespace StructureSynth {
 				engine->setPivot(pivot);
 			};
 
+			void OpenGLRenderer::setPerspectiveAngle(double angle) {
+				engine->setPerspectiveAngle(angle);
+			}
+
+
 				
 
 		}

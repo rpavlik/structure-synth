@@ -51,10 +51,11 @@ namespace SyntopiaCore {
 			Vector3<scalar> operator- (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]-rhs.s[0], s[1]-rhs.s[1], s[2]-rhs.s[2]); }
 			Vector3<scalar> operator+ (const Vector3<scalar>& rhs) const { return Vector3<scalar>(s[0]+rhs.s[0], s[1]+rhs.s[1], s[2]+rhs.s[2]); }
 			Vector3<scalar> operator- () const { return Vector3<scalar>(-s[0], -s[1], -s[2]); }
-
+			bool operator== (const Vector3<scalar>& rhs) const { return (s[0]==rhs.s[0] && s[1]==rhs.s[1] && s[2]==rhs.s[2]); }
+			
 			Vector3<scalar> operator* (scalar rhs) const { return Vector3<scalar>(s[0]*rhs, s[1]*rhs, s[2]*rhs); }
 			Vector3<scalar> operator/ (scalar rhs) const { scalar t = 1.0/rhs; return Vector3<scalar>(s[0]*t, s[1]*t, s[2]*t); }
-
+			
 			
 			QString toString() const {
 				return QString("[%1 %2 %3]").arg(s[0]).arg(s[1]).arg(s[2]);

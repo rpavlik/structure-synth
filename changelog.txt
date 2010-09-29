@@ -1,7 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
-The RayID tagging is still not thread-safe.
+
+22 Sep 10 [MHC] Added 'set raytracer::light [x,y,z]' command
+				Added 'set perspective-angle <angle>' command (still a bit fuzzy)
 
 21 Sep 10 [MHC] Proper sorting of transparent OpenGL objects. 
 [2h]			Changed name to 'Raytracer::samples' and 'Raytracer::ambient-occlusion-samples'

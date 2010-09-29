@@ -15,6 +15,7 @@ namespace SyntopiaCore {
 			MiniParser& getInt(int& val);				
 			MiniParser& getBool(bool& val);
 			MiniParser& getDouble(double& val);
+			MiniParser& getFloat(float& val);
 		private:
 			QChar separator;
 			QString original;

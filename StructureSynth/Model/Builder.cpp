@@ -372,6 +372,11 @@ namespace StructureSynth {
 				Matrix4f m4(param, succes);
 				if (!succes) throw Exception(QString("Command 'rotation' expected matrix (such as [1 0 0 0 1 0 0 0 1]). Found: %1").arg(param));
 				renderTarget->setRotation(m4);
+			} else if (command == "perspective-angle") {
+				bool succes;
+				double s = param.toDouble(&succes);
+				if (!succes) throw Exception(QString("Command 'perspective-angle' expected floating point parameter. Found: %1").arg(param));
+				renderTarget->setPerspectiveAngle(s);
 			} else if (command == "opengl") {
 				INFO("Render commands for 'opengl' not impl'ed yet!");
 			} else if (command == "template") {
