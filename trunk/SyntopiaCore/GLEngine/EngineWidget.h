@@ -73,6 +73,7 @@ namespace SyntopiaCore {
 			void setRotation(SyntopiaCore::Math::Matrix4f rotation) { this->rotation = rotation; }
 			void setTranslation(SyntopiaCore::Math::Vector3f translation) { this->translation = translation; }
 		    void setScale(double scale) { this->scale = scale; }
+			void setPerspectiveAngle(double angle) { this->settings.perspectiveAngle = angle; updatePerspective(); } 
 
 			/// RGB in [0;1]
 			void setBackgroundColor(double r, double g, double b) { 

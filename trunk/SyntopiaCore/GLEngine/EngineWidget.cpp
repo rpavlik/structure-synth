@@ -77,6 +77,8 @@ namespace SyntopiaCore {
 			rotation = Matrix4f::Identity();
 			pivot = Vector3f(0,0,0);
 			scale = 0.4f;
+			settings = Settings();
+			updatePerspective();
 			//backgroundColor = QColor(0,0,0);
 			requireRedraw();
 
@@ -223,7 +225,6 @@ namespace SyntopiaCore {
 
 			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
 				// Fast-draw
-				INFO("D");
 				int objs =  objects.size();
 				int step = objs/5000;
 				if (step < 1) step = 1;

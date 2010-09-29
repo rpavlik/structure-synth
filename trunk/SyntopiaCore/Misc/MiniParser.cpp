@@ -72,6 +72,25 @@ namespace SyntopiaCore {
 			return *this;
 		}
 
+		MiniParser& MiniParser::getFloat(float& val) {
+			paramCount++;
+			QString first = value.section(separator, 0,0);
+			value = value.section(separator, 1);
+
+			if (first.isEmpty()) {
+				WARNING(QString("Expected argument number %1 for %2").arg(paramCount).arg(original));
+			}
+
+			bool succes = false;
+			float d = first.toFloat(&succes);
+			if (!succes) {
+				WARNING(QString("Expected argument number %1 to be an float. Found: %2").arg(paramCount).arg(first));
+			}
+			val = d;
+
+			return *this;
+		}
+
 
 
 	}

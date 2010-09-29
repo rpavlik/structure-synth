@@ -14,6 +14,7 @@ namespace SyntopiaCore {
 			ambSmooth = 0;
 			useShadows = true;
 			copy = false;
+			lightPos = Vector3f(0,0,0);
 
 			dofCenter = 0;
 			dofFalloff = 0;
@@ -143,6 +144,7 @@ namespace SyntopiaCore {
 			int x = newUnit-1;
 			for (int y = 0; y < h; y++) {	
 				if (aoMap[x+y*w] != -1) continue;
+				//rg.setUniformCounter3D(0);
 				aoMap[x+y*w] =  getAOStrength(objs[x+y*w],normals[x+y*w],intersections[x+y*w]);
 			}
 		};
@@ -168,6 +170,8 @@ namespace SyntopiaCore {
 
 				for (unsigned int xo = 0; xo < steps; xo++) {
 					for (unsigned int yo = 0; yo < steps; yo++) {
+						//rg.setUniformCounter3D(0);
+				
 						if (dofFalloff==0) {
 							Vector3f c = rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 														(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));

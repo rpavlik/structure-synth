@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 
 	QPixmap pixmap(QDir(StructureSynth::GUI::MainWindow::getMiscDir()).absoluteFilePath("splash.png"));
 	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+	     splash.setMask(pixmap.mask());
 	splash.show();
 	qApp->processEvents();
 

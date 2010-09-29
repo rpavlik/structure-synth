@@ -149,14 +149,15 @@ namespace SyntopiaCore {
 			QTime start = QTime::currentTime();
 			QImage im(w,h, QImage::Format_RGB32);
 
-			// Find a suitable light position. TODO: CHANGE!
-			GLdouble sx1, sy1, sz1;				
-			gluUnProject((float)-200, windowHeight, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
-			rt.lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
+			if (rt.lightPos == Vector3f(0,0,0)) {
+				GLdouble sx1, sy1, sz1;				
+				gluUnProject((float)-200, windowHeight, 0.0f, modelView, projection, viewPort, &sx1, &sy1 ,&sz1);				
+				rt.lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
+			}
 
 			aaPixels = 0;
 			
-			bool debugAA = rt.aaSamples<0;
+			bool disableAdaptiveAA = rt.aaSamples<0;
 			
 			rt.aaSamples=abs(rt.aaSamples);
 			rt.setCounters(&nextUnit, &completedUnits, maxUnits);
@@ -275,11 +276,11 @@ namespace SyntopiaCore {
 					for (int y = 1; y+1 < h; y++) {
 						Vector3f c1 = rt.colors[x+y*w];
 						
-						if (rt.dofFalloff !=0 || 
+						if (disableAdaptiveAA || (rt.dofFalloff !=0 || 
 							cdist(c1,rt.colors[x+1+y*w]) > threshold ||
 							cdist(c1,rt.colors[x-1+y*w]) > threshold ||
 							cdist(c1,rt.colors[x+(y+1)*w]) > threshold ||
-							cdist(c1,rt.colors[x+(y-1)*w]) > threshold)
+							cdist(c1,rt.colors[x+(y-1)*w]) > threshold))
 						{
 							rt.depths[x+y*w] = 0;
 							aaPixels++;
@@ -291,7 +292,7 @@ namespace SyntopiaCore {
 
 				/// Multithread the actual anti-aliasing
 				for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::AntiAlias);
-				if (!debugAA) startJobs(progress);
+				startJobs(progress);
 			} else {
 				/// Just apply the ambient occlusion map.
 				for (int x = 0; x < w; x++) {
@@ -307,9 +308,6 @@ namespace SyntopiaCore {
 				for (int y = 0; y < h; y++) {
 					Vector3f c = rt.colors[x+y*w];
 					im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
-					if (debugAA && rt.depths[x+y*w]==0) {
-						im.setPixel(x,y,qRgb(255,0,0));
-					}
 				}
 			}
 
@@ -367,7 +365,11 @@ namespace SyntopiaCore {
 				INFO(QString("Max threads: %3").arg(maxThreads));
 			} else if (param == "size") {
 				MiniParser(value, 'x').getInt(sizeX).getInt(sizeY);
-				INFO(QString("size: %3, %4").arg(sizeX).arg(sizeY));
+				INFO(QString("Size: %1, %2").arg(sizeX).arg(sizeY));
+			} else if (param == "light") {
+				MiniParser(value, ',').getFloat(rt.lightPos.x()).getFloat(rt.lightPos.y()).getFloat(rt.lightPos.z());
+				INFO(QString("Light position: %1, %2, %3").arg(rt.lightPos.x())
+					  .arg(rt.lightPos.y()).arg(rt.lightPos.z()));
 			} else {
 				WARNING("Unknown parameter: " + param);
 			}
