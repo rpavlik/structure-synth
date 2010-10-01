@@ -322,13 +322,11 @@ namespace SyntopiaCore {
 				if (bestObj != 0 && lengthToClosest < maxT) break;
 				list = accelerator->advance(maxT); 
 			}
-
 			// Now we can calculate the lightning.
 			if (lengthToClosest>0) {	
 				// iPoint is the intersection point in 3D.
 				Vector3f iPoint = startPoint + direction*lengthToClosest;
 				Vector3f lightDirection = (lightPos-iPoint);
-
 				double light = 0;
 
 				// This is a Phong lightning model, see e.g. (http://ai.autonomy.net.au/wiki/Graphics/Illumination)
@@ -451,13 +449,13 @@ namespace SyntopiaCore {
 					occ = occ*occ;
 
 					*/
-					light = light*occ;
+					light = occ*light;
 				}
 
 
 				normal = foundNormal;
 				depth = lengthToClosest;
-				color = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);
+				color =  Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);
 				intersection = iPoint;
 				hitObject = bestObj;
 				return color;
