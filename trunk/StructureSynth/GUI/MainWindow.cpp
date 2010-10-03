@@ -17,6 +17,7 @@
 #include "../../StructureSynth/Parser/EisenParser.h"
 #include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "../../StructureSynth/Model/Rendering/TemplateRenderer.h"
+#include "../../StructureSynth/Model/Rendering/ObjRenderer.h"
 #include "../../StructureSynth/Parser/Tokenizer.h"
 #include "../../StructureSynth/Parser/Preprocessor.h"
 #include "../../StructureSynth/Model/RuleSet.h"
@@ -46,7 +47,7 @@ namespace StructureSynth {
 		void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 		{	
 			QMenu *menu = createStandardContextMenu();
-			
+
 			QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
 			raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", this , SLOT(insertText()));
@@ -58,12 +59,12 @@ namespace StructureSynth {
 			raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", this , SLOT(insertText()));
 			raytraceMenu->addAction("set raytracer::max-threads 2", this , SLOT(insertText()));
-			
+
 			QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
 			modifierMenu->addAction("weight", this , SLOT(insertText()));
 			modifierMenu->addAction("maxdepth", this , SLOT(insertText()));
 			modifierMenu->addAction("maxdepth > newRule", this , SLOT(insertText()));
-			
+
 			QMenu *transformationMenu = new QMenu("Transformations", 0);
 			transformationMenu->addAction("x 1 // translations", this , SLOT(insertText()));
 			transformationMenu->addAction("y 1", this , SLOT(insertText()));
@@ -85,37 +86,37 @@ namespace StructureSynth {
 			transformationMenu->addAction("fx // mirror in yz-plane", this , SLOT(insertText()));
 			transformationMenu->addAction("fy", this , SLOT(insertText()));
 			transformationMenu->addAction("fz", this , SLOT(insertText()));
-		
+
 			QMenu *setMenu = new QMenu("Set Commands", 0);
 			setMenu->addAction("set maxdepth 100", this , SLOT(insertText()));
 			setMenu->addAction("set maxsize 10 // maximum object size", this , SLOT(insertText()));
 			setMenu->addAction("set minsize 0.1 // minimum object size", this , SLOT(insertText()));
 			setMenu->addAction("set background #fff", this , SLOT(insertText()));
 			setMenu->addAction("set seed 45", this , SLOT(insertText()));
-			
+
 			QMenu *colorMenu = new QMenu("Set Colorpool Commands", 0);
 			colorMenu->addAction("set colorpool randomrgb", this , SLOT(insertText()));
 			colorMenu->addAction("set colorpool randomhue", this , SLOT(insertText()));
 			colorMenu->addAction("set colorpool list:orange,yellow,blue // sample from list", this , SLOT(insertText()));
 			colorMenu->addAction("set colorpool image:test.png // sample from image", this , SLOT(insertText()));
-			
+
 
 			QMenu *set2Menu = new QMenu("Exotic Set Commands", 0);
 			set2Menu->addAction("set seed initial // reset random seed", this , SLOT(insertText()));
 			set2Menu->addAction("set recursion depth // traverse depth-first", this , SLOT(insertText()));
 			set2Menu->addAction("set rng old // old random generator", this , SLOT(insertText()));
 			set2Menu->addAction("set syncrandom true", this , SLOT(insertText()));
-			
+
 			QMenu *setCMenu = new QMenu("Camera Commands", 0);
 			setCMenu->addAction("set scale 0.5", this , SLOT(insertText()));
 			setCMenu->addAction("set pivot [0 0 0]", this , SLOT(insertText()));
 			setCMenu->addAction("set translation [0 0 -20]", this , SLOT(insertText()));
 			setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", this , SLOT(insertText()));
-			
+
 			QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
 			pMenu->addAction("#define myAngle 45", this , SLOT(insertText()));
 			pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", this , SLOT(insertText()));
-			
+
 
 			menu->insertMenu(menu->actions()[0], modifierMenu);
 			menu->insertMenu(menu->actions()[1], transformationMenu);
@@ -125,7 +126,7 @@ namespace StructureSynth {
 			menu->insertMenu(menu->actions()[5], raytraceMenu);
 			menu->insertMenu(menu->actions()[6], setCMenu);
 			menu->insertMenu(menu->actions()[7], pMenu);
-			
+
 			menu->insertSeparator(menu->actions()[8]);
 			menu->exec(event->globalPos());
 			delete menu;
@@ -468,13 +469,13 @@ namespace StructureSynth {
 
 			readSettings();
 		}
-		
-		
+
+
 
 		void MainWindow::createOpenGLContextMenu() {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(insertCameraSettingsAction);
-				
+
 			QAction* probeDepth  = new QAction(tr("Toggle 3D Object Information"), this);
 			connect(probeDepth, SIGNAL(triggered()), this, SLOT(toggleProbeDepth()));
 			openGLContextMenu->addAction(probeDepth);
@@ -634,7 +635,7 @@ namespace StructureSynth {
 			fileMenu->addAction(openAction);
 			fileMenu->addAction(saveAction);
 			fileMenu->addAction(saveAsAction);
-			
+
 			recentFileSeparator = fileMenu->addSeparator();
 			for (int i = 0; i < MaxRecentFiles; ++i)
 				fileMenu->addAction(recentFileActions[i]);
@@ -651,10 +652,13 @@ namespace StructureSynth {
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
 			renderMenu->addAction(exportAction);
+
+			renderMenu->addSeparator();
 			
+			renderMenu->addAction("Obj Export...", this, SLOT(exportToObj()));
 			// Scan render templates...
 			QStringList filters;
-			
+
 			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
 			renderMenu->addAction(rayTraceAction);
@@ -807,7 +811,7 @@ namespace StructureSynth {
 		bool MainWindow::saveFile(const QString &fileName)
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return false; } 
-			
+
 			QFile file(fileName);
 			if (!file.open(QFile::WriteOnly | QFile::Text)) {
 				QMessageBox::warning(this, tr("Structure Synth"),
@@ -926,7 +930,7 @@ namespace StructureSynth {
 
 				delete(rs); 
 				rs = 0;
-				
+
 			} catch (ParseError& pe) {
 				WARNING(pe.getMessage());
 				int pos = pe.getPosition();
@@ -1115,7 +1119,7 @@ namespace StructureSynth {
 				allowedTypes.append(a[i]);
 			}
 			QString filter = "Image Files (" + allowedTypesFilter.join(" ")+")";
-			
+
 			QString filename = QFileDialog::getSaveFileName(this, "Save Screenshot As...", QString(), filter);
 			if (filename.isEmpty()) {
 				INFO("User cancelled save...");
@@ -1153,13 +1157,13 @@ namespace StructureSynth {
 		void MainWindow::insertCameraSettings() {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
 
-			
+
 			getTextEdit()->insertPlainText(getCameraSettings());
 			INFO("Camera settings are now pasted into the script window.");
 			INFO("Remember to clear previous 'set' commands if necessary.");
 		}
 
-		
+
 
 		QString MainWindow::getScriptWithSettings(QString filename) {
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return ""; } 
@@ -1175,7 +1179,7 @@ namespace StructureSynth {
 		}
 
 		QString MainWindow::getCameraSettings() {
-		
+
 			Vector3f translation = engine->getTranslation();
 			Matrix4f rotation = engine->getRotation();
 			Vector3f pivot = engine->getPivot();
@@ -1233,106 +1237,106 @@ namespace StructureSynth {
 		void MainWindow::templateRender(const QString& fileName, Model::Rendering::Template* myTemplate, QString inputText,
 			int width, int height, bool postModify)
 		{
-				RandomStreams::SetSeed(getSeed());
-				if (inputText.isEmpty()) inputText = getTextEdit()->toPlainText();
-				INFO(QString("Random seed: %1").arg(getSeed()));
-				try {
-					if (width == 0) width = engine->width();
-					if (height == 0) height = engine->height();
-					TemplateRenderer rendering(*myTemplate);
-					Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
-					cameraRight.normalize();
-					rendering.setCamera(
-						engine->getCameraPosition(), 
-						engine->getCameraUp().normalized(), 
-						cameraRight,
-						engine->getCameraTarget(),
-						width, height, width/(double)height, engine->getFOV());
+			RandomStreams::SetSeed(getSeed());
+			if (inputText.isEmpty()) inputText = getTextEdit()->toPlainText();
+			INFO(QString("Random seed: %1").arg(getSeed()));
+			try {
+				if (width == 0) width = engine->width();
+				if (height == 0) height = engine->height();
+				TemplateRenderer rendering(*myTemplate);
+				Vector3f cameraRight=  (engine->getCameraPosition()-engine->getCameraTarget()).cross(engine->getCameraUp());
+				cameraRight.normalize();
+				rendering.setCamera(
+					engine->getCameraPosition(), 
+					engine->getCameraUp().normalized(), 
+					cameraRight,
+					engine->getCameraTarget(),
+					width, height, width/(double)height, engine->getFOV());
 
-					rendering.setBackgroundColor(engine->getBackgroundColor());
-					rendering.begin(); 
+				rendering.setBackgroundColor(engine->getBackgroundColor());
+				rendering.begin(); 
 
-					Preprocessor pp;
-					QString out = pp.Process(inputText);
-					bool showGUI = false;
-					out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
-					editorDockWidget->setHidden(!showGUI);
+				Preprocessor pp;
+				QString out = pp.Process(inputText);
+				bool showGUI = false;
+				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
+				editorDockWidget->setHidden(!showGUI);
 
-					Tokenizer tokenizer(out);
-					EisenParser e(&tokenizer);
-					INFO("Started Eisenstein engine...");
-					RuleSet* rs = e.parseRuleset();
+				Tokenizer tokenizer(out);
+				EisenParser e(&tokenizer);
+				INFO("Started Eisenstein engine...");
+				RuleSet* rs = e.parseRuleset();
 
-					rs->resolveNames();
+				rs->resolveNames();
 
-					rs->dumpInfo();
+				rs->dumpInfo();
 
-					Builder b(&rendering, rs, true);
-					b.build();
-					rendering.end();
+				Builder b(&rendering, rs, true);
+				b.build();
+				rendering.end();
 
-					if (b.seedChanged()) {
-						setSeed(b.getNewSeed());
-						INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
-					} 
+				if (b.seedChanged()) {
+					setSeed(b.getNewSeed());
+					INFO(QString("Builder changed seed to: %1").arg(b.getNewSeed()));
+				} 
 
-					QString output = rendering.getOutput();
+				QString output = rendering.getOutput();
 
-					if (postModify) {
-						// Post modify output.
-						QDialog* d = new QDialog(this);
-						QVBoxLayout* vl = new QVBoxLayout(d);
+				if (postModify) {
+					// Post modify output.
+					QDialog* d = new QDialog(this);
+					QVBoxLayout* vl = new QVBoxLayout(d);
 
-						d->resize(800,600);
-						QTextEdit* te = new QTextEdit(d);
-						vl->addWidget(te);
-						te->setText(output);
-						
-						QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-							| QDialogButtonBox::Cancel);
-						vl->addWidget(buttonBox);						
+					d->resize(800,600);
+					QTextEdit* te = new QTextEdit(d);
+					vl->addWidget(te);
+					te->setText(output);
 
-						connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
-						connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+					QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+						| QDialogButtonBox::Cancel);
+					vl->addWidget(buttonBox);						
 
-						if (d->exec() == QDialog::Accepted) {
-							output = te->toPlainText();
-						} else {
-							WARNING("User cancelled...");
-							return;
-						}
-					}
+					connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+					connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
 
-					if (fileName.isEmpty()){
-						QClipboard *clipboard = QApplication::clipboard();
-						clipboard->setText(output); 
-						INFO("Done...");
-						INFO("Script is now copied to the clipboard");
+					if (d->exec() == QDialog::Accepted) {
+						output = te->toPlainText();
 					} else {
-						QFile file(fileName);
-						INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
-						if (!file.open(QFile::WriteOnly | QFile::Text)) {
-							QMessageBox::warning(this, tr("Structure Synth"),
-								tr("Cannot write file %1:\n%2.")
-								.arg(fileName)
-								.arg(file.errorString()));
-							return;
-						}
+						WARNING("User cancelled...");
+						return;
+					}
+				}
 
-						QTextStream out(&file);
-						QApplication::setOverrideCursor(Qt::WaitCursor);
-						out << output;
-						QApplication::restoreOverrideCursor();
-						INFO("File saved.");
+				if (fileName.isEmpty()){
+					QClipboard *clipboard = QApplication::clipboard();
+					clipboard->setText(output); 
+					INFO("Done...");
+					INFO("Script is now copied to the clipboard");
+				} else {
+					QFile file(fileName);
+					INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
+					if (!file.open(QFile::WriteOnly | QFile::Text)) {
+						QMessageBox::warning(this, tr("Structure Synth"),
+							tr("Cannot write file %1:\n%2.")
+							.arg(fileName)
+							.arg(file.errorString()));
+						return;
 					}
 
-					delete(rs);
-					rs = 0;
-
-
-				} catch (Exception& er) {
-					WARNING(er.getMessage());
+					QTextStream out(&file);
+					QApplication::setOverrideCursor(Qt::WaitCursor);
+					out << output;
+					QApplication::restoreOverrideCursor();
+					INFO("File saved.");
 				}
+
+				delete(rs);
+				rs = 0;
+
+
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+			}
 
 		}
 
@@ -1432,7 +1436,7 @@ namespace StructureSynth {
 				recentFileActions[i]->setData(absPath);
 				recentFileActions[i]->setVisible(true);
 			}
-			
+
 			for (int j = numRecentFiles; j < MaxRecentFiles; ++j) recentFileActions[j]->setVisible(false);
 
 			recentFileSeparator->setVisible(numRecentFiles > 0);
@@ -1444,7 +1448,7 @@ namespace StructureSynth {
 			public:
 				Complex(double r, double i) : r(r), i(i) {};
 				Complex() : r(0), i(0) {};
-				
+
 				Complex operator*(const double& rhs) const { return Complex(r*rhs, i*rhs); }
 				Complex operator*(const Complex& rhs) const { return Complex(r*rhs.r-i*rhs.i,r*rhs.i+i*rhs.r); }
 				Complex operator+(const Complex& rhs) const { return Complex(r+rhs.r,i+rhs.i); }
@@ -1512,7 +1516,7 @@ namespace StructureSynth {
 			// View: (-2,-2) -> (2,2)
 			// C: (-0.375,0)
 			// Z0: 
-			
+
 			double dw = 100;
 			double dh = 100;
 			double dMax = 10;
@@ -1557,7 +1561,7 @@ namespace StructureSynth {
 				} else {
 					WARNING("Could not match: "+s);
 				}
-				
+
 			};
 			breakOut = breakOut*breakOut;
 			int w = (int)dw;
@@ -1565,10 +1569,10 @@ namespace StructureSynth {
 			int maxGen = (int)dMax;
 
 			Complex c(cR,cI);
-					
+
 			QDialog* d = new QDialog(this);
 			d->resize(w,h);
-			
+
 			QImage im(w,h, QImage::Format_RGB32);
 
 			QString termS = "Term: ";
@@ -1587,7 +1591,7 @@ namespace StructureSynth {
 					x = x*(x1-x0)+x0;
 					y = y*(y1-y0)+y0;
 					Complex z(x,y);
-					
+
 					int gen = 0;
 					//z=c;
 					Complex z0 = z;
@@ -1609,8 +1613,8 @@ namespace StructureSynth {
 					} else {
 						im.setPixel(i,j, qRgb(0,0,0));
 					}
-					
-					
+
+
 				}
 			}
 			QPixmap p = QPixmap::fromImage(im);
@@ -1627,9 +1631,9 @@ namespace StructureSynth {
 		PreviewWindow::PreviewWindow(MainWindow* mainWindow, QImage im) : QDialog(mainWindow), mainWindow(mainWindow), image(im) {
 			QVBoxLayout *layout = new QVBoxLayout(this);
 			setLayout(layout);
-			
+
 			QHBoxLayout* hlayout = new QHBoxLayout();
-			
+
 			QPushButton* pb = new QPushButton(this);
 			pb->setText("Save as Bitmap...");
 			connect(pb, SIGNAL(clicked()), this, SLOT(saveImage()));
@@ -1653,6 +1657,65 @@ namespace StructureSynth {
 		void PreviewWindow::saveImage() {
 			mainWindow->saveImage(image);
 		}
+
+		void MainWindow::exportToObj()
+		{
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+
+			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), "output.obj");
+			if (fileName.isEmpty()) {
+				INFO("User cancelled.");
+				return;
+			}
+
+			RandomStreams::SetSeed(getSeed());
+			QString inputText = getTextEdit()->toPlainText();
+
+			INFO(QString("Random seed: %1").arg(getSeed()));
+			try {
+				ObjRenderer renderer;
+				renderer.begin(); 
+
+				Preprocessor pp;
+				QString out = pp.Process(inputText);
+				bool showGUI = false;
+				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
+				editorDockWidget->setHidden(!showGUI);
+
+				Tokenizer tokenizer(out);
+				EisenParser e(&tokenizer);
+				INFO("Started Eisenstein engine...");
+				RuleSet* rs = e.parseRuleset();
+				rs->resolveNames();
+				rs->dumpInfo();
+
+				Builder b(&renderer, rs, true);
+				b.build();
+				renderer.end();
+
+
+				QFile file(fileName);
+				INFO("Writing to file: " + QFileInfo(file).absoluteFilePath());
+				if (!file.open(QFile::WriteOnly | QFile::Text)) {
+					QMessageBox::warning(this, tr("Structure Synth"),
+						tr("Cannot write file %1:\n%2.")
+						.arg(fileName)
+						.arg(file.errorString()));
+					return;
+				}
+
+				QTextStream out2(&file);
+				QApplication::setOverrideCursor(Qt::WaitCursor);
+				renderer.writeToStream(out2);
+				QApplication::restoreOverrideCursor();
+				INFO("File saved.");
+				delete(rs);
+			} catch (Exception& er) {
+				WARNING(er.getMessage());
+			}
+
+		}
+
 
 	}
 
