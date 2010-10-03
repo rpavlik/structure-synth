@@ -1,6 +1,7 @@
  
 Changelog for Structure Synth:
 ------------
+03 Oct 10 [MHC] Started implementing an OBJ exporter.
 
 22 Sep 10 [MHC] Added 'set raytracer::light [x,y,z]' command
 				Added 'set perspective-angle <angle>' command (still a bit fuzzy)

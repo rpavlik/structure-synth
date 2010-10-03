@@ -97,6 +97,7 @@ namespace StructureSynth {
 			void templateRender(const QString& fileName);
 			
 			void openFile();
+			void exportToObj();
 			void raytrace();
 			void newFile();
 			void open();

@@ -49,6 +49,12 @@ namespace SyntopiaCore {
 				return m;
 			};
 
+			static Matrix4<scalar> ScaleMatrix(scalar s) { 
+				Matrix4<scalar> m;
+				m.v[0] = s; m.v[5] = s; m.v[10] = s; m.v[15] = 1; 
+				return m;
+			};
+
 			/// at(row, col) return a copy of the value.
 			scalar at(int row, int col) const { return v[row+col*4]; }
 			scalar at(int index) const { return v[index]; }
