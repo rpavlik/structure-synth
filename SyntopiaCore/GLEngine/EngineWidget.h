@@ -104,13 +104,14 @@ namespace SyntopiaCore {
 			QVector<GLEngine::Command> getRaytracerCommands() { return raytracerCommands; }
 			
 			void setupFragmentShader(); // For experimenting with shader effects.
-
+			void setImage(QImage im);
 		protected:
 			void mouseMoveEvent(QMouseEvent* ev) ; 
-			void contextMenuEvent (QContextMenuEvent* ev );
-			void mouseReleaseEvent ( QMouseEvent * event );
+			void contextMenuEvent (QContextMenuEvent* ev);
+			void mouseReleaseEvent ( QMouseEvent * ev);
 			void initializeGL();
 			void timerEvent( QTimerEvent * );
+			void paintEvent(QPaintEvent * ev);  
 
 			/// Actual drawing is implemented here
 			void paintGL();
@@ -169,6 +170,7 @@ namespace SyntopiaCore {
 			bool showDepth;
 
 			QMainWindow* mainWindow;
+			QImage staticImage;
 		};
 	};
 

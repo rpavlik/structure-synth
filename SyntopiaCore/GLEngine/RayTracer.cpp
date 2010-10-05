@@ -15,12 +15,6 @@ namespace SyntopiaCore {
 
 		using namespace SyntopiaCore::Logging;
 
-
-		namespace {
-
-			
-		}
-
 		
 		RayTracer::RayTracer(EngineWidget* engine) {
 			for (int i = 0; i < 16; i++) modelView[i] = engine->getModelViewCache()[i];
@@ -50,7 +44,6 @@ namespace SyntopiaCore {
 				setParameter(c.command, arg);
 			}
 			rt.backgroundColor = engine->getBackgroundColor();
-
 		
 		}
 
@@ -165,6 +158,12 @@ namespace SyntopiaCore {
 			threads.append(&rt);
 			for (int i = 1; i < maxThreads; i++) {
 				threads.append( new RenderThread(rt));	
+			}
+
+			// To avoid coherence we will seed the threads differently.
+			// (This was actually very visible near the left of the window).
+			for (int i = 0; i < maxThreads; i++) {
+				threads[i]->seed(rg.getInt());
 			}
 			
 			startJobs(progress);
@@ -350,7 +349,7 @@ namespace SyntopiaCore {
 					.arg(rt.ambMaxRays));
 			} else if (param == "samples") {
 				MiniParser(value, ',').getInt(rt.aaSamples);
-				INFO(QString("Samples per pixel (anti-alias or DOF): %3x%3 ")
+				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")
 					.arg(rt.aaSamples).arg(rt.aaSamples));
 			} else if (param == "dof") {
 				MiniParser(value, ',').getDouble(rt.dofCenter).getDouble(rt.dofFalloff);

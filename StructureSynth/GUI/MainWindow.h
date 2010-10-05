@@ -90,6 +90,7 @@ namespace StructureSynth {
 			void closeTab();
 			void launchSfHome();
 			void fastRotateChanged();
+			void raytraceClicked();
 			void launchGallery();
 			void launchReferenceHome();
 			void templateRender();
@@ -178,6 +179,7 @@ namespace StructureSynth {
 
 			QVBoxLayout* frameMainWindow;
 			QCheckBox* fastRotateCheckbox;
+			QPushButton* raytracePushButton;
 			VariableEditor* variableEditor;
 			QDockWidget* editorDockWidget;
 

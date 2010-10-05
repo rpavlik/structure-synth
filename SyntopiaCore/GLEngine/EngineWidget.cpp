@@ -47,10 +47,49 @@ namespace SyntopiaCore {
 			//setupFragmentShader();
 		}
 
+		void EngineWidget::paintEvent(QPaintEvent * ev) {
+			if (staticImage.isNull()) {
+				QGLWidget::paintEvent(ev);
+			} else {
+				setAutoFillBackground(false);
+				glDisable( GL_CULL_FACE );
+				glDisable( GL_LIGHTING );
+				glDisable( GL_DEPTH_TEST );
+				glViewport(0,0,width(),height());
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				gluOrtho2D(0,100,0,100);
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+				
+				QPainter p;
+				p.begin(this);
+				p.drawImage(QPoint(0,0), staticImage);
+				p.end();
+				ev->accept();
+				pendingRedraws = 0;
+				
+			}
+		}
+
+
 		void EngineWidget::setFastRotate(bool enabled) {
 			fastRotate = enabled;
 		}
 
+		void EngineWidget::setImage(QImage im) {
+			staticImage = im; 
+			if (im.isNull()) {
+				glEnable( GL_CULL_FACE );
+				glEnable( GL_LIGHTING );
+				glEnable( GL_DEPTH_TEST );
+				updatePerspective();
+				initializeGL();
+			} else {
+				update();
+			}
+			
+		} 
 
 		EngineWidget::~EngineWidget() {
 		}
@@ -89,12 +128,14 @@ namespace SyntopiaCore {
 		}
 
 		void EngineWidget::requireRedraw() {
+			if (!staticImage.isNull()) setImage(QImage());
 			pendingRedraws = requiredRedraws;
 		}
 
 		void vertexm(SyntopiaCore::Math::Vector3f v) { glVertex3f(v.x(), v.y(), v.z()); }
 
 		void EngineWidget::setupFragmentShader() {
+			// As of now, these are not used...
 
 			shaderProgram = new QGLShaderProgram(this);
 			bool s = shaderProgram->addShaderFromSourceCode(QGLShader::Vertex,
@@ -164,7 +205,11 @@ namespace SyntopiaCore {
 		}
 
 
-		void EngineWidget::paintGL() {			
+		void EngineWidget::paintGL() {
+			if (!staticImage.isNull()) {
+				return;
+			}
+			
 			static int count = 0;
 			count++;
 
@@ -282,6 +327,7 @@ namespace SyntopiaCore {
 		};
 
 		void EngineWidget::updatePerspective() {
+			if (!staticImage.isNull()) return;
 			if (height() == 0) return;
 
 			GLfloat w = (float) width() / (float) height();
@@ -319,6 +365,7 @@ namespace SyntopiaCore {
 
 		void EngineWidget::initializeGL()
 		{
+			if (!staticImage.isNull()) return;
 			requireRedraw();
 
 			GLfloat pos[4] = {-55.0f, -25.0f, 20.0f, 1.0f };
