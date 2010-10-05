@@ -16,7 +16,7 @@ namespace SyntopiaCore {
 		/// If set to useStdLib, the CStdLib 'rand' and 'srand' functions are used - these are not independent - not even with multiple instances of this class.
 		class RandomNumberGenerator {
 		public:
-			RandomNumberGenerator(bool useOldLibrary = false) { if (useOldLibrary) { rng = 0; } else { rng = new MTRand(); } setSeed(0); };
+			RandomNumberGenerator(bool useOldLibrary = false) : uniformCounter2D(0), uniformCounter3D(0) { if (useOldLibrary) { rng = 0; } else { rng = new MTRand(); } setSeed(0); };
 			~RandomNumberGenerator() { delete rng; };
 
 			// This is only useful for backward compatibility.

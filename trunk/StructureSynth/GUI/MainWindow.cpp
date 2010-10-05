@@ -760,12 +760,26 @@ namespace StructureSynth {
 			renderToolBar->addWidget(fastRotateCheckbox);
 			fastRotateCheckbox->setChecked(false);
 
+			raytracePushButton = new QPushButton("Raytrace preview", randomToolBar);
+			connect(raytracePushButton, SIGNAL(clicked()), this, SLOT(raytraceClicked()));
+			renderToolBar->addWidget(raytracePushButton);
+
+
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
 
 		void MainWindow::fastRotateChanged() {
 			engine->setFastRotate(fastRotateCheckbox->isChecked());
 		}
+
+		void MainWindow::raytraceClicked() {
+			RayTracer rt(engine);
+			QImage im = rt.calculateImage(engine->width(),engine->height());
+			engine->setImage(im);
+		}
+
+
+
 
 		void MainWindow::seedChanged() {
 			autoIncrementCheckbox->setChecked(false);

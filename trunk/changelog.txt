@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+05 Oct 10 [MHC] Added 'Raytrace preview' button. Fixed bug: random seeds are no longer synchronized between threads.
+[3h]
+
 04 Oct 10 [MHC] OBJ exporter: now prunes geometry a bit, added normals, groups according to tagging.
 [2h]
 

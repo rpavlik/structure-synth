@@ -27,6 +27,7 @@ namespace SyntopiaCore {
 			static void msleep(int i) { QThread::msleep(i); }
 			void run();
 			Vector3f rayCastPixel(float x, float y);
+			void seed(int value) { rg.setSeed(value); };
 			Vector3f rayCastPixelWithDOF(float x, float y);
 			double getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection);
 			Vector3f rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level = 0);
