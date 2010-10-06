@@ -2,7 +2,7 @@
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "Object3D.h"
-#include "RayTraceTriangle.h"
+#include "RaytraceTriangle.h"
 
 
 namespace SyntopiaCore {
