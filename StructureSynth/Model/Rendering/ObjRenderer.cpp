@@ -135,9 +135,11 @@ namespace StructureSynth {
 				group.faces.append(vns);
 			}
 
-			void ObjRenderer::setClass(QString classID, Vector3f /*rgb*/, double /*alpha*/) {
-
-				QString className = classID; // TODO: add in rgb+alpga?
+			void ObjRenderer::setClass(QString classID, Vector3f rgb, double /*alpha*/) {
+				// Should we also group by alpha channel?
+				QString className;
+				if (groupByTagging) className += classID;
+				if (groupByColor) className += QColor(int(rgb[0]*255),int(rgb[1]*255),int(rgb[2]*255)).name();
 				if (className.isEmpty()) className = "default";
 				if (!groups.contains(className)) groups[className] = ObjGroup();
 				groups[className].groupName = className;
@@ -207,7 +209,7 @@ namespace StructureSynth {
 
 				Matrix4f m  = Matrix4f::Translation(center.x(),center.y(),center.z())*(Matrix4f::ScaleMatrix(radius));
 
-				CreateUnitSphere(30,30,groups[currentGroup],m);
+				CreateUnitSphere(sphereDT,sphereDP,groups[currentGroup],m);
 			};
 
 			void ObjRenderer::begin() {

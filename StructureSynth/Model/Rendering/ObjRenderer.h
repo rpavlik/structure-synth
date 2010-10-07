@@ -33,7 +33,8 @@ namespace StructureSynth {
 			/// Obj file renderer
 			class ObjRenderer : public Renderer {
 			public:
-				ObjRenderer() {};
+				ObjRenderer(int sphereDT, int sphereDP, bool groupByTagging, bool groupByColor) 
+					: sphereDT(sphereDT), sphereDP(sphereDP), groupByTagging(groupByTagging), groupByColor(groupByColor) {};
 				virtual ~ObjRenderer() {};
 
 				/// Flow
@@ -111,6 +112,10 @@ namespace StructureSynth {
 				QString currentGroup;
 				SyntopiaCore::Math::Vector3f rgb;
 				double alpha;
+				int sphereDT;
+				int sphereDP;
+				bool groupByTagging; 
+				bool groupByColor;
 
 			};
 
