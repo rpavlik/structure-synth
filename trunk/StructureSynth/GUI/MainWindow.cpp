@@ -8,6 +8,7 @@
 #include <QStack>
 #include <QImage>
 #include <QPixmap>
+#include <QDialogButtonBox>
 
 #include "MainWindow.h"
 #include "VariableEditor.h"
@@ -1672,9 +1673,75 @@ namespace StructureSynth {
 			mainWindow->saveImage(image);
 		}
 
+		namespace {
+			class ObjDialog : public QDialog {
+			public:
+				ObjDialog(QWidget* parent) : QDialog(parent) {
+					/*
+					Group by tagging [x]
+					Group by color   [ ]
+					Sphere resolution: D-Theta [x] degrees, D-Phi [x] degrees.
+
+					2.6GB Memory, 
+					3.9M Polygons,
+					*/
+					setWindowTitle("Obj Export Settings");
+					QVBoxLayout* vl = new QVBoxLayout(this);
+					//resize(800,600);
+					
+					groupByTaggingCheckBox = new QCheckBox("Group by Tagging", this);
+					vl->addWidget(groupByTaggingCheckBox);
+					groupByTaggingCheckBox->setChecked(true);
+					groupByColorCheckBox = new QCheckBox("Group by Color", this);
+					vl->addWidget(groupByColorCheckBox);
+					
+					QHBoxLayout* hl = new QHBoxLayout(this);
+					
+					QLabel* l = new QLabel(QString("Sphere resolution: %1%2=").
+						arg(QChar(948)).arg(QChar(952)), this);
+					spinBox1 = new QSpinBox(this);
+					spinBox1->setMinimum(1);
+					spinBox1->setMaximum(30);
+					spinBox1->setValue(15);
+					QLabel* l2 = new QLabel(QString(" degrees, %4%5=").
+						arg(QChar(948)).arg(QChar(966)).arg(QChar(176)), this);
+					spinBox2 = new QSpinBox(this);
+					spinBox2->setMinimum(1);
+					spinBox2->setMaximum(30);
+					spinBox2->setValue(15);
+					QLabel* l3 = new QLabel(QString(" degrees."));
+					hl->addWidget(l);
+					hl->addWidget(spinBox1);
+					hl->addWidget(l2);
+					hl->addWidget(spinBox2);
+					hl->addWidget(l3);
+					vl->addLayout(hl);
+
+					QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+					vl->addWidget(buttonBox);						
+
+					connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+					connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+					vl->addWidget(buttonBox);
+				};
+				
+				QSpinBox* spinBox1;
+				QSpinBox* spinBox2;
+				QCheckBox* groupByTaggingCheckBox;
+				QCheckBox* groupByColorCheckBox ;
+
+			};
+		}
+
 		void MainWindow::exportToObj()
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+
+			ObjDialog od(this);
+			if (od.exec() == QDialog::Rejected) return;
+			int dt = od.spinBox1->value();
+			int dp = od.spinBox2->value();
 
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), "output.obj");
 			if (fileName.isEmpty()) {
@@ -1687,7 +1754,7 @@ namespace StructureSynth {
 
 			INFO(QString("Random seed: %1").arg(getSeed()));
 			try {
-				ObjRenderer renderer;
+				ObjRenderer renderer(dt,dp, od.groupByTaggingCheckBox->isChecked(), od.groupByColorCheckBox->isChecked() );
 				renderer.begin(); 
 
 				Preprocessor pp;

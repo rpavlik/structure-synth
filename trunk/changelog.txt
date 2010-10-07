@@ -1,6 +1,9 @@
  
 Changelog for Structure Synth:
 ------------
+07 Oct 10 [MHC] More Obj export: added settings dialog.
+[1h]
+
 05 Oct 10 [MHC] Added 'Raytrace preview' button. Fixed bug: random seeds are no longer synchronized between threads.
 [3h]
 
