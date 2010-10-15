@@ -148,13 +148,10 @@ namespace SyntopiaCore {
 				rt.lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
 			}
 
-			aaPixels = 0;
-			
-			bool disableAdaptiveAA = rt.aaSamples<0;
 			
 			rt.aaSamples=abs(rt.aaSamples);
 			rt.setCounters(&nextUnit, &completedUnits, maxUnits);
-			rt.setTask(RenderThread::RayTrace);
+			rt.setTask(RenderThread::Raytrace);
 			threads.append(&rt);
 			for (int i = 1; i < maxThreads; i++) {
 				threads.append( new RenderThread(rt));	
@@ -166,143 +163,10 @@ namespace SyntopiaCore {
 				threads[i]->seed(rg.getInt());
 			}
 			
+			for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::Raytrace);
 			startJobs(progress);
-			
 			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
-			start = QTime::currentTime();
-
-
-			progress.setLabelText("Ambient Occlusion (Step 2/3)...");
-
-			int step = rt.occlusionSampleStepSize;
-			if ( rt.ambMaxRays>0 && step>0) {
-				double tr = 0.99;
-
-				for (int x = 0; x < w; x=x+1) {
-					for (int y = 0; y < h; y=y+1) {	
-						bool sample = false;
-						if ((y % step == 0) && (x % step == 0)) { sample = true; } 	
-						else if ((x > 0) && 
-							(rt.objs[x+y*w]!=rt.objs[x+y*w-1] || Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w-1])<tr)) { sample = true; }
-						else if ((y > 0) && 
-							(rt.objs[x+y*w]!=rt.objs[x+y*w-w] || Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w-w])<tr)) { sample = true; }
-						else if ((y < h-1) && 
-							(rt.objs[x+y*w]!=rt.objs[x+y*w+w] || Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w+w])<tr)) { sample = true; }
-						else if ((x < w-1) && 
-							(rt.objs[x+y*w]!=rt.objs[x+y*w+1] || Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w+1])<tr)) { sample = true; }
-
-						if (!sample || rt.depths[x+y*w] > 1) { 
-							rt.aoMap[x+y*w] = 1;
-							continue;
-						}
-					}
-				}
-	
-					
-                // Call threads....
-				for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::AmbientOcclusion);
-				startJobs(progress);
-
-				for (int i = 0; i<w*h; i++) if (rt.depths[i]>1) rt.aoMap[i] = 1;
-
-				double* aoMap2 = new double[w*h];
-				for (int i = 0; i<w*h; i++) aoMap2[i] = rt.aoMap[i];
-
-				// Fill with simple
-				for (int y = 0; y < h; y=y+step) {
-					for (int x = 0; x < w; x=x+step) {
-						double d = rt.aoMap[x+y*w];;
-						for (int yy = 0; yy < step; yy++) {
-							for (int xx = 0; xx < step; xx++) {
-								if ((x+xx>=w) || (y+yy>=h)) continue;
-								if ((xx == 0 && yy == 0) || rt.aoMap[xx+x+(y+yy)*w]>=0) 
-									d = rt.aoMap[xx+x+(y+yy)*w];
-								aoMap2[xx+x+(y+yy)*w] =  d;
-							}
-						}	
-					}
-				}
-
-
-				tr = 0.9;
-				const int f = 10;
-				for (int i = 0; i< rt.ambSmooth; i++) {
-					for (int y = 1 ; y < h-1; y++) {
-						for (int x = 1 ; x < w-1; x++) {
-							int c = rt.aoMap[x+y*w+1]<0 ? 1 : f;
-							double d = c*aoMap2[x+y*w];
-							if (rt.objs[x+y*w]==rt.objs[x+y*w+1] && Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w+1])>tr) { int n = rt.aoMap[x+y*w+1]<0 ? 1 : f ; c=c+n; d+=n*aoMap2[x+y*w+1]; };
-							if (rt.objs[x+y*w]==rt.objs[x+y*w+w] && Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w+w])>tr) { int n = rt.aoMap[x+y*w+w]<0 ? 1 : f ; c=c+n; d+=n*aoMap2[x+y*w+w]; };
-							if (rt.objs[x+y*w]==rt.objs[x+y*w-w] && Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w-w])>tr) { int n = rt.aoMap[x+y*w-w]<0 ? 1 : f ; c=c+n; d+=n*aoMap2[x+y*w-w]; };
-							if (rt.objs[x+y*w]==rt.objs[x+y*w-1] && Vector3f::dot(rt.normals[x+y*w],rt.normals[x+y*w-1])>tr) { int n = rt.aoMap[x+y*w-1]<0 ? 1 : f ; c=c+n; d+=n*aoMap2[x+y*w-1]; };
-							d = d/c;
-							aoMap2[x+y*w] = d;	
-						}
-					}
-
-
-				}
-
-
-				for (int i = 0; i<w*h; i++) rt.aoMap[i] = aoMap2[i];
-				delete[] aoMap2;
-
-
-
-			} else {
-				for (int i = 0; i<w*h; i++) rt.aoMap[i] = 1;
-
-			}
-
-			if	(progress.wasCanceled()) {
-				for (int i = 0; i<w*h; i++) if (rt.aoMap[i] == -1) rt.aoMap[i] = 1.0;
-			}
-		
-			double aoTime = start.msecsTo(QTime::currentTime())/1000.0;
-			start = QTime::currentTime();
-
-			progress.setLabelText("Raytracing Anti-Alias (Step 3/3)...");
-
-			int aaPixels = 0;
-			if (rt.aaSamples>0) {
-				const float threshold = 0.1f*0.1f;
-
-				// Determine which parts to anti-alias
-				// As of now, only color information is used,
-				// but we also have normals, depths, objects and so on,
-				// if we need more fine-grained control.
-				for (int x = 1; x+1 < w; x++) {
-					for (int y = 1; y+1 < h; y++) {
-						Vector3f c1 = rt.colors[x+y*w];
-						
-						if (disableAdaptiveAA || (rt.dofFalloff !=0 || 
-							cdist(c1,rt.colors[x+1+y*w]) > threshold ||
-							cdist(c1,rt.colors[x-1+y*w]) > threshold ||
-							cdist(c1,rt.colors[x+(y+1)*w]) > threshold ||
-							cdist(c1,rt.colors[x+(y-1)*w]) > threshold))
-						{
-							rt.depths[x+y*w] = 0;
-							aaPixels++;
-						} else {
-							rt.depths[x+y*w] = 1;
-						}
-					}
-				}
-
-				/// Multithread the actual anti-aliasing
-				for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::AntiAlias);
-				startJobs(progress);
-			} else {
-				/// Just apply the ambient occlusion map.
-				for (int x = 0; x < w; x++) {
-					for (int y = 0; y < h; y++) {
-						rt.colors[x+y*w]=rt.colors[x+y*w]*rt.aoMap[x+y*w];
-					}
-				}
 			
-			}
-
-
 			for (int x = 0; x < w; x++) {
 				for (int y = 0; y < h; y++) {
 					Vector3f c = rt.colors[x+y*w];
@@ -311,22 +175,15 @@ namespace SyntopiaCore {
 			}
 
 			for (int i = 0; i < maxThreads; i++) {
-				//INFO(threads[i]->isFinished() ? "isFinished" : "isNot");
 				if (i!=0) delete(threads[i]);
 			}
-			double aaTime = start.msecsTo(QTime::currentTime())/1000.0;
-
-			INFO(QString("Time: %1s (rendering %2s, ambient occlusion %3s, anti-alias %4s)")
-				.arg(renderTime+aoTime+aaTime).arg(renderTime).arg(aoTime).arg(aaTime));
-			//INFO(QString("Pixels: %1, Object checks: %2, Objects checked per pixel: %3").
-			//	arg(pixels).arg(checks).arg(checks/(float)pixels));
-			INFO(QString("Pixels: %1, Anti-aliased pixels: %2 (percentage: %3%)").
-				arg(w*h).arg(aaPixels).arg((100.0*aaPixels)/(float)(w*h),0,'f',2));
-
+			
+			INFO(QString("Time: %1s")
+				.arg(renderTime));
+			INFO(QString("Pixels: %1.").
+				arg(w*h));
 
 			progress.close();
-
-
 			return im;
 		}
 

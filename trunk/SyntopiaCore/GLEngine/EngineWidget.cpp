@@ -1,5 +1,6 @@
 #include "EngineWidget.h"
 #include "../Math/Vector3.h"
+#include "../Math/Random.h"
 #include "../Logging/Logging.h"
 
 #include "Sphere.h"
@@ -269,6 +270,42 @@ namespace SyntopiaCore {
 			renderText(10, 20, infoText);
 
 			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
+				
+				
+				/*
+				glDisable (GL_LIGHTING);
+
+				glPointSize(3);
+				glColor4f(1,1,1,1);
+				glBegin(GL_POINTS);
+				double stepX = 1.0/160.0;
+				Math::RandomNumberGenerator rg;
+				static int seeder = 0;
+				//rg.setSeed(seeder++);
+
+				for (double uz1 = 0; uz1 <=1; uz1+=stepX)
+				{
+					for (double uz2 = 0; uz2 <=1; uz2+=stepX)
+					{
+						double u1 = rg.getDouble(0,1);
+						double u2 = rg.getDouble(0,1);
+						u1 = uz1;
+						u2 = uz2;
+						double z = 1.0 - 2.0*u1;
+						double r = r = sqrt(1.0-z*z);
+						double phi = 2.0 * 3.1415926 * u2;
+						double x = r * cos(phi);
+						double y = r * sin(phi);
+						glVertex3d(x,y,z);
+					}
+				}
+				
+				glEnd();
+				
+				glEnable (GL_LIGHTING);
+
+				*/
+
 				// Fast-draw
 				int objs =  objects.size();
 				int step = objs/5000;

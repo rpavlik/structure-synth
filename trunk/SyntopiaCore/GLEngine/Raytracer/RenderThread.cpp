@@ -6,6 +6,74 @@ using namespace SyntopiaCore::Math;
 
 namespace SyntopiaCore {
 	namespace GLEngine {
+		
+			class Sampler {
+			public:
+				Sampler(Math::RandomNumberGenerator* rg) : rg(rg) {
+				}
+				
+				virtual Vector3f getAODirection() {
+					return rg->getUniform3D();
+				}
+
+				virtual Vector3f getLensSample() {
+					return rg->getUniform2D();
+				}
+
+				virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt) {};
+
+			protected:
+				Math::RandomNumberGenerator* rg;
+			};
+
+			class StratifiedSampler : public Sampler {
+			public:
+				StratifiedSampler(Math::RandomNumberGenerator* rg) : Sampler(rg) {
+					aoSampleIndex = 0;
+				}
+
+				virtual Vector3f getAODirection() {
+					//return rg->getUniform3D();
+					if (aoSampleIndex>=aoSamples.count()) throw 1;
+					return aoSamples[aoSampleIndex++];
+				}
+
+				virtual Vector3f getLensSample() {
+					return rg->getUniform2D();
+				}
+
+				// Based on the Physical Based Rendering book
+				Vector3f sampleSphere(double u1, double u2) {
+					double z = 1.0 - 2.0*u1;
+					double r = 0;
+					if (1.0-z*z > 0) r = sqrt(1.0-z*z);
+					double phi = 2.0 * 3.1415926 * u2;
+					double x = r * cos(phi);
+					double y = r * sin(phi);
+					return Vector3f(x,y,z);
+				}
+
+				virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt) {
+					aoSamples = QVector<Vector3f>(nSamplesSqrt*nSamplesSqrt);
+					int count = 0;
+					for (int i = 0; i < nSamplesSqrt; i++) {
+						for (int j = 0; j < nSamplesSqrt; j++) {
+							// we need a uniform number in the interval
+							// [i/nSamplesSqrt;(i+1)/nSamplesSqrt]
+							double x = rg->getDouble( ((double)i)/(double)nSamplesSqrt,((double)(i+1.0))/(double)nSamplesSqrt);
+							double y = rg->getDouble( ((double)j)/(double)nSamplesSqrt,((double)(j+1.0))/(double)nSamplesSqrt);
+							aoSamples[count++] = sampleSphere(x,y);
+							//aoSamples.append(rg->getUniform3D());
+						}	
+					}
+					aoSampleIndex = 0;
+				};
+			private:
+				int aoSampleIndex;
+				QVector<Vector3f> aoSamples;
+				QVector<Vector3f> lensSamples;
+			};
+
 		RenderThread::RenderThread() {
 			backgroundColor = Vector3f(0,0,0);
 			occlusionSampleStepSize = 0;
@@ -18,9 +86,10 @@ namespace SyntopiaCore {
 
 			dofCenter = 0;
 			dofFalloff = 0;
-
+			sampler = new StratifiedSampler(&rg);
 		}
 
+		
 		RenderThread::~RenderThread() {
 			if (!copy) {
 				delete[] aoMap;
@@ -31,6 +100,7 @@ namespace SyntopiaCore {
 				delete[] intersections;
 			}
 			delete accelerator;
+			delete sampler;
 		}
 
 
@@ -81,23 +151,10 @@ namespace SyntopiaCore {
 			pixels = 0;
 			checks = 0;
 			rg.randomizeUniformCounter(); // to avoid coherence between threads
+			sampler = new Sampler(&rg);
 		};
 
-		void RenderThread::render() {
-			for (int x = 0; x < w; x++) {
-				float fx = x/(float)(w);
-
-				for (int y = 0; y < h; y++) {	
-					float fy = y/(float)(h);
-					Vector3f colorn = rayCastPixel(fx,fy);
-					colors[x+y*w] = colorn;
-					depths[x+y*w] = depth;
-					normals[x+y*w] = normal;
-					intersections[x+y*w] = intersection;
-					objs[x+y*w] = hitObject;
-				}
-			}
-		}
+		
 
 		double RenderThread::getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection) {
 			
@@ -106,16 +163,8 @@ namespace SyntopiaCore {
 				int hits = 0;
 				for (int ix = 0; ix < ambMaxRays; ix++) {
 					tests++;
-					// Use monte carlo sampling to obtain random vector.
-
-					/*
-					Vector3f random ;
-					do {
-						random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
-					} while (random.sqrLength() > 1);
-					*/
-					//Vector3f random = rg.getUniform3DFromTable();
-					Vector3f random = rg.getUniform3D();
+					
+					Vector3f random = sampler->getAODirection();
 					random.normalize();
 					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
 
@@ -140,28 +189,19 @@ namespace SyntopiaCore {
 				return 1-hits/(double)tests;
 		}
 
-		void RenderThread::ambientOcclusion(int newUnit) {
-			int x = newUnit-1;
-			for (int y = 0; y < h; y++) {	
-				if (aoMap[x+y*w] != -1) continue;
-				//rg.setUniformCounter3D(0);
-				aoMap[x+y*w] =  getAOStrength(objs[x+y*w],normals[x+y*w],intersections[x+y*w]);
-			}
-		};
-
-		void RenderThread::antiAlias(int newUnit) {
+		
+		void RenderThread::raytrace(int newUnit) {
 			int x = newUnit-1;
 			float fx = x/(float)(w);
 			float xs = (1.0/w);
 			float ys = (1.0/h);
+
 				
 			for (int y = 0; y < h; y++) {	
-				float fy = y/(float)(h);
-				if (depths[x+y*w] != 0) {
-					colors[x+y*w] = colors[x+y*w]*aoMap[x+y*w];
-					continue;
-				}
 
+				sampler->prepareSamples(aaSamples,1);
+			
+				float fy = y/(float)(h);
 				Vector3f color(0,0,0);
 
 				unsigned int steps = aaSamples;
@@ -170,53 +210,25 @@ namespace SyntopiaCore {
 
 				for (unsigned int xo = 0; xo < steps; xo++) {
 					for (unsigned int yo = 0; yo < steps; yo++) {
-						//rg.setUniformCounter3D(0);
-				
-						if (dofFalloff==0) {
-							Vector3f c = rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
-														(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
-							color = color + c * getAOStrength(hitObject, normal, intersection);
-						} else {
-							Vector3f c =  rayCastPixelWithDOF(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
+							Vector3f c =  rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 													(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
 							color = color + c * getAOStrength(hitObject, normal, intersection);
-						}
 					}
 				}
 				
-
 				color = color / (steps*steps);
 				colors[x+y*w] = color;
-
 			}
 		};
 
-		void RenderThread::rayTrace(int newUnit) {
-			int x = newUnit-1;
-			float fx = x/(float)(w);
 		
-			for (int y = 0; y < h; y++) {	
-				float fy = y/(float)(h);
-				Vector3f colorn = rayCastPixel(fx,fy);
-				colors[x+y*w] = colorn;
-				depths[x+y*w] = depth;
-				normals[x+y*w] = normal;
-				intersections[x+y*w] = intersection;
-				objs[x+y*w] = hitObject;
-			}
-
-
-		}
-
 		void RenderThread::run() {
 			int newUnit = nextUnit->increase();
 			while (newUnit <= maxUnits) {
 				// do work here...
 				switch (task) {
-					case RayTrace: rayTrace(newUnit); break;
-					case AmbientOcclusion: ambientOcclusion(newUnit); break;
-					case AntiAlias: antiAlias(newUnit); break;
-					default: rayTrace(newUnit);
+					case Raytrace: raytrace(newUnit); break;
+					default: throw(1);
 				}
 				completedUnits->increase();
 				newUnit = nextUnit->increase();
@@ -249,39 +261,29 @@ namespace SyntopiaCore {
 		}
 
 
+	
+
 		Vector3f RenderThread::rayCastPixel(float x, float y) {
-
-			Vector3f startPoint = frontStart + frontX*x + frontY*y;
-			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
-			Vector3f direction = endPoint - startPoint;
-
-			return rayCast(startPoint, direction, 0);
-		}
-
-		Vector3f RenderThread::rayCastPixelWithDOF(float x, float y) {
 		
 			Vector3f startPoint = frontStart + frontX*x + frontY*y;
 			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
-			Vector3f centerPoint =(endPoint-startPoint)* dofCenter+ startPoint;
+			
+			if (dofCenter == 0) {
+				Vector3f direction = endPoint - startPoint;
+				return rayCast(startPoint, direction, 0);
+			} else {
+				Vector3f centerPoint =(endPoint-startPoint)* dofCenter+ startPoint;
+				// --- Uniform Disc Sampling
+				Vector3f displace = sampler->getLensSample()*dofFalloff;
+				Vector3f newStartPoint = frontStart + frontX*(x+displace.x())+ frontY*(y+displace.y());	
+				Vector3f direction = (centerPoint - newStartPoint)*(1/dofCenter);
+				return rayCast(newStartPoint, direction, 0);
+			}
 
-			
-			// --- Uniform Disc Sampling
-			//Vector3f displace = rg.getUniform2DFromTable()*dofFalloff;
-			//Vector3f newStartPoint = frontStart + frontX*(x+displace.x())+ frontY*(y+displace.y());
-			
-			double angle = rg.getDouble(0,2*3.1415);
-			//double radius = rg.getNormal(dofFalloff);
-			double radius = rg.getDouble(0,dofFalloff);
-			Vector3f newStartPoint = frontStart + frontX*(x+cos(angle)*radius) 
-												+ frontY*(y+sin(angle)*radius);
-			
-			Vector3f direction = (centerPoint - newStartPoint)*(1/dofCenter);
-
-			return rayCast(newStartPoint, direction, 0);
 		}
 
 		Vector3f RenderThread::rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level) {
-			if (level>15) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
+			if (level>4) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
 			rayID++;
 			pixels++;
 
@@ -414,11 +416,7 @@ namespace SyntopiaCore {
 					for (int ix = 0; ix < ambMaxRays; ix++) {
 						tests++;
 						// Use monte carlo sampling to obtain random vector.
-						Vector3f random ;
-						do {
-							random = Vector3f(rg.getDouble(-1,1),rg.getDouble(-1,1),rg.getDouble(-1,1));
-						} while (random.sqrLength() > 1);
-						random.normalize();
+						Vector3f random = sampler->getAODirection();
 						if (Vector3f::dot(random, foundNormal)<0) random = random*-1.0; // Only check away from surface.
 
 						double maxT = 0;
