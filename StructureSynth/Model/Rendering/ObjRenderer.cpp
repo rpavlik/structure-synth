@@ -193,15 +193,42 @@ namespace StructureSynth {
 			};
 
 			void ObjRenderer::drawLine(SyntopiaCore::Math::Vector3f from, SyntopiaCore::Math::Vector3f to, PrimitiveClass* classID) {
+				setClass(classID->name,rgb,alpha);
+				ObjGroup group;
+				group.vertices.append(from);
+				group.vertices.append(to);
+				QVector<VertexNormal> vns; 
+				vns.append(VertexNormal(1, -1));
+				vns.append(VertexNormal(2, -1));
+				group.faces.append(vns);
+				groups[currentGroup].addGroup(group);
 			};
 
 			void ObjRenderer::drawTriangle(SyntopiaCore::Math::Vector3f p1,
 				SyntopiaCore::Math::Vector3f p2,
 				SyntopiaCore::Math::Vector3f p3,
-				PrimitiveClass* classID) {
+				PrimitiveClass* classID)
+			{
+					setClass(classID->name,rgb,alpha);
+					ObjGroup group;
+					group.vertices.append(p1);
+					group.vertices.append(p2);
+					group.vertices.append(p3);
+
+					QVector<VertexNormal> vns; 
+					for (int j = 0; j<4; j++) vns.append(VertexNormal(1+j, -1));
+					group.faces.append(vns);
+					groups[currentGroup].addGroup(group);
 			}
 
 			void ObjRenderer::drawDot(SyntopiaCore::Math::Vector3f v, PrimitiveClass* classID) {
+				setClass(classID->name,rgb,alpha);
+				ObjGroup group;
+				group.vertices.append(v);
+				QVector<VertexNormal> vns; 
+				vns.append(VertexNormal(1, -1));
+				group.faces.append(vns);
+				groups[currentGroup].addGroup(group);
 			};
 
 			void ObjRenderer::drawSphere(SyntopiaCore::Math::Vector3f center, float radius, PrimitiveClass* classID) {
@@ -251,8 +278,14 @@ namespace StructureSynth {
 					foreach (QVector<VertexNormal> vi, o.faces) {
 						ts << "f ";
 						
-						foreach (VertexNormal vn, vi) ts << QString::number(vn.vID+vertexCount) << "//"
+						foreach (VertexNormal vn, vi) {
+							if (vn.nID == -1) {
+								ts << QString::number(vn.vID+vertexCount) << " ";
+							} else {
+								ts << QString::number(vn.vID+vertexCount) << "//"
 								<< QString::number(vn.nID+normalCount) << " ";
+							}
+						}
 						ts << endl;
 					}
 					vertexCount += o.vertices.count();

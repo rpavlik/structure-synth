@@ -1,6 +1,8 @@
  
 Changelog for Structure Synth:
 ------------
+15 Oct 10 [MHC] Removed old anti-alias code. Added stratified sampling (for AO). No visible effect :-(
+
 07 Oct 10 [MHC] More Obj export: added settings dialog.
 [1h]
 

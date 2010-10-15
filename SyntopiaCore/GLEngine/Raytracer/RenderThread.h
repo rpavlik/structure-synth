@@ -8,19 +8,19 @@
 
 namespace SyntopiaCore {
 	namespace GLEngine {	
+
 		using namespace SyntopiaCore::Math;
+
+		class Sampler; // forward decl.
 
 		class RenderThread : public QThread {
 		public:
-			enum Task { RayTrace, AmbientOcclusion, AntiAlias } ;
+			enum Task { Raytrace } ;
 			RenderThread();
 			~RenderThread();
 			void setTask(Task task) { this->task = task; };
 			RenderThread(const RenderThread& other);
-			void render();
-			void rayTrace(int newUnit);
-			void ambientOcclusion(int newUnit);
-			void antiAlias(int newUnit);
+			void raytrace(int newUnit);
 			void setCounters(AtomicCounter* nextUnit, AtomicCounter* completedUnits, int maxUnits);
 			void alloc(int w, int h);
 			void setObjects(int count);
@@ -28,7 +28,6 @@ namespace SyntopiaCore {
 			void run();
 			Vector3f rayCastPixel(float x, float y);
 			void seed(int value) { rg.setSeed(value); };
-			Vector3f rayCastPixelWithDOF(float x, float y);
 			double getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection);
 			Vector3f rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level = 0);
 
@@ -83,6 +82,7 @@ namespace SyntopiaCore {
 			Object3D* hitObject;
 			bool copy;
 
+			Sampler* sampler;
 			friend class RayTracer;
 		};
 
