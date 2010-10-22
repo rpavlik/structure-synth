@@ -1,10 +1,6 @@
-/*
-Mondrian Cube. MHC 2007.
-
-Has a few rendering bugs...
-*/
-
- mondrian
+// Mondrian Cube.
+ 
+mondrian
 
 rule mondrian {
   //  The six faces of the cube  

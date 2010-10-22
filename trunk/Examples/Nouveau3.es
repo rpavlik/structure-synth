@@ -1,18 +1,25 @@
-// Nouveau system variant.
+// Nouveau variant (Rounded tubes)
 
-#define shrink s 0.999
+#define shrink s 0.996
+
+set raytracer::ambient-occlusion-samples 0
+set raytracer::shadows true
+set raytracer::samples 2
+set raytracer::reflection 0.0
+set raytracer::phong [0.6,0.6,0.6]
 
 set maxdepth 1000
-set background #888
-6 * {  rz 60 color white } hbox
+set background #fff
+10 * { x 0 color white ry 10  } 2 * { rz 180  } hbox
 
-rule hbox { set seed initial  r}
-rule r { { rx 90 } forward }
-rule r { { rx -90 }forward }
-rule r { forward }
+rule hbox { r}
 rule r { forward }
 rule r { turn }
 rule r { turn2 }
+rule r { turn4 }
+rule r { turn3 }
+rule r { turn5 }
+rule r { turn6 }
 
 rule forward md 90 > r {
 dbox
@@ -41,15 +48,14 @@ dbox
 
 rule turn5 md 90 > r {
 dbox
-{ rx -2 x 0.1 shrink } turn5
+{ ry -2 x 0.1 shrink } turn5
 }
 
 rule turn6 md 90 >  r {
 dbox
-{ rx -2 x 0.1 shrink } turn6
+{ ry -2 x 0.1 shrink } turn6
 }
 
 rule dbox {
-{ s 0.2 1 1 } box
-{ rx 10 s 0.2 1 1 color black } box
+{ s 0.2 1 1 } sphere
 }
