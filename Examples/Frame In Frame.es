@@ -5,7 +5,6 @@ rule r2 maxdepth 20 {
 frame
 }
 
-
 rule frame  {
 { s 0.1 1.1 0.1 x 5  z 5 } box
 { s 0.1 1.1 0.1 x 5  z -5 } box

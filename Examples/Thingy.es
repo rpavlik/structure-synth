@@ -5,13 +5,11 @@ set background white
 10 * { s 0.8 rx 36 ry 10  } steps * { h 1 rz 360/steps } 1 * { x 10 rz 180} dspawn
 
 rule dspawn {
-  spawn
+   spawn
    m
 }
 
 rule m {
- // { x -0.1 rx 1 s 0.98 } m
- // { x -0.5 s 1.2 } sphere 
 }
 
 rule spawn {
