@@ -103,6 +103,7 @@ namespace StructureSynth {
 				virtual void callCommand(const QString& /*renderClass*/, const QString& /*command*/) {};
 
 				void addQuad(ObjGroup& group, Vector3f v1,Vector3f v2,Vector3f v3,Vector3f v4);
+				void addLineQuad(ObjGroup& group, Vector3f v1,Vector3f v2,Vector3f v3,Vector3f v4);
 				void setClass(QString classID, Vector3f rgb, double alpha);
 
 				void writeToStream(QTextStream& ts);

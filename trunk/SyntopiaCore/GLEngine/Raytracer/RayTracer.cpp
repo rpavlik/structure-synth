@@ -192,18 +192,10 @@ namespace SyntopiaCore {
 		void RayTracer::setParameter(QString param, QString value) {
 			param=param.toLower();
 
-			if (param == "ambient-occlusion") {
-				// Min rays, Max rays, Precision...		
-				MiniParser(value, ',').getInt(rt.occlusionSampleStepSize).getInt(rt.ambMaxRays).getInt(rt.ambSmooth);
-				INFO(QString("Occlusion Sample Step Size: %1, Max Rays: %2, Smoothening Steps: %3 ")
-					.arg(rt.occlusionSampleStepSize).arg(rt.ambMaxRays).arg(rt.ambSmooth));
-			} else if (param == "ambient-occlusion-samples") {
-				// Min rays, Max rays, Precision...		
-				MiniParser(value, ',').getInt(rt.ambMaxRays);
-				rt.ambSmooth = 0;
-				rt.occlusionSampleStepSize = 1;
-				INFO(QString("Ambient Occlusion samples: %3 ")
-					.arg(rt.ambMaxRays));
+			if (param == "ambient-occlusion-samples") {	
+				MiniParser(value, ',').getInt(rt.aoSamples);
+				INFO(QString("Ambient Occlusion samples: %3x%4 ")
+					.arg(rt.aoSamples).arg(rt.aoSamples));
 			} else if (param == "samples") {
 				MiniParser(value, ',').getInt(rt.aaSamples);
 				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")

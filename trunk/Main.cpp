@@ -14,6 +14,9 @@ int main(int argc, char *argv[])
 	//QApplication::setStyle("cleanlooks");
     QApplication app(argc, argv);
 
+	QCoreApplication::setOrganizationName("Syntopia Software");
+    QCoreApplication::setApplicationName("Structure Synth");
+
 	QPixmap pixmap(QDir(StructureSynth::GUI::MainWindow::getMiscDir()).absoluteFilePath("splash.png"));
 	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
 	     splash.setMask(pixmap.mask());

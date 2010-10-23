@@ -24,7 +24,7 @@
 #include "../../StructureSynth/Model/RuleSet.h"
 #include "../../StructureSynth/Model/Builder.h"
 #include "../../StructureSynth/JavaScriptSupport/JavaScriptParser.h"
-#include "../../SyntopiaCore/GLEngine/RayTracer.h"
+#include "../../SyntopiaCore/GLEngine/Raytracer/RayTracer.h"
 #include "../../SyntopiaCore/Math/Vector3.h"
 #include "../../SyntopiaCore/Math/Random.h"
 #include "../../SyntopiaCore/Math/Matrix4.h"
@@ -802,7 +802,7 @@ namespace StructureSynth {
 
 		void MainWindow::writeSettings()
 		{
-			QSettings settings("Syntopia Software", "Structure Synth");
+			QSettings settings;
 			settings.setValue("pos", pos());
 			settings.setValue("size", size());
 		}
@@ -1157,7 +1157,7 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::makeScreenshot() {
-			QImage image = engine->grabFrameBuffer();
+			QImage image = engine->getScreenShot();
 			saveImage(image);
 		}
 
@@ -1433,7 +1433,7 @@ namespace StructureSynth {
 
 		void MainWindow::setRecentFile(const QString &fileName)
 		{
-			QSettings settings("Syntopia Software", "Structure Synth");
+			QSettings settings;
 
 			QStringList files = settings.value("recentFileList").toStringList();
 			files.removeAll(fileName);
@@ -1677,39 +1677,36 @@ namespace StructureSynth {
 			class ObjDialog : public QDialog {
 			public:
 				ObjDialog(QWidget* parent) : QDialog(parent) {
-					/*
-					Group by tagging [x]
-					Group by color   [ ]
-					Sphere resolution: D-Theta [x] degrees, D-Phi [x] degrees.
+					QSettings s;
 
-					2.6GB Memory, 
-					3.9M Polygons,
-					*/
 					setWindowTitle("Obj Export Settings");
 					QVBoxLayout* vl = new QVBoxLayout(this);
-					//resize(800,600);
 					
 					groupByTaggingCheckBox = new QCheckBox("Group by Tagging", this);
 					vl->addWidget(groupByTaggingCheckBox);
-					groupByTaggingCheckBox->setChecked(true);
+					bool groupByTagging = s.value("ObjDialog/groupByTagging", true).toBool();
+					groupByTaggingCheckBox->setChecked(groupByTagging);
+					
 					groupByColorCheckBox = new QCheckBox("Group by Color", this);
+					bool groupByColor = s.value("ObjDialog/groupByColor", false).toBool();
+					groupByColorCheckBox->setChecked(groupByColor);
 					vl->addWidget(groupByColorCheckBox);
 					
 					QHBoxLayout* hl = new QHBoxLayout(this);
 					
-					QLabel* l = new QLabel(QString("Sphere resolution: %1%2=").
-						arg(QChar(948)).arg(QChar(952)), this);
+					QLabel* l = new QLabel(QString("Sphere resolution: Latitude: "), this);
 					spinBox1 = new QSpinBox(this);
-					spinBox1->setMinimum(1);
-					spinBox1->setMaximum(30);
-					spinBox1->setValue(15);
-					QLabel* l2 = new QLabel(QString(" degrees, %4%5=").
-						arg(QChar(948)).arg(QChar(966)).arg(QChar(176)), this);
+					spinBox1->setMinimum(2);
+					spinBox1->setMaximum(40);
+					int latResolution = s.value("ObjDialog/latResolution", 10).toInt();
+					spinBox1->setValue(latResolution);
+					QLabel* l2 = new QLabel(QString(" divs, Longitude: "), this);
 					spinBox2 = new QSpinBox(this);
-					spinBox2->setMinimum(1);
-					spinBox2->setMaximum(30);
-					spinBox2->setValue(15);
-					QLabel* l3 = new QLabel(QString(" degrees."));
+					spinBox2->setMinimum(2);
+					spinBox2->setMaximum(40);
+					int longResolution = s.value("ObjDialog/longResolution", 10).toInt();					
+					spinBox2->setValue(longResolution);
+					QLabel* l3 = new QLabel(QString(" divs."));
 					hl->addWidget(l);
 					hl->addWidget(spinBox1);
 					hl->addWidget(l2);
@@ -1725,6 +1722,14 @@ namespace StructureSynth {
 
 					vl->addWidget(buttonBox);
 				};
+
+				~ObjDialog() {
+					QSettings s;
+					s.setValue("ObjDialog/groupByTagging", groupByTaggingCheckBox->isChecked());
+					s.setValue("ObjDialog/groupByColor", groupByColorCheckBox->isChecked());
+					s.setValue("ObjDialog/latResolution", spinBox1->value());
+					s.setValue("ObjDialog/longResolution", spinBox2->value());
+				}
 				
 				QSpinBox* spinBox1;
 				QSpinBox* spinBox2;

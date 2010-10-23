@@ -1,7 +1,11 @@
  
 Changelog for Structure Synth:
 ------------
+23 Oct 10 [MHC] OBJ exporter is done. Supports Sphere (with adjustable resolution), Box, Mesh, Grid, Line, and Dots. Group by tag or color. No .mat file support.
+[2h] 
+
 15 Oct 10 [MHC] Removed old anti-alias code. Added stratified sampling (for AO). No visible effect :-(
+[2h]
 
 07 Oct 10 [MHC] More Obj export: added settings dialog.
 [1h]

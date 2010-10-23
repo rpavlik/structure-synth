@@ -4,14 +4,13 @@
 #include "../Object3D.h"
 #include "AtomicCounter.h"
 #include "VoxelStepper.h"
+#include "Sampler.h"
 #include "SyntopiaCore/Math/Random.h"
 
 namespace SyntopiaCore {
 	namespace GLEngine {	
 
 		using namespace SyntopiaCore::Math;
-
-		class Sampler; // forward decl.
 
 		class RenderThread : public QThread {
 		public:
@@ -62,9 +61,7 @@ namespace SyntopiaCore {
 			int checks;
 			VoxelStepper* accelerator;
 
-			int occlusionSampleStepSize;
-			int ambMaxRays;
-			int ambSmooth;
+			int aoSamples;
 			int totalAOCasts;
 			int aaSamples;
 			int width;

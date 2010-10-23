@@ -13,7 +13,7 @@
 #include <QThread>
 #include "SyntopiaCore/Logging/Logging.h"
 #include "../../SyntopiaCore/GLEngine/Sphere.h"
-#include "../../SyntopiaCore/GLEngine/RayTracer.h"
+#include "../../SyntopiaCore/GLEngine/Raytracer/RayTracer.h"
 #include "../../StructureSynth/Model/Rendering/OpenGLRenderer.h"
 #include "../../StructureSynth/Parser/Tokenizer.h"
 #include "../../StructureSynth/Parser/Preprocessor.h"
