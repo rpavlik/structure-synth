@@ -53,6 +53,8 @@ namespace SyntopiaCore {
 			/// Calling this function multiple times will still only result in one redraw
 			void requireRedraw();
 
+			QImage getScreenShot();
+
 			void toggleShowDepth() { showDepth = !showDepth; };
 			void clearWorld();
 			void reset();

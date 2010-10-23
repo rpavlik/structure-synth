@@ -1,14 +1,14 @@
-<template defaultExtension="Sunflow scene file (*.sc)" name="Sunflow" runAfter="%SUNFLOW%\sunflow.bat &quot;$FILE&quot; -o &quot;$FILE.png&quot;" >
+<template defaultExtension="Sunflow scene file (*.sc)" name="Sunflow" runAfter="&quot;%SUNFLOW%\sunflow2.bat&quot; &quot;$FILE&quot; -o &quot;$FILE.png&quot;">
  <description>
 A simple Sunflow render template, using one shader for each object. 
 The template uses ambient occlusion lightning, which means there is no need to worry about setting up light sources. 
 
-This template is a good choice for trying out Sunflow. 
+This template is a good choice for trying out Sunflow.  
    
 Original template by Syntopia.   
 The Sunflow coloring was added by Tom Beddard ('subblue')
 </description>
- <primitive name="begin" ><![CDATA[
+ <primitive name="begin"><![CDATA[
 %photons {
 %  caustics 10000000 kd 64 0.5
 %}
@@ -91,10 +91,10 @@ object {
    uvs none
 }
 		]]></primitive>
- <primitive name="end" ><![CDATA[
+ <primitive name="end"><![CDATA[
 
 		]]></primitive>
- <primitive name="box" ><![CDATA[
+ <primitive name="box"><![CDATA[
 shader {
 	name "shader{uid}"
 	type amb-occ
@@ -111,7 +111,7 @@ instance {
 	shader "shader{uid}"
 }
 		]]></primitive>
- <primitive name="sphere" ><![CDATA[
+ <primitive name="sphere"><![CDATA[
 shader {
 	name "shader{uid}"
 	type diffuse

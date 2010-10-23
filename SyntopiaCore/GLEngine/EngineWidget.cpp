@@ -48,6 +48,11 @@ namespace SyntopiaCore {
 			//setupFragmentShader();
 		}
 
+		QImage EngineWidget::getScreenShot() {
+			if (!staticImage.isNull()) return staticImage;
+			return grabFrameBuffer();
+		}
+
 		void EngineWidget::paintEvent(QPaintEvent * ev) {
 			if (staticImage.isNull()) {
 				QGLWidget::paintEvent(ev);

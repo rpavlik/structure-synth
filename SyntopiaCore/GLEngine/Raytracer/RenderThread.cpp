@@ -7,79 +7,11 @@ using namespace SyntopiaCore::Math;
 namespace SyntopiaCore {
 	namespace GLEngine {
 		
-			class Sampler {
-			public:
-				Sampler(Math::RandomNumberGenerator* rg) : rg(rg) {
-				}
-				
-				virtual Vector3f getAODirection() {
-					return rg->getUniform3D();
-				}
-
-				virtual Vector3f getLensSample() {
-					return rg->getUniform2D();
-				}
-
-				virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt) {};
-
-			protected:
-				Math::RandomNumberGenerator* rg;
-			};
-
-			class StratifiedSampler : public Sampler {
-			public:
-				StratifiedSampler(Math::RandomNumberGenerator* rg) : Sampler(rg) {
-					aoSampleIndex = 0;
-				}
-
-				virtual Vector3f getAODirection() {
-					//return rg->getUniform3D();
-					if (aoSampleIndex>=aoSamples.count()) throw 1;
-					return aoSamples[aoSampleIndex++];
-				}
-
-				virtual Vector3f getLensSample() {
-					return rg->getUniform2D();
-				}
-
-				// Based on the Physical Based Rendering book
-				Vector3f sampleSphere(double u1, double u2) {
-					double z = 1.0 - 2.0*u1;
-					double r = 0;
-					if (1.0-z*z > 0) r = sqrt(1.0-z*z);
-					double phi = 2.0 * 3.1415926 * u2;
-					double x = r * cos(phi);
-					double y = r * sin(phi);
-					return Vector3f(x,y,z);
-				}
-
-				virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt) {
-					aoSamples = QVector<Vector3f>(nSamplesSqrt*nSamplesSqrt);
-					int count = 0;
-					for (int i = 0; i < nSamplesSqrt; i++) {
-						for (int j = 0; j < nSamplesSqrt; j++) {
-							// we need a uniform number in the interval
-							// [i/nSamplesSqrt;(i+1)/nSamplesSqrt]
-							double x = rg->getDouble( ((double)i)/(double)nSamplesSqrt,((double)(i+1.0))/(double)nSamplesSqrt);
-							double y = rg->getDouble( ((double)j)/(double)nSamplesSqrt,((double)(j+1.0))/(double)nSamplesSqrt);
-							aoSamples[count++] = sampleSphere(x,y);
-							//aoSamples.append(rg->getUniform3D());
-						}	
-					}
-					aoSampleIndex = 0;
-				};
-			private:
-				int aoSampleIndex;
-				QVector<Vector3f> aoSamples;
-				QVector<Vector3f> lensSamples;
-			};
-
+		
 		RenderThread::RenderThread() {
 			backgroundColor = Vector3f(0,0,0);
-			occlusionSampleStepSize = 0;
-			ambMaxRays = 0;
+			aoSamples = 1;
 			aaSamples = 2;
-			ambSmooth = 0;
 			useShadows = true;
 			copy = false;
 			lightPos = Vector3f(0,0,0);
@@ -126,9 +58,7 @@ namespace SyntopiaCore {
 			accelerator = new VoxelStepper(*other.accelerator);
 			accelerator->setCopy(true);
 
-			occlusionSampleStepSize = other.occlusionSampleStepSize;
-			ambMaxRays = other.ambMaxRays;
-			ambSmooth = other.ambSmooth;
+			aoSamples = other.aoSamples;
 			width = other.width;
 			height = other.height;
 			useShadows = other.useShadows;
@@ -158,16 +88,15 @@ namespace SyntopiaCore {
 
 		double RenderThread::getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection) {
 			
-			if (ambMaxRays == 0 || object==0) return 1.0;
-				int tests = 0;
-				int hits = 0;
-				for (int ix = 0; ix < ambMaxRays; ix++) {
-					tests++;
+			if (aoSamples == 0 || object==0) return 1.0;
+				double tests = 0;
+				double hits = 0;
+				for (int ix = 0; ix < aoSamples*aoSamples; ix++) {
 					
 					Vector3f random = sampler->getAODirection();
-					random.normalize();
 					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
-
+					random.normalize();
+					
 					double maxT = 0;
 					QList<Object3D*>* list = accelerator->setupRay(objectIntersection,random, maxT);
 					RayInfo ri;
@@ -184,22 +113,21 @@ namespace SyntopiaCore {
 						}
 						if (!occluded) list = accelerator->advance(maxT); 
 					}
-					if (occluded) hits++;
+					double weight = 1.0; // Vector3f::dot(random, objectNormal);
+					if (occluded) hits+=weight;
+					tests += weight;			
 				}
-				return 1-hits/(double)tests;
+				return 1-hits/tests;
 		}
-
 		
 		void RenderThread::raytrace(int newUnit) {
 			int x = newUnit-1;
 			float fx = x/(float)(w);
 			float xs = (1.0/w);
 			float ys = (1.0/h);
-
 				
 			for (int y = 0; y < h; y++) {	
-
-				sampler->prepareSamples(aaSamples,1);
+				sampler->prepareSamples(aaSamples,aoSamples);
 			
 				float fy = y/(float)(h);
 				Vector3f color(0,0,0);
@@ -212,7 +140,7 @@ namespace SyntopiaCore {
 					for (unsigned int yo = 0; yo < steps; yo++) {
 							Vector3f c =  rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
 													(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
-							color = color + c * getAOStrength(hitObject, normal, intersection);
+							color = color + c; //* getAOStrength(hitObject, normal, intersection);
 					}
 				}
 				
@@ -254,14 +182,10 @@ namespace SyntopiaCore {
 			aoMap = new double[w*h];
 			for (int i = 0; i<w*h; i++) aoMap[i] = -1;
 			objs = new Object3D*[w*h];
-
 			rayID = 0;
 			pixels = 0;
 			checks = 0;
 		}
-
-
-	
 
 		Vector3f RenderThread::rayCastPixel(float x, float y) {
 		
@@ -279,7 +203,6 @@ namespace SyntopiaCore {
 				Vector3f direction = (centerPoint - newStartPoint)*(1/dofCenter);
 				return rayCast(newStartPoint, direction, 0);
 			}
-
 		}
 
 		Vector3f RenderThread::rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level) {
@@ -355,7 +278,11 @@ namespace SyntopiaCore {
 				light += spec;
 
 				// -- Ambient light
-				double ambient = bestObj->getPrimitiveClass()->ambient;
+				double aoStrength = 1.0;
+				// We will only check for AO at first intersection...
+				if (level == 0) aoStrength = getAOStrength(bestObj, foundNormal, iPoint);
+
+				double ambient = bestObj->getPrimitiveClass()->ambient*aoStrength;
 				light += ambient; 
 
 				// -- calculate shadow...
@@ -387,12 +314,11 @@ namespace SyntopiaCore {
 				if (light < 0) light = 0;
 
 				if (foundColor[3] < 1) {
-					Vector3f color = rayCast(iPoint, direction, bestObj, level+5); 
+					Vector3f color = rayCast(iPoint, direction, bestObj, level+1); 
 					foundColor[0] = light*foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
 					foundColor[1] = light*foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
 					foundColor[2] = light*foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
 				}
-
 
 				double reflection = bestObj->getPrimitiveClass()->reflection;
 
@@ -408,48 +334,6 @@ namespace SyntopiaCore {
 					if (foundColor[1]>1) foundColor[1] = 1;
 					if (foundColor[2]>1) foundColor[2] = 1;
 				}
-
-				if (level==-1 && ambMaxRays>0) {
-					int hits = 0;
-					int tests = 0;
-					totalAOCasts++;
-					for (int ix = 0; ix < ambMaxRays; ix++) {
-						tests++;
-						// Use monte carlo sampling to obtain random vector.
-						Vector3f random = sampler->getAODirection();
-						if (Vector3f::dot(random, foundNormal)<0) random = random*-1.0; // Only check away from surface.
-
-						double maxT = 0;
-						QList<Object3D*>* list = accelerator->setupRay(iPoint,random, maxT);
-						ri.startPoint = iPoint;
-						ri.lineDirection = random;
-						bool occluded = false;
-						while (list != 0 && !occluded) { 
-							// check objects
-							for (int i = 0; i < list->size(); i++) {
-								if (list->at(i) == bestObj) continue; // self-shadow? 							
-								occluded = list->at(i)->intersectsRay(&ri);
-								if (ri.intersection < 1E-5) occluded = false;
-								if (occluded) break;								
-							}
-
-							if (!occluded) list = accelerator->advance(maxT); 
-						}
-
-						if (occluded) hits++;
-
-					}
-					double occ = (1-hits/(double)tests);
-					/*
-					if (occ < 0.4) occ = 0;
-					else if (occ > 1) occ = 1;
-					else occ = (occ-0.4)/(1-0.4);
-					occ = occ*occ;
-
-					*/
-					light = occ*light;
-				}
-
 
 				normal = foundNormal;
 				depth = lengthToClosest;
@@ -467,11 +351,9 @@ namespace SyntopiaCore {
 			}
 		}
 
-
 		void RenderThread::setObjects(int count) {
 			rayIDs = QVector<int>(count, -1);
-		}
-			
+		}			
 
 	}
 }

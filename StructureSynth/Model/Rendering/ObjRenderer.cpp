@@ -82,12 +82,16 @@ namespace StructureSynth {
 				Note that at the poles only 3 vertex facet result
 				while the rest of the sphere has 4 point facets
 				*/
-				void CreateUnitSphere(int dtheta,int dphi, ObjGroup& motherGroup, Matrix4f m)
+				void CreateUnitSphere(int dt,int dp, ObjGroup& motherGroup, Matrix4f m)
 				{
 					float DTOR = 3.1415/180.0;
+					double dtheta = 180.0/dt;
+					double dphi = 360.0/dp;
 					ObjGroup group;
-					for (int theta=-90;theta<=90-dtheta;theta+=dtheta) {
-						for (int phi=0;phi<=360-dphi;phi+=dphi) {
+					for (int i = 0; i < dt; i++) {
+						double theta = -90.0 + ((i*180.0)/(double)dt);
+						for (int j=0;j<dp;j++) {
+							double phi = ((j*360.0)/(double)dp);
 							int vi = group.vertices.count()+1;
 							int vn = group.normals.count()+1;
 
@@ -113,6 +117,21 @@ namespace StructureSynth {
 					motherGroup.addGroup(group);
 				}
 
+			}
+
+			void ObjRenderer::addLineQuad(ObjGroup& group, Vector3f v1,Vector3f v2,Vector3f v3,Vector3f v4) {
+				int vi = group.vertices.count()+1;
+				group.vertices.append(v1);
+				group.vertices.append(v2);
+				group.vertices.append(v3);
+				group.vertices.append(v4);
+
+				for (int j = 0; j<4; j++) {
+					QVector<VertexNormal> vns; 
+					vns.append(VertexNormal(vi+j, -1));
+					vns.append(VertexNormal(vi+(j+1 % 4), -1));
+					group.faces.append(vns);
+				}
 			}
 
 
@@ -164,14 +183,25 @@ namespace StructureSynth {
 			};
 
 
-			void ObjRenderer::drawMesh(  SyntopiaCore::Math::Vector3f startBase, 
-				SyntopiaCore::Math::Vector3f startDir1, 
-				SyntopiaCore::Math::Vector3f startDir2, 
+			void ObjRenderer::drawMesh(  SyntopiaCore::Math::Vector3f O, 
+				SyntopiaCore::Math::Vector3f v1, 
+				SyntopiaCore::Math::Vector3f v2, 
 				SyntopiaCore::Math::Vector3f endBase, 
-				SyntopiaCore::Math::Vector3f endDir1, 
-				SyntopiaCore::Math::Vector3f endDir2, 
+				SyntopiaCore::Math::Vector3f u1, 
+				SyntopiaCore::Math::Vector3f u2, 
 				PrimitiveClass* classID) {
 
+					setClass(classID->name,rgb,alpha);
+					ObjGroup group;
+					Vector3f v3 = endBase-O;
+					addQuad(group, O, O+v2,O+v2+v1,O+v1);
+					addQuad(group, O+v3, O+u1+v3, O+u2+u1+v3, O+u2+v3);
+					addQuad(group, O, O+v3, O+v3+u2,O+v2);
+					addQuad(group, O+v1,O+v2+v1, O+v3+u2+u1,  O+v3+u1);
+					addQuad(group, O, O+v1, O+v3+u1, O+v3);
+					addQuad(group, O+v2, O+v3+u2 , O+v3+u2+u1,O+v1+v2);
+					group.reduceVertices();
+					groups[currentGroup].addGroup(group);
 
 			};
 
@@ -182,12 +212,12 @@ namespace StructureSynth {
 				PrimitiveClass* classID) {
 					setClass(classID->name,rgb,alpha);
 					ObjGroup group;
-					addQuad(group,O, O+v2,O+v2+v1,O+v1);
-					addQuad(group,O+v3, O+v1+v3, O+v2+v1+v3, O+v2+v3);
-					addQuad(group,O, O+v3, O+v3+v2,O+v2);
-					addQuad(group,O+v1,O+v2+v1, O+v3+v2+v1,  O+v3+v1);
-					addQuad(group,O, O+v1, O+v3+v1, O+v3);
-					addQuad(group,O+v2, O+v3+v2 , O+v3+v2+v1,O+v1+v2);
+					addLineQuad(group,O, O+v2,O+v2+v1,O+v1);
+					addLineQuad(group,O+v3, O+v1+v3, O+v2+v1+v3, O+v2+v3);
+					addLineQuad(group,O, O+v3, O+v3+v2,O+v2);
+					addLineQuad(group,O+v1,O+v2+v1, O+v3+v2+v1,  O+v3+v1);
+					addLineQuad(group,O, O+v1, O+v3+v1, O+v3);
+					addLineQuad(group,O+v2, O+v3+v2 , O+v3+v2+v1,O+v1+v2);
 					group.reduceVertices();
 					groups[currentGroup].addGroup(group);
 			};
@@ -216,7 +246,7 @@ namespace StructureSynth {
 					group.vertices.append(p3);
 
 					QVector<VertexNormal> vns; 
-					for (int j = 0; j<4; j++) vns.append(VertexNormal(1+j, -1));
+					for (int j = 0; j<3; j++) vns.append(VertexNormal(1+j, -1));
 					group.faces.append(vns);
 					groups[currentGroup].addGroup(group);
 			}
@@ -276,17 +306,23 @@ namespace StructureSynth {
 
 					// Faces
 					foreach (QVector<VertexNormal> vi, o.faces) {
-						ts << "f ";
-						
+						if (vi.count() == 1) {
+							ts << "p ";
+						} else if (vi.count() == 2) {
+							ts << "l ";
+						} else {
+							ts << "f ";
+						}
 						foreach (VertexNormal vn, vi) {
 							if (vn.nID == -1) {
 								ts << QString::number(vn.vID+vertexCount) << " ";
 							} else {
 								ts << QString::number(vn.vID+vertexCount) << "//"
-								<< QString::number(vn.nID+normalCount) << " ";
+									<< QString::number(vn.nID+normalCount) << " ";
 							}
 						}
 						ts << endl;
+						
 					}
 					vertexCount += o.vertices.count();
 					normalCount += o.normals.count();
