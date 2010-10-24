@@ -5,6 +5,7 @@
 #include "AtomicCounter.h"
 #include "VoxelStepper.h"
 #include "Sampler.h"
+#include "ProgressiveOutput.h"
 #include "SyntopiaCore/Math/Random.h"
 
 namespace SyntopiaCore {
@@ -12,20 +13,23 @@ namespace SyntopiaCore {
 
 		using namespace SyntopiaCore::Math;
 
+
 		class RenderThread : public QThread {
 		public:
-			enum Task { Raytrace } ;
+			enum Task { Raytrace, RaytraceProgressive } ;
 			RenderThread();
 			~RenderThread();
 			void setTask(Task task) { this->task = task; };
 			RenderThread(const RenderThread& other);
 			void raytrace(int newUnit);
+			void raytraceProgressive(int newUnit);
 			void setCounters(AtomicCounter* nextUnit, AtomicCounter* completedUnits, int maxUnits);
 			void alloc(int w, int h);
 			void setObjects(int count);
 			static void msleep(int i) { QThread::msleep(i); }
 			void run();
 			Vector3f rayCastPixel(float x, float y);
+			
 			void seed(int value) { rg.setSeed(value); };
 			double getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection);
 			Vector3f rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level = 0);
@@ -80,7 +84,9 @@ namespace SyntopiaCore {
 			bool copy;
 
 			Sampler* sampler;
+			ProgressiveOutput* progressiveOutput;
 			friend class RayTracer;
+			int rayNumber;
 		};
 
 

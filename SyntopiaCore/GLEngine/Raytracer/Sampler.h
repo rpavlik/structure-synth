@@ -12,9 +12,11 @@ namespace SyntopiaCore {
 		class Sampler {
 		public:
 			Sampler(Math::RandomNumberGenerator* rg) : rg(rg) {}
-			virtual Vector3f getAODirection() { return rg->getUniform3D(); }
-			virtual Vector3f getLensSample() { return rg->getUniform2D(); }
+			virtual Vector3f getAASample(int index) { return Vector3f(rg->getDouble(-0.5,0.5), rg->getDouble(-0.5,0.5),1.0); }
+			virtual Vector3f getAODirection(int index) { return rg->getUniform3D(); }
+			virtual Vector3f getLensSample(int index) { return rg->getUniform2D(); }
 			virtual void prepareSamples(int /*nSamplesSqrt*/, int /*nAOSamplesSqrt*/) {};
+			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new Sampler(rg); }
 		protected:
 			Math::RandomNumberGenerator* rg;
 		};
@@ -22,17 +24,39 @@ namespace SyntopiaCore {
 		// Stratified sampling
 		class StratifiedSampler : public Sampler {
 		public:
-			StratifiedSampler(Math::RandomNumberGenerator* rg) : Sampler(rg), aoSampleIndex(0) {}
-
-			virtual Vector3f getAODirection();
-			virtual Vector3f getLensSample();
+			StratifiedSampler(Math::RandomNumberGenerator* rg) : 
+			  Sampler(rg), aoSampleIndex(0), aaSampleIndex(0), lensSampleIndex(0) {}
+			virtual Vector3f getAASample(int index);
+			virtual Vector3f getAODirection(int index);
+			virtual Vector3f getLensSample(int index);
 			Vector3f sampleSphere(double u1, double u2);
 			virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt);
+			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new StratifiedSampler(rg); }
 
 		private:
 			int aoSampleIndex;
+			int aaSampleIndex;
+			int lensSampleIndex;
 			QVector<Vector3f> aoSamples;
+			QVector<Vector3f> aaSamples;
 			QVector<Vector3f> lensSamples;
+		};
+
+		// Stratified sampling
+		class ProgressiveStratifiedSampler : public Sampler {
+		public:
+			ProgressiveStratifiedSampler(Math::RandomNumberGenerator* rg) : 
+			  Sampler(rg) {}
+			virtual Vector3f getAASample(int index);
+			virtual Vector3f getAODirection(int index);
+			virtual Vector3f getLensSample(int index);
+			Vector3f sampleSphere(double u1, double u2);
+			virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt);
+			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new ProgressiveStratifiedSampler(rg); }
+
+		private:
+			int aoSamplesSqrt;
+			int aaSamplesSqrt;
 		};
 
 

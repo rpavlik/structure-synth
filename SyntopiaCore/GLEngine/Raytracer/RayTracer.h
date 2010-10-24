@@ -8,6 +8,7 @@
 #include "SyntopiaCore/Math/Random.h"
 #include "VoxelStepper.h"
 #include "RenderThread.h"
+#include "ProgressiveOutput.h"
 
 namespace SyntopiaCore {
 	namespace GLEngine {
@@ -20,7 +21,9 @@ namespace SyntopiaCore {
 			QImage calculateImage(int width, int height);
 			void setParameter(QString param, QString value);
 			bool wasCancelled() { return userCancelled; }
-		private:			
+		private:	
+			ProgressiveOutput* progressiveOutput;
+			EngineWidget* engine;
 			void startJobs(QProgressDialog& progress);
 			QList<Object3D*> objects;
 			float xmin;
@@ -45,6 +48,7 @@ namespace SyntopiaCore {
 			AtomicCounter completedUnits;
 			int maxUnits;			
 			RenderThread rt;
+			bool progressiveRender;
 		};
 
 	}

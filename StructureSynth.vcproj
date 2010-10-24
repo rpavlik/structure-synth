@@ -328,6 +328,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\SyntopiaCore\GLEngine\Raytracer\ProgressiveOutput.h"
+						>
+					</File>
+					<File
 						RelativePath=".\SyntopiaCore\GLEngine\Raytracer\RayTracer.cpp"
 						>
 					</File>
