@@ -18,7 +18,8 @@ namespace SyntopiaCore {
 
 			dofCenter = 0;
 			dofFalloff = 0;
-			sampler = new StratifiedSampler(&rg);
+			//sampler = new StratifiedSampler(&rg);
+			sampler = 0;
 		}
 
 		
@@ -81,7 +82,8 @@ namespace SyntopiaCore {
 			pixels = 0;
 			checks = 0;
 			rg.randomizeUniformCounter(); // to avoid coherence between threads
-			sampler = new Sampler(&rg);
+			sampler = other.sampler->clone(&rg);
+			progressiveOutput = other.progressiveOutput;
 		};
 
 		
@@ -93,7 +95,7 @@ namespace SyntopiaCore {
 				double hits = 0;
 				for (int ix = 0; ix < aoSamples*aoSamples; ix++) {
 					
-					Vector3f random = sampler->getAODirection();
+					Vector3f random = sampler->getAODirection(rayNumber*aoSamples*aoSamples+ix);
 					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
 					random.normalize();
 					
@@ -125,30 +127,38 @@ namespace SyntopiaCore {
 			float fx = x/(float)(w);
 			float xs = (1.0/w);
 			float ys = (1.0/h);
-				
 			for (int y = 0; y < h; y++) {	
 				sampler->prepareSamples(aaSamples,aoSamples);
-			
 				float fy = y/(float)(h);
 				Vector3f color(0,0,0);
-
-				unsigned int steps = aaSamples;
-				double xstepsize = xs/steps;
-				double ystepsize = ys/steps;
-
-				for (unsigned int xo = 0; xo < steps; xo++) {
-					for (unsigned int yo = 0; yo < steps; yo++) {
-							Vector3f c =  rayCastPixel(fx-xs/2.0 +xo*xstepsize+xstepsize/2.0,
-													(fy-ys/2.0 +yo*ystepsize+ystepsize/2.0));
-							color = color + c; //* getAOStrength(hitObject, normal, intersection);
-					}
+				for (int i = 0; i < aaSamples*aaSamples; i++) {
+					rayNumber = i;
+					Vector3f ls = sampler->getAASample(rayNumber);
+					color = color + rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);		
 				}
-				
-				color = color / (steps*steps);
-				colors[x+y*w] = color;
+				colors[x+y*w] = color / (aaSamples*aaSamples);
 			}
 		};
 
+		void RenderThread::raytraceProgressive(int newUnit) {
+			rayNumber = newUnit;
+			double* weights = new double[w*h];
+			float xs = (1.0/w);
+			float ys = (1.0/h);
+			for (int x = 0; x < w; x++) {	
+				float fx = x/(float)(w);
+				for (int y = 0; y < h; y++) {	
+					float fy = y/(float)(h);
+					sampler->prepareSamples(aaSamples,aoSamples);
+					Vector3f ls = sampler->getAASample(rayNumber);
+					colors[x+y*w] = ls[2]*rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);
+					weights[x+y*w] = ls[2];
+				}
+			}
+
+			progressiveOutput->addIteration(colors, weights);
+			delete[] weights;
+		};
 		
 		void RenderThread::run() {
 			int newUnit = nextUnit->increase();
@@ -156,6 +166,7 @@ namespace SyntopiaCore {
 				// do work here...
 				switch (task) {
 					case Raytrace: raytrace(newUnit); break;
+					case RaytraceProgressive: raytraceProgressive(newUnit); break;
 					default: throw(1);
 				}
 				completedUnits->increase();
@@ -198,7 +209,7 @@ namespace SyntopiaCore {
 			} else {
 				Vector3f centerPoint =(endPoint-startPoint)* dofCenter+ startPoint;
 				// --- Uniform Disc Sampling
-				Vector3f displace = sampler->getLensSample()*dofFalloff;
+				Vector3f displace = sampler->getLensSample(aoSamples*aoSamples)*dofFalloff;
 				Vector3f newStartPoint = frontStart + frontX*(x+displace.x())+ frontY*(y+displace.y());	
 				Vector3f direction = (centerPoint - newStartPoint)*(1/dofCenter);
 				return rayCast(newStartPoint, direction, 0);

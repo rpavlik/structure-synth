@@ -1,6 +1,12 @@
  
 Changelog for Structure Synth:
 ------------
+24 Oct 10 [MHC] Added progressive sampling.
+[2h] 
+
+23 Oct 10 [MHC] Fixed sampling bug. Stratified sampling does improve results :-) Only stratifies AA & AO, not Lens samples.
+[1h] 
+
 23 Oct 10 [MHC] OBJ exporter is done. Supports Sphere (with adjustable resolution), Box, Mesh, Grid, Line, and Dots. Group by tag or color. No .mat file support.
 [2h] 
 

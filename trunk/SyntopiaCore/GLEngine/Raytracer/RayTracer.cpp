@@ -37,27 +37,17 @@ namespace SyntopiaCore {
 			
 			maxThreads = QThread::idealThreadCount();
 	
+			progressiveRender = true;
+
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
 				arg = arg.remove("[");
 				arg = arg.remove("]");
 				setParameter(c.command, arg);
 			}
-			rt.backgroundColor = engine->getBackgroundColor();
-		
+			rt.backgroundColor = engine->getBackgroundColor();		
+			this->engine = engine;
 		}
-
-
-		namespace {
-			int sqr(int a) { return a*a; } 
-
-			float cdist(Vector3f c1, Vector3f c2) {
-				return (c1-c2).sqrLength();
-			}
-
-		}
-
-
 
 		void RayTracer::startJobs(QProgressDialog& progress) {
 			completedUnits.setValue(0);
@@ -68,10 +58,10 @@ namespace SyntopiaCore {
 				threads[i]->start();
 			}
 			
-			
 			int c = completedUnits.value();
+			int oldC = 0;
 			while (c<maxUnits) {
-				bool s = completedUnits.wait(1000);
+				bool s = completedUnits.wait(1000); // Wait to see if a new unit is completed.
 				progress.setValue((c*100)/maxUnits);
 				if (!s) qApp->processEvents();
 
@@ -86,12 +76,26 @@ namespace SyntopiaCore {
 					}
 				}
 				c = completedUnits.value();
+				//Debug(QString::number(c));
+				if (progressiveRender && oldC != c) {
+					oldC = c;
+					engine->setImage(progressiveOutput->getImage());
+					Debug(QString::number(c));
+				}
 			};
 		}
 			
 
 		QImage RayTracer::calculateImage(int w, int h) {
 			
+			if (progressiveRender) {
+				maxUnits = rt.aaSamples*rt.aaSamples-1;
+				rt.sampler = new ProgressiveStratifiedSampler(&rt.rg);
+			} else {
+				maxUnits = w;
+				rt.sampler = new StratifiedSampler(&rt.rg);
+			}
+
 			// Setup dimensions
 			if (w == 0) w = sizeX;
 			if (h == 0) h = sizeY;
@@ -109,13 +113,8 @@ namespace SyntopiaCore {
 
 			rt.alloc(w,h);
 
-
 			// Initialize rng loopup tables 
-			RandomNumberGenerator rg;
-			rg.getUniform2DFromTable();
-			rg.getUniform3DFromTable();
-			
-			maxUnits = w;
+			RandomNumberGenerator rg;			
 			
 			// Calculate viewport
 			GLdouble ox1, oy1, oz1;				
@@ -148,13 +147,19 @@ namespace SyntopiaCore {
 				rt.lightPos = Vector3f((GLfloat)sx1, (GLfloat)sy1, (GLfloat)sz1);
 			}
 
-			
 			rt.aaSamples=abs(rt.aaSamples);
 			rt.setCounters(&nextUnit, &completedUnits, maxUnits);
-			rt.setTask(RenderThread::Raytrace);
+			progressiveOutput = 0;
+			if (progressiveRender) {
+				rt.setTask(RenderThread::RaytraceProgressive);
+				progressiveOutput =  new ProgressiveOutput(w,h);
+				rt.progressiveOutput = progressiveOutput;
+			} else {
+				rt.setTask(RenderThread::Raytrace);
+			}
 			threads.append(&rt);
 			for (int i = 1; i < maxThreads; i++) {
-				threads.append( new RenderThread(rt));	
+				threads.append(new RenderThread(rt));	
 			}
 
 			// To avoid coherence we will seed the threads differently.
@@ -163,14 +168,17 @@ namespace SyntopiaCore {
 				threads[i]->seed(rg.getInt());
 			}
 			
-			for (int i = 0; i < maxThreads; i++) threads[i]->setTask(RenderThread::Raytrace);
 			startJobs(progress);
 			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
 			
-			for (int x = 0; x < w; x++) {
-				for (int y = 0; y < h; y++) {
-					Vector3f c = rt.colors[x+y*w];
-					im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
+			if (progressiveRender) {
+				im = progressiveOutput->getImage();
+			} else {
+				for (int x = 0; x < w; x++) {
+					for (int y = 0; y < h; y++) {
+						Vector3f c = rt.colors[x+y*w];
+						im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
+					}
 				}
 			}
 
@@ -178,12 +186,10 @@ namespace SyntopiaCore {
 				if (i!=0) delete(threads[i]);
 			}
 			
-			INFO(QString("Time: %1s")
-				.arg(renderTime));
-			INFO(QString("Pixels: %1.").
-				arg(w*h));
-
+			INFO(QString("Time: %1s for %2 pixels.").arg(renderTime).arg(w*h));
+			
 			progress.close();
+			delete (progressiveOutput);
 			return im;
 		}
 
@@ -200,6 +206,9 @@ namespace SyntopiaCore {
 				MiniParser(value, ',').getInt(rt.aaSamples);
 				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")
 					.arg(rt.aaSamples).arg(rt.aaSamples));
+			} else if (param == "progressive") {
+				MiniParser(value, ',').getBool(progressiveRender);
+				INFO(QString("Progressive Render: %3").arg(progressiveRender ? "true" : "false"));
 			} else if (param == "dof") {
 				MiniParser(value, ',').getDouble(rt.dofCenter).getDouble(rt.dofFalloff);
 				INFO(QString("Depth-of-field: center %1, falloff %2 ")
