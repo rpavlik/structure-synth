@@ -31,6 +31,7 @@ namespace StructureSynth {
 			bool hasBeenSavedOnce;			
         };
 
+		
 		// A modified QTextEdit with an extended context menu
 		class TextEdit : public QTextEdit {
 			Q_OBJECT
@@ -186,6 +187,7 @@ namespace StructureSynth {
 			QVector<QAction*> recentFileActions;
 			QAction* recentFileSeparator;
 			bool probeDepth;
+			SyntopiaCore::GLEngine::ProgressBox* progressBox;
 		};
 
 		class PreviewWindow : public QDialog {

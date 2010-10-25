@@ -6,12 +6,12 @@ using namespace SyntopiaCore::Math;
 
 namespace SyntopiaCore {
 	namespace GLEngine {
-		
-		
+
+
 		RenderThread::RenderThread() {
 			backgroundColor = Vector3f(0,0,0);
 			aoSamples = 1;
-			aaSamples = 2;
+			aaSamples = 8;
 			useShadows = true;
 			copy = false;
 			lightPos = Vector3f(0,0,0);
@@ -22,15 +22,10 @@ namespace SyntopiaCore {
 			sampler = 0;
 		}
 
-		
+
 		RenderThread::~RenderThread() {
 			if (!copy) {
-				delete[] aoMap;
 				delete[] colors;
-				delete[] normals;
-				delete[] depths;
-				delete[] objs;
-				delete[] intersections;
 			}
 			delete accelerator;
 			delete sampler;
@@ -38,13 +33,8 @@ namespace SyntopiaCore {
 
 
 		RenderThread::RenderThread(const RenderThread& other) {
-			depths = other.depths;
-			normals = other.normals;
 			colors = other.colors;
-			intersections= other.intersections;
-			aoMap = other.aoMap;
-			objs = other.objs;
-
+		
 			rayIDs = other.rayIDs;
 
 			frontStart = other.frontStart;
@@ -86,42 +76,42 @@ namespace SyntopiaCore {
 			progressiveOutput = other.progressiveOutput;
 		};
 
-		
+
 
 		double RenderThread::getAOStrength(Object3D* object, Vector3f objectNormal, Vector3f objectIntersection) {
-			
+
 			if (aoSamples == 0 || object==0) return 1.0;
-				double tests = 0;
-				double hits = 0;
-				for (int ix = 0; ix < aoSamples*aoSamples; ix++) {
-					
-					Vector3f random = sampler->getAODirection(rayNumber*aoSamples*aoSamples+ix);
-					if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
-					random.normalize();
-					
-					double maxT = 0;
-					QList<Object3D*>* list = accelerator->setupRay(objectIntersection,random, maxT);
-					RayInfo ri;
-					ri.startPoint = objectIntersection;
-					ri.lineDirection = random;
-					bool occluded = false;
-					while (list != 0 && !occluded) { 
-						// check objects
-						for (int i = 0; i < list->size(); i++) {
-							if (list->at(i) == object) continue; // self-shadow? 							
-							occluded = list->at(i)->intersectsRay(&ri);
-							if (ri.intersection < 1E-5) occluded = false;
-							if (occluded) break;								
-						}
-						if (!occluded) list = accelerator->advance(maxT); 
+			double tests = 0;
+			double hits = 0;
+			for (int ix = 0; ix < aoSamples*aoSamples; ix++) {
+
+				Vector3f random = sampler->getAODirection(rayNumber*aoSamples*aoSamples+ix);
+				if (Vector3f::dot(random, objectNormal)<0) random = random*-1.0; // Only check away from surface.
+				random.normalize();
+
+				double maxT = 0;
+				QList<Object3D*>* list = accelerator->setupRay(objectIntersection,random, maxT);
+				RayInfo ri;
+				ri.startPoint = objectIntersection;
+				ri.lineDirection = random;
+				bool occluded = false;
+				while (list != 0 && !occluded) { 
+					// check objects
+					for (int i = 0; i < list->size(); i++) {
+						if (list->at(i) == object) continue; // self-shadow? 							
+						occluded = list->at(i)->intersectsRay(&ri);
+						if (ri.intersection < 1E-5) occluded = false;
+						if (occluded) break;								
 					}
-					double weight = 1.0; // Vector3f::dot(random, objectNormal);
-					if (occluded) hits+=weight;
-					tests += weight;			
+					if (!occluded) list = accelerator->advance(maxT); 
 				}
-				return 1-hits/tests;
+				double weight = 1.0; // Vector3f::dot(random, objectNormal);
+				if (occluded) hits+=weight;
+				tests += weight;			
+			}
+			return 1-hits/tests;
 		}
-		
+
 		void RenderThread::raytrace(int newUnit) {
 			int x = newUnit-1;
 			float fx = x/(float)(w);
@@ -143,13 +133,15 @@ namespace SyntopiaCore {
 		void RenderThread::raytraceProgressive(int newUnit) {
 			rayNumber = newUnit;
 			double* weights = new double[w*h];
+			colors = new Vector3f[w*h];
 			float xs = (1.0/w);
 			float ys = (1.0/h);
-			for (int x = 0; x < w; x++) {	
-				float fx = x/(float)(w);
-				for (int y = 0; y < h; y++) {	
-					float fy = y/(float)(h);
-					sampler->prepareSamples(aaSamples,aoSamples);
+			sampler->prepareSamples(aaSamples,aoSamples);
+					
+			for (int y = 0; y < h; y++) {	
+					float fy = y*ys;
+				for (int x = 0; x < w; x++) {	
+				float fx = x*xs;
 					Vector3f ls = sampler->getAASample(rayNumber);
 					colors[x+y*w] = ls[2]*rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);
 					weights[x+y*w] = ls[2];
@@ -158,8 +150,10 @@ namespace SyntopiaCore {
 
 			progressiveOutput->addIteration(colors, weights);
 			delete[] weights;
+			delete[] colors;
+			colors = 0;
 		};
-		
+
 		void RenderThread::run() {
 			int newUnit = nextUnit->increase();
 			while (newUnit <= maxUnits) {
@@ -185,24 +179,17 @@ namespace SyntopiaCore {
 		void RenderThread::alloc(int w, int h) {
 			this->w = w;
 			this->h = h;
-			depths = new double[w*h];
-			for (int i = 0; i<w*h; i++) depths[i] = -1;
-			normals = new Vector3f[w*h];
 			colors = new Vector3f[w*h];
-			intersections = new Vector3f[w*h];
-			aoMap = new double[w*h];
-			for (int i = 0; i<w*h; i++) aoMap[i] = -1;
-			objs = new Object3D*[w*h];
 			rayID = 0;
 			pixels = 0;
 			checks = 0;
 		}
 
 		Vector3f RenderThread::rayCastPixel(float x, float y) {
-		
+
 			Vector3f startPoint = frontStart + frontX*x + frontY*y;
 			Vector3f endPoint  =   backStart  + backX*x  + backY*y;
-			
+
 			if (dofCenter == 0) {
 				Vector3f direction = endPoint - startPoint;
 				return rayCast(startPoint, direction, 0);

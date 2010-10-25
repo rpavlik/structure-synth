@@ -43,6 +43,8 @@ namespace StructureSynth {
 
 		namespace {
 			int MaxRecentFiles = 5;
+
+		
 		}
 
 		void TextEdit::contextMenuEvent(QContextMenuEvent *event)
@@ -765,6 +767,12 @@ namespace StructureSynth {
 			connect(raytracePushButton, SIGNAL(clicked()), this, SLOT(raytraceClicked()));
 			renderToolBar->addWidget(raytracePushButton);
 
+			progressBox = new ProgressBox(this);
+			renderToolBar->addWidget(progressBox);
+			progressBox->setValue(0);
+		//	progressBox->setEnabled(false);
+
+
 
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
@@ -774,9 +782,13 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::raytraceClicked() {
-			RayTracer rt(engine);
+		//	this->setEnabled(false);
+		//	progressBox->setEnabled(true);
+			RayTracer rt(engine, progressBox);
 			QImage im = rt.calculateImage(engine->width(),engine->height());
+		//	this->setEnabled(true);
 			engine->setImage(im);
+			progressBox->setEnabled(true);
 		}
 
 
@@ -898,6 +910,7 @@ namespace StructureSynth {
 				return;
 			}
 
+			setEnabled(false);
 			if (autoIncrementCheckbox->isChecked()) updateRandom();
 			RandomStreams::SetSeed(getSeed());
 			INFO(QString("Random seed: %1").arg(getSeed()));
@@ -960,6 +973,7 @@ namespace StructureSynth {
 				engine->clearWorld();
 				engine->requireRedraw();
 			} 
+			setEnabled(true);
 
 			engine->setDisabled(false);
 
@@ -1517,7 +1531,7 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::raytrace() {
-			RayTracer rt(engine);
+			RayTracer rt(engine, progressBox);
 			QImage im = rt.calculateImage(0,0);
 			PreviewWindow pd(this, im);
 			pd.exec();

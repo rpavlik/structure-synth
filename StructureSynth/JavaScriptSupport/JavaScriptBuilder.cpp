@@ -255,7 +255,7 @@ namespace StructureSynth {
 
 		void Builder::raytraceToFile(QString fileName, bool overwrite) {
 
-			RayTracer rt(engine3D);
+			RayTracer rt(engine3D,0);
 			INFO(QString("Raytracing %1x%2 image...").arg(width).arg(height));
 			QImage im = rt.calculateImage(width,height);
 			if (rt.wasCancelled()) throw Exception("User cancelled");

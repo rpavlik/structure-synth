@@ -16,7 +16,8 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 		
-		RayTracer::RayTracer(EngineWidget* engine) {
+		RayTracer::RayTracer(EngineWidget* engine, ProgressBox* progressBox) {
+			this->progressBox = progressBox;
 			for (int i = 0; i < 16; i++) modelView[i] = engine->getModelViewCache()[i];
 			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
 			for (int i = 0; i < 16; i++) viewPort[i] = engine->getViewPortCache()[i];
@@ -49,7 +50,7 @@ namespace SyntopiaCore {
 			this->engine = engine;
 		}
 
-		void RayTracer::startJobs(QProgressDialog& progress) {
+		void RayTracer::startJobs(ProgressBox* progress) {
 			completedUnits.setValue(0);
 			nextUnit.setValue(0);
 
@@ -60,12 +61,13 @@ namespace SyntopiaCore {
 			
 			int c = completedUnits.value();
 			int oldC = 0;
+			QTime now = QTime::currentTime();
 			while (c<maxUnits) {
 				bool s = completedUnits.wait(1000); // Wait to see if a new unit is completed.
-				progress.setValue((c*100)/maxUnits);
-				if (!s) qApp->processEvents();
+				if (progress && !progress->wasCanceled()) progress->setValue((c*100)/maxUnits);
+				
 
-				if	(progress.wasCanceled()) {
+				if	(progress && progress->wasCanceled()) {
 					// in order to cancel, we will swallow
 					// all pending job units...
 					userCancelled = true;
@@ -77,11 +79,19 @@ namespace SyntopiaCore {
 				}
 				c = completedUnits.value();
 				//Debug(QString::number(c));
-				if (progressiveRender && oldC != c) {
-					oldC = c;
-					engine->setImage(progressiveOutput->getImage());
-					Debug(QString::number(c));
+				if (!s || now.msecsTo(QTime::currentTime())>1000) {
+					now =  QTime::currentTime();
+
+					if (progressiveRender && oldC != c) {
+						oldC = c;
+						engine->setImage(progressiveOutput->getImage());
+					}
+				
+					qApp->processEvents();
+					
 				}
+
+				
 			};
 		}
 			
@@ -133,10 +143,7 @@ namespace SyntopiaCore {
 			rt.backY = Vector3f(ox1,oy1,oz1)-rt.backStart;
 
 			// Setup progress dialog.
-			QProgressDialog progress("progress", "Cancel", 0, 100);
-			progress.setLabelText("Ray tracing");
-			progress.setMinimumDuration(1000);
-			progress.setWindowModality(Qt::WindowModal);
+			if (progressBox) progressBox->start();
 
 			QTime start = QTime::currentTime();
 			QImage im(w,h, QImage::Format_RGB32);
@@ -168,7 +175,7 @@ namespace SyntopiaCore {
 				threads[i]->seed(rg.getInt());
 			}
 			
-			startJobs(progress);
+			startJobs(progressBox);
 			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
 			
 			if (progressiveRender) {
@@ -188,7 +195,7 @@ namespace SyntopiaCore {
 			
 			INFO(QString("Time: %1s for %2 pixels.").arg(renderTime).arg(w*h));
 			
-			progress.close();
+			if (progressBox) progressBox->dismiss();
 			delete (progressiveOutput);
 			return im;
 		}

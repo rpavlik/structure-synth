@@ -1,11 +1,10 @@
 set raytracer::ambient-occlusion-samples 1
 set raytracer::shadows false
+set raytracer::progressive true
 set raytracer::samples 8
-set raytracer::reflection 0.0
-set raytracer::reflective::reflection 0.0
-set raytracer::phong [0.8,0.4,0.5]
-set raytracer::reflective::phong [0.6,0.6,0.0]
-//set raytracer::dof [0.23,0.07]
+set raytracer::reflection 0.3
+set raytracer::phong [0.5,0.6,0.2]
+set raytracer::dof [0.23,0.07]
 
 // Camera settings. Place these before first rule call.
 set translation [0 -0.367113 -20]
@@ -14,13 +13,9 @@ set pivot [0 0 0]
 set scale 0.408795
 
 set background #fff
-#define _md 400
-#define _rz 0
-#define _zoom 1
+set maxdepth 400
 
-set maxdepth _md
-
-{ rz _rz s _zoom color white } r0
+ r0
 
 rule r0 {
 3 * { rz 120  } R1

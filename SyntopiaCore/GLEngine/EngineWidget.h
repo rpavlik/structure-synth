@@ -39,6 +39,34 @@ namespace SyntopiaCore {
 			double farClipping;
 		};
 
+		class ProgressBox : public QWidget {
+			Q_OBJECT
+		public:
+			ProgressBox(QWidget* parent) : QWidget(parent) {
+				QHBoxLayout *layout = new QHBoxLayout(this);
+				bar = new QProgressBar(this);
+				cancelButton = new QPushButton(this);
+				cancelButton->setText("Cancel");
+				layout->addWidget(bar);
+				layout->addWidget(cancelButton); 
+				canceled = false;
+				connect(cancelButton, SIGNAL(clicked()), this, SLOT(setCanceled()));
+			}
+
+			bool wasCanceled() { return canceled; }
+			void setValue(int v) { bar->setValue(v); }
+			void start() { setValue(0); setVisible(true); setEnabled(true); canceled = false; }
+			void dismiss() { setValue(0); setVisible(false); setEnabled(false);  }
+		public slots:
+			void setCanceled() { canceled = true; } 
+
+		private:
+
+			QProgressBar* bar;
+			QPushButton* cancelButton;
+			bool canceled;
+		};
+
 
 		/// Widget for the mini OpenGL engine.
 		class EngineWidget : public QGLWidget {
