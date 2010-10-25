@@ -17,14 +17,14 @@ namespace SyntopiaCore {
 	
 		class RayTracer {
 		public:
-			RayTracer(EngineWidget* widget);
+			RayTracer(EngineWidget* widget, ProgressBox* progressBox);
 			QImage calculateImage(int width, int height);
 			void setParameter(QString param, QString value);
 			bool wasCancelled() { return userCancelled; }
 		private:	
 			ProgressiveOutput* progressiveOutput;
 			EngineWidget* engine;
-			void startJobs(QProgressDialog& progress);
+			void startJobs(ProgressBox* progress);
 			QList<Object3D*> objects;
 			float xmin;
 			float ymin;
@@ -49,6 +49,7 @@ namespace SyntopiaCore {
 			int maxUnits;			
 			RenderThread rt;
 			bool progressiveRender;
+			ProgressBox* progressBox;
 		};
 
 	}

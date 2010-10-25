@@ -43,12 +43,12 @@ namespace SyntopiaCore {
 			int h;
 
 			// Shared between instances...
-			double* depths;
-			Vector3f* normals;
+			//double* depths;
+			//Vector3f* normals;
 			Vector3f* colors;
-			Vector3f* intersections;
-			double* aoMap;
-			Object3D** objs;
+			//Vector3f* intersections;
+			//double* aoMap;
+			//Object3D** objs;
 
 			Vector3f frontStart;
 			Vector3f frontX;

@@ -12,9 +12,9 @@ namespace SyntopiaCore {
 		class Sampler {
 		public:
 			Sampler(Math::RandomNumberGenerator* rg) : rg(rg) {}
-			virtual Vector3f getAASample(int index) { return Vector3f(rg->getDouble(-0.5,0.5), rg->getDouble(-0.5,0.5),1.0); }
-			virtual Vector3f getAODirection(int index) { return rg->getUniform3D(); }
-			virtual Vector3f getLensSample(int index) { return rg->getUniform2D(); }
+			virtual Vector3f getAASample(int /*index*/) { return Vector3f(rg->getDouble(-0.5,0.5), rg->getDouble(-0.5,0.5),1.0); }
+			virtual Vector3f getAODirection(int /*index*/) { return rg->getUniform3D(); }
+			virtual Vector3f getLensSample(int /*index*/) { return rg->getUniform2D(); }
 			virtual void prepareSamples(int /*nSamplesSqrt*/, int /*nAOSamplesSqrt*/) {};
 			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new Sampler(rg); }
 		protected:

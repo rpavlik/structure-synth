@@ -1,6 +1,11 @@
  
 Changelog for Structure Synth:
 ------------
+TODO: Memleak for Colors[], re-entry
+
+25 Oct 10 [MHC] Fixed progressive sampling concurrency bug. 
+[2h]            New ProgressBox
+
 24 Oct 10 [MHC] Added progressive sampling.
 [2h] 
 

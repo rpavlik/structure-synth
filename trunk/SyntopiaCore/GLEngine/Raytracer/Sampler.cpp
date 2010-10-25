@@ -66,8 +66,10 @@ namespace SyntopiaCore {
 
 		Vector3f ProgressiveStratifiedSampler::getAODirection(int index) {
 			if (index>=aoSamplesSqrt*aoSamplesSqrt) throw 1;
-			int i = index / aoSamplesSqrt;
-			int j = index % aoSamplesSqrt;
+			int j = index / aoSamplesSqrt;
+			int i = index % aoSamplesSqrt;
+			
+
 			double x = rg->getDouble( ((double)i)/(double)aoSamplesSqrt,((double)(i+1.0))/(double)aoSamplesSqrt);
 			double y = rg->getDouble( ((double)j)/(double)aoSamplesSqrt,((double)(j+1.0))/(double)aoSamplesSqrt);		
 			return sampleSphere(x,y);
