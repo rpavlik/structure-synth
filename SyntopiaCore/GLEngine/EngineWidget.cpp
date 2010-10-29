@@ -279,7 +279,6 @@ namespace SyntopiaCore {
 				
 				/*
 				glDisable (GL_LIGHTING);
-
 				glPointSize(3);
 				glColor4f(1,1,1,1);
 				glBegin(GL_POINTS);
@@ -287,7 +286,6 @@ namespace SyntopiaCore {
 				Math::RandomNumberGenerator rg;
 				static int seeder = 0;
 				//rg.setSeed(seeder++);
-
 				for (double uz1 = 0; uz1 <=1; uz1+=stepX)
 				{
 					for (double uz2 = 0; uz2 <=1; uz2+=stepX)
@@ -301,15 +299,15 @@ namespace SyntopiaCore {
 						double phi = 2.0 * 3.1415926 * u2;
 						double x = r * cos(phi);
 						double y = r * sin(phi);
-						glVertex3d(x,y,z);
+						//glVertex3d(x,y,z);
+						glVertex3d(cos(2*3.1415*u1)*sqrt(u2),sin(2*3.1415*u1)*sqrt(u2),0);
 					}
 				}
-				
 				glEnd();
-				
 				glEnable (GL_LIGHTING);
 
 				*/
+				
 
 				// Fast-draw
 				int objs =  objects.size();

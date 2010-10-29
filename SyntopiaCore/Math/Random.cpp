@@ -1,8 +1,27 @@
-  #include "Random.h"
+#include "Random.h"
 
 
 namespace SyntopiaCore {
 	namespace Math {	
+
+		namespace {
+			struct SortPair {
+				SortPair() {};
+				SortPair(int index, double sortValue) : index(index), sortValue(sortValue) {};
+				int index;
+				double sortValue;
+				bool operator< (const SortPair& rhs) const { return sortValue < rhs.sortValue; }
+			};
+		}
+
+		QVector<int> RandomNumberGenerator::getRandomIndices(int count) {
+			QVector<SortPair> sp(count);
+			for (int i = 0; i < count; i++) sp[i] = SortPair(i, getDouble());
+			qSort(sp);
+			QVector<int> out(count);
+			for (int i = 0; i < count; i++) out[i] = sp[i].index;
+			return out;
+		}
 
 		Vector3f RandomNumberGenerator::getUniform2D() {
 			Vector3f v;
@@ -11,7 +30,7 @@ namespace SyntopiaCore {
 			} while (v.sqrLength()>1.0);
 			return v;
 		}
-		
+
 		Vector3f RandomNumberGenerator::getUniform3D() {
 			Vector3f v;
 			do {

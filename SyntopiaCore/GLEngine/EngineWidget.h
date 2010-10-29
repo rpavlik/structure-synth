@@ -44,27 +44,41 @@ namespace SyntopiaCore {
 		public:
 			ProgressBox(QWidget* parent) : QWidget(parent) {
 				QHBoxLayout *layout = new QHBoxLayout(this);
-				bar = new QProgressBar(this);
 				cancelButton = new QPushButton(this);
-				cancelButton->setText("Cancel");
-				layout->addWidget(bar);
+				bar = new QProgressBar(this);
 				layout->addWidget(cancelButton); 
+				layout->addWidget(bar);
 				canceled = false;
 				connect(cancelButton, SIGNAL(clicked()), this, SLOT(setCanceled()));
+				dismiss();
+				started = false;
 			}
 
 			bool wasCanceled() { return canceled; }
 			void setValue(int v) { bar->setValue(v); }
-			void start() { setValue(0); setVisible(true); setEnabled(true); canceled = false; }
-			void dismiss() { setValue(0); setVisible(false); setEnabled(false);  }
+			void start() { cancelButton->setEnabled(true);  started = true; setValue(0); bar->setVisible(true); setEnabled(true); cancelButton->setText("Cancel"); canceled = false; }
+			void dismiss() { cancelButton->setEnabled(true); started = false; setValue(0); bar->setVisible(false); cancelButton->setText("Raytrace Preview");  }
+		
 		public slots:
-			void setCanceled() { canceled = true; } 
+	
+			void setCanceled() { 
+				if (started) { 
+					canceled = true;
+					cancelButton->setEnabled(false);
+				} else {
+					emit startPressed();
+				}
+			} 
 
+		signals:
+
+			void startPressed();
 		private:
 
 			QProgressBar* bar;
 			QPushButton* cancelButton;
 			bool canceled;
+			bool started;
 		};
 
 

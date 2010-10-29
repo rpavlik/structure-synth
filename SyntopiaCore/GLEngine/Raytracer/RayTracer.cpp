@@ -61,12 +61,13 @@ namespace SyntopiaCore {
 			
 			int c = completedUnits.value();
 			int oldC = 0;
-			QTime now = QTime::currentTime();
+			
+			int screenUpdates=0;
+				
+			QTime lastTime = QTime::currentTime().addMSecs(-2000);
 			while (c<maxUnits) {
 				bool s = completedUnits.wait(1000); // Wait to see if a new unit is completed.
-				if (progress && !progress->wasCanceled()) progress->setValue((c*100)/maxUnits);
-				
-
+								
 				if	(progress && progress->wasCanceled()) {
 					// in order to cancel, we will swallow
 					// all pending job units...
@@ -78,29 +79,34 @@ namespace SyntopiaCore {
 					}
 				}
 				c = completedUnits.value();
-				//Debug(QString::number(c));
-				if (!s || now.msecsTo(QTime::currentTime())>1000) {
-					now =  QTime::currentTime();
+				if (progress && !progress->wasCanceled()) progress->setValue((c*100)/maxUnits);
+					
+				if (lastTime.msecsTo(QTime::currentTime())>1000) {
+					//Debug(QString::number(c));
+				
+					lastTime =  QTime::currentTime();
 
-					if (progressiveRender && oldC != c) {
+					if (oldC != c) {
+						screenUpdates++;    
 						oldC = c;
 						engine->setImage(progressiveOutput->getImage());
 					}
 				
 					qApp->processEvents();
-					
 				}
 
-				
 			};
+			INFO(QString("Screen updates: %1").arg(screenUpdates));
 		}
 			
 
 		QImage RayTracer::calculateImage(int w, int h) {
 			
 			if (progressiveRender) {
-				maxUnits = rt.aaSamples*rt.aaSamples-1;
+				maxUnits = rt.aaSamples*rt.aaSamples;
 				rt.sampler = new ProgressiveStratifiedSampler(&rt.rg);
+				((ProgressiveStratifiedSampler*)rt.sampler)->setAAOrder(rt.rg.getRandomIndices(maxUnits));
+				
 			} else {
 				maxUnits = w;
 				rt.sampler = new StratifiedSampler(&rt.rg);
@@ -156,11 +162,10 @@ namespace SyntopiaCore {
 
 			rt.aaSamples=abs(rt.aaSamples);
 			rt.setCounters(&nextUnit, &completedUnits, maxUnits);
-			progressiveOutput = 0;
+			progressiveOutput =  new ProgressiveOutput(w,h);
+			rt.progressiveOutput = progressiveOutput;
 			if (progressiveRender) {
-				rt.setTask(RenderThread::RaytraceProgressive);
-				progressiveOutput =  new ProgressiveOutput(w,h);
-				rt.progressiveOutput = progressiveOutput;
+				rt.setTask(RenderThread::RaytraceProgressive);	
 			} else {
 				rt.setTask(RenderThread::Raytrace);
 			}
@@ -178,17 +183,8 @@ namespace SyntopiaCore {
 			startJobs(progressBox);
 			double renderTime = start.msecsTo(QTime::currentTime())/1000.0;
 			
-			if (progressiveRender) {
-				im = progressiveOutput->getImage();
-			} else {
-				for (int x = 0; x < w; x++) {
-					for (int y = 0; y < h; y++) {
-						Vector3f c = rt.colors[x+y*w];
-						im.setPixel(x,y,qRgb(c.x()*255, c.y()*255, c.z()*255));
-					}
-				}
-			}
-
+			im = progressiveOutput->getImage();
+			
 			for (int i = 0; i < maxThreads; i++) {
 				if (i!=0) delete(threads[i]);
 			}

@@ -763,17 +763,10 @@ namespace StructureSynth {
 			renderToolBar->addWidget(fastRotateCheckbox);
 			fastRotateCheckbox->setChecked(false);
 
-			raytracePushButton = new QPushButton("Raytrace preview", randomToolBar);
-			connect(raytracePushButton, SIGNAL(clicked()), this, SLOT(raytraceClicked()));
-			renderToolBar->addWidget(raytracePushButton);
-
 			progressBox = new ProgressBox(this);
 			renderToolBar->addWidget(progressBox);
+			connect(progressBox, SIGNAL(startPressed()), this, SLOT(raytraceClicked()));
 			progressBox->setValue(0);
-		//	progressBox->setEnabled(false);
-
-
-
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
 
@@ -782,13 +775,19 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::raytraceClicked() {
-		//	this->setEnabled(false);
-		//	progressBox->setEnabled(true);
+			QList<QWidget *> widgets = findChildren<QWidget *>("");
+			QWidget* w = progressBox;
+			while (w) { widgets.removeAll(w); w=w->parentWidget(); }
+
+			foreach (QWidget* w, widgets) w->setEnabled(false);
+			//progressBox->setEnabled(true);
+			qApp->processEvents();
+
 			RayTracer rt(engine, progressBox);
 			QImage im = rt.calculateImage(engine->width(),engine->height());
-		//	this->setEnabled(true);
+			foreach (QWidget* w, widgets) w->setEnabled(true);
 			engine->setImage(im);
-			progressBox->setEnabled(true);
+			
 		}
 
 

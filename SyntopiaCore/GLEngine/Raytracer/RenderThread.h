@@ -42,14 +42,6 @@ namespace SyntopiaCore {
 			int w;
 			int h;
 
-			// Shared between instances...
-			//double* depths;
-			//Vector3f* normals;
-			Vector3f* colors;
-			//Vector3f* intersections;
-			//double* aoMap;
-			//Object3D** objs;
-
 			Vector3f frontStart;
 			Vector3f frontX;
 			Vector3f frontY;
@@ -76,11 +68,7 @@ namespace SyntopiaCore {
 
 			Math::RandomNumberGenerator rg;
 
-			Vector3f normal;
-			double depth;
 			Vector3f color;
-			Vector3f intersection;
-			Object3D* hitObject;
 			bool copy;
 
 			Sampler* sampler;

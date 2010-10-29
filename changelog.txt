@@ -1,8 +1,14 @@
  
 Changelog for Structure Synth:
 ------------
-TODO: Memleak for Colors[], re-entry
 
+(77h)
+
+31 Oct 10 [MHC] Fixed memleaks for colors[], fixed GUI reentry
+[5h]			Added LensSamples stratification
+				Removed Mutex Locks for progressive rendering (because the column rendering was too slow)
+				Tried out sRGB conversion and simple exponential 'exposure' tonemapping, but discarded it for now.
+				
 25 Oct 10 [MHC] Fixed progressive sampling concurrency bug. 
 [2h]            New ProgressBox
 

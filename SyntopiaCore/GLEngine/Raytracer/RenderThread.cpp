@@ -24,17 +24,12 @@ namespace SyntopiaCore {
 
 
 		RenderThread::~RenderThread() {
-			if (!copy) {
-				delete[] colors;
-			}
 			delete accelerator;
 			delete sampler;
 		}
 
 
 		RenderThread::RenderThread(const RenderThread& other) {
-			colors = other.colors;
-		
 			rayIDs = other.rayIDs;
 
 			frontStart = other.frontStart;
@@ -117,6 +112,8 @@ namespace SyntopiaCore {
 			float fx = x/(float)(w);
 			float xs = (1.0/w);
 			float ys = (1.0/h);
+			Vector3f* colors = new Vector3f[h];
+
 			for (int y = 0; y < h; y++) {	
 				sampler->prepareSamples(aaSamples,aoSamples);
 				float fy = y/(float)(h);
@@ -126,22 +123,26 @@ namespace SyntopiaCore {
 					Vector3f ls = sampler->getAASample(rayNumber);
 					color = color + rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);		
 				}
-				colors[x+y*w] = color / (aaSamples*aaSamples);
+				colors[y] = color / (aaSamples*aaSamples);
 			}
+
+			progressiveOutput->addColumn(x,colors);
+			delete[] colors;
+			
 		};
 
 		void RenderThread::raytraceProgressive(int newUnit) {
-			rayNumber = newUnit;
+			rayNumber = newUnit-1;
 			double* weights = new double[w*h];
-			colors = new Vector3f[w*h];
+			Vector3f* colors = new Vector3f[w*h];
 			float xs = (1.0/w);
 			float ys = (1.0/h);
 			sampler->prepareSamples(aaSamples,aoSamples);
-					
+
 			for (int y = 0; y < h; y++) {	
-					float fy = y*ys;
+				float fy = y*ys;
 				for (int x = 0; x < w; x++) {	
-				float fx = x*xs;
+					float fx = x*xs;
 					Vector3f ls = sampler->getAASample(rayNumber);
 					colors[x+y*w] = ls[2]*rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);
 					weights[x+y*w] = ls[2];
@@ -151,7 +152,6 @@ namespace SyntopiaCore {
 			progressiveOutput->addIteration(colors, weights);
 			delete[] weights;
 			delete[] colors;
-			colors = 0;
 		};
 
 		void RenderThread::run() {
@@ -179,7 +179,6 @@ namespace SyntopiaCore {
 		void RenderThread::alloc(int w, int h) {
 			this->w = w;
 			this->h = h;
-			colors = new Vector3f[w*h];
 			rayID = 0;
 			pixels = 0;
 			checks = 0;
@@ -196,7 +195,7 @@ namespace SyntopiaCore {
 			} else {
 				Vector3f centerPoint =(endPoint-startPoint)* dofCenter+ startPoint;
 				// --- Uniform Disc Sampling
-				Vector3f displace = sampler->getLensSample(aoSamples*aoSamples)*dofFalloff;
+				Vector3f displace = sampler->getLensSample(rayNumber)*dofFalloff;
 				Vector3f newStartPoint = frontStart + frontX*(x+displace.x())+ frontY*(y+displace.y());	
 				Vector3f direction = (centerPoint - newStartPoint)*(1/dofCenter);
 				return rayCast(newStartPoint, direction, 0);
@@ -306,45 +305,40 @@ namespace SyntopiaCore {
 					}
 				}
 
-				// Clamp light values.
 				if (useShadows && inShadow) light=ambient; // drop-shadow strength (only ambient light...)
-				if (light > 1) light = 1;
 				if (light < 0) light = 0;
+
+				foundColor[0] = foundColor[0]*light;
+				foundColor[1] = foundColor[1]*light;
+				foundColor[2] = foundColor[2]*light;
 
 				if (foundColor[3] < 1) {
 					Vector3f color = rayCast(iPoint, direction, bestObj, level+1); 
-					foundColor[0] = light*foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
-					foundColor[1] = light*foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
-					foundColor[2] = light*foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
+					foundColor[0] = foundColor[0]*(foundColor[3]) + color.x()*(1-foundColor[3]);
+					foundColor[1] = foundColor[1]*(foundColor[3]) + color.y()*(1-foundColor[3]);
+					foundColor[2] = foundColor[2]*(foundColor[3]) + color.z()*(1-foundColor[3]);
 				}
 
 				double reflection = bestObj->getPrimitiveClass()->reflection;
 
 				if (reflection > 0) {
 					Vector3f nDir = foundNormal*(-2)*Vector3f::dot(foundNormal, direction)/foundNormal.sqrLength() + direction;
+
+					//Vector3f v = rg.getUniform3D();
+					//if (Vector3f::dot(v,nDir)<0) v = -v;
+					//nDir = v+nDir;
+
 					Vector3f color = rayCast(iPoint, nDir, bestObj, level+1);
-					Vector3f thisColor = Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]) *(1-reflection)
-						+ color*(reflection);
-					foundColor[0] = light*foundColor[0]*(1-reflection) + color.x()*reflection;
-					foundColor[1] = light*foundColor[1]*(1-reflection) + color.y()*reflection;
-					foundColor[2] = light*foundColor[2]*(1-reflection) + color.z()*reflection;
-					if (foundColor[0]>1) foundColor[0] = 1;
-					if (foundColor[1]>1) foundColor[1] = 1;
-					if (foundColor[2]>1) foundColor[2] = 1;
+					foundColor[0] = foundColor[0]*(1-reflection) + color.x()*reflection;
+					foundColor[1] = foundColor[1]*(1-reflection) + color.y()*reflection;
+					foundColor[2] = foundColor[2]*(1-reflection) + color.z()*reflection;
+
 				}
 
-				normal = foundNormal;
-				depth = lengthToClosest;
-				color =  Vector3f(light*foundColor[0],light*foundColor[1],light*foundColor[2]);
-				intersection = iPoint;
-				hitObject = bestObj;
+				color =  Vector3f(foundColor[0],foundColor[1],foundColor[2]);
 				return color;
 			} else {
-				depth = 10; // Real depth is [0;1]
-				normal = Vector3f(0,0,0);
 				color = Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
-				intersection =  Vector3f(0,0,0);
-				hitObject = 0;
 				return color;
 			}
 		}
