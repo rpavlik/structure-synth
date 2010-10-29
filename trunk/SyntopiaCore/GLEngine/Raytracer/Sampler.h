@@ -52,11 +52,13 @@ namespace SyntopiaCore {
 			virtual Vector3f getLensSample(int index);
 			Vector3f sampleSphere(double u1, double u2);
 			virtual void prepareSamples(int nSamplesSqrt, int nAOSamplesSqrt);
-			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new ProgressiveStratifiedSampler(rg); }
-
+			virtual Sampler* clone(Math::RandomNumberGenerator* rg);
+			void setAAOrder(QVector<int> aaOrder) { this->aaOrder = aaOrder; }
 		private:
 			int aoSamplesSqrt;
 			int aaSamplesSqrt;
+			QVector<int> aaOrder;
+			
 		};
 
 

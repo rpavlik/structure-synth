@@ -29,6 +29,8 @@ namespace SyntopiaCore {
 				setSeed(lastSeed);
 			};
 
+			QVector<int> getRandomIndices(int count); 
+
 			bool isUsingStdLib() { return (rng == 0); }
 
 			// Returns a double in the interval [0;1]

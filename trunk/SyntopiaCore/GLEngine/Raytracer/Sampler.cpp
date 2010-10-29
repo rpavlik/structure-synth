@@ -3,6 +3,43 @@
 namespace SyntopiaCore {
 	namespace GLEngine {
 
+		namespace {
+		    
+			
+			// This code is based on the method in Physical Based Rendering p. 666, and the Sunflow implementation
+			Vector3f concentricSampleDisk(float u1, float u2) {
+				float r, angle;
+				float sx = 2 * u1 - 1;
+				float sy = 2 * u2 - 1;
+
+				if (sx == 0.0 && sy == 0.0)	return Vector3f(0,0,0);
+				
+				if (sx >= -sy) {
+					if (sx > sy) {
+						r = sx;
+						if (sy > 0.0) angle = sy/r; else angle = 8.0f + sy/r;
+					}
+					else {
+						r = sy;
+						angle = 2.0f - sx/r;
+					}
+				}
+				else {
+					if (sx <= sy) {
+						r = -sx;
+						angle = 4.0f - sy/r;
+					}
+					else {
+						r = -sy;
+						angle = 6.0f + sx/r;
+					}
+				}
+				angle *= 3.1415 / 4.f;
+				return Vector3f(r * cosf(angle),r * sinf(angle),0);
+			}
+
+		}
+		
 		Vector3f StratifiedSampler::getAODirection(int index) {
 			if (aoSampleIndex>=aoSamples.count()) throw 1;
 			//return aoSamples[aoSampleIndex++];
@@ -68,15 +105,15 @@ namespace SyntopiaCore {
 			if (index>=aoSamplesSqrt*aoSamplesSqrt) throw 1;
 			int j = index / aoSamplesSqrt;
 			int i = index % aoSamplesSqrt;
-			
-
 			double x = rg->getDouble( ((double)i)/(double)aoSamplesSqrt,((double)(i+1.0))/(double)aoSamplesSqrt);
 			double y = rg->getDouble( ((double)j)/(double)aoSamplesSqrt,((double)(j+1.0))/(double)aoSamplesSqrt);		
 			return sampleSphere(x,y);
 		}
 
-		Vector3f ProgressiveStratifiedSampler::getAASample(int index) {
-			if (index>=(aaSamplesSqrt*aaSamplesSqrt)) throw 1;
+		Vector3f ProgressiveStratifiedSampler::getAASample(int ix) {
+			if (ix>=(aaSamplesSqrt*aaSamplesSqrt)) throw 1;
+			int index = (aaSamplesSqrt*aaSamplesSqrt-1)-aaOrder[ix];
+			
 			int i = index / aaSamplesSqrt;
 			int j = index % aaSamplesSqrt;
 			double x = rg->getDouble( ((double)i)/(double)aaSamplesSqrt,((double)(i+1.0))/(double)aaSamplesSqrt);
@@ -84,8 +121,16 @@ namespace SyntopiaCore {
 			return Vector3f(x-0.5,y-0.5,1);
 		}
 
-		Vector3f ProgressiveStratifiedSampler::getLensSample(int index) {
-			return rg->getUniform2D();
+		Vector3f ProgressiveStratifiedSampler::getLensSample(int ix) {
+			if (ix>=(aaSamplesSqrt*aaSamplesSqrt)) throw 1;
+			int index = aaOrder[ix];
+			int i = index / aaSamplesSqrt;
+			int j = index % aaSamplesSqrt;
+			double x = rg->getDouble( ((double)i)/(double)aaSamplesSqrt,((double)(i+1.0))/(double)aaSamplesSqrt);
+			double y = rg->getDouble( ((double)j)/(double)aaSamplesSqrt,((double)(j+1.0))/(double)aaSamplesSqrt);
+			//return rg->getUniform2D();
+			return concentricSampleDisk(x,y);
+			
 		}
 
 		// Based on the Physical Based Rendering book
@@ -103,6 +148,13 @@ namespace SyntopiaCore {
 			this->aoSamplesSqrt = nAASamplesSqrt*nAOSamplesSqrt;
 			this->aaSamplesSqrt = nAASamplesSqrt;
 		};
+
+		Sampler* ProgressiveStratifiedSampler::clone(Math::RandomNumberGenerator* rg) { 
+			ProgressiveStratifiedSampler* ps = new ProgressiveStratifiedSampler(rg); 
+			ps->aaOrder = aaOrder;
+			return ps;
+		}
+
 
 
 	}

@@ -180,7 +180,6 @@ namespace StructureSynth {
 
 			QVBoxLayout* frameMainWindow;
 			QCheckBox* fastRotateCheckbox;
-			QPushButton* raytracePushButton;
 			VariableEditor* variableEditor;
 			QDockWidget* editorDockWidget;
 

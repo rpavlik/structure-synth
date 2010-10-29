@@ -1,11 +1,7 @@
 #define shrink s 0.996
 
-set raytracer::ambient-occlusion-samples 3
-set raytracer::shadows true
-set raytracer::samples 4
-set raytracer::reflection 0.0
-set raytracer::phong [1,0,0]
 set raytracer::dof [0.245,0.09]
+
 set maxdepth 1000
 set background #fff
 16 * { rz 20 color white } hbox
