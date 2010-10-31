@@ -1,7 +1,7 @@
 // Grinder.es
 
 set maxobjects 117600
- grinder 
+grinder 
 
 rule grinder { 
   36 * { ry 10 z 1.2 b 0.99 } 1 * { ry 34  rx 34 }  arm 

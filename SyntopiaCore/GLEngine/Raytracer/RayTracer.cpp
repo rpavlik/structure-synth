@@ -25,10 +25,21 @@ namespace SyntopiaCore {
 			sizeX = 0;
 			sizeY = 0;
 			userCancelled = false;
+			
+			maxThreads = QThread::idealThreadCount();
+			progressiveRender = true;
+			voxelSteps = 35;
+			foreach (Command c, engine->getRaytracerCommands()) {
+				QString arg = c.arg;
+				arg = arg.remove("[");
+				arg = arg.remove("]");
+				setParameter(c.command, arg);
+			}
+			
 			Vector3f from;
 			Vector3f to;
 			engine->getBoundingBox(from,to);
-			rt.accelerator = new VoxelStepper(from,to, 35);
+			rt.accelerator = new VoxelStepper(from,to, voxelSteps);
 			windowHeight = engine->height();
 			windowWidth = engine->width();
 			objects = engine->getObjects();
@@ -36,16 +47,6 @@ namespace SyntopiaCore {
 			rt.setObjects(objects.count());
 			for (int i = 0; i < objects.count(); i++) objects[i]->setObjectID(i);
 			
-			maxThreads = QThread::idealThreadCount();
-	
-			progressiveRender = true;
-
-			foreach (Command c, engine->getRaytracerCommands()) {
-				QString arg = c.arg;
-				arg = arg.remove("[");
-				arg = arg.remove("]");
-				setParameter(c.command, arg);
-			}
 			rt.backgroundColor = engine->getBackgroundColor();		
 			this->engine = engine;
 		}
@@ -96,7 +97,7 @@ namespace SyntopiaCore {
 				}
 
 			};
-			INFO(QString("Screen updates: %1").arg(screenUpdates));
+			//INFO(QString("Screen updates: %1").arg(screenUpdates));
 		}
 			
 
@@ -209,6 +210,10 @@ namespace SyntopiaCore {
 				MiniParser(value, ',').getInt(rt.aaSamples);
 				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")
 					.arg(rt.aaSamples).arg(rt.aaSamples));
+			} else if (param == "voxel-steps") {
+				MiniParser(value, ',').getInt(voxelSteps);
+				INFO(QString("Voxel steps: %1")
+					.arg(voxelSteps));
 			} else if (param == "progressive") {
 				MiniParser(value, ',').getBool(progressiveRender);
 				INFO(QString("Progressive Render: %3").arg(progressiveRender ? "true" : "false"));

@@ -1,9 +1,3 @@
-set raytracer::ambient-occlusion  [2,14,1000,50,1]
-set raytracer::shadows true
-set raytracer::reflection 0.4
-set raytracer::reflection 0.4
-set raytracer::phong [0.3,0.8,1]
-
 // Camera settings. Place these before first rule call.
 set translation [0.0896358 -1.76726 -20]
 set rotation [0.985717 0.144947 -0.0857551 -0.0263006 0.635428 0.771712 0.166349 -0.758434 0.630164]

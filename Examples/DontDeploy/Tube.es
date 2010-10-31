@@ -1,7 +1,7 @@
 set maxobjects 52200
 set maxdepth 5000
-set background #232
-{ b 0.4  color #0a0    sat 0.5  } r1 
+set background #fff
+{  color #0a0     } r1 
 
 rule r1 w  10  {
    { rz 15 h 1  s 1.01 0.99 1  y 1  h 4  } r1 

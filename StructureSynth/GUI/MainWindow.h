@@ -76,6 +76,8 @@ namespace StructureSynth {
 			void keyReleaseEvent(QKeyEvent* ev);
 
 		private slots:
+			void insertText();
+			void showCoordinateSystemChanged();
 			void templateExport();
 			void toggleProbeDepth();
 			
@@ -91,7 +93,7 @@ namespace StructureSynth {
 			void closeTab();
 			void launchSfHome();
 			void fastRotateChanged();
-			void raytraceClicked();
+			void raytraceProgressive();
 			void launchGallery();
 			void launchReferenceHome();
 			void templateRender();
@@ -114,7 +116,6 @@ namespace StructureSynth {
 
 		private:
 			void setRecentFile(const QString &fileName);
-			void parseEaster(QString text);
 			void parseJavaScript(QString scripture);
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
@@ -136,6 +137,9 @@ namespace StructureSynth {
 			QCheckBox* autoIncrementCheckbox;
 
 			QDockWidget* dockLog;
+			QAction* probeDepthAction ;
+			QAction* fastRotateAction;
+			QAction* showCoordinateSystemAction;
 			QAction* fullScreenAction;
 			QAction* insertCameraSettingsAction;
 			QAction* screenshotAction;
@@ -151,7 +155,8 @@ namespace StructureSynth {
 			QToolBar *editToolBar;
 			QToolBar *randomToolBar;
 			QAction *newAction;
-			QAction *rayTraceAction;
+			QAction *raytraceFinalAction;
+			QAction *raytraceProgressiveAction;
 			QAction *openAction;
 			QAction *saveAction;
 			QAction *saveAsAction;
@@ -164,7 +169,7 @@ namespace StructureSynth {
 
 			QAction *renderAction;
 			QAction *exportAction;
-			QAction *panicAction;
+			QAction *resetViewAction;
 			SyntopiaCore::GLEngine::EngineWidget* engine;
 			QTabBar* tabBar;
 
@@ -179,7 +184,6 @@ namespace StructureSynth {
 			int oldDirtyPosition;
 
 			QVBoxLayout* frameMainWindow;
-			QCheckBox* fastRotateCheckbox;
 			VariableEditor* variableEditor;
 			QDockWidget* editorDockWidget;
 

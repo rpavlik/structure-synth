@@ -38,7 +38,9 @@ namespace StructureSynth {
 		public:
 			Preprocessor() {};
 			
-			QString Process(QString input);
+			// The preprocess replaces 'random[2,4]' statements with random numbers.
+			// This requires a seed. Using the same seed as controls the EisenScript is probably the best idea her.
+			QString Process(QString input, int seed = 0);
 			QVector<GuiParameter*> getParameters() { return params; }
 			
 		private:

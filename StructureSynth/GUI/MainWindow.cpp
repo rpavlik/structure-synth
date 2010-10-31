@@ -47,97 +47,104 @@ namespace StructureSynth {
 		
 		}
 
+		namespace {
+
+			void createCommandHelpMenu(QMenu* menu, QWidget* textEdit) {
+
+				QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
+				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::shadows false", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::reflection 0.5", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::phong [0.6,0.6,0.3]", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::size [800x600]", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::max-threads 2", textEdit , SLOT(insertText()));
+
+				QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
+				modifierMenu->addAction("weight", textEdit , SLOT(insertText()));
+				modifierMenu->addAction("maxdepth", textEdit , SLOT(insertText()));
+				modifierMenu->addAction("maxdepth > newRule", textEdit , SLOT(insertText()));
+
+				QMenu *transformationMenu = new QMenu("Transformations", 0);
+				transformationMenu->addAction("x 1 // translations", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("y 1", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("z 1", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("rx 45 // rotate angle around x-axis", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("ry 45", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("rz 45", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("hue 0.9", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("sat 0.9", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("brightness 0.9", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("color white // static color", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("color random // use color pool", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("blend red 0.5 // blend color with strength 0.5", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("alpha 0.9 // make transparent", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("matrix ", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("size 2 // uniform scaling", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("size 1 1 1.2 // non-uniform scaling", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("reflect", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("fx // mirror in yz-plane", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("fy", textEdit , SLOT(insertText()));
+				transformationMenu->addAction("fz", textEdit , SLOT(insertText()));
+
+				QMenu *setMenu = new QMenu("Set Commands", 0);
+				setMenu->addAction("set maxdepth 100", textEdit , SLOT(insertText()));
+				setMenu->addAction("set maxsize 10 // maximum object size", textEdit , SLOT(insertText()));
+				setMenu->addAction("set minsize 0.1 // minimum object size", textEdit , SLOT(insertText()));
+				setMenu->addAction("set background #fff", textEdit , SLOT(insertText()));
+				setMenu->addAction("set seed 45", textEdit , SLOT(insertText()));
+
+				QMenu *colorMenu = new QMenu("Set Colorpool Commands", 0);
+				colorMenu->addAction("set colorpool randomrgb", textEdit , SLOT(insertText()));
+				colorMenu->addAction("set colorpool randomhue", textEdit , SLOT(insertText()));
+				colorMenu->addAction("set colorpool list:orange,yellow,blue // sample from list", textEdit , SLOT(insertText()));
+				colorMenu->addAction("set colorpool image:test.png // sample from image", textEdit , SLOT(insertText()));
+
+
+				QMenu *set2Menu = new QMenu("Exotic Set Commands", 0);
+				set2Menu->addAction("set seed initial // reset random seed", textEdit , SLOT(insertText()));
+				set2Menu->addAction("set recursion depth // traverse depth-first", textEdit , SLOT(insertText()));
+				set2Menu->addAction("set rng old // old random generator", textEdit , SLOT(insertText()));
+				set2Menu->addAction("set syncrandom true", textEdit , SLOT(insertText()));
+
+				QMenu *setCMenu = new QMenu("Camera Commands", 0);
+				setCMenu->addAction("set scale 0.5", textEdit , SLOT(insertText()));
+				setCMenu->addAction("set pivot [0 0 0]", textEdit , SLOT(insertText()));
+				setCMenu->addAction("set translation [0 0 -20]", textEdit , SLOT(insertText()));
+				setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", textEdit , SLOT(insertText()));
+
+				QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
+				pMenu->addAction("#define myAngle 45", textEdit , SLOT(insertText()));
+				pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", textEdit , SLOT(insertText()));
+
+
+				menu->insertMenu(menu->actions()[0], modifierMenu);
+				menu->insertMenu(menu->actions()[1], transformationMenu);
+				menu->insertMenu(menu->actions()[2], setMenu);
+				menu->insertMenu(menu->actions()[3], set2Menu);
+				menu->insertMenu(menu->actions()[4], colorMenu);
+				menu->insertMenu(menu->actions()[5], raytraceMenu);
+				menu->insertMenu(menu->actions()[6], setCMenu);
+				menu->insertMenu(menu->actions()[7], pMenu);
+				menu->insertSeparator(menu->actions()[8]);
+
+			}
+		}
 		void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 		{	
 			QMenu *menu = createStandardContextMenu();
 
-			QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
-			raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::shadows false", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::reflection 0.5", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::phong [0.6,0.6,0.3]", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size [800x600]", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", this , SLOT(insertText()));
-			raytraceMenu->addAction("set raytracer::max-threads 2", this , SLOT(insertText()));
+			createCommandHelpMenu(menu, this);
 
-			QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
-			modifierMenu->addAction("weight", this , SLOT(insertText()));
-			modifierMenu->addAction("maxdepth", this , SLOT(insertText()));
-			modifierMenu->addAction("maxdepth > newRule", this , SLOT(insertText()));
-
-			QMenu *transformationMenu = new QMenu("Transformations", 0);
-			transformationMenu->addAction("x 1 // translations", this , SLOT(insertText()));
-			transformationMenu->addAction("y 1", this , SLOT(insertText()));
-			transformationMenu->addAction("z 1", this , SLOT(insertText()));
-			transformationMenu->addAction("rx 45 // rotate angle around x-axis", this , SLOT(insertText()));
-			transformationMenu->addAction("ry 45", this , SLOT(insertText()));
-			transformationMenu->addAction("rz 45", this , SLOT(insertText()));
-			transformationMenu->addAction("hue 0.9", this , SLOT(insertText()));
-			transformationMenu->addAction("sat 0.9", this , SLOT(insertText()));
-			transformationMenu->addAction("brightness 0.9", this , SLOT(insertText()));
-			transformationMenu->addAction("color white // static color", this , SLOT(insertText()));
-			transformationMenu->addAction("color random // use color pool", this , SLOT(insertText()));
-			transformationMenu->addAction("blend red 0.5 // blend color with strength 0.5", this , SLOT(insertText()));
-			transformationMenu->addAction("alpha 0.9 // make transparent", this , SLOT(insertText()));
-			transformationMenu->addAction("matrix ", this , SLOT(insertText()));
-			transformationMenu->addAction("size 2 // uniform scaling", this , SLOT(insertText()));
-			transformationMenu->addAction("size 1 1 1.2 // non-uniform scaling", this , SLOT(insertText()));
-			transformationMenu->addAction("reflect", this , SLOT(insertText()));
-			transformationMenu->addAction("fx // mirror in yz-plane", this , SLOT(insertText()));
-			transformationMenu->addAction("fy", this , SLOT(insertText()));
-			transformationMenu->addAction("fz", this , SLOT(insertText()));
-
-			QMenu *setMenu = new QMenu("Set Commands", 0);
-			setMenu->addAction("set maxdepth 100", this , SLOT(insertText()));
-			setMenu->addAction("set maxsize 10 // maximum object size", this , SLOT(insertText()));
-			setMenu->addAction("set minsize 0.1 // minimum object size", this , SLOT(insertText()));
-			setMenu->addAction("set background #fff", this , SLOT(insertText()));
-			setMenu->addAction("set seed 45", this , SLOT(insertText()));
-
-			QMenu *colorMenu = new QMenu("Set Colorpool Commands", 0);
-			colorMenu->addAction("set colorpool randomrgb", this , SLOT(insertText()));
-			colorMenu->addAction("set colorpool randomhue", this , SLOT(insertText()));
-			colorMenu->addAction("set colorpool list:orange,yellow,blue // sample from list", this , SLOT(insertText()));
-			colorMenu->addAction("set colorpool image:test.png // sample from image", this , SLOT(insertText()));
-
-
-			QMenu *set2Menu = new QMenu("Exotic Set Commands", 0);
-			set2Menu->addAction("set seed initial // reset random seed", this , SLOT(insertText()));
-			set2Menu->addAction("set recursion depth // traverse depth-first", this , SLOT(insertText()));
-			set2Menu->addAction("set rng old // old random generator", this , SLOT(insertText()));
-			set2Menu->addAction("set syncrandom true", this , SLOT(insertText()));
-
-			QMenu *setCMenu = new QMenu("Camera Commands", 0);
-			setCMenu->addAction("set scale 0.5", this , SLOT(insertText()));
-			setCMenu->addAction("set pivot [0 0 0]", this , SLOT(insertText()));
-			setCMenu->addAction("set translation [0 0 -20]", this , SLOT(insertText()));
-			setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", this , SLOT(insertText()));
-
-			QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
-			pMenu->addAction("#define myAngle 45", this , SLOT(insertText()));
-			pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", this , SLOT(insertText()));
-
-
-			menu->insertMenu(menu->actions()[0], modifierMenu);
-			menu->insertMenu(menu->actions()[1], transformationMenu);
-			menu->insertMenu(menu->actions()[2], setMenu);
-			menu->insertMenu(menu->actions()[3], set2Menu);
-			menu->insertMenu(menu->actions()[4], colorMenu);
-			menu->insertMenu(menu->actions()[5], raytraceMenu);
-			menu->insertMenu(menu->actions()[6], setCMenu);
-			menu->insertMenu(menu->actions()[7], pMenu);
-
-			menu->insertSeparator(menu->actions()[8]);
 			menu->exec(event->globalPos());
 			delete menu;
 		}
 
 		void TextEdit::insertText() {
 			QString text = ((QAction*)sender())->text();
-
 			insertPlainText(text.section("//",0,0)); // strip comments
 		}
 
@@ -381,7 +388,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(1, 0, 0, -1, " (\"Potemkin\")");
+			version = SyntopiaCore::Misc::Version(1, 4, 0, -1, " (\"IN DEVELOPMENT\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			QSplitter*	splitter = new QSplitter(this);
@@ -412,10 +419,7 @@ namespace StructureSynth {
 			splitter->setSizes(l);
 
 			createActions();
-			createMenus();
-			createToolBars();
-			createStatusBar();
-
+			
 			QDir d(getExamplesDir());
 
 			// Log widget (in dockable window)
@@ -471,6 +475,13 @@ namespace StructureSynth {
 			connect(this->tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 			readSettings();
+
+			//m->addMenu(createPopupMenu());
+
+			createToolBars();
+			createStatusBar();
+			createMenus();
+			
 		}
 
 
@@ -479,13 +490,14 @@ namespace StructureSynth {
 			openGLContextMenu = new QMenu();			
 			openGLContextMenu->addAction(insertCameraSettingsAction);
 
-			QAction* probeDepth  = new QAction(tr("Toggle 3D Object Information"), this);
-			connect(probeDepth, SIGNAL(triggered()), this, SLOT(toggleProbeDepth()));
-			openGLContextMenu->addAction(probeDepth);
+			probeDepthAction  = new QAction(tr("Show 3D Object Information"), this);
+			probeDepthAction->setCheckable(true);
+			connect(probeDepthAction, SIGNAL(triggered()), this, SLOT(toggleProbeDepth()));
+			openGLContextMenu->addAction(probeDepthAction);
 
 			openGLContextMenu->addAction(fullScreenAction);
 			openGLContextMenu->addAction(screenshotAction);
-			openGLContextMenu->addAction(panicAction);
+			openGLContextMenu->addAction(resetViewAction);
 			engine->setContextMenu(openGLContextMenu);
 		}
 
@@ -535,14 +547,26 @@ namespace StructureSynth {
 			fullScreenAction->setCheckable(true);
 			connect(fullScreenAction, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
-			insertCameraSettingsAction  = new QAction(tr("&Copy Camera settings to EisenScript Window"), this);
+			fastRotateAction = new QAction(tr("Fast Rotate"), this);
+			fastRotateAction->setCheckable(true);
+			connect(fastRotateAction, SIGNAL(triggered()), this, SLOT(fastRotateChanged()));
+
+			showCoordinateSystemAction = new QAction(tr("Show Coordinate System"), this);
+			showCoordinateSystemAction->setCheckable(true);
+			connect(showCoordinateSystemAction, SIGNAL(triggered()), this, SLOT(showCoordinateSystemChanged()));
+
+
+			insertCameraSettingsAction  = new QAction(tr("&Copy Camera Settings to EisenScript Window"), this);
 			connect(insertCameraSettingsAction, SIGNAL(triggered()), this, SLOT(insertCameraSettings()));
 
 			screenshotAction = new QAction(tr("&Save as Bitmap..."), this);
 			connect(screenshotAction, SIGNAL(triggered()), this, SLOT(makeScreenshot()));
 
-			rayTraceAction = new QAction(tr("&Raytrace..."), this);
-			connect(rayTraceAction, SIGNAL(triggered()), this, SLOT(raytrace()));
+			raytraceFinalAction = new QAction(tr("&Raytrace (Final)"), this);
+			connect(raytraceFinalAction, SIGNAL(triggered()), this, SLOT(raytrace()));
+
+			raytraceProgressiveAction = new QAction(tr("&Raytrace (in Window)"), this);
+			connect(raytraceProgressiveAction, SIGNAL(triggered()), this, SLOT(raytraceProgressive()));
 
 			newAction = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
 			newAction->setShortcut(tr("Ctrl+N"));
@@ -591,19 +615,19 @@ namespace StructureSynth {
 				"selection"));
 			connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 
-			renderAction = new QAction(QIcon(":/images/render.png"), tr("&Render"), this);
+			renderAction = new QAction(QIcon(":/images/render.png"), tr("&Build System"), this);
 			renderAction->setShortcut(tr("F5"));
 			renderAction->setStatusTip(tr("Render the current ruleset"));
 			connect(renderAction, SIGNAL(triggered()), this, SLOT(render()));
 
-			exportAction = new QAction(QIcon(":/images/render.png"), tr("&Template Export"), this);
+			exportAction = new QAction(tr("&Template Export..."), this);
 			exportAction->setShortcut(tr("F6"));
 			exportAction->setStatusTip(tr("Export the structure using a template."));
 			connect(exportAction, SIGNAL(triggered()), this, SLOT(templateExport()));
 
-			panicAction = new QAction("Reset View", this);
-			panicAction->setStatusTip(tr("Resets the viewport"));
-			connect(panicAction, SIGNAL(triggered()), this, SLOT(resetView()));
+			resetViewAction = new QAction("Reset View", this);
+			resetViewAction->setStatusTip(tr("Resets the viewport"));
+			connect(resetViewAction, SIGNAL(triggered()), this, SLOT(resetView()));
 
 			aboutAction = new QAction(QIcon(":/images/documentinfo.png"), tr("&About"), this);
 			aboutAction->setStatusTip(tr("Show the About box"));
@@ -633,44 +657,57 @@ namespace StructureSynth {
 
 		void MainWindow::createMenus()
 		{
+			// -- File Menu --
 			fileMenu = menuBar()->addMenu(tr("&File"));
 			fileMenu->addAction(newAction);
 			fileMenu->addAction(openAction);
 			fileMenu->addAction(saveAction);
 			fileMenu->addAction(saveAsAction);
-
 			recentFileSeparator = fileMenu->addSeparator();
-			for (int i = 0; i < MaxRecentFiles; ++i)
-				fileMenu->addAction(recentFileActions[i]);
-
+			for (int i = 0; i < MaxRecentFiles; ++i) fileMenu->addAction(recentFileActions[i]);
 			fileMenu->addSeparator();
 			fileMenu->addAction(closeAction);
 			fileMenu->addAction(exitAction);
 
+			// -- Edit Menu --
 			editMenu = menuBar()->addMenu(tr("&Edit"));
 			editMenu->addAction(cutAction);
 			editMenu->addAction(copyAction);
 			editMenu->addAction(pasteAction);
+			editMenu->addSeparator();
+			editMenu->addAction(insertCameraSettingsAction);
+			QMenu* m = editMenu->addMenu("Insert Command");
+			createCommandHelpMenu(m, this);
 
+
+			// -- Render Menu --
 			renderMenu = menuBar()->addMenu(tr("&Render"));
 			renderMenu->addAction(renderAction);
-			renderMenu->addAction(exportAction);
-
 			renderMenu->addSeparator();
-			
-			renderMenu->addAction("Obj Export...", this, SLOT(exportToObj()));
-			// Scan render templates...
-			QStringList filters;
-
+			renderMenu->addAction(raytraceProgressiveAction);
+			renderMenu->addAction(raytraceFinalAction);
 			renderMenu->addSeparator();
 			renderMenu->addAction(fullScreenAction);
-			renderMenu->addAction(rayTraceAction);
+			renderMenu->addAction(resetViewAction);
+			renderMenu->addSeparator();
+			
+			renderMenu->addAction(fastRotateAction);
+			renderMenu->addAction(showCoordinateSystemAction);
+			renderMenu->addAction(probeDepthAction);
+			
+
+			// -- Export --
+			renderMenu = menuBar()->addMenu(tr("&Export"));
+			renderMenu->addAction(exportAction);
+			renderMenu->addAction("Obj Export...", this, SLOT(exportToObj()));
 			renderMenu->addAction(screenshotAction);
-			menuBar()->addSeparator();
 
-			// Examples...
+		
+			//menuBar()->addSeparator();
+
+			// -- Examples Menu --
+			QStringList filters;
 			QMenu* examplesMenu = menuBar()->addMenu(tr("&Examples"));
-
 			// Scan examples dir...
 			QDir d(getExamplesDir());
 			filters.clear();
@@ -707,7 +744,6 @@ namespace StructureSynth {
 
 					sl = dir.entryList();
 					for (int i = 0; i < sl.size(); i++) {
-						INFO(QString("Found item:")+ sl[i]);
 						QAction* a = new QAction(sl[i], this);
 						a->setIcon(QIcon(":/images/mail_new.png"));
 
@@ -723,6 +759,11 @@ namespace StructureSynth {
 
 			}
 
+			QMenu* mc = createPopupMenu();
+			mc->setTitle("Windows");
+			QAction* a =  menuBar()->addMenu(mc);
+
+
 			helpMenu = menuBar()->addMenu(tr("&Help"));
 			helpMenu->addAction(aboutAction);
 			helpMenu->addSeparator();
@@ -733,17 +774,17 @@ namespace StructureSynth {
 
 		void MainWindow::createToolBars()
 		{
-			fileToolBar = addToolBar(tr("File"));
+			fileToolBar = addToolBar(tr("File Toolbar"));
 			fileToolBar->addAction(newAction);
 			fileToolBar->addAction(openAction);
 			fileToolBar->addAction(saveAction);
 
-			editToolBar = addToolBar(tr("Edit"));
+			editToolBar = addToolBar(tr("Edit Toolbar"));
 			editToolBar->addAction(cutAction);
 			editToolBar->addAction(copyAction);
 			editToolBar->addAction(pasteAction);
 
-			randomToolBar = addToolBar(tr("Random"));
+			randomToolBar = addToolBar(tr("Random Toolbar"));
 
 			QLabel* randomSeed = new QLabel("Seed:"); 
 			randomToolBar->addWidget(randomSeed);
@@ -755,26 +796,30 @@ namespace StructureSynth {
 			randomToolBar->addWidget(autoIncrementCheckbox);
 			autoIncrementCheckbox->setChecked(true);
 
-			renderToolBar = addToolBar(tr("Render"));
+			renderToolBar = addToolBar(tr("Render Toolbar"));
 			renderToolBar->addAction(renderAction);
-			renderToolBar->addAction(panicAction);
-			fastRotateCheckbox = new QCheckBox("Fast rotate", randomToolBar);
-			connect(fastRotateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(fastRotateChanged()));
-			renderToolBar->addWidget(fastRotateCheckbox);
-			fastRotateCheckbox->setChecked(false);
-
+			renderToolBar->addAction(resetViewAction);
+			
 			progressBox = new ProgressBox(this);
 			renderToolBar->addWidget(progressBox);
-			connect(progressBox, SIGNAL(startPressed()), this, SLOT(raytraceClicked()));
+			connect(progressBox, SIGNAL(startPressed()), this, SLOT(raytraceProgressive()));
 			progressBox->setValue(0);
 			connect(seedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged()));
 		}
 
 		void MainWindow::fastRotateChanged() {
-			engine->setFastRotate(fastRotateCheckbox->isChecked());
+			engine->setFastRotate(fastRotateAction->isChecked());
 		}
 
-		void MainWindow::raytraceClicked() {
+		void MainWindow::showCoordinateSystemChanged() {
+			engine->setShowCoordinateSystem(showCoordinateSystemAction->isChecked());
+			if (showCoordinateSystemAction->isChecked()) {
+				INFO("X,Y,Z axis is colored red,green, and blue respectively. Axis length is 10 units.");
+			}
+			engine->requireRedraw();
+		}
+
+		void MainWindow::raytraceProgressive() {
 			QList<QWidget *> widgets = findChildren<QWidget *>("");
 			QWidget* w = progressBox;
 			while (w) { widgets.removeAll(w); w=w->parentWidget(); }
@@ -901,14 +946,6 @@ namespace StructureSynth {
 				return;
 			}
 
-			if (getTextEdit()->toPlainText().startsWith("#easter", Qt::CaseInsensitive)) {
-				// This is an easter egg...
-				QString text = getTextEdit()->toPlainText();
-				text = text.remove("#easter", Qt::CaseInsensitive);
-				parseEaster(text);
-				return;
-			}
-
 			setEnabled(false);
 			if (autoIncrementCheckbox->isChecked()) updateRandom();
 			RandomStreams::SetSeed(getSeed());
@@ -922,7 +959,7 @@ namespace StructureSynth {
 				renderTarget.begin(); // we clear before parsing...
 
 				Preprocessor pp;
-				QString out = pp.Process(getTextEdit()->toPlainText());
+				QString out = pp.Process(getTextEdit()->toPlainText(), getSeed());
 				bool showGUI = false;
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);
@@ -1285,7 +1322,7 @@ namespace StructureSynth {
 				rendering.begin(); 
 
 				Preprocessor pp;
-				QString out = pp.Process(inputText);
+				QString out = pp.Process(inputText, getSeed());
 				bool showGUI = false;
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);
@@ -1420,7 +1457,7 @@ namespace StructureSynth {
 			QStringList primitives;
 			try {	
 				Preprocessor pp;
-				QString out = pp.Process(getTextEdit()->toPlainText());
+				QString out = pp.Process(getTextEdit()->toPlainText(), getSeed());
 				bool showGUI = false;
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);
@@ -1536,126 +1573,6 @@ namespace StructureSynth {
 			pd.exec();
 		}
 
-		void MainWindow::parseEaster(QString text) {
-			QStringList l = text.split("\n");
-
-			// Formula: z <- z0 * z^z + C
-			// Size: 800x800
-			// View: (-2,-2) -> (2,2)
-			// C: (-0.375,0)
-			// Z0: 
-
-			double dw = 100;
-			double dh = 100;
-			double dMax = 10;
-			double x0 = -1;
-			double y0 = -1;
-			double x1 = 1;
-			double y1 = 1;
-			double cR = -0.375;
-			double cI = 0;
-			double a0 = 0;
-			double a1 = 0;
-			double a2 = 0;
-			double a3 = 0;
-			double breakOut = 2;
-			QList<Term> terms;
-			foreach (QString s, l) {
-				if (match(s,"Size: @x@", &dw, &dh) >=0) {
-				} else if (match(s,"View: (@,@) -> (@,@)", &x0, &y0, &x1, &y1) >= 0) {
-				} else if (match(s,"Term: (@,@)", &cR , &cI) >= 0) {
-				} else if (match(s,"Term: (@,@)*Z^(@,@)", &a0,&a1,&a2,&a3) >= 0) {
-					Complex c1(a0,a1); 
-					Complex c2(a2,a3);
-					terms.append(Term(c1,c2));
-				} else if (match(s,"Term: Z^(@,@)", &a2,&a3) >= 0) {
-					Complex c1(1,0); 
-					Complex c2(a2,a3);
-					terms.append(Term(c1,c2));
-				} else if (match(s,"Term: Z^@", &a3) >= 0) {
-					Complex c1(1,0); 
-					Complex c2(a3,0);
-					terms.append(Term(c1,c2));
-				} else if (match(s,"Term: @*Z^@", &a0, &a3) >= 0) {
-					Complex c1(a0,0); 
-					Complex c2(a3,0);
-					terms.append(Term(c1,c2));
-				} else if (match(s,"Term: @*Z^Z", &a0) >= 0) {
-					Complex c2(0,0); 
-					Complex c1(a0,0);
-					terms.append(Term(c1,c2));
-				} else if (match(s,"MaxIter: @", &dMax) >= 0) {
-				} else if (match(s,"BreakOut: @", &breakOut) >= 0) {
-				} else {
-					WARNING("Could not match: "+s);
-				}
-
-			};
-			breakOut = breakOut*breakOut;
-			int w = (int)dw;
-			int h = (int)dh;
-			int maxGen = (int)dMax;
-
-			Complex c(cR,cI);
-
-			QDialog* d = new QDialog(this);
-			d->resize(w,h);
-
-			QImage im(w,h, QImage::Format_RGB32);
-
-			QString termS = "Term: ";
-			for (int i = 0; i < terms.count(); i++) {
-				termS += " + " + QString("%1*Z^%2").arg(terms[i].factor.toString()).arg(terms[i].exponent.toString());
-			}
-			termS += " + " + c.toString();
-			INFO(termS);
-
-			RandomNumberGenerator rg;
-
-			for ( int i = 0; i < w; i++) {
-				for ( int j = 0; j < h; j++) {
-					double x = (x1-x0)*(i/(double)w)+x0;
-					double y = (y1-y0)*(j/(double)h)+y0;
-					x = x*(x1-x0)+x0;
-					y = y*(y1-y0)+y0;
-					Complex z(x,y);
-
-					int gen = 0;
-					//z=c;
-					Complex z0 = z;
-					while (gen++ < maxGen) {
-						z = c;
-						for (int i = 0; i < terms.count(); i++) {
-							if( terms[i].exponent.r == 0 && terms[i].exponent.i == 0) {
-								z = z + terms[i].factor * z0.raisedTo(z0);
-							} else {
-								z = z + terms[i].factor * z0.raisedTo(terms[i].exponent);
-							}
-						}
-						z0 = z;
-						if (z.sqrLength() > breakOut) break;
-					}
-
-					if (z.sqrLength() > breakOut) {
-						im.setPixel(i,j, qRgb((gen % 2)*250 ,(gen % 20)*15,(gen*255)/maxGen));
-					} else {
-						im.setPixel(i,j, qRgb(0,0,0));
-					}
-
-
-				}
-			}
-			QPixmap p = QPixmap::fromImage(im);
-			QLabel* lb = new QLabel(d);
-			lb->setPixmap(p);
-			//d->layout()->addWidget(l);
-			d->exec();
-			delete(lb);
-			delete(d);
-			//d->setSize(w,h);
-
-		}
-
 		PreviewWindow::PreviewWindow(MainWindow* mainWindow, QImage im) : QDialog(mainWindow), mainWindow(mainWindow), image(im) {
 			QVBoxLayout *layout = new QVBoxLayout(this);
 			setLayout(layout);
@@ -1752,6 +1669,12 @@ namespace StructureSynth {
 			};
 		}
 
+		void MainWindow::insertText() {
+			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
+
+			QString text = ((QAction*)sender())->text();
+			getTextEdit()->insertPlainText(text.section("//",0,0)); // strip comments
+		}
 		void MainWindow::exportToObj()
 		{
 			if (tabBar->currentIndex() == -1) { WARNING("No open tab"); return; } 
@@ -1776,7 +1699,7 @@ namespace StructureSynth {
 				renderer.begin(); 
 
 				Preprocessor pp;
-				QString out = pp.Process(inputText);
+				QString out = pp.Process(inputText, getSeed());
 				bool showGUI = false;
 				out = variableEditor->updateFromPreprocessor(&pp, out, &showGUI);
 				editorDockWidget->setHidden(!showGUI);

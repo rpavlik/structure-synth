@@ -6,15 +6,20 @@
 
 #include "../../SyntopiaCore/Exceptions/Exception.h"
 #include "../../SyntopiaCore/Logging/Logging.h"
+#include "../../SyntopiaCore/Math/Random.h"
 
 using namespace SyntopiaCore::Exceptions;
 using namespace SyntopiaCore::Logging;
+using namespace SyntopiaCore::Math;
 
 
 namespace StructureSynth {
 	namespace Parser {	
 
-		QString Preprocessor::Process(QString input) {
+		QString Preprocessor::Process(QString input, int seed) {
+			RandomNumberGenerator rg;
+			rg.setSeed(seed);
+
 			QStringList in = input.split(QRegExp("\r\n|\r|\n"));
 
 			QMap<QString, QString> substitutions;
@@ -22,6 +27,8 @@ namespace StructureSynth {
 			QRegExp defineCommand("^#define\\s([^\\s]+)\\s(.*)*$"); // Look for #define varname value
 			QRegExp defineCommandWithGUI("^#define\\s([^\\s]+)\\s(.*)\\s\\(float:([^\\s]*)\\)$"); // Look for #define varname value 
 
+			// Match a number: [-+]?[0-9]*\.?[0-9]+
+			QRegExp randomNumber("random\\[([-+]?[0-9]*\\.?[0-9]+),([-+]?[0-9]*\\.?[0-9]+)\\]"); // random[-2.3,3.4]
 
 			for (QStringList::iterator it = in.begin(); it != in.end(); ++it) {
 
@@ -93,6 +100,15 @@ namespace StructureSynth {
 						}
 				    }
 				}
+
+				while (randomNumber.indexIn(*it) != -1) {
+					double d1 = randomNumber.cap(1).toDouble();
+					double d2 = randomNumber.cap(2).toDouble();
+					double r = rg.getDouble(d1,d2);
+					INFO(QString("Random number: %1 -> %2 ").arg(randomNumber.cap(0)).arg(r));
+					(*it).replace(randomNumber.cap(0), QString::number(r));
+				}
+				
 			}
 
 			QStringList out = in;

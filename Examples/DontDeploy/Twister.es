@@ -1,8 +1,3 @@
-set raytracer::ambient-occlusion [40,40,0.95]
-set raytracer::shadows false
-set raytracer::reflection 0.0
-set raytracer::phong [0.4,0.8,1]
-
 set maxdepth 1200
 #define max1 130 (float:0-180)
 #define rzstep 2  (float:0-4)
