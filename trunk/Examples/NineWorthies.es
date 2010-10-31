@@ -5,7 +5,7 @@ set maxobjects 52200
 set maxdepth 3000
 set background #232
 9 * { x 5 }  1 * { b 0.4  color #0a0    color white } r1 
-{ s 1000 1000 1 color white } box 
+// { s 1000 1000 1 color white } box 
 
 // Camera settings. Place these before first rule call.
 set translation [-4.50383 -2.80381 -20]

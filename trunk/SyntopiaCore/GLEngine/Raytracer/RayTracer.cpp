@@ -28,12 +28,26 @@ namespace SyntopiaCore {
 			
 			maxThreads = QThread::idealThreadCount();
 			progressiveRender = true;
-			voxelSteps = 35;
+			voxelSteps = 0;
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
 				arg = arg.remove("[");
 				arg = arg.remove("]");
 				setParameter(c.command, arg);
+			}
+
+			objects = engine->getObjects();
+			if (voxelSteps == 0) {
+				// voxel steps is not explicitly set.
+				// We will try this simple heuristic
+				if (objects.count()<10000) {
+					voxelSteps = 35;
+				} else if (objects.count()<50000) {
+					voxelSteps = 60;
+				} else {
+					voxelSteps = 100;
+				}
+				INFO(QString("Settings voxel steps to %1.").arg(voxelSteps));
 			}
 			
 			Vector3f from;
@@ -42,7 +56,6 @@ namespace SyntopiaCore {
 			rt.accelerator = new VoxelStepper(from,to, voxelSteps);
 			windowHeight = engine->height();
 			windowWidth = engine->width();
-			objects = engine->getObjects();
 			for (int i = 0; i < objects.count(); i++) rt.accelerator->registerObject(objects[i]);
 			rt.setObjects(objects.count());
 			for (int i = 0; i < objects.count(); i++) objects[i]->setObjectID(i);
@@ -67,7 +80,7 @@ namespace SyntopiaCore {
 				
 			QTime lastTime = QTime::currentTime().addMSecs(-2000);
 			while (c<maxUnits) {
-				bool s = completedUnits.wait(1000); // Wait to see if a new unit is completed.
+				/*bool s = */completedUnits.wait(1000); // Wait to see if a new unit is completed.
 								
 				if	(progress && progress->wasCanceled()) {
 					// in order to cancel, we will swallow
@@ -77,6 +90,10 @@ namespace SyntopiaCore {
 					while (newUnit <= maxUnits) {
 						completedUnits.increase();
 						newUnit = nextUnit.increase();
+					}
+					
+					for (int i = 0; i < maxThreads; i++) {
+						threads[i]->setTerminated(true);
 					}
 				}
 				c = completedUnits.value();

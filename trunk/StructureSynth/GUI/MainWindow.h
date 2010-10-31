@@ -116,7 +116,7 @@ namespace StructureSynth {
 
 		private:
 			void setRecentFile(const QString &fileName);
-			void parseJavaScript(QString scripture);
+			void parseJavaScript(QString scripture, QString dir);
 			void insertTabPage(QString filename);
 			QTextEdit* getTextEdit();
 			void init();

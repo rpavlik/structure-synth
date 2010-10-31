@@ -15,7 +15,7 @@ namespace StructureSynth {
 			Q_OBJECT
 
 		public:
-			Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D);
+			Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D, QString dir);
 			~Builder() {};
 			
 		public slots:
@@ -26,6 +26,9 @@ namespace StructureSynth {
 
 			/// Simply does text substitutions (but ignores preprocessor lines!)
 			void define(QString input, QString value);
+
+			/// prepends the script with 'prescript'
+			void prepend(QString prescript);
 
 			/// Render (OpenGL to viewport).
 			void render();
@@ -58,6 +61,7 @@ namespace StructureSynth {
 			QString originalSystem;
 			int width;
 			int height;
+			QString workingDir;
 		};
 
 

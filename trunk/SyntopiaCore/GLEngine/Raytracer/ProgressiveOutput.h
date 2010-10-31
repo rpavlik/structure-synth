@@ -52,7 +52,7 @@ namespace SyntopiaCore {
 			// This function is responsible for tonemapping and gamma-conversion.
 			// I prefer not converting to sRGB encode 
 			// and a simply clipping functions works better than an 'exposure'-simulation
-			int encode(float c, float exposure)
+			int encode(float c, float /*exposure*/)
 			{
 				
 				// Enable below for sRGB encoding

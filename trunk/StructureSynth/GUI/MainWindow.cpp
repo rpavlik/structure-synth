@@ -52,7 +52,8 @@ namespace StructureSynth {
 			void createCommandHelpMenu(QMenu* menu, QWidget* textEdit) {
 
 				QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
-				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20", textEdit , SLOT(insertText()));
+
+				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20 // change samples instead..", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::shadows false", textEdit , SLOT(insertText()));
@@ -62,7 +63,9 @@ namespace StructureSynth {
 				raytraceMenu->addAction("set raytracer::size [0x800] // auto-calc proper width", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::size [800x0] // auto-calc proper height", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::max-threads 2", textEdit , SLOT(insertText()));
-
+				raytraceMenu->addAction("set raytracer::light [0,0,-29]", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::voxel-steps 30", textEdit , SLOT(insertText()));
+				
 				QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
 				modifierMenu->addAction("weight", textEdit , SLOT(insertText()));
 				modifierMenu->addAction("maxdepth", textEdit , SLOT(insertText()));
@@ -109,12 +112,17 @@ namespace StructureSynth {
 				set2Menu->addAction("set recursion depth // traverse depth-first", textEdit , SLOT(insertText()));
 				set2Menu->addAction("set rng old // old random generator", textEdit , SLOT(insertText()));
 				set2Menu->addAction("set syncrandom true", textEdit , SLOT(insertText()));
+				
 
 				QMenu *setCMenu = new QMenu("Camera Commands", 0);
 				setCMenu->addAction("set scale 0.5", textEdit , SLOT(insertText()));
 				setCMenu->addAction("set pivot [0 0 0]", textEdit , SLOT(insertText()));
 				setCMenu->addAction("set translation [0 0 -20]", textEdit , SLOT(insertText()));
 				setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", textEdit , SLOT(insertText()));
+				setCMenu->addAction("set perspective-angle 70", textEdit , SLOT(insertText()));
+
+				
+
 
 				QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
 				pMenu->addAction("#define myAngle 45", textEdit , SLOT(insertText()));
@@ -761,7 +769,7 @@ namespace StructureSynth {
 
 			QMenu* mc = createPopupMenu();
 			mc->setTitle("Windows");
-			QAction* a =  menuBar()->addMenu(mc);
+			menuBar()->addMenu(mc);
 
 
 			helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -942,7 +950,16 @@ namespace StructureSynth {
 				// This is javascript...
 				QString text = getTextEdit()->toPlainText();
 				text = text.remove("#javascript", Qt::CaseInsensitive);
-				parseJavaScript(text);
+
+				TabInfo t = tabInfo[tabBar->currentIndex()];
+				QString dir;
+				if (t.hasBeenSavedOnce) {
+					dir = QFileInfo(t.filename).absolutePath();
+				} else {
+					dir = ""; // we will use the default dir.
+				}
+
+				parseJavaScript(text,dir);
 				return;
 			}
 
@@ -1406,10 +1423,9 @@ namespace StructureSynth {
 		}
 
 
-		void MainWindow::parseJavaScript(QString scripture) {
+		void MainWindow::parseJavaScript(QString scripture, QString dir) {
 			JavaScriptParser jsp(this, statusBar());
-			jsp.parse(scripture);
-
+			jsp.parse(scripture, dir);
 		}
 
 		void MainWindow::copy() {
