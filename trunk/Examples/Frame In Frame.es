@@ -20,5 +20,4 @@ rule frame  {
 { s 0.1 0.1 1 y 5  x -5 } box
 { s 0.1 0.1 1 y -5  x 5 } box
 { s 0.1 0.1 1 y -5  x -5 } box
-
 }

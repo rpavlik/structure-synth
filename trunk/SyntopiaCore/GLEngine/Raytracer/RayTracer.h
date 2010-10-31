@@ -31,6 +31,7 @@ namespace SyntopiaCore {
 			float xmax;
 			float ymax;
 			
+			int voxelSteps;
 			int windowWidth;
 			int windowHeight;
 

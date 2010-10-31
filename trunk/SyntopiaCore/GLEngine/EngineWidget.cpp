@@ -20,6 +20,7 @@ namespace SyntopiaCore {
 			showDepth = false;
 			disabled = false;
 			updatePerspective();
+			showCoordinateSystem = false;
 
 			pendingRedraws = 0;
 			requiredRedraws = 2; // for double buffering
@@ -272,7 +273,44 @@ namespace SyntopiaCore {
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 			qglColor(getVisibleForegroundColor());
 
-			renderText(10, 20, infoText);
+			
+			if (showCoordinateSystem) {
+
+				glPushMatrix();
+			
+				GLUquadric* g = gluNewQuadric();    
+				gluQuadricDrawStyle(g, GLU_FILL);
+
+				const float red[4] = { 1,0,0,1 };
+				const float green[4] = { 0,1,0,1 };
+				const float blue[4] = { 0,0,1,1 };
+				glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue );
+				gluCylinder(g, 0.1,0.1,9,15,1); // z
+				glTranslatef(0,0,9);
+				gluCylinder(g, 0.3,0,1,15,1); // z-arrow
+				glTranslatef(0,0,-9);
+			
+				glRotatef(90,0,1,0);
+				glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red );
+				gluCylinder(g, 0.1,0.1,9,15,1); // z
+				glTranslatef(0,0,9);
+				gluCylinder(g, 0.3,0,1,15,1); // z-arrow
+				glTranslatef(0,0,-9);
+			
+				glRotatef(-90,1,0,0);
+				glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, green );
+				gluCylinder(g, 0.1,0.1,9,15,1); // z
+				glTranslatef(0,0,9);
+				gluCylinder(g, 0.3,0,1,15,1); // z-arrow
+				glTranslatef(0,0,-9);
+			
+
+				
+
+				glPopMatrix();
+			
+
+			}
 
 			if (QApplication::keyboardModifiers() == Qt::AltModifier || (doingRotate && fastRotate && ( objects.size()>1000))) {
 				
@@ -357,6 +395,8 @@ namespace SyntopiaCore {
 					transparentObjects[i]->draw();
 				}
 			}
+			renderText(10, 20, infoText);
+
 
 		};
 

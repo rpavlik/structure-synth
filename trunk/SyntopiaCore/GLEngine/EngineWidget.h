@@ -57,7 +57,7 @@ namespace SyntopiaCore {
 			bool wasCanceled() { return canceled; }
 			void setValue(int v) { bar->setValue(v); }
 			void start() { cancelButton->setEnabled(true);  started = true; setValue(0); bar->setVisible(true); setEnabled(true); cancelButton->setText("Cancel"); canceled = false; }
-			void dismiss() { cancelButton->setEnabled(true); started = false; setValue(0); bar->setVisible(false); cancelButton->setText("Raytrace Preview");  }
+			void dismiss() { cancelButton->setEnabled(true); started = false; setValue(0); bar->setVisible(false); cancelButton->setText("Raytrace (in Window)");  }
 		
 		public slots:
 	
@@ -149,6 +149,8 @@ namespace SyntopiaCore {
 			
 			void setupFragmentShader(); // For experimenting with shader effects.
 			void setImage(QImage im);
+
+			void setShowCoordinateSystem(bool val) { showCoordinateSystem = val; }
 		protected:
 			void mouseMoveEvent(QMouseEvent* ev) ; 
 			void contextMenuEvent (QContextMenuEvent* ev);
@@ -169,6 +171,7 @@ namespace SyntopiaCore {
 
 		
 		private:
+			bool showCoordinateSystem;
 			bool fragmentShader;
 			QGLShaderProgram* shaderProgram;
 			QVector<GLEngine::Command> raytracerCommands;

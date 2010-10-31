@@ -2,11 +2,6 @@
 
 #define shrink s 0.996
 
-set raytracer::ambient-occlusion-samples 0
-set raytracer::shadows true
-set raytracer::samples 2
-set raytracer::reflection 0.0
-set raytracer::phong [0.6,0.6,0.6]
 
 set maxdepth 1000
 set background #fff
