@@ -14,7 +14,7 @@ namespace StructureSynth {
 			JavaScriptParser(StructureSynth::GUI::MainWindow* mainWindow, QStatusBar* statusBar);
 			~JavaScriptParser();
 			
-			void parse(QString input);
+			void parse(QString input, QString dir);
 		private:
 			StructureSynth::GUI::MainWindow* mainWindow;
 			QStatusBar* statusBar;

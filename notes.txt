@@ -1,13 +1,16 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
-VoxelStepper needs to be tuned.
+JavaScript: make cancellable, preview?
+Raytracer: fix stratification for progressiveSampler
+Raytracer: fix 'Raytrace (final)' (do we need size thing?)
+Command help:
 set raytracer::lights ...
 set raytracer::grid-steps 0
 
 - Triangles may not support ClassID
 
 
-Structure Synth 1.4.0 ("XXXX") Released
+Structure Synth 1.4.0 ("Hinxton") Released
 ------------------------------------------
 Structure Synth is a tool for generating 3D structures from recursive rules. The structures are often complex and surprising.
 Structure Synth integrates with third-party renderers (such as Sunflow and POV-Ray) using a flexible template based export system.
@@ -19,158 +22,25 @@ Linux is still source only.
 Download instructions at:
 http://structuresynth.sourceforge.net/download.php
 
-New features since (0.9.5):
-- Added a 'Recent files' menu entry.
-- Optional depth-first recursion (using 'set recursion depth')
-- Added application icon.
-- Support for a new generic 'template' primitive 
+New major features (since 1.0.0):
+- Integrated raytracer (multi-threaded, ambient occlusion, depth-of-field, stratified sampling, progressive preview) 
+- JavaScript integration (for building animations).
 
-A new Template Export Browser:
-- Shows the defined primitives in the template (highlighting used and missing).
-- Integrated XML editor with syntax highlighting for quickly modifying the template.
-- Automatic unique filename generation.
-- Define output width and height.
-- A post modification window allows you to modify the output before saving.
-
-The template XML syntax has been updated:
-- A new <description> element. 
-- The 'substitution' element is now called 'primitive'
-- Added 'defaultExtension' tag.
-- Added 'runAfter' tag.
+Minor features:
+- Added a patch by François Beaune to support Appleseed
+- Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
+- Context menu with command help
+- Proper sorting of transparent OpenGL objects
+- OBJ exporter.
+- Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
+- Added 'show coordinate system'.
+- GUI Refactoring.
 
 For more information see:
-
-
-04 May 09 [MHC] 
-[4h]
-
-
-Structure Synth 0.9.5 ("Haiku") Released
--------------------------------------------
-Binaries for XP and Vista. 
-Mac binaries will hopefully be available soon.
-Linux is still source only.
- 
-New features: 
-- New color features: a 'random color' operator with different palettes (random hue, random rgb, greyscale, sampling from image, or from user-defined list). 
-- Now uses two independent (Mersenne Twisters) random number generators: one for geometry and one for colors.
-- Upgraded to Qt 4.5.0. Now Structure Synth is dual licensed under GPL and LGPL.
-- Added 'blend {color} {strength}' operator.
-- Added 'set seed initial' for syncing random seed. 
-- Added 'set maxsize ...' and 'set minsize ...'.
-- Added support for specifying a startup .es file on the Commandline (this makes file associations possible). 
-- Added support for drag'and'drop (drop a .es file onto the clipboard).
-- Added simple GUI for manipulating preprocessor defines.
-- Added templates by Neon22 and Groovelock to SVN.
-
-Minor changes and bug fixes:
-- Added close icon to tabs.
-- Applied more agressive optimization on Windows build (SSE2/fast fp-math). SSE2 is now required! 
-- Fixed a bug where a recursive rule (not producing objects) could fill memory.
-- Added export of background color to templates.
-- BugFix: The scrollwheel can now be used to zoom again.
-
-
-Next version:
-- Show hour-glass when making long operations (before progress when rendering...)    
-- Better sphere implementation (remember transformation thing...)
-- 
-
-Request:
-- Remember file extension.
-
-Filename (and 'run the following') should be possible to set in template.
-If changed in dialog it should be persistent.
-
-Template Rendering Dialog:
-
-Setup Tab:
-
-Choose Template:
-[Sunflow.template] [<]
-
-Notes:
-(This template was created by MHC....)
-
-Primitives in template:
-Box::spheres   comment
-Box::float     comment
-Grid           Warning: not found in template. (shown in red)
-
-(o) Render to file: [c:\testmig.es] [File...]
-	[x] add unique ID to filename (testmig-1.es) <- autoreview
-( ) Render to clipboard.
-
-[x] Run the following commands after export:
-    C:\sunflow\sunflow.bat {File}
-
-Template details tab:
-
-Output Size:
-X: 640 Y: 400. [x] Lock Aspect
-
-[x] Modify Template before applying:
-
-[                 ]
-[                 ]
-[				  ]
-[                 ]
-		[Save modifications] [Undo]
-
-[x] Modify Template output before saving
-    (Spawns an edit window)
+http://structuresynth.sourceforge.net/
 
 
 
-
-
-Make Debug moc'ing on release...
-
-Debug.Info(...);
-Debug.ShowProgress(...);
-Debug.SetProgress(...);   // TODO: Should throw exception if cancelled...
-Debug.HideProgress();
-Debug.Message(...);
-
-Builder.load(filename);
-Builder.replace(before, after);
-QString text = Builder.applyTemplate(...);
-Builder.run();
-
-IO.save(text, filename);
-IO.spawnProcess(...);
-IO.saveImage(filename); // For OpenGL output...
-
-About box sizing on Mac.
-Change 'mac.pro' -> 'StructureSynth.pro'
-Check copy paste menu
-
-Template Render Dialog
-----------------------
-Save file as:
-Default file path: [...............] [Dir...]
-File name: [Output0001.es] [File...]
-
-Post processing:
-[ ] Run the following command after saving picture.
-    [C:\program files\Sunflow\Sunflow.bat {FILENAME}]
-   
- Edit script before saving:
-[                  ]
-[                  ]
-[                  ]
-[                  ]
-
-
-
-
-On startup -> show 3D view nav info...
-Help -> add weblinks...
-
-- Restructure: 
-	-Check directory structure.
-	-Comments
-				
 - Website: 
     - add section links.
     - tutorials: 'EisenScript Kata'

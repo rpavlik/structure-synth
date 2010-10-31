@@ -69,9 +69,10 @@ namespace StructureSynth {
 
 		}
 
-		Builder::Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D) : mainWindow(mainWindow), engine3D(engine3D) {
+		Builder::Builder(StructureSynth::GUI::MainWindow* mainWindow, SyntopiaCore::GLEngine::EngineWidget* engine3D, QString dir) : mainWindow(mainWindow), engine3D(engine3D) {
 				width = engine3D->width();
 				height = engine3D->height();
+				workingDir = dir;
 			};
 
 		void Builder::render() {
@@ -104,7 +105,7 @@ namespace StructureSynth {
 		}
 
 		void Builder::load(QString fileName) {	
-			fileName = QDir("").absoluteFilePath(fileName);
+			fileName = QDir(workingDir).absoluteFilePath(fileName);
 			QFile file(fileName);
 			if (!file.open(QFile::ReadOnly | QFile::Text)) {
 				throw Exception(QString("Cannot read file %1: %2.").arg(fileName).arg(file.errorString()));
@@ -114,6 +115,10 @@ namespace StructureSynth {
 				originalSystem = loadedSystem;
 			}
 		};
+
+		void Builder::prepend(QString prescript) {
+			loadedSystem = prescript + "\n" + loadedSystem;
+		}
 
 		void Builder::define(QString input, QString value) {
 			QStringList s = loadedSystem.split("\n");
@@ -131,6 +136,8 @@ namespace StructureSynth {
 		};
 
 		void Builder::renderToFile(QString fileName, bool overwrite) {
+			fileName = QDir(workingDir).absoluteFilePath(fileName);
+			
 			render();
 			engine3D->requireRedraw();
 			engine3D->update();
@@ -164,6 +171,8 @@ namespace StructureSynth {
 
 		/// Raytrace image with same dimensions as viewport to file.
 		void Builder::templateRenderToFile(QString templateName, QString fileName, bool overwrite) {
+			fileName = QDir(workingDir).absoluteFilePath(fileName);
+			
 			QDir d(mainWindow->getTemplateDir());
 			QString templateFileName = d.absoluteFilePath(templateName);
 			INFO("Starting Template Renderer: " + fileName);
@@ -255,6 +264,8 @@ namespace StructureSynth {
 
 		void Builder::raytraceToFile(QString fileName, bool overwrite) {
 
+			fileName = QDir(workingDir).absoluteFilePath(fileName);
+			
 			RayTracer rt(engine3D,0);
 			INFO(QString("Raytracing %1x%2 image...").arg(width).arg(height));
 			QImage im = rt.calculateImage(width,height);

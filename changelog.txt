@@ -2,11 +2,13 @@
 Changelog for Structure Synth:
 ------------
 
-(80h)
+(82h)
 
 31 Oct 10 [MHC] Refactored GUI menus. 
-[3h]			Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
+[5h]			Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
 				Added 'show coordinate system'.
+				JavaScript: fixed relative directory locations. Added Builder.prepend(...)
+				Added better raytracing thread termination.
 
 30 Oct 10 [MHC] Fixed memleaks for colors[], fixed GUI reentry
 [5h]			Added LensSamples stratification

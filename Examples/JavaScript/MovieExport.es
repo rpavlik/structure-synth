@@ -9,17 +9,16 @@ function pad(number) {
 }
 
 
-Builder.load("Examples/Twister2.es");
-max = 500;
+Builder.load("../DontDeploy/Twister2.es");
+max = 5;
 for (i = 0; i <=  max; i+=1) {
 	Builder.reset();	
-	//Builder.setSize(0,100); raytracer does not support custom sizes yet. It uses screen size.
+	Builder.setSize(0,100);
 	Builder.define("rzstep",( 2.2*(i/max)));
 	Builder.define("rxstep",1);
 	Builder.render();
-      // Builder.renderToFile("Out2/XPict" + pad(i) + ".png",true);
-	Builder.raytraceToFile("XPict" + pad(i) + ".png",true);
-	//Debug.waitForMouseButton();
+   	Builder.raytraceToFile("XPict" + pad(i) + ".png",true);
+	Debug.waitForMouseButton();
 }
 
 Debug.Info("This will be written to the console.");

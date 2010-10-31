@@ -1,17 +1,21 @@
 #define shrink s 0.996
+#define _rz 0
+#define _dofa 0.245
+#define _dofb 0.09
+#define _md 1000
+set seed 14
 
-set seed 9
 // Camera settings. Place these before first rule call.
-set translation [-2.66914 -1.23905 -20]
-set rotation [0.707436 -0.702911 -0.0738339 0.542177 0.472696 0.694696 -0.453408 -0.531484 0.715504]
+set translation [-1.54217 -1.76221 -20]
+set rotation [0.530172 -0.847845 -0.00877037 0.100004 0.0522555 0.993614 -0.841972 -0.527663 0.112492]
 set pivot [0 0 0]
-set scale 0.953754
+set scale 1.13904
 
-set raytracer::dof [0.245,0.09]
+set raytracer::dof [_dofa,_dofb]
 
-set maxdepth 1000
+set maxdepth _md
 set background #fff
-16 * { rz 20 color white } hbox
+1 * { rz _rz } 16 * { rz 20 color white } hbox
 
 rule hbox { r}
 rule r { forward }

@@ -5,8 +5,8 @@
 set maxdepth 1000
 set background #888
 6 * {  rz 60 color white } hbox
-{ s 80 80 0.1 color white } box
-set raytracer::light [0,0,-20]
+//{ s 80 80 0.1 color white } box
+//set raytracer::light [0,0,-20]
 
 rule hbox { set seed initial  r}
 rule r { { rx 90 } forward }

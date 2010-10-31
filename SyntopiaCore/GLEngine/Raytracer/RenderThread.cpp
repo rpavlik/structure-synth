@@ -20,6 +20,8 @@ namespace SyntopiaCore {
 			dofFalloff = 0;
 			//sampler = new StratifiedSampler(&rg);
 			sampler = 0;
+			terminated = false;
+
 		}
 
 
@@ -31,6 +33,7 @@ namespace SyntopiaCore {
 
 		RenderThread::RenderThread(const RenderThread& other) {
 			rayIDs = other.rayIDs;
+			terminated = false;
 
 			frontStart = other.frontStart;
 			frontX = other.frontX;
@@ -141,6 +144,7 @@ namespace SyntopiaCore {
 
 			for (int y = 0; y < h; y++) {	
 				float fy = y*ys;
+				if (terminated) break;
 				for (int x = 0; x < w; x++) {	
 					float fx = x*xs;
 					Vector3f ls = sampler->getAASample(rayNumber);

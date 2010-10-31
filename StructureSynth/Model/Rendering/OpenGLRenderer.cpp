@@ -96,7 +96,7 @@ namespace StructureSynth {
 			};
 
 			void OpenGLRenderer::end() {
-				INFO(QString("Rendering done. Wrote %1 objects.").arg(engine->objectCount()));
+				INFO(QString("Build done. Created %1 objects.").arg(engine->objectCount()));
 				engine->requireRedraw();
 			};
 

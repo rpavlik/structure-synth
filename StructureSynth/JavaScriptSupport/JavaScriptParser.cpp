@@ -111,16 +111,20 @@ namespace StructureSynth {
 		JavaScriptParser::~JavaScriptParser() {
 		}
 			
-		void JavaScriptParser::parse(QString input) {
+		void JavaScriptParser::parse(QString input, QString dir) {
 
 			INFO("Initializing JavaScript environment.");
+			QString fdir =  QDir(dir).absolutePath();
+			INFO("Working directory: " + fdir);
+			if (dir.isEmpty()) { WARNING("Filenames are relative to the script location, but this script is not saved."); }
+
 			QScriptEngine engine;
 
 			// Setup the global objects...
 			Debug debugObject(statusBar);
 			engine.globalObject().setProperty("Debug", engine.newQObject(&debugObject)); 
 
-			Builder builder(mainWindow, mainWindow->getEngine());
+			Builder builder(mainWindow, mainWindow->getEngine(), dir);
 			engine.globalObject().setProperty("Builder", engine.newQObject(&builder)); 
 
 			World world(mainWindow->getEngine());

@@ -11,7 +11,7 @@ set maxdepth 420
 #define symmetry 6
 #define _rz 0
 set background white
-
+set raytracer::samples 1
 
 { s 100 100 1  rz _rz } box
 
