@@ -264,11 +264,13 @@ namespace StructureSynth {
 
 		void Builder::raytraceToFile(QString fileName, bool overwrite) {
 
+			mainWindow->disableAllExcept(mainWindow->getProgressBox());
 			fileName = QDir(workingDir).absoluteFilePath(fileName);
 			
-			RayTracer rt(engine3D,0);
+			RayTracer rt(engine3D,mainWindow->getProgressBox(),false,false);
 			INFO(QString("Raytracing %1x%2 image...").arg(width).arg(height));
 			QImage im = rt.calculateImage(width,height);
+			mainWindow->enableAll();
 			if (rt.wasCancelled()) throw Exception("User cancelled");
 			QFileInfo fi(fileName);
 			if (fi.exists()) {

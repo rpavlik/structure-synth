@@ -31,6 +31,20 @@ namespace StructureSynth {
 			double defaultValue;
 		};
 
+		class IntParameter : public GuiParameter {
+		public:
+			IntParameter(QString name, int from, int to, int defaultValue) :
+					GuiParameter(name), from(from), to(to), defaultValue(defaultValue) {};
+			
+			int getFrom() { return from; }
+			int getTo() { return to; }
+			int getDefaultValue() { return defaultValue; }
+		private:
+			int from;
+			int to;
+			int defaultValue;
+		};
+
 		/// The preprocessor is responsible for expanding '#define'
 		///
 		class Preprocessor {

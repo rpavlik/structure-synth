@@ -41,18 +41,18 @@ namespace SyntopiaCore {
 		}
 		
 		Vector3f StratifiedSampler::getAODirection(int index) {
-			if (aoSampleIndex>=aoSamples.count()) throw 1;
-			//return aoSamples[aoSampleIndex++];
+			if (index>=aoSamples.count()) throw 1;
 			return aoSamples[index];
 		}
 
 		Vector3f StratifiedSampler::getAASample(int index) {
-			if (aaSampleIndex>=aaSamples.count()) throw 1;
-			return aaSamples[aaSampleIndex++];
+			if (index>=aaSamples.count()) throw 1;
+			return aaSamples[index];
 		}
 
 		Vector3f StratifiedSampler::getLensSample(int index) {
-			return rg->getUniform2D();
+			if (index>=lensSamples.count()) throw 1;
+			return lensSamples[index];
 		}
 
 		// Based on the Physical Based Rendering book
@@ -70,6 +70,7 @@ namespace SyntopiaCore {
 			int nSqrt = nAASamplesSqrt*nAOSamplesSqrt;
 			aoSamples = QVector<Vector3f>(nSqrt*nSqrt);
 			aaSamples = QVector<Vector3f>(nAASamplesSqrt*nAASamplesSqrt);
+			lensSamples = QVector<Vector3f>(nAASamplesSqrt*nAASamplesSqrt);
 			int count = 0;
 			for (int i = 0; i < nSqrt; i++) {
 				for (int j = 0; j < nSqrt; j++) {
@@ -77,7 +78,7 @@ namespace SyntopiaCore {
 					// [i/nSqrt;(i+1)/nSqrt]
 					double x = rg->getDouble( ((double)i)/(double)nSqrt,((double)(i+1.0))/(double)nSqrt);
 					double y = rg->getDouble( ((double)j)/(double)nSqrt,((double)(j+1.0))/(double)nSqrt);
-					aoSamples[count++] = sampleSphere(x,y);
+					aoSamples[count++] = sampleSphere(x,y);		
 				}	
 			}
 
@@ -88,13 +89,12 @@ namespace SyntopiaCore {
 					// [i/nSqrt;(i+1)/nSqrt]
 					double x = rg->getDouble( ((double)i)/(double)nAASamplesSqrt,((double)(i+1.0))/(double)nAASamplesSqrt);
 					double y = rg->getDouble( ((double)j)/(double)nAASamplesSqrt,((double)(j+1.0))/(double)nAASamplesSqrt);
-					aaSamples[count++] = Vector3f(x-0.5,y-0.5,1);
+					aaSamples[count] = Vector3f(x-0.5,y-0.5,1);
+					x = rg->getDouble( ((double)i)/(double)nSqrt,((double)(i+1.0))/(double)nSqrt);
+					y = rg->getDouble( ((double)j)/(double)nSqrt,((double)(j+1.0))/(double)nSqrt);
+					lensSamples[count++] = concentricSampleDisk(x,y);
 				}	
 			}
-
-			aoSampleIndex = 0;
-			aaSampleIndex = 0;
-			lensSampleIndex = 0;
 
 		};
 

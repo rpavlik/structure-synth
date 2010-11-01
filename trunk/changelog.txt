@@ -2,7 +2,12 @@
 Changelog for Structure Synth:
 ------------
 
-(82h)
+ 
+1  Nov 10 [MHC] Added int sliders to the Variable GUI interface.
+[2h]			Made JavaScript-rendering cancellable, fixed Raytrace (Final)
+				Fixed StratifiedSampler lens samples.
+
+(Last count: 82h)
 
 31 Oct 10 [MHC] Refactored GUI menus. 
 [5h]			Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).

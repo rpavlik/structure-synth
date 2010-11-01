@@ -74,6 +74,48 @@ namespace StructureSynth {
 			double maximum;
 		};
 
+		// A helper class (combined int slider+spinner)
+		class IntComboSlider : public QWidget {
+		Q_OBJECT
+		public:
+			IntComboSlider(QWidget* parent, int defaultValue, int minimum, int maximum) 
+				: QWidget(parent), defaultValue(defaultValue), minimum(minimum), maximum(maximum){
+				setLayout(new QHBoxLayout());
+				slider = new QSlider(Qt::Horizontal,this);
+				slider->setRange(minimum,maximum);
+				slider->setValue(defaultValue);
+				spinner = new QSpinBox(this);
+				spinner->setMaximum(maximum);
+				spinner->setMinimum(minimum);
+				spinner->setValue(defaultValue);
+				layout()->addWidget(slider);
+				layout()->addWidget(spinner);
+				connect(spinner, SIGNAL(valueChanged(int)), this, SLOT(spinnerChanged(int)));
+				connect(slider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
+			}
+
+			int getValue() { return spinner->value(); }
+		
+		protected slots:
+			void spinnerChanged(int) {
+				int val = spinner->value();
+				slider->setValue(val);
+			}
+
+			void sliderChanged(int) {
+				double val = slider->value();
+				spinner->setValue(val);
+			}
+
+		private:
+			
+			QSlider* slider;
+			QSpinBox* spinner;
+			int defaultValue;
+			int minimum;
+			int maximum;
+		};
+
 	}
 }
 

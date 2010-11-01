@@ -25,7 +25,8 @@ namespace StructureSynth {
 			QMap<QString, QString> substitutions;
 			QRegExp ppCommand("^#"); // Look for #define varname value
 			QRegExp defineCommand("^#define\\s([^\\s]+)\\s(.*)*$"); // Look for #define varname value
-			QRegExp defineCommandWithGUI("^#define\\s([^\\s]+)\\s(.*)\\s\\(float:([^\\s]*)\\)$"); // Look for #define varname value 
+			QRegExp defineFloatCommand("^#define\\s([^\\s]+)\\s(.*)\\s\\(float:([^\\s]*)\\)$"); // Look for #define varname value 
+			QRegExp defineIntCommand("^#define\\s([^\\s]+)\\s(.*)\\s\\(int:([^\\s]*)\\)$"); // Look for #define varname value 
 
 			// Match a number: [-+]?[0-9]*\.?[0-9]+
 			QRegExp randomNumber("random\\[([-+]?[0-9]*\\.?[0-9]+),([-+]?[0-9]*\\.?[0-9]+)\\]"); // random[-2.3,3.4]
@@ -35,16 +36,16 @@ namespace StructureSynth {
 				if (ppCommand.indexIn(*it) != -1) {
 					// Preprocessor command
 
-					if (defineCommandWithGUI.indexIn(*it) != -1) {
+					if (defineFloatCommand.indexIn(*it) != -1) {
 						//INFO(QString("Found ppC (%1)->(%2): ").arg(defineCommandWithGUI.cap(1)).arg(defineCommandWithGUI.cap(2)) + *it);
-						if (defineCommandWithGUI.cap(2).contains(defineCommandWithGUI.cap(1))) {
+						if (defineFloatCommand.cap(2).contains(defineFloatCommand.cap(1))) {
 							WARNING(QString("#define command is recursive - skipped: %1 -> %2")
-								.arg(defineCommandWithGUI.cap(1))
-								.arg(defineCommandWithGUI.cap(2)));
+								.arg(defineFloatCommand.cap(1))
+								.arg(defineFloatCommand.cap(2)));
 						}
 						//substitutions[defineCommandWithGUI.cap(1)] = defineCommandWithGUI.cap(2);
-						QString defaultValue = defineCommandWithGUI.cap(2);
-						QString floatInterval = defineCommandWithGUI.cap(3);
+						QString defaultValue = defineFloatCommand.cap(2);
+						QString floatInterval = defineFloatCommand.cap(3);
 						QStringList fi = floatInterval.split("-");
 						if (fi.count() != 2) {
 							WARNING("Could not understand #define gui command: " + floatInterval);
@@ -59,17 +60,46 @@ namespace StructureSynth {
 							continue;
 						}
 						bool succes3 = false;
-						double d3 = defineCommandWithGUI.cap(2).toDouble(&succes3);
+						double d3 = defineFloatCommand.cap(2).toDouble(&succes3);
 						if (!succes3) {
-							WARNING("Could not parse default argumentin #define gui command: " + defineCommandWithGUI.cap(2));
+							WARNING("Could not parse default argument in #define gui command: " + defineFloatCommand.cap(2));
 							continue;
 						}
-						FloatParameter* fp= new FloatParameter(defineCommandWithGUI.cap(1), d1, d2, d3);
-						//INFO(QString("Float: %1, %2").arg(d1).arg(d2));
+						FloatParameter* fp= new FloatParameter(defineFloatCommand.cap(1), d1, d2, d3);
+						params.append(fp);
+						
+					} else if (defineIntCommand.indexIn(*it) != -1) {
+						INFO("INT");
+						if (defineIntCommand.cap(2).contains(defineIntCommand.cap(1))) {
+							WARNING(QString("#define command is recursive - skipped: %1 -> %2")
+								.arg(defineIntCommand.cap(1))
+								.arg(defineIntCommand.cap(2)));
+						}
+						QString defaultValue = defineIntCommand.cap(2);
+						QString intInterval = defineIntCommand.cap(3);
+						QStringList ii = intInterval.split("-");
+						if (ii.count() != 2) {
+							WARNING("Could not understand #define gui command: " + intInterval);
+							continue;
+						}
+						bool succes = false;
+						int i1 = ii[0].toInt(&succes);
+						bool succes2 = false;
+						int i2 = ii[1].toInt(&succes2);
+						if (!succes || !succes2) {
+							WARNING("Could not parse int interval in #define gui command: " + intInterval);
+							continue;
+						}
+						bool succes3 = false;
+						int i3 = defineIntCommand.cap(2).toInt(&succes3);
+						if (!succes3) {
+							WARNING("Could not parse default argument in #define gui command: " + defineIntCommand.cap(2));
+							continue;
+						}
+						IntParameter* fp= new IntParameter(defineIntCommand.cap(1), i1, i2, i3);
 						params.append(fp);
 						
 					} else if (defineCommand.indexIn(*it) != -1) {
-						//INFO(QString("Found ppC (%1)->(%2): ").arg(defineCommand.cap(1)).arg(defineCommand.cap(2)) + *it);
 						if (defineCommand.cap(2).contains(defineCommand.cap(1))) {
 							WARNING(QString("#define command is recursive - skipped: %1 -> %2")
 								.arg(defineCommand.cap(1))

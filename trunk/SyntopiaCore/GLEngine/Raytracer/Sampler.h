@@ -24,8 +24,7 @@ namespace SyntopiaCore {
 		// Stratified sampling
 		class StratifiedSampler : public Sampler {
 		public:
-			StratifiedSampler(Math::RandomNumberGenerator* rg) : 
-			  Sampler(rg), aoSampleIndex(0), aaSampleIndex(0), lensSampleIndex(0) {}
+			StratifiedSampler(Math::RandomNumberGenerator* rg) : Sampler(rg) {};
 			virtual Vector3f getAASample(int index);
 			virtual Vector3f getAODirection(int index);
 			virtual Vector3f getLensSample(int index);
@@ -34,9 +33,6 @@ namespace SyntopiaCore {
 			virtual Sampler* clone(Math::RandomNumberGenerator* rg) { return new StratifiedSampler(rg); }
 
 		private:
-			int aoSampleIndex;
-			int aaSampleIndex;
-			int lensSampleIndex;
 			QVector<Vector3f> aoSamples;
 			QVector<Vector3f> aaSamples;
 			QVector<Vector3f> lensSamples;

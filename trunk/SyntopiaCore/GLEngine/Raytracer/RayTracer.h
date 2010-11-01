@@ -17,11 +17,12 @@ namespace SyntopiaCore {
 	
 		class RayTracer {
 		public:
-			RayTracer(EngineWidget* widget, ProgressBox* progressBox);
+			RayTracer(EngineWidget* widget, ProgressBox* progressBox, bool progressiveGUI, bool progressiveStratification);
 			QImage calculateImage(int width, int height);
 			void setParameter(QString param, QString value);
 			bool wasCancelled() { return userCancelled; }
-		private:	
+		private:
+			bool progressiveGUI;
 			ProgressiveOutput* progressiveOutput;
 			EngineWidget* engine;
 			void startJobs(ProgressBox* progress);

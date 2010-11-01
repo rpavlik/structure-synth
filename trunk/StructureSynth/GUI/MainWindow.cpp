@@ -52,7 +52,6 @@ namespace StructureSynth {
 			void createCommandHelpMenu(QMenu* menu, QWidget* textEdit) {
 
 				QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
-
 				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20 // change samples instead..", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", textEdit , SLOT(insertText()));
@@ -95,6 +94,7 @@ namespace StructureSynth {
 
 				QMenu *setMenu = new QMenu("Set Commands", 0);
 				setMenu->addAction("set maxdepth 100", textEdit , SLOT(insertText()));
+				setMenu->addAction("set maxobjects 100", textEdit , SLOT(insertText()));
 				setMenu->addAction("set maxsize 10 // maximum object size", textEdit , SLOT(insertText()));
 				setMenu->addAction("set minsize 0.1 // minimum object size", textEdit , SLOT(insertText()));
 				setMenu->addAction("set background #fff", textEdit , SLOT(insertText()));
@@ -106,13 +106,11 @@ namespace StructureSynth {
 				colorMenu->addAction("set colorpool list:orange,yellow,blue // sample from list", textEdit , SLOT(insertText()));
 				colorMenu->addAction("set colorpool image:test.png // sample from image", textEdit , SLOT(insertText()));
 
-
 				QMenu *set2Menu = new QMenu("Exotic Set Commands", 0);
 				set2Menu->addAction("set seed initial // reset random seed", textEdit , SLOT(insertText()));
 				set2Menu->addAction("set recursion depth // traverse depth-first", textEdit , SLOT(insertText()));
 				set2Menu->addAction("set rng old // old random generator", textEdit , SLOT(insertText()));
-				set2Menu->addAction("set syncrandom true", textEdit , SLOT(insertText()));
-				
+				set2Menu->addAction("set syncrandom true", textEdit , SLOT(insertText()));				
 
 				QMenu *setCMenu = new QMenu("Camera Commands", 0);
 				setCMenu->addAction("set scale 0.5", textEdit , SLOT(insertText()));
@@ -121,12 +119,10 @@ namespace StructureSynth {
 				setCMenu->addAction("set rotation  [1 0 0 0 1 0 0 0 1]", textEdit , SLOT(insertText()));
 				setCMenu->addAction("set perspective-angle 70", textEdit , SLOT(insertText()));
 
-				
-
-
 				QMenu *pMenu = new QMenu("Preprocessor Commands", 0);
 				pMenu->addAction("#define myAngle 45", textEdit , SLOT(insertText()));
 				pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", textEdit , SLOT(insertText()));
+				pMenu->addAction("#define iterations 20 (int:0-23) // create slider with default value 20", textEdit , SLOT(insertText()));
 
 
 				menu->insertMenu(menu->actions()[0], modifierMenu);
@@ -827,20 +823,24 @@ namespace StructureSynth {
 			engine->requireRedraw();
 		}
 
-		void MainWindow::raytraceProgressive() {
-			QList<QWidget *> widgets = findChildren<QWidget *>("");
-			QWidget* w = progressBox;
-			while (w) { widgets.removeAll(w); w=w->parentWidget(); }
-
-			foreach (QWidget* w, widgets) w->setEnabled(false);
-			//progressBox->setEnabled(true);
+		void MainWindow::disableAllExcept(QWidget* w) {
+			disabledWidgets.clear();
+			disabledWidgets = findChildren<QWidget *>("");
+			while (w) { disabledWidgets.removeAll(w); w=w->parentWidget(); }
+			foreach (QWidget* w, disabledWidgets) w->setEnabled(false);
 			qApp->processEvents();
+		}
 
-			RayTracer rt(engine, progressBox);
+		void MainWindow::enableAll() {
+			foreach (QWidget* w, disabledWidgets) w->setEnabled(true);
+		}
+		
+		void MainWindow::raytraceProgressive() {
+			disableAllExcept(progressBox);
+			RayTracer rt(engine, progressBox,true,true);
 			QImage im = rt.calculateImage(engine->width(),engine->height());
-			foreach (QWidget* w, widgets) w->setEnabled(true);
 			engine->setImage(im);
-			
+			enableAll();
 		}
 
 
@@ -1583,8 +1583,10 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::raytrace() {
-			RayTracer rt(engine, progressBox);
+			disableAllExcept(progressBox);
+			RayTracer rt(engine, progressBox, false, false);
 			QImage im = rt.calculateImage(0,0);
+			enableAll();
 			PreviewWindow pd(this, im);
 			pd.exec();
 		}
