@@ -16,7 +16,7 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 		
-		RayTracer::RayTracer(EngineWidget* engine, ProgressBox* progressBox) {
+		RayTracer::RayTracer(EngineWidget* engine, ProgressBox* progressBox, bool progressiveGUI, bool progressiveStratification) {
 			this->progressBox = progressBox;
 			for (int i = 0; i < 16; i++) modelView[i] = engine->getModelViewCache()[i];
 			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
@@ -25,9 +25,10 @@ namespace SyntopiaCore {
 			sizeX = 0;
 			sizeY = 0;
 			userCancelled = false;
+			this->progressiveGUI = progressiveGUI;
 			
 			maxThreads = QThread::idealThreadCount();
-			progressiveRender = true;
+			progressiveRender = progressiveStratification;
 			voxelSteps = 0;
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
@@ -107,7 +108,7 @@ namespace SyntopiaCore {
 					if (oldC != c) {
 						screenUpdates++;    
 						oldC = c;
-						engine->setImage(progressiveOutput->getImage());
+						if (progressiveGUI) engine->setImage(progressiveOutput->getImage());
 					}
 				
 					qApp->processEvents();
@@ -119,17 +120,6 @@ namespace SyntopiaCore {
 			
 
 		QImage RayTracer::calculateImage(int w, int h) {
-			
-			if (progressiveRender) {
-				maxUnits = rt.aaSamples*rt.aaSamples;
-				rt.sampler = new ProgressiveStratifiedSampler(&rt.rg);
-				((ProgressiveStratifiedSampler*)rt.sampler)->setAAOrder(rt.rg.getRandomIndices(maxUnits));
-				
-			} else {
-				maxUnits = w;
-				rt.sampler = new StratifiedSampler(&rt.rg);
-			}
-
 			// Setup dimensions
 			if (w == 0) w = sizeX;
 			if (h == 0) h = sizeY;
@@ -144,6 +134,18 @@ namespace SyntopiaCore {
 			}
 
 			INFO(QString("Rendering size: %3x%4").arg(w).arg(h));
+			if (progressiveRender) {
+				maxUnits = rt.aaSamples*rt.aaSamples;
+				rt.sampler = new ProgressiveStratifiedSampler(&rt.rg);
+				((ProgressiveStratifiedSampler*)rt.sampler)->setAAOrder(rt.rg.getRandomIndices(maxUnits));
+				INFO("Using progressive stratification (renders 1 ray layer at a time)");
+			} else {
+				maxUnits = w;
+				rt.sampler = new StratifiedSampler(&rt.rg);
+				INFO("Using stratified sampling (renders 1 pixel column a time)");
+			}
+
+			
 
 			rt.alloc(w,h);
 

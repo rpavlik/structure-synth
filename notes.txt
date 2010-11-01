@@ -3,9 +3,7 @@ TODO list and scratch pad for Structure Synth. /Mikael
 JavaScript: make cancellable, preview?
 Raytracer: fix stratification for progressiveSampler
 Raytracer: fix 'Raytrace (final)' (do we need size thing?)
-Command help:
-set raytracer::lights ...
-set raytracer::grid-steps 0
+
 
 - Triangles may not support ClassID
 
@@ -17,23 +15,23 @@ Structure Synth integrates with third-party renderers (such as Sunflow and POV-R
 
 Binaries for Windows (XP and Vista).
 Mac binaries available soon.
-Linux is still source only.
+Linux is source only.
 
 Download instructions at:
 http://structuresynth.sourceforge.net/download.php
 
 New major features (since 1.0.0):
-- Integrated raytracer (multi-threaded, ambient occlusion, depth-of-field, stratified sampling, progressive preview) 
+- Integrated raytracer (multi-threaded, ambient occlusion, depth-of-field, stratified sampling, progressive preview, uniform grid accelerator) 
 - JavaScript integration (for building animations).
+- OBJ exporter (supporting all primitives and tagging)
 
 Minor features:
-- Added a patch by François Beaune to support Appleseed
-- Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
-- Context menu with command help
-- Proper sorting of transparent OpenGL objects
-- OBJ exporter.
 - Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
 - Added 'show coordinate system'.
+- Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
+- Context menu with command help in editor window.
+- Proper sorting of transparent OpenGL objects.
+- Added a patch by François Beaune to support Appleseed.
 - GUI Refactoring.
 
 For more information see:

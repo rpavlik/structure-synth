@@ -2,16 +2,19 @@
 	An example of using GUI preprocessor defines.
 
        The "float" suffix makes it possible to control variables via sliders.
+       The 'int' suffix is identical to the above, but only accepts natural numbers.
 */
 
 #define sizeStep 0.94 (float:0-1)
 #define angle1 20 (float:0-90)
 #define angle2 6 (float:0-90)
+#define iterations 6 (int:1-90)
+
 
 set maxdepth 100
 set background black
 
-18 * { rx 10  x 0.2 sat 0.95  } R
+iterations * { rx 10  x 0.2 sat 0.95  } R
 
 
 rule R { 

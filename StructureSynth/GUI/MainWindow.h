@@ -68,7 +68,12 @@ namespace StructureSynth {
 			QString getCameraSettings();
 			QString getScriptWithSettings(QString filename);
 			
+			SyntopiaCore::GLEngine::ProgressBox* getProgressBox() { return progressBox; };
+
+			void disableAllExcept(QWidget* w);
+			void enableAll();
 			
+		
 		protected:
 			void dragEnterEvent(QDragEnterEvent *ev);
 			void dropEvent(QDropEvent *ev);
@@ -115,6 +120,8 @@ namespace StructureSynth {
 			
 
 		private:
+			QList<QWidget *> disabledWidgets;
+			
 			void setRecentFile(const QString &fileName);
 			void parseJavaScript(QString scripture, QString dir);
 			void insertTabPage(QString filename);

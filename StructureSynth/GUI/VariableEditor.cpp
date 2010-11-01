@@ -14,24 +14,19 @@ using namespace SyntopiaCore::Logging;
 namespace StructureSynth {
 	namespace GUI {
 
-		/// The supported types of variables.
-		enum VariableType { StringVariable, FloatVariable };
-
-		/// A widget editor for a constant variable.
+	
+		/// Widget editor base class.
 		class VariableWidget : public QWidget {
 		public:
-			/// FloatVariable constructor.
 			VariableWidget(QWidget* parent, QString name) : QWidget(parent), name(name) {};
 
 			virtual QString getValueAsText() { return ""; };
 			QString getName() const { return name; };
-			VariableType getType() const { return type; };
 			bool isUpdated() const { return updated; };
 			void setUpdated(bool value) { updated = value; };
 
 		private:
 			QString name;
-			VariableType type;
 			bool updated;
 			QWidget* widget;
 		};
@@ -39,7 +34,7 @@ namespace StructureSynth {
 
 	
 
-		/// A widget editor for a constant variable.
+		/// A widget editor for a float variable.
 		class FloatWidget : public VariableWidget {
 		public:
 			/// FloatVariable constructor.
@@ -48,7 +43,6 @@ namespace StructureSynth {
 					QHBoxLayout* l = new QHBoxLayout(this);
 					l->setSpacing(2);
 					setContentsMargins (0,0,0,0);
-					//setLayout(l);
 					QLabel* label = new QLabel(this);
 					label->setText(name);
 					l->addWidget(label);
@@ -63,16 +57,36 @@ namespace StructureSynth {
 		};
 
 
+		class IntWidget : public VariableWidget {
+		public:
+			/// FloatVariable constructor.
+			IntWidget(QWidget* parent, QString name, int defaultValue, int min, int max) 
+				: VariableWidget(parent, name)  {
+					QHBoxLayout* l = new QHBoxLayout(this);
+					l->setSpacing(2);
+					setContentsMargins (0,0,0,0);
+					QLabel* label = new QLabel(this);
+					label->setText(name);
+					l->addWidget(label);
+					comboSlider = new IntComboSlider(parent, defaultValue, min, max);
+					l->addWidget(comboSlider);
+			};
+
+			virtual QString getValueAsText() { return QString::number(comboSlider->getValue()); };
+
+		private:
+			IntComboSlider* comboSlider;
+		};
+
+
 		VariableEditor::VariableEditor(QWidget* parent) : QWidget(parent) {
 			layout = new QVBoxLayout(this);
 			layout->setSpacing(1);
-
 			spacer=0;
 		};	
 
 	
 		QString VariableEditor::updateFromPreprocessor(Parser::Preprocessor* pp, QString in, bool* showGUI) {
-
 			if (spacer) {
 				layout->removeItem(spacer);
 				delete(spacer);
@@ -107,10 +121,17 @@ namespace StructureSynth {
 						variables.append(fw);
 						fw->setUpdated(true);
 						layout->addWidget(fw);
-
-						//INFO("Creating : " + ps[i]->getName());
 						substitutions[name] = fw->getValueAsText();
-						
+					}
+
+					if (dynamic_cast<Parser::IntParameter*>(ps[i])) {
+						Parser::IntParameter* ip = dynamic_cast<Parser::IntParameter*>(ps[i]);
+						QString name = ip->getName();
+						IntWidget* iw = new IntWidget(this, name, ip->getDefaultValue(), ip->getFrom(), ip->getTo());
+						variables.append(iw);
+						iw->setUpdated(true);
+						layout->addWidget(iw);
+						substitutions[name] = iw->getValueAsText();
 					}
 				}
 			}
@@ -128,9 +149,6 @@ namespace StructureSynth {
 			}
 
 			if (showGUI) (*showGUI) = (variables.count() != 0);
-
-
-			
 
 			QMap<QString, QString>::const_iterator it2 = substitutions.constBegin();
 			int subst = 0;
