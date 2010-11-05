@@ -30,8 +30,11 @@ namespace StructureSynth {
 			/// prepends the script with 'prescript'
 			void prepend(QString prescript);
 
-			/// Render (OpenGL to viewport).
-			void render();
+			/// prepends the script with 'prescript'
+			void append(QString postscript);
+
+			/// Build (OpenGL).
+			void build();
 			
 			/// Render (OpenGL to file).
 			void renderToFile(QString fileName, bool overwrite);

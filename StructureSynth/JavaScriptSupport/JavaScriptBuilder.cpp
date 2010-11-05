@@ -75,7 +75,7 @@ namespace StructureSynth {
 				workingDir = dir;
 			};
 
-		void Builder::render() {
+		void Builder::build() {
 
 			engine3D->setDisabled(true);
 
@@ -120,6 +120,10 @@ namespace StructureSynth {
 			loadedSystem = prescript + "\n" + loadedSystem;
 		}
 
+		void Builder::append(QString postscript) {
+			loadedSystem = loadedSystem + "\n" + postscript;
+		}
+
 		void Builder::define(QString input, QString value) {
 			QStringList s = loadedSystem.split("\n");
 			for (int i = 0; i < s.count(); i++) {
@@ -138,7 +142,7 @@ namespace StructureSynth {
 		void Builder::renderToFile(QString fileName, bool overwrite) {
 			fileName = QDir(workingDir).absoluteFilePath(fileName);
 			
-			render();
+			build();
 			engine3D->requireRedraw();
 			engine3D->update();
 			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -169,17 +173,18 @@ namespace StructureSynth {
 
 		void Builder::reset() { loadedSystem = originalSystem; };
 
-		/// Raytrace image with same dimensions as viewport to file.
 		void Builder::templateRenderToFile(QString templateName, QString fileName, bool overwrite) {
 			fileName = QDir(workingDir).absoluteFilePath(fileName);
-			
+			if (!overwrite && QFileInfo(fileName).exists()) {
+				throw Exception("File already exists: " + fileName + ". Set 'overwrite' argument to true or use another filename.");
+			}
 			QDir d(mainWindow->getTemplateDir());
 			QString templateFileName = d.absoluteFilePath(templateName);
 			INFO("Starting Template Renderer: " + fileName);
 			try {
 				QFile file(templateFileName);
 				Template myTemplate(file);
-				mainWindow->templateRender(fileName, &myTemplate, loadedSystem); 
+				mainWindow->templateRender(fileName, &myTemplate, loadedSystem, width, height); 
 			} catch (Exception& er) {
 				WARNING(er.getMessage());
 			}
@@ -189,6 +194,7 @@ namespace StructureSynth {
 		void Builder::execute(QString fileName, QString args, bool waitForFinish) {
 			QProcess p;
 
+			// Replace enviroment settings
 			QStringList env = QProcess::systemEnvironment();
 			foreach (QString es, env) {
 				QStringList l = es.split("=");
@@ -204,6 +210,7 @@ namespace StructureSynth {
 			INFO("Command: " + fileName);
    			INFO("Args: " + args);
    
+			// Split arguments. Be sure to respect quotes.
 			bool inQuote = false;
 			QStringList out;
 			QString buffer;
@@ -221,10 +228,9 @@ namespace StructureSynth {
 				buffer += args.at(i);	
 			}
 			if (!buffer.isEmpty())  out.append(buffer);
-
-			for (int i = 0; i < out.count(); i++) INFO("args:" + out[i]);
+			//for (int i = 0; i < out.count(); i++) INFO("args:" + out[i]);
 				
-
+			// Finally start the process...
 			p.setWorkingDirectory(dir);
 			p.start(fileName, out);
 			if (!p.waitForStarted()) {
@@ -233,15 +239,28 @@ namespace StructureSynth {
 			}
 
 			if (waitForFinish) {
-				if (!p.waitForFinished(-1)) {
-					throw Exception("Process did not terminate properly: " + QFileInfo(fileName).absoluteFilePath());
-					return;
+				QProgressDialog progress("Executing "  + QFileInfo(fileName).absoluteFilePath(), "Abort", 0, 0, mainWindow);
+				progress.setWindowModality(Qt::WindowModal);
+				progress.setMinimumDuration(0);
+				progress.show();
+				QTime t = QTime::currentTime();
+				while (p.state() == QProcess::Running) {
+					qApp->processEvents();
+					p.waitForFinished(100);
+					progress.setLabelText("Executing "  + QFileInfo(fileName).absoluteFilePath() + QString("\n\nRunning for %1 seconds...").arg(
+						t.secsTo(QTime::currentTime())));
+					if (progress.wasCanceled()) {
+						p.kill();
+						throw Exception("User cancelled: " + QFileInfo(fileName).absoluteFilePath());		
+						break;
+					}
 				}
+				int secs = t.secsTo(QTime::currentTime());
+				INFO("Executed "  + QFileInfo(fileName).absoluteFilePath() + QString("in %1 seconds...").arg(
+						t.secsTo(QTime::currentTime())));
 				//QString s = p.readAllStandardError();
 				//QString s2 = p.readAllStandardOutput();
-				//if (!s.isEmpty()) WARNING(s);
-				p.kill();
-				//if (!s2.isEmpty()) INFO(s2);
+				
 			}
 		}
 

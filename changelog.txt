@@ -1,7 +1,8 @@
  
 Changelog for Structure Synth:
 ------------
-
+6  Nov 10 [MHC] Fixed JavaScript TemplateRender (size+cancel)
+				Added BoxFilter, TriangleFilter, GaussianFilter.
  
 1  Nov 10 [MHC] Added int sliders to the Variable GUI interface.
 [2h]			Made JavaScript-rendering cancellable, fixed Raytrace (Final)

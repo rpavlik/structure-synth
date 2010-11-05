@@ -18,16 +18,17 @@ namespace SyntopiaCore {
 
 			dofCenter = 0;
 			dofFalloff = 0;
-			//sampler = new StratifiedSampler(&rg);
 			sampler = 0;
 			terminated = false;
-
+			//filter = new GaussianFilter(0.75,1);
+			filter = new TriangleFilter(1);
 		}
 
 
 		RenderThread::~RenderThread() {
 			delete accelerator;
 			delete sampler;
+			if (!copy) delete (filter);
 		}
 
 
@@ -72,6 +73,7 @@ namespace SyntopiaCore {
 			rg.randomizeUniformCounter(); // to avoid coherence between threads
 			sampler = other.sampler->clone(&rg);
 			progressiveOutput = other.progressiveOutput;
+			filter = other.filter;
 		};
 
 
@@ -118,15 +120,18 @@ namespace SyntopiaCore {
 			Vector3f* colors = new Vector3f[h];
 
 			for (int y = 0; y < h; y++) {	
+				float weightSum = 0.0;
 				sampler->prepareSamples(aaSamples,aoSamples);
 				float fy = y/(float)(h);
 				Vector3f color(0,0,0);
 				for (int i = 0; i < aaSamples*aaSamples; i++) {
 					rayNumber = i;
 					Vector3f ls = sampler->getAASample(rayNumber);
-					color = color + rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);		
+					float weight = 1.0;
+					weightSum += weight;
+					color = color + weight*rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);		
 				}
-				colors[y] = color / (aaSamples*aaSamples);
+				colors[y] = color / weightSum;
 			}
 
 			progressiveOutput->addColumn(x,colors);
@@ -138,18 +143,35 @@ namespace SyntopiaCore {
 			rayNumber = newUnit-1;
 			double* weights = new double[w*h];
 			Vector3f* colors = new Vector3f[w*h];
+			for (int i = 0; i < w*h; i++) { weights[i] = 0; colors[i] = Vector3f(0,0,0); }
 			float xs = (1.0/w);
 			float ys = (1.0/h);
 			sampler->prepareSamples(aaSamples,aoSamples);
-
+			int extent = filter->getExtent();
+			
 			for (int y = 0; y < h; y++) {	
+				int yFrom = y - extent; if (yFrom<0) yFrom=0;
+				int yTo = y + extent; if (yTo>=h) yTo=h-1;
+			
 				float fy = y*ys;
 				if (terminated) break;
 				for (int x = 0; x < w; x++) {	
+					int xFrom = x - extent; if (xFrom<0) xFrom=0;
+					int xTo = x + extent; if (xTo>=w) xTo=w-1;
+			
 					float fx = x*xs;
 					Vector3f ls = sampler->getAASample(rayNumber);
-					colors[x+y*w] = ls[2]*rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);
-					weights[x+y*w] = ls[2];
+					Vector3f sample = rayCastPixel(fx+ls.x()*xs,fy+ls.y()*ys);
+
+					for (int xf = xFrom; xf<= xTo; xf++) {
+						for (int yf = yFrom; yf<= yTo; yf++) {
+							float dx = (xf - x)+ls.x();
+							float dy = (yf - y)+ls.y();
+							float wi = filter->getWeight(dx*dx,dy*dy);
+							colors[xf+yf*w] = colors[xf+yf*w] + wi*sample;
+							weights[xf+yf*w] += wi;
+						}
+					}
 				}
 			}
 
