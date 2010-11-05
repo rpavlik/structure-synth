@@ -3,8 +3,14 @@
 namespace SyntopiaCore {
 	namespace GLEngine {
 
-		namespace {
 		    
+		Sampler::Sampler(Math::RandomNumberGenerator* rg) : rg(rg) {
+		}
+
+		Sampler::~Sampler() {
+		}
+			
+		namespace {
 			
 			// This code is based on the method in Physical Based Rendering p. 666, and the Sunflow implementation
 			Vector3f concentricSampleDisk(float u1, float u2) {

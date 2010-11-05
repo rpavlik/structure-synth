@@ -77,6 +77,7 @@ namespace SyntopiaCore {
 			ProgressiveOutput* progressiveOutput;
 			friend class RayTracer;
 			int rayNumber;
+			Filter* filter;
 		};
 
 

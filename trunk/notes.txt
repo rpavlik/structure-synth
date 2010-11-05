@@ -1,9 +1,7 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
-JavaScript: make cancellable, preview?
-Raytracer: fix stratification for progressiveSampler
-Raytracer: fix 'Raytrace (final)' (do we need size thing?)
-
+- JavaScript: render OpenGL
+- Update acknowledgements
 
 - Triangles may not support ClassID
 
@@ -21,7 +19,7 @@ Download instructions at:
 http://structuresynth.sourceforge.net/download.php
 
 New major features (since 1.0.0):
-- Integrated raytracer (multi-threaded, ambient occlusion, depth-of-field, stratified sampling, progressive preview, uniform grid accelerator) 
+- Integrated raytracer
 - JavaScript integration (for building animations).
 - OBJ exporter (supporting all primitives and tagging)
 
