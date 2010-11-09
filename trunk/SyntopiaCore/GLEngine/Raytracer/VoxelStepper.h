@@ -41,12 +41,12 @@ namespace SyntopiaCore {
 			int cy;
 			int cz;
 
-			const Vector3f size;
 			Vector3f pos;
 			Vector3f dir;
 			int steps;
 			Vector3f minPos;
 			Vector3f maxPos;		
+			const Vector3f size;
 			QList<Object3D*>* grid;
 		};
 

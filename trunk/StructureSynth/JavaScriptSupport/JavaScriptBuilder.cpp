@@ -257,7 +257,7 @@ namespace StructureSynth {
 				}
 				int secs = t.secsTo(QTime::currentTime());
 				INFO("Executed "  + QFileInfo(fileName).absoluteFilePath() + QString("in %1 seconds...").arg(
-						t.secsTo(QTime::currentTime())));
+						secs));
 				//QString s = p.readAllStandardError();
 				//QString s2 = p.readAllStandardOutput();
 				

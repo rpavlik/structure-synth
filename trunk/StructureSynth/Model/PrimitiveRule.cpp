@@ -14,7 +14,7 @@ using namespace SyntopiaCore::Math;
 
 namespace StructureSynth {
 	namespace Model {	
-		PrimitiveRule::PrimitiveRule(PrimitiveType type, PrimitiveClass* primitiveClass) : type(type), primitiveClass(primitiveClass) {
+		PrimitiveRule::PrimitiveRule(PrimitiveType type, PrimitiveClass* primitiveClass) : primitiveClass(primitiveClass), type(type) {
 
 			// enum PrimitiveType { Box, Sphere, Point, Cylinder, Line } ;			
 			if (type == Box) {
