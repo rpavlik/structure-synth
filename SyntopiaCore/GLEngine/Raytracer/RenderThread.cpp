@@ -32,7 +32,7 @@ namespace SyntopiaCore {
 		}
 
 
-		RenderThread::RenderThread(const RenderThread& other) {
+		RenderThread::RenderThread(const RenderThread& other) : QThread() {
 			rayIDs = other.rayIDs;
 			terminated = false;
 
@@ -236,6 +236,7 @@ namespace SyntopiaCore {
 			double lengthToClosest = -1;
 			Vector3f foundNormal;
 			GLfloat foundColor[4];
+			for (int i = 0; i < 4; i++) foundColor[i] = 0;
 
 			Object3D* bestObj = 0;
 			double maxT = 0;

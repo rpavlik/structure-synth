@@ -23,23 +23,12 @@ namespace SyntopiaCore {
 			Expand(from,to, base+v1+v3);
 			Expand(from,to, base+v1+v2+v3);
 
-			/*
-			Vector3f c = (from+to)/2.0;
-			Vector3f c2 = (to-from)/2.0;
-			from = c - c2*1.5;
-			to = c + c2*1.5;
-			*/
 
 			n21 = Vector3f::cross(v2,v1).normalized();
 			n32 = Vector3f::cross(v3,v2).normalized();
 			n13 = Vector3f::cross(v1,v3).normalized();
 
-
-
-
-
 			ac = base + v1*0.5 + v2*0.5 + v3*0.5;
-			a[3];
 			a[0] = v1.normalized();
 			a[1] = v2.normalized();
 			a[2] = v3.normalized();
@@ -49,8 +38,6 @@ namespace SyntopiaCore {
 		};
 
 		Box::~Box() { };
-
-
 
 		void Box::draw() const {
 			glPushMatrix();
@@ -67,7 +54,6 @@ namespace SyntopiaCore {
 			vertex4n(O, v1, v3+v1, v3);
 			vertex4rn(O+v2, v1+v2, v3+v2+v1, v3+v2);
 			glEnd();
-
 			glPopMatrix();			
 		};
 

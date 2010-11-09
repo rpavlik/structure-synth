@@ -161,7 +161,7 @@ namespace StructureSynth {
 			};
 		};
 
-		TemplateExportDialog::TemplateExportDialog(MainWindow* parent, QStringList primitives) : primitives(primitives), QDialog(parent) {
+		TemplateExportDialog::TemplateExportDialog(MainWindow* parent, QStringList primitives) :  QDialog(parent), primitives(primitives) {
 			// 'primitives' contain a list of used primitives.
 			// We add 'begin' and 'end' since these are always used.
 			this->primitives.append("begin");
