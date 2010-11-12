@@ -2,14 +2,6 @@ set maxdepth 600
 
 set background #f94
 
-// Camera settings. Place these before first rule call.
-set translation [0 0 -20]
-set rotation [-0.0423152 0.017662 -0.998948 -0.0209926 0.999607 0.0185629 0.998884 0.021756 -0.0419277]
-set pivot [0 0 0]
-set scale 0.236512
-set raytracer::ambient-occlusion-samples 0
-set raytracer::samples 3
-
 {  sat 0.7 color green } start
 
 rule spiral w 100 {

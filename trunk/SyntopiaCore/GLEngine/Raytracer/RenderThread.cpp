@@ -21,7 +21,9 @@ namespace SyntopiaCore {
 			sampler = 0;
 			terminated = false;
 			//filter = new GaussianFilter(0.75,1);
-			filter = new TriangleFilter(1);
+			//filter = new TriangleFilter(1);
+			filter = new BoxFilter();
+			maxDepth = 2;
 		}
 
 
@@ -49,6 +51,7 @@ namespace SyntopiaCore {
 			accelerator->setCopy(true);
 
 			aoSamples = other.aoSamples;
+			maxDepth = other.maxDepth;
 			width = other.width;
 			height = other.height;
 			useShadows = other.useShadows;
@@ -140,7 +143,10 @@ namespace SyntopiaCore {
 		};
 
 		void RenderThread::raytraceProgressive(int newUnit) {
-			rayNumber = newUnit-1;
+			// rayNumber = (newUnit-1);
+			RandomNumberGenerator rg;
+			rg.setSeed(0);
+				
 			double* weights = new double[w*h];
 			Vector3f* colors = new Vector3f[w*h];
 			for (int i = 0; i < w*h; i++) { weights[i] = 0; colors[i] = Vector3f(0,0,0); }
@@ -150,12 +156,15 @@ namespace SyntopiaCore {
 			int extent = filter->getExtent();
 			
 			for (int y = 0; y < h; y++) {	
+						
 				int yFrom = y - extent; if (yFrom<0) yFrom=0;
 				int yTo = y + extent; if (yTo>=h) yTo=h-1;
 			
 				float fy = y*ys;
 				if (terminated) break;
 				for (int x = 0; x < w; x++) {	
+					rayNumber = ((newUnit-1) + rg.getInt(maxUnits)) % maxUnits;
+				
 					int xFrom = x - extent; if (xFrom<0) xFrom=0;
 					int xTo = x + extent; if (xTo>=w) xTo=w-1;
 			
@@ -229,7 +238,7 @@ namespace SyntopiaCore {
 		}
 
 		Vector3f RenderThread::rayCast(Vector3f startPoint, Vector3f direction, Object3D* excludeThis, int level) {
-			if (level>4) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
+			if (level>maxDepth) return Vector3f(backgroundColor.x(),backgroundColor.y(),backgroundColor.z());
 			rayID++;
 			pixels++;
 
