@@ -56,6 +56,7 @@ namespace SyntopiaCore {
 			int rayID;
 			QVector<int> rayIDs;
 			int pixels;
+			int maxDepth;
 			int checks;
 			VoxelStepper* accelerator;
 

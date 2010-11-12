@@ -64,6 +64,7 @@ namespace StructureSynth {
 				raytraceMenu->addAction("set raytracer::max-threads 2", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::light [0,0,-29]", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::voxel-steps 30", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::max-depth 5", textEdit , SLOT(insertText()));
 				
 				QMenu *modifierMenu = new QMenu("Rule Modifiers", 0);
 				modifierMenu->addAction("weight", textEdit , SLOT(insertText()));
@@ -124,7 +125,19 @@ namespace StructureSynth {
 				pMenu->addAction("#define angle 20 (float:0-90) // create slider with default value 20", textEdit , SLOT(insertText()));
 				pMenu->addAction("#define iterations 20 (int:0-23) // create slider with default value 20", textEdit , SLOT(insertText()));
 
-
+				QMenu *p2Menu = new QMenu("JavaScript Commands", 0);
+				p2Menu->addAction("Builder.load(\"system.es\");", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.define(\"_rotation\", 34);", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.prepend(\"sometext\");", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.append(\"sometext\");", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.build();", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.renderToFile(\"out.png\", overwrite);", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.raytraceToFile(\"out.png\", overwrite);", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.templateRenderToFile(\"Sunflow-Colored.rendertemplate\", \"sunflow.sc\", overwrite);", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.execute('\"%JAVAPATH%/java\"', '-Xmx1G -server -jar \"%SUNFLOW%/sunflow.jar\" sunflow.sc -nogui -o sunflow.png\", true);", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.reset();", textEdit , SLOT(insertText()));
+				p2Menu->addAction("Builder.setSize(640,0);", textEdit , SLOT(insertText()));
+				
 				menu->insertMenu(menu->actions()[0], modifierMenu);
 				menu->insertMenu(menu->actions()[1], transformationMenu);
 				menu->insertMenu(menu->actions()[2], setMenu);
@@ -133,7 +146,8 @@ namespace StructureSynth {
 				menu->insertMenu(menu->actions()[5], raytraceMenu);
 				menu->insertMenu(menu->actions()[6], setCMenu);
 				menu->insertMenu(menu->actions()[7], pMenu);
-				menu->insertSeparator(menu->actions()[8]);
+				menu->insertMenu(menu->actions()[8], p2Menu);
+				menu->insertSeparator(menu->actions()[9]);
 
 			}
 		}

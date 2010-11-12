@@ -1,8 +1,8 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
-- JavaScript: render OpenGL
-- Update acknowledgements
 
+- Update acknowledgements
+- Update website
 - Triangles may not support ClassID
 
 

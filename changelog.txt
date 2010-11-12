@@ -1,6 +1,13 @@
  
 Changelog for Structure Synth:
 ------------
+12 Nov 10 [MHC] The filters are disabled for now (until they have been properly integrated).
+[3h]			Fixed Linux compilation warnings.
+				Decorrelated progressive preview AO directions.
+				Added 'set raytracer::max-depth 3'
+				Added JavaScript command templates to context menu.
+				
+				
 6  Nov 10 [MHC] Fixed JavaScript TemplateRender (size+cancel)
 				Added BoxFilter, TriangleFilter, GaussianFilter.
  

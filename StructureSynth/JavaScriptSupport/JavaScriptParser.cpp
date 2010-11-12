@@ -151,7 +151,7 @@ namespace StructureSynth {
 					QString error =  QString("Uncaught exception at line %1:%2").arg(line).arg(result.toString());
 					WARNING(error);
 				} else {
-					INFO(result.toString());
+					INFO("Script completed without errors.");
 				}
 			} catch (Exception& e) {
 				WARNING(e.getMessage());

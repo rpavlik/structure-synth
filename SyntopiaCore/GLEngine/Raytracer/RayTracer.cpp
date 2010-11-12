@@ -229,6 +229,10 @@ namespace SyntopiaCore {
 				MiniParser(value, ',').getInt(rt.aaSamples);
 				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")
 					.arg(rt.aaSamples).arg(rt.aaSamples));
+			}  else if (param == "max-depth") {
+				MiniParser(value, ',').getInt(rt.maxDepth);
+				INFO(QString("Maximum ray recursion depth: %1x ")
+					.arg(rt.maxDepth));
 			} else if (param == "voxel-steps") {
 				MiniParser(value, ',').getInt(voxelSteps);
 				INFO(QString("Voxel steps: %1")
