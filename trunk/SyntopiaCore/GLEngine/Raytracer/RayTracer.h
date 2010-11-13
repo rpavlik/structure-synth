@@ -17,7 +17,7 @@ namespace SyntopiaCore {
 	
 		class RayTracer {
 		public:
-			RayTracer(EngineWidget* widget, ProgressBox* progressBox, bool progressiveGUI, bool progressiveStratification);
+			RayTracer(EngineWidget* widget, ProgressBox* progressBox, bool inGUI);
 			QImage calculateImage(int width, int height);
 			void setParameter(QString param, QString value);
 			bool wasCancelled() { return userCancelled; }

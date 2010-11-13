@@ -31,6 +31,16 @@ namespace SyntopiaCore {
 
 			QVector<int> getRandomIndices(int count); 
 
+			// Returns a vector, where the elements are ranked randomly.
+			template <typename T>
+			QVector<T> randomize(QVector<T> list) {
+				QVector<int> indices = getRandomIndices(list.count());
+				QVector<T> copy(list.count());
+				for (int i = 0; i < list.count(); i++) copy[i] = list[indices[i]];
+				return copy;
+			}
+		
+
 			bool isUsingStdLib() { return (rng == 0); }
 
 			// Returns a double in the interval [0;1]

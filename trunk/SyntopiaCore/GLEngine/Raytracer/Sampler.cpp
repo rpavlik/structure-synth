@@ -101,6 +101,9 @@ namespace SyntopiaCore {
 					lensSamples[count++] = concentricSampleDisk(x,y);
 				}	
 			}
+			// We randomize the samples to avoid coherence.
+			aaSamples = rg->randomize(aaSamples);
+			lensSamples = rg->randomize(lensSamples);
 
 		};
 

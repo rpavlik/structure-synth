@@ -30,8 +30,8 @@ rule R2 {
 set raytracer::shadows false
 
 // the number of samples controls the quality
-// '8' means 8x8 samples per pixels!
-set raytracer::samples 8
+// '6' means 6x6 samples per pixels, and is the default.
+set raytracer::samples 6
 
 // dof is depth-of-field.
 // Use 'Edit | Show 3D Object Information' to find the correct plane 

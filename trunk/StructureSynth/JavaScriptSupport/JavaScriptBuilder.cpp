@@ -286,7 +286,7 @@ namespace StructureSynth {
 			mainWindow->disableAllExcept(mainWindow->getProgressBox());
 			fileName = QDir(workingDir).absoluteFilePath(fileName);
 			
-			RayTracer rt(engine3D,mainWindow->getProgressBox(),false,false);
+			RayTracer rt(engine3D,mainWindow->getProgressBox(),false);
 			INFO(QString("Raytracing %1x%2 image...").arg(width).arg(height));
 			QImage im = rt.calculateImage(width,height);
 			mainWindow->enableAll();

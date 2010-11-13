@@ -7,11 +7,34 @@ rule grinder {
 } 
 
 rule xbox {
-  { s 1.1  } grid
+  { s 1.1  } frame
   { b 0.7  color #eee   a 1.0  }  box
 }
 
 rule xbox {
- { s 1.1    } grid
+ { s 1.1    } frame
  { b 0.7  color #fff  a 1.0    } box
+}
+
+#define _f3 10
+#define _f1 0.05
+#define _f2 1.05
+
+rule frame  {
+{ s _f1 _f2 _f1  x _f3  z _f3 } box
+{s _f1 _f2 _f1 x _f3  z -_f3 } box
+{ s _f1 _f2 _f1 x -_f3  z _f3} box
+{s _f1 _f2 _f1 x -_f3 z -_f3} box
+
+
+{ s _f2 _f1  _f1  y _f3  z _f3 } box
+{ s _f2 _f1  _f1 y _f3 z -_f3 } box
+{ s _f2 _f1  _f1 y -_f3  z _f3 } box
+{ s _f2 _f1  _f1 y -_f3  z -_f3 } box
+
+{ s _f1 _f1  _f2 y _f3 x _f3 } box
+{ s _f1 _f1  _f2 y _f3  x -_f3 } box
+{ s _f1 _f1  _f2 y -_f3  x _f3 } box
+{ s _f1 _f1  _f2 y -_f3  x -_f3} box
+
 }

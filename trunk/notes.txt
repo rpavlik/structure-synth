@@ -1,12 +1,10 @@
 TODO list and scratch pad for Structure Synth. /Mikael
 
-
-- Update acknowledgements
 - Update website
-- Triangles may not support ClassID
+- Update ray-tracer blog
+- seed geometry-seed initial
 
-
-Structure Synth 1.4.0 ("Hinxton") Released
+Structure Synth 1.5.0 ("Hinxton") Released
 ------------------------------------------
 Structure Synth is a tool for generating 3D structures from recursive rules. The structures are often complex and surprising.
 Structure Synth integrates with third-party renderers (such as Sunflow and POV-Ray) using a flexible template based export system.
@@ -36,17 +34,11 @@ For more information see:
 http://structuresynth.sourceforge.net/
 
 
-
 - Website: 
     - add section links.
     - tutorials: 'EisenScript Kata'
 
 - JanJacobSV has some interesting 3D experiments with CFDG and Virtools. http://www.youtube.com/watch?v=KWgQ8XIPAio
-	
-- [Collada] Support? (http://www.khronos.org/collada/)
-
-- VRML example (could be fun)
-
 
 
 
