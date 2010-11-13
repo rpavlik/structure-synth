@@ -1,6 +1,10 @@
  
 Changelog for Structure Synth:
 ------------
+
+- Fix 'Reset View' button.
+
+
 12 Nov 10 [MHC] The filters are disabled for now (until they have been properly integrated).
 [3h]			Fixed Linux compilation warnings.
 				Decorrelated progressive preview AO directions.

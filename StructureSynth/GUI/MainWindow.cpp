@@ -52,7 +52,7 @@ namespace StructureSynth {
 			void createCommandHelpMenu(QMenu* menu, QWidget* textEdit) {
 
 				QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
-				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 20 // change samples instead..", textEdit , SLOT(insertText()));
+				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 0 // turn off AO", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::dof [0.4,0.1] // focal-plane distance, strength", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::shadows false", textEdit , SLOT(insertText()));
@@ -184,8 +184,11 @@ namespace StructureSynth {
 
 				expression = QRegExp("(set|blend|recursion|maxsize|minsize|translation|pivot|rotation|scale|maxobjects|background|color|rule|a|alpha|matrix|h|hue|sat|b|brightness|v|x|y|z|rx|ry|rz|s|fx|fy|fz|maxdepth|weight|md|w)");
 				primitives = QRegExp("(triangle\\[.*\\]|sphere(::\\w+)?|box(::\\w+)?|dot(::\\w+)?|line(::\\w+)?|grid(::\\w+)?)");
+				randomNumber = QRegExp("(random\\[[-+]?[0-9]*\\.?[0-9]+,[-+]?[0-9]*\\.?[0-9]+\\])"); // random[-2.3,3.4]
+
 				expression.setCaseSensitivity(Qt::CaseInsensitive);
 				primitives.setCaseSensitivity(Qt::CaseInsensitive);
+				randomNumber.setCaseSensitivity(Qt::CaseInsensitive);
 			};
 
 			void highlightBlock(const QString &text)
@@ -251,6 +254,7 @@ namespace StructureSynth {
 						int adder = (i==text.length()-1 ? 1 : 0);
 						if (expression.exactMatch(current)) setFormat(startMatch, i-startMatch+adder, keywordFormat);
 						if (primitives.exactMatch(current)) setFormat(startMatch, i-startMatch+adder, primitiveFormat);
+						if (randomNumber.exactMatch(current)) setFormat(startMatch, i-startMatch+adder, preprocessorFormat);
 						if (text.at(i) == '{' || text.at(i) == '}') setFormat(i, 1, bracketFormat);
 						startMatch = i;
 						current = "";
@@ -270,6 +274,7 @@ namespace StructureSynth {
 
 			QRegExp expression;
 			QRegExp primitives;
+			QRegExp randomNumber;
 		};
 
 
@@ -406,7 +411,7 @@ namespace StructureSynth {
 			oldDirtyPosition = -1;
 			setFocusPolicy(Qt::StrongFocus);
 
-			version = SyntopiaCore::Misc::Version(1, 4, 0, -1, " (\"IN DEVELOPMENT\")");
+			version = SyntopiaCore::Misc::Version(1, 5, 0, -1, " (\"Hinxton\")");
 			setAttribute(Qt::WA_DeleteOnClose);
 
 			QSplitter*	splitter = new QSplitter(this);
@@ -485,7 +490,7 @@ namespace StructureSynth {
 			INFO("Use the context menu in the text edit area to get a list of common commands.");
 			INFO("");
 			INFO("Please report bugs and feature requests at the SourceForge forums (weblink at the Help Menu). Enjoy.");
-			WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
+			//WARNING("This is an experimental SVN checkout build. For stability use the package releases.");
 
 			fullScreenEnabled = false;
 			createOpenGLContextMenu();
@@ -816,7 +821,11 @@ namespace StructureSynth {
 
 			renderToolBar = addToolBar(tr("Render Toolbar"));
 			renderToolBar->addAction(renderAction);
-			renderToolBar->addAction(resetViewAction);
+			renderToolBar->addWidget(new QLabel("Build    ", this));
+			QPushButton* pb = new QPushButton(this);
+			pb->setText("Reset View");
+			renderToolBar->addWidget(pb);
+			connect(pb, SIGNAL(clicked()), this, SLOT(resetView()));
 			
 			progressBox = new ProgressBox(this);
 			renderToolBar->addWidget(progressBox);
@@ -851,7 +860,7 @@ namespace StructureSynth {
 		
 		void MainWindow::raytraceProgressive() {
 			disableAllExcept(progressBox);
-			RayTracer rt(engine, progressBox,true,true);
+			RayTracer rt(engine, progressBox,true);
 			QImage im = rt.calculateImage(engine->width(),engine->height());
 			engine->setImage(im);
 			enableAll();
@@ -1597,8 +1606,9 @@ namespace StructureSynth {
 		}
 
 		void MainWindow::raytrace() {
+			INFO("Hint: use the 'set raytracer::size [0x800]' command to set the dimensions. use 'set raytracer::samples 10' to control quality."); 
 			disableAllExcept(progressBox);
-			RayTracer rt(engine, progressBox, false, false);
+			RayTracer rt(engine, progressBox, false);
 			QImage im = rt.calculateImage(0,0);
 			enableAll();
 			PreviewWindow pd(this, im);

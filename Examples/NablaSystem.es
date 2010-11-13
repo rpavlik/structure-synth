@@ -5,7 +5,8 @@ set maxdepth 30
 
 { ry -90 b 0.2 } R1
 
-{  x 30 y 30 z -3 s 900 900 1 color red } box
+// Floor box
+//{  x 30 y 30 z -3 s 900 900 1 color red } box
 
 Rule R1 {
 dbox

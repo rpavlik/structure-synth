@@ -16,7 +16,7 @@ namespace SyntopiaCore {
 		using namespace SyntopiaCore::Logging;
 
 		
-		RayTracer::RayTracer(EngineWidget* engine, ProgressBox* progressBox, bool progressiveGUI, bool progressiveStratification) {
+		RayTracer::RayTracer(EngineWidget* engine, ProgressBox* progressBox, bool inGUI) {
 			this->progressBox = progressBox;
 			for (int i = 0; i < 16; i++) modelView[i] = engine->getModelViewCache()[i];
 			for (int i = 0; i < 16; i++) projection[i] = engine->getProjectionCache()[i];
@@ -25,11 +25,12 @@ namespace SyntopiaCore {
 			sizeX = 0;
 			sizeY = 0;
 			userCancelled = false;
-			this->progressiveGUI = progressiveGUI;
+			this->progressiveGUI = inGUI;
 			
 			maxThreads = QThread::idealThreadCount();
-			progressiveRender = progressiveStratification;
+			progressiveRender = inGUI;
 			voxelSteps = 0;
+			rt.aaSamples = inGUI ? 6 : 8; // Default quality: 36 samples in GUI, 64 in Final.
 			foreach (Command c, engine->getRaytracerCommands()) {
 				QString arg = c.arg;
 				arg = arg.remove("[");
@@ -227,7 +228,7 @@ namespace SyntopiaCore {
 					.arg(rt.aoSamples).arg(rt.aoSamples));
 			} else if (param == "samples") {
 				MiniParser(value, ',').getInt(rt.aaSamples);
-				INFO(QString("Samples per pixel (anti-alias or DOF): %1x%2 ")
+				INFO(QString("Samples per pixel (anti-alias, DOF, AO, ...): %1x%2 ")
 					.arg(rt.aaSamples).arg(rt.aaSamples));
 			}  else if (param == "max-depth") {
 				MiniParser(value, ',').getInt(rt.maxDepth);
