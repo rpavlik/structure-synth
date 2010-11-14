@@ -2,8 +2,6 @@
 Changelog for Structure Synth:
 ------------
 
-- Fix 'Reset View' button.
-
 14 Nov 10 [MHC] --> Release Candidate version 1.4
 [1h]			Cleaned up examples.
 
