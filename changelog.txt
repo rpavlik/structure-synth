@@ -4,6 +4,8 @@ Changelog for Structure Synth:
 
 - Fix 'Reset View' button.
 
+14 Nov 10 [MHC] --> Release Candidate version 1.4
+[1h]			Cleaned up examples.
 
 12 Nov 10 [MHC] The filters are disabled for now (until they have been properly integrated).
 [3h]			Fixed Linux compilation warnings.
