@@ -10,7 +10,7 @@ function pad(number) {
 
 
 Builder.load("NouveauMovie.es");
-max =1 ;
+max =1000 ;
 for (i = 0; i <=  max; i+=1) {
        c = i/max;
 
@@ -23,10 +23,12 @@ for (i = 0; i <=  max; i+=1) {
 	Builder.build();
 
        // ---- Sunflow raytrace -----
+       /*
        name = "f:/Test/out" + pad(i);
 	Builder.templateRenderToFile("Sunflow-Colored.rendertemplate", name + ".sc",true); 
        Builder.execute('"C:/Program Files/Java/jdk1.6.0_21/bin/java"', '-Xmx1G -server -jar  "%SUNFLOW%/sunflow.jar" ' +  name + ".sc -nogui -o " + name + ".png", true);
-   	
+   	*/
+
 	 // ---- Internal raytrace ------
-       // Builder.raytraceToFile("N" + pad(i) + ".png",true);
+       Builder.raytraceToFile("N" + pad(i) + ".png",true);
 }

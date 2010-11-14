@@ -2,7 +2,6 @@ TODO list and scratch pad for Structure Synth. /Mikael
 
 - Update website
 - Update ray-tracer blog
-- seed geometry-seed initial
 
 Structure Synth 1.5.0 ("Hinxton") Released
 ------------------------------------------

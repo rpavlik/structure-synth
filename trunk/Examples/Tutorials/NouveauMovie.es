@@ -1,3 +1,6 @@
+// This system is meant to used
+// by the 'JavaScript - Movie.es' example.
+
 #define shrink s 0.996
 #define _rz 0
 #define _dofa 0.245
