@@ -1,6 +1,8 @@
  
 Changelog for Structure Synth:
 ------------
+17 Nov 10 [MHC] Updated web site
+[3h Adms]
 
 14 Nov 10 [MHC] --> Release Candidate version 1.5
 [1h]			Cleaned up examples.
