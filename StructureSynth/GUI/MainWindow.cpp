@@ -287,6 +287,7 @@ namespace StructureSynth {
 
 		MainWindow::MainWindow(const QString &fileName)
 		{
+			QDir::setCurrent(QCoreApplication::applicationDirPath ()); // Otherwise we cannot find examples + templates
 			init();
 			loadFile(fileName);
 			tabChanged(0); // to update title.
@@ -1058,12 +1059,14 @@ namespace StructureSynth {
 		namespace {
 			// Returns the first valid directory.
 			QString findDirectory(QStringList guesses) {
+				QStringList invalid;
 				for (int i = 0; i < guesses.size(); i++) {
 					if (QFile::exists(guesses[i])) return guesses[i];
+					invalid.append(QFileInfo(guesses[i]).absoluteFilePath());
 				}
 
 				// not found.
-				WARNING("Could not locate directory in: " + guesses.join(",") + ".");
+				WARNING("Could not locate directory in: " + invalid.join(",") + ".");
 				return "[not found]";
 			}
 		}
