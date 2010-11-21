@@ -1,6 +1,11 @@
  
 Changelog for Structure Synth:
 ------------
+21 Nov 10 [MHC] Fixed an working path error, when using .es file associations.
+[2h]			Created Inno Setup Installer
+	
+<- 1.5 Mac Builds here.
+				
 17 Nov 10 [MHC] Updated web site
 [3h Adms]
 

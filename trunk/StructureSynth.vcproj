@@ -265,7 +265,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="moc_EngineWidget.cpp"
-							CommandLine="$(QT4DIR)\bin\moc.exe -DNDEBUG -D_WINDOWS -DUNICODE -DQT_LARGEFILE_SUPPORT -DWIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT  -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include&quot; -I &quot;$(QT4DIR)\include\ActiveQt&quot; -I &quot;tmp\moc\debug_release&quot; -I &quot;.&quot; -I&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot; SyntopiaCore/GLEngine/EngineWidget.h -o tmp\moc\release_shared\moc_EngineWidget.cpp"
+							CommandLine="$(QT4DIR)\bin\moc.exe -DNDEBUG -D_WINDOWS -DUNICODE -DQT_LARGEFILE_SUPPORT -DWIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT  -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtCore&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include\QtGui&quot; -I &quot;$(QT4DIR)\include&quot; -I &quot;$(QT4DIR)\include\ActiveQt&quot; -I &quot;tmp\moc\debug_release&quot; -I &quot;.&quot; -I&quot;$(QT4DIR)\mkspecs\win32-msvc2005&quot; SyntopiaCore/GLEngine/EngineWidget.h -o tmp\moc\release_shared\moc_EngineWidget.cpp&#x0D;&#x0A;"
 							Outputs=" tmp\moc\release_shared\moc_EngineWidget.cpp"
 						/>
 					</FileConfiguration>
@@ -465,18 +465,6 @@
 			Filter="cpp;c;cxx;moc;h;qrc;def;odl;idl;res"
 			>
 			<File
-				RelativePath=".\tmp\moc\debug_shared\moc_Builder.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\tmp\moc\release_shared\moc_Builder.cpp"
 				>
 				<FileConfiguration
@@ -489,7 +477,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
+				RelativePath=".\tmp\moc\debug_shared\moc_Builder.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -505,6 +493,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tmp\moc\debug_shared\moc_Debug.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -541,6 +541,18 @@
 				>
 			</File>
 			<File
+				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\tmp\rcc\release_shared\qrc_StructureSynth.cpp"
 				>
 				<FileConfiguration
@@ -560,18 +572,6 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="tmp\rcc\debug_shared\qrc_StructureSynth.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
