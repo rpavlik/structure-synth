@@ -1,6 +1,13 @@
  
 Changelog for Structure Synth:
-------------
+
+----- Release of v1.5.0 (Hinxton) [22 Nov 2010 ] ----------------------------------------------------------
+This release: 43 hours of work (92 hours coding + 5 hours adm).
+Stats total: 235 hours of work (276 hours coding + 56 hours adm). 
+
+22 Nov 10 [MHC] Relased Structure Synth 1.5
+[2h adm] 
+
 21 Nov 10 [MHC] Fixed an working path error, when using .es file associations.
 [2h]			Created Inno Setup Installer
 	
@@ -20,13 +27,12 @@ Changelog for Structure Synth:
 				
 				
 6  Nov 10 [MHC] Fixed JavaScript TemplateRender (size+cancel)
-				Added BoxFilter, TriangleFilter, GaussianFilter.
+[1h]			Added BoxFilter, TriangleFilter, GaussianFilter.
  
 1  Nov 10 [MHC] Added int sliders to the Variable GUI interface.
 [2h]			Made JavaScript-rendering cancellable, fixed Raytrace (Final)
 				Fixed StratifiedSampler lens samples.
 
-(Last count: 82h)
 
 31 Oct 10 [MHC] Refactored GUI menus. 
 [5h]			Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
