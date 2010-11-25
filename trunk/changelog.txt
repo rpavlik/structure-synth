@@ -1,9 +1,11 @@
  
 Changelog for Structure Synth:
 
+25 Nov 10 [MHC] Bugfix: Hopefully this allows Structure Synth to run on Debian.
+
 ----- Release of v1.5.0 (Hinxton) [22 Nov 2010 ] ----------------------------------------------------------
 This release: 43 hours of work (92 hours coding + 5 hours adm).
-Stats total: 235 hours of work (276 hours coding + 56 hours adm). 
+Stats total: 278 hours of work (276 hours coding + 56 hours adm). 
 
 22 Nov 10 [MHC] Relased Structure Synth 1.5
 [2h adm] 
