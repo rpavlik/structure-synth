@@ -50,7 +50,6 @@ namespace StructureSynth {
 		namespace {
 
 			void createCommandHelpMenu(QMenu* menu, QWidget* textEdit) {
-
 				QMenu *raytraceMenu = new QMenu("Raytracer Commands", 0);
 				raytraceMenu->addAction("set raytracer::ambient-occlusion-samples 0 // turn off AO", textEdit , SLOT(insertText()));
 				raytraceMenu->addAction("set raytracer::samples 4 // for anti-alias and DOF", textEdit , SLOT(insertText()));
@@ -138,16 +137,18 @@ namespace StructureSynth {
 				p2Menu->addAction("Builder.reset();", textEdit , SLOT(insertText()));
 				p2Menu->addAction("Builder.setSize(640,0);", textEdit , SLOT(insertText()));
 				
-				menu->insertMenu(menu->actions()[0], modifierMenu);
-				menu->insertMenu(menu->actions()[1], transformationMenu);
-				menu->insertMenu(menu->actions()[2], setMenu);
-				menu->insertMenu(menu->actions()[3], set2Menu);
-				menu->insertMenu(menu->actions()[4], colorMenu);
-				menu->insertMenu(menu->actions()[5], raytraceMenu);
-				menu->insertMenu(menu->actions()[6], setCMenu);
-				menu->insertMenu(menu->actions()[7], pMenu);
-				menu->insertMenu(menu->actions()[8], p2Menu);
-				menu->insertSeparator(menu->actions()[9]);
+				QAction* before = 0;
+				if (menu->actions().count() > 0) before = menu->actions()[0];
+				menu->insertMenu(before, modifierMenu);
+				menu->insertMenu(before, transformationMenu);
+				menu->insertMenu(before, setMenu);
+				menu->insertMenu(before, set2Menu);
+				menu->insertMenu(before, colorMenu);
+				menu->insertMenu(before, raytraceMenu);
+				menu->insertMenu(before, setCMenu);
+				menu->insertMenu(before, pMenu);
+				menu->insertMenu(before, p2Menu);
+				menu->insertSeparator(before);
 
 			}
 		}
