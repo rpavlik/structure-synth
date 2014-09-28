@@ -84,7 +84,7 @@ namespace StructureSynth {
 				*/
 				void CreateUnitSphere(int dt,int dp, ObjGroup& motherGroup, Matrix4f m)
 				{
-					float DTOR = 3.1415/180.0;
+                    float DTOR = 3.1415f/180.0f;
 					double dtheta = 180.0/dt;
 					double dphi = 360.0/dp;
 					ObjGroup group;

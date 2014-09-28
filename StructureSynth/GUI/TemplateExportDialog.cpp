@@ -899,33 +899,33 @@ namespace StructureSynth {
 
 		void TemplateExportDialog::retranslateUi()
 		{
-			setWindowTitle(QApplication::translate("Dialog", "Template Export", 0, QApplication::UnicodeUTF8));
-			label->setText(QApplication::translate("Dialog", "Template:", 0, QApplication::UnicodeUTF8));
-			templatePathButton->setText(QApplication::translate("Dialog", "Template Path...", 0, QApplication::UnicodeUTF8));
-			descriptionLabel->setText(QApplication::translate("Dialog", "Description", 0, QApplication::UnicodeUTF8));
+            setWindowTitle(QApplication::translate("Dialog", "Template Export", 0));
+            label->setText(QApplication::translate("Dialog", "Template:", 0));
+            templatePathButton->setText(QApplication::translate("Dialog", "Template Path...", 0));
+            descriptionLabel->setText(QApplication::translate("Dialog", "Description", 0));
 			descriptionTextBrowser->setHtml(QApplication::translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 				"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 				"p, li { white-space: pre-wrap; }\n"
 				"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-				"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This template was created by ....</span></p></body></html>", 0, QApplication::UnicodeUTF8));
-			primitivesLabel->setText(QApplication::translate("Dialog", "Primitives in Template", 0, QApplication::UnicodeUTF8));
-			templateOutputGroupBox->setTitle(QApplication::translate("Dialog", "Template Output", 0, QApplication::UnicodeUTF8));
-			fileRadioButton->setText(QApplication::translate("Dialog", "File:", 0, QApplication::UnicodeUTF8));
-			filePushButton->setText(QApplication::translate("Dialog", "File...", 0, QApplication::UnicodeUTF8));
-			//uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename", 0, QApplication::UnicodeUTF8));
-			clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0, QApplication::UnicodeUTF8));
-			postProcessingGroupBox->setTitle(QApplication::translate("Dialog", "Post Processing", 0, QApplication::UnicodeUTF8));
-			runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0, QApplication::UnicodeUTF8));
-			afterCommandLineEdit->setText(QApplication::translate("Dialog", "", 0, QApplication::UnicodeUTF8));
-			tabWidget->setTabText(tabWidget->indexOf(settingstab), QApplication::translate("Dialog", "Settings", 0, QApplication::UnicodeUTF8));
-			label_4->setText(QApplication::translate("Dialog", "Width:", 0, QApplication::UnicodeUTF8));
-			label_5->setText(QApplication::translate("Dialog", "Height:", 0, QApplication::UnicodeUTF8));
-			lockAspectRatioCheckBox->setText(QApplication::translate("Dialog", "Lock aspect ratio (Current = 1.23)", 0, QApplication::UnicodeUTF8));
-			modifyTemplateLabel->setText(QApplication::translate("Dialog", "Modify template before applying", 0, QApplication::UnicodeUTF8));
-			saveModificationsButton->setText(QApplication::translate("Dialog", "Save Modifications", 0, QApplication::UnicodeUTF8));
-			undoButton->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0, QApplication::UnicodeUTF8));
-			modifyOutputCheckBox->setText(QApplication::translate("Dialog", "Modify output before saving (spawns edit window when pressing OK)", 0, QApplication::UnicodeUTF8));
-			tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Modify", 0, QApplication::UnicodeUTF8));
+                "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This template was created by ....</span></p></body></html>", 0));
+            primitivesLabel->setText(QApplication::translate("Dialog", "Primitives in Template", 0));
+            templateOutputGroupBox->setTitle(QApplication::translate("Dialog", "Template Output", 0));
+            fileRadioButton->setText(QApplication::translate("Dialog", "File:", 0));
+            filePushButton->setText(QApplication::translate("Dialog", "File...", 0));
+            //uniqueCheckBox->setText(QApplication::translate("Dialog", "Add unique ID to filename", 0));
+            clipboardRadioButton->setText(QApplication::translate("Dialog", "Clipboard", 0));
+            postProcessingGroupBox->setTitle(QApplication::translate("Dialog", "Post Processing", 0));
+            runAfterCheckBox->setText(QApplication::translate("Dialog", "Run the following command after export:", 0));
+            afterCommandLineEdit->setText(QApplication::translate("Dialog", "", 0));
+            tabWidget->setTabText(tabWidget->indexOf(settingstab), QApplication::translate("Dialog", "Settings", 0));
+            label_4->setText(QApplication::translate("Dialog", "Width:", 0));
+            label_5->setText(QApplication::translate("Dialog", "Height:", 0));
+            lockAspectRatioCheckBox->setText(QApplication::translate("Dialog", "Lock aspect ratio (Current = 1.23)", 0));
+            modifyTemplateLabel->setText(QApplication::translate("Dialog", "Modify template before applying", 0));
+            saveModificationsButton->setText(QApplication::translate("Dialog", "Save Modifications", 0));
+            undoButton->setText(QApplication::translate("Dialog", "Revert (Undo Changed)", 0));
+            modifyOutputCheckBox->setText(QApplication::translate("Dialog", "Modify output before saving (spawns edit window when pressing OK)", 0));
+            tabWidget->setTabText(tabWidget->indexOf(advancedTab), QApplication::translate("Dialog", "Modify", 0));
 
 		} // retranslateUi
 

@@ -1,3 +1,4 @@
+Test commit
  
 Changelog for Structure Synth:
 
