@@ -6,6 +6,7 @@
 #include "SyntopiaCore/Math/Vector3.h"
 #include "SyntopiaCore/Logging/Logging.h"
 #include "SyntopiaCore/Misc/MiniParser.h"
+#include "glut.h"
 
 using namespace SyntopiaCore::Math;
 using namespace SyntopiaCore::Misc;

@@ -1,6 +1,5 @@
 #define shrink s 0.996
 
-set seed 9
 // Camera settings. Place these before first rule call.
 set translation [-2.66914 -1.23905 -20]
 set rotation [0.707436 -0.702911 -0.0738339 0.542177 0.472696 0.694696 -0.453408 -0.531484 0.715504]

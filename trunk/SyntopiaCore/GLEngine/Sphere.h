@@ -2,6 +2,7 @@
 
 #include "SyntopiaCore/Math/Vector3.h"
 #include "Object3D.h"
+#include "glut.h"
 
 namespace SyntopiaCore {
 	namespace GLEngine {	
@@ -22,7 +23,7 @@ namespace SyntopiaCore {
 		private:
 			SyntopiaCore::Math::Vector3f center;
 			float radius;
-			GLUquadric* myQuad;    
+            GLUquadric* myQuad;
 			static int displayListIndex;
 		};
 

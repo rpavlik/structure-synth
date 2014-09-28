@@ -40,7 +40,7 @@ namespace SyntopiaCore {
 						angle = 6.0f + sx/r;
 					}
 				}
-				angle *= 3.1415 / 4.f;
+                angle *= 3.1415f / 4.f;
 				return Vector3f(r * cosf(angle),r * sinf(angle),0);
 			}
 
